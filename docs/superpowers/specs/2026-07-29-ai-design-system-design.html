@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 친화 디자인 시스템 설계서</title>
+<style>
+  :root {
+    --bg: #f7f7f5;
+    --surface: #ffffff;
+    --ink: #1a1a1a;
+    --ink-soft: #555;
+    --ink-faint: #888;
+    --accent: #0d5fd6;
+    --accent-soft: #e8f0fd;
+    --border: #e3e3df;
+    --code-bg: #f1f2f4;
+    --mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+    line-height: 1.7;
+    font-size: 16px;
+  }
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 56px 32px 120px;
+  }
+  header.doc {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+  }
+  h1 { font-size: 34px; line-height: 1.25; margin: 0 0 16px; letter-spacing: -0.02em; }
+  .meta { display: flex; gap: 10px; flex-wrap: wrap; }
+  .chip {
+    font-size: 13px; padding: 4px 12px; border-radius: 999px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--ink-soft);
+  }
+  .chip.ok { background: #e6f4ea; border-color: #c4e4cd; color: #1d7a3a; font-weight: 600; }
+  h2 {
+    font-size: 23px; letter-spacing: -0.01em;
+    margin: 56px 0 16px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  h2 .num { color: var(--accent); font-variant-numeric: tabular-nums; margin-right: 8px; }
+  h3 { font-size: 17px; margin: 28px 0 8px; }
+  p { margin: 10px 0; }
+  strong { font-weight: 700; }
+  .lead { font-size: 17px; color: var(--ink-soft); }
+  .callout {
+    background: var(--accent-soft); border-left: 4px solid var(--accent);
+    padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 18px 0;
+  }
+  table {
+    width: 100%; border-collapse: collapse; margin: 16px 0;
+    background: var(--surface); border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--border); font-size: 15px;
+  }
+  th {
+    text-align: left; background: #fafaf8; padding: 10px 14px;
+    border-bottom: 2px solid var(--border); font-size: 13px;
+    text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint);
+  }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  pre {
+    background: #22272e; color: #d8dee6; padding: 20px 24px;
+    border-radius: 10px; overflow-x: auto; font-family: var(--mono);
+    font-size: 13px; line-height: 1.55; margin: 16px 0;
+  }
+  code { font-family: var(--mono); font-size: 0.88em; background: var(--code-bg); padding: 2px 6px; border-radius: 4px; }
+  pre code { background: none; padding: 0; }
+  ol, ul { padding-left: 24px; margin: 10px 0; }
+  li { margin: 6px 0; }
+  li::marker { color: var(--accent); font-weight: 700; }
+  .principles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0; }
+  .principle {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 18px;
+  }
+  .principle .t { font-weight: 700; margin-bottom: 4px; }
+  .principle .d { font-size: 14px; color: var(--ink-soft); }
+  .flow {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 8px 20px; margin: 16px 0;
+  }
+  .flow-step { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px dashed var(--border); align-items: baseline; }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-step .n {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; align-self: flex-start; margin-top: 2px;
+  }
+  .badge { font-size: 12px; font-weight: 700; color: var(--accent); background: var(--accent-soft); padding: 2px 8px; border-radius: 4px; margin-right: 6px; }
+  .footer-note { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--ink-faint); }
+  @media (max-width: 640px) { .principles { grid-template-columns: 1fr; } h1 { font-size: 27px; } }
+  @media print { body { background: #fff; } .page { padding: 0; max-width: none; } pre { white-space: pre-wrap; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="doc">
+  <h1>AI 친화 디자인 시스템 설계서</h1>
+  <div class="meta">
+    <span class="chip ok">승인됨 — 텍스트 우선 A안</span>
+    <span class="chip">2026-07-29</span>
+    <span class="chip">Avikus 사내 · Figma + Claude</span>
+  </div>
+</header>
+
+<h2><span class="num">1</span>목표</h2>
+<p class="lead">자연어 한 문단을 입력하면 —</p>
+<div class="flow">
+  <div class="flow-step"><span class="n">1</span><div>디자인 시스템을 준수하는 <strong>동작하는 목업 페이지</strong>(코드)가 생성되고,</div></div>
+  <div class="flow-step"><span class="n">2</span><div>사람이 보고 <strong>승인</strong>하면,</div></div>
+  <div class="flow-step"><span class="n">3</span><div>해당 화면이 <strong>피그마에 정식 디자인 산출물로 기록</strong>된다.</div></div>
+</div>
+<div class="callout">예시 프롬프트: "어드민이 회원 관리하는 테이블 리스트 페이지, 유저 추가 시 해당 유저의 로그인 페이지, 로그인 후 수치·지표 메인 페이지 만들어줘"<br>우선순위는 <strong>코드 &gt; 디자인</strong>. 피그마는 기록 보관소(하류)다.</div>
+
+<h2><span class="num">2</span>확정된 요구사항</h2>
+<table>
+  <tr><th>항목</th><th>결정</th></tr>
+  <tr><td><strong>산출물</strong></td><td>코드 우선. 승인된 화면을 피그마에 기록 (둘 다, 코드 &gt; 디자인)</td></tr>
+  <tr><td><strong>기존 자산</strong></td><td>피그마·코드에 조금씩 있으나 정리 안 됨 → 수확 후 정규화</td></tr>
+  <tr><td><strong>주 사용자</strong></td><td>디자이너, 개발자, 기획/PM 등 전 직군</td></tr>
+  <tr><td><strong>기술 스택</strong></td><td>여러 스택 혼재 → 토큰은 프레임워크 중립, 목업은 React 기준</td></tr>
+  <tr><td><strong>비개발 직군 접점</strong></td><td>claude.ai + 커넥터, design.md를 지식으로 첨부해 사용</td></tr>
+</table>
+
+<h2><span class="num">3</span>핵심 원칙</h2>
+<div class="principles">
+  <div class="principle"><div class="t">① 단일 원천</div><div class="d">git 저장소 하나(design.md + tokens + components + recipes)가 진실의 원천. 피그마 라이브러리, 목업 코드, claude.ai용 문서는 전부 파생 산출물.</div></div>
+  <div class="principle"><div class="t">② 텍스트 우선</div><div class="d">AI가 가장 잘 읽는 형식은 마크다운 + JSON. 피그마 캔버스를 매번 MCP로 읽는 방식은 쓰지 않는다.</div></div>
+  <div class="principle"><div class="t">③ 선택지 제한</div><div class="d">시맨틱 토큰과 등록된 컴포넌트만 사용. 임의 값(hex, arbitrary spacing) 금지. 이 제약이 일관성을 만든다.</div></div>
+  <div class="principle"><div class="t">④ 레시피 기반 조립</div><div class="d">반복되는 페이지 유형을 레시피로 문서화. 자연어 요청 → 레시피 매칭 → 컴포넌트 조립.</div></div>
+  <div class="principle"><div class="t">⑤ 단방향 동기화</div><div class="d">코드 → 피그마. 피그마에서의 직접 수정은 원천에 반영 안 됨. 규칙 변경은 저장소에서. (팀 공지 필요한 운영 규칙)</div></div>
+  <div class="principle"><div class="t">⑥ 규정 우선</div><div class="d">제품별 특수 규정(도메인 규제·사내 정책·법적 요건)은 다른 모든 규칙보다 우선. <code>regulations/&lt;제품&gt;.md</code>에 명시하고, 요청이 규정과 충돌하면 AI가 생성 전에 검토 결과를 알리고 확인을 받는다.</div></div>
+</div>
+
+<h2><span class="num">4</span>아키텍처</h2>
+<pre>
+                ┌─────────────────────────────┐
+                │  디자인 시스템 저장소 (git)    │
+                │  tokens/  design.md         │
+                │  components/  recipes/      │
+                └──────┬───────────┬──────────┘
+                       │           │
+        ┌──────────────┘           └──────────────┐
+        ▼                                         ▼
+[생성 접점 1] Claude Code                 [생성 접점 2] claude.ai
+개발자·디자이너                            기획/PM·비개발 직군
+저장소에서 페이지 생성                      프로젝트에 design-standalone.md 첨부
+→ playground dev 서버 미리보기            → 아티팩트로 즉시 미리보기
+        │                                         │
+        └──────────────┬──────────────────────────┘
+                       ▼
+                 사람이 보고 승인
+                       ▼
+          [기록] Figma MCP로 승인 화면을 피그마에 기록
+          (피그마 Variables·컴포넌트 라이브러리도 토큰에서 생성)
+</pre>
+
+<h2><span class="num">5</span>저장소 구조</h2>
+<pre>
+design-system/
+├── design.md               # AI 규칙서 — 시스템의 헌법
+├── CLAUDE.md               # Claude Code용 절차 지침
+├── tokens/
+│   ├── core.json           # 원시 값: 팔레트, 타입 스케일, 간격 스케일 (W3C DTCG)
+│   └── semantic.json       # 의미 토큰: bg-surface, text-primary, border-danger…
+├── components/
+│   ├── ui/                 # Button, Input, Table, Card, Badge, Dialog… (~15개)
+│   └── patterns/           # DataTable+툴바, StatCard 그리드, AuthForm 등 조립 패턴
+├── recipes/
+│   ├── admin-list.md       # 어드민 테이블 리스트 페이지
+│   ├── auth.md             # 로그인/가입 페이지
+│   ├── dashboard.md        # 수치·지표 대시보드
+│   └── form-detail.md      # 상세/편집 폼 페이지
+├── regulations/            # 제품별 우선 규정 — 생성 전 필수 검토
+│   └── &lt;product&gt;.md        # 도메인 규제·사내 정책·법적 요건 (제품별 명시)
+├── playground/             # Next.js 앱 — 생성된 목업 미리보기
+├── dist/
+│   ├── design-standalone.md  # claude.ai 첨부용 단일 문서 (자동 생성)
+│   └── tokens.css / tailwind # Style Dictionary 산출물
+└── scripts/
+    ├── build-tokens.ts     # 토큰 → CSS 변수 / Tailwind / 피그마 Variables
+    └── build-standalone.ts # design.md+토큰+레시피 → 단일 문서
+</pre>
+<p>레퍼런스 구현 스택: <strong>React + Tailwind + shadcn/ui 계열</strong>. 목업·승인용이며, 토큰 JSON은 중립이므로 다른 스택 제품도 토큰을 가져다 쓸 수 있다.</p>
+
+<h2><span class="num">6</span>design.md 구성 — AI 규칙서</h2>
+<p>사람용 가이드라인이 아니라 <strong>AI에게 내리는 명령문</strong> 형태로 작성한다.</p>
+<ol>
+  <li><strong>강제 규칙</strong> — 색·간격·라운드·그림자는 시맨틱 토큰만 사용. 임의 값 금지 (<code>#3B82F6</code>, <code>p-[13px]</code> 등).</li>
+  <li><strong>컴포넌트 카탈로그</strong> — 컴포넌트마다 {언제 쓴다 / 언제 안 쓴다 / props / 예시 코드} 블록.</li>
+  <li><strong>페이지 레시피 인덱스</strong> — 요청 유형 → 레시피 매핑 표.</li>
+  <li><strong>레이아웃 규칙</strong> — 사이드바/헤더 셸, 그리드, 반응형 브레이크포인트.</li>
+  <li><strong>금지 목록(안티패턴)</strong> — 그라데이션 남발, 카드 안의 카드, 임의 그림자 등 AI가 습관적으로 저지르는 것들.</li>
+</ol>
+<div class="callout"><strong>레시피 형식 예 (admin-list):</strong> 사이드바 셸 + 페이지 헤더(제목, 주요 액션 버튼) + 필터 툴바 + DataTable + 페이지네이션. 각 구역에 사용할 컴포넌트와 토큰을 명시.</div>
+
+<h2><span class="num">7</span>토큰 파이프라인</h2>
+<p>원천: <code>tokens/*.json</code> (W3C DTCG 표준, core → semantic 참조 구조). 빌드 스크립트가 세 갈래로 산출:</p>
+<ol>
+  <li>CSS 변수 + Tailwind 프리셋 → playground/목업용</li>
+  <li>피그마 Variables (라이트/다크 모드 포함) → Figma MCP로 주입</li>
+  <li>design-standalone.md 내 토큰 표 → claude.ai용</li>
+</ol>
+
+<h2><span class="num">8</span>생성 워크플로우</h2>
+<h3><span class="badge">원천</span>원천과 배포 — 버전 관리</h3>
+<p>design.md를 포함한 모든 규칙의 원천은 <strong>사내 git 원격 저장소(예: GitHub) 하나</strong>다. 개인이 파일을 복사해 각자 첨부하는 방식은 금지한다 — 버전 분기가 생기는 즉시 시스템이 무너진다.</p>
+<ul>
+  <li><strong>Claude Code 경로</strong> — 항상 저장소를 pull 받아 사용하므로 자연히 최신 버전.</li>
+  <li><strong>claude.ai 경로</strong> — 개인 프로젝트가 아니라 <strong>팀 공유 프로젝트 1개</strong>만 운영. 프로젝트 지식은 claude.ai의 GitHub 연동(지식 동기화)으로 <code>dist/design-standalone.md</code>에 연결해, 저장소가 갱신되면 프로젝트 지식도 함께 갱신. 연동 불가 환경이면 "CI 빌드 → 담당자 1인이 지식 갱신"으로 대체.</li>
+  <li><code>dist/design-standalone.md</code>는 손으로 편집하지 않는다. CI가 main 브랜치에서 자동 빌드.</li>
+  <li>빌드 시 문서 머리에 <strong>버전 스탬프(버전 번호·날짜·커밋 해시)</strong>를 자동 삽입하고, 생성된 목업 하단에도 사용 버전을 표기 → 구버전 문서로 생성된 결과물을 즉시 식별.</li>
+</ul>
+<h3><span class="badge">경로 1</span>Claude Code — 개발자·디자이너</h3>
+<p>CLAUDE.md가 절차를 강제: 페이지 생성 요청 → <strong>해당 제품 <code>regulations/</code> 검토 (충돌·주의사항 발견 시 생성 전에 알림)</strong> → design.md + 해당 레시피 읽기 → playground에 페이지 생성 → 기계 검증(lint) → dev 서버 미리보기 → 스크린샷 셀프 리뷰.</p>
+<h3><span class="badge">경로 2</span>claude.ai — 기획/PM</h3>
+<p>팀 공유 claude.ai 프로젝트(위 참조)에서 대화로 요청하면 React 아티팩트로 미리보기. standalone 문서에는 규정 검토 지침과 아티팩트 제약 대응 지침 포함(토큰을 CSS 변수 블록으로 인라인, 컴포넌트는 문서 내 스니펫 사용). 결과가 채택되면 개발자/디자이너가 경로 1에서 정식 목업화.</p>
+
+<h2><span class="num">9</span>피그마 기록 파이프라인</h2>
+<ul>
+  <li><strong>1회 셋업</strong> — 토큰 → 피그마 Variables 생성, 핵심 컴포넌트 → 피그마 컴포넌트 라이브러리 생성 (figma-generate-library). Code Connect로 피그마 ↔ 코드 컴포넌트 매핑.</li>
+  <li><strong>화면 기록</strong> — 승인된 목업 → 라이브러리 컴포넌트 인스턴스 + Variables 바인딩으로 화면 조립 (figma-generate-design). 하드코딩 값 없는 정식 산출물.</li>
+  <li><strong>재동기화</strong> — 토큰/컴포넌트 변경 시 피그마 Variables·라이브러리 재생성.</li>
+  <li><strong>히스토리 기록</strong> — 피그마 파일에 전용 "History" 페이지를 두고, 화면을 기록·갱신할 때마다 {날짜, 요청 내용(프롬프트 요약), 변경 사항, 디자인 시스템 버전, 승인자} 엔트리를 시간순으로 추가. 기록된 각 화면 옆에도 동일 메타를 담은 주석 카드를 붙여, 화면만 봐도 언제·왜·어떤 요청으로 만들어졌는지 추적 가능하게 한다.</li>
+</ul>
+
+<h2><span class="num">10</span>기존 자산 수확 (Phase 0)</h2>
+<p>기존 피그마 파일·코드베이스에서 실제 사용 중인 색/타이포/간격/컴포넌트를 인벤토리로 추출 → 중복 통합, 명명 정리 → 토큰과 컴포넌트 목록 초안으로 확정. <strong>발명이 아닌 정규화.</strong></p>
+
+<h2><span class="num">11</span>품질 검증</h2>
+<table>
+  <tr><th>층위</th><th>내용</th></tr>
+  <tr><td><strong>기계 검증</strong></td><td>ESLint 커스텀 룰 또는 스크립트로 임의 색상·간격 값 검출. 생성 직후 자동 실행.</td></tr>
+  <tr><td><strong>시각 검증</strong></td><td>생성 후 스크린샷을 Claude가 셀프 리뷰 (정렬, 대비, 오버플로). CLAUDE.md 절차에 포함.</td></tr>
+  <tr><td><strong>사람 승인</strong></td><td>최종 게이트. 승인된 것만 피그마에 기록.</td></tr>
+</table>
+
+<h2><span class="num">12</span>단계별 로드맵</h2>
+<table>
+  <tr><th>단계</th><th>내용</th><th>완료 판정</th></tr>
+  <tr><td><strong>0</strong></td><td>기존 자산 수확 → 토큰 확정</td><td>tokens/*.json 확정, 팀 리뷰 통과</td></tr>
+  <tr><td><strong>1</strong></td><td>design.md + 레퍼런스 컴포넌트 ~15개 + playground</td><td>단일 페이지 생성이 일관되게 나옴</td></tr>
+  <tr><td><strong>2</strong></td><td>레시피 4종 + Claude Code 워크플로우(CLAUDE.md, lint)</td><td>예시 프롬프트가 한 번에 3페이지 목업으로 나옴</td></tr>
+  <tr><td><strong>3</strong></td><td>피그마 파이프라인 (Variables·라이브러리·화면 기록)</td><td>승인 화면이 피그마에 정식 산출물로 기록됨</td></tr>
+  <tr><td><strong>4</strong></td><td>claude.ai 접점 (standalone 빌드 + 프로젝트 셋업)</td><td>기획자가 대화만으로 아티팩트 목업을 뽑음</td></tr>
+</table>
+
+<h2><span class="num">13</span>성공 기준</h2>
+<div class="callout">자연어 한 문단 요청 → 어드민 리스트 + 로그인 + 대시보드 3페이지가 디자인 시스템을 준수하는 <strong>동작하는 목업</strong>으로 생성되고, 승인 시 피그마에 <strong>라이브러리 기반 산출물</strong>로 기록된다.</div>
+
+<h2><span class="num">14</span>범위 제외 (v1)</h2>
+<ul>
+  <li>피그마 → 코드 역방향 동기화</li>
+  <li>프로덕션 npm 패키지 배포 (목업·승인용 레퍼런스 구현까지만)</li>
+  <li>React 외 스택용 컴포넌트 구현 (토큰만 중립 제공)</li>
+  <li>사내 전용 웹 툴 (claude.ai로 대체)</li>
+</ul>
+
+<div class="footer-note">원본: docs/superpowers/specs/2026-07-29-ai-design-system-design.md · 커밋 8ffa47e</div>
+
+</div>
+</body>
+</html>
