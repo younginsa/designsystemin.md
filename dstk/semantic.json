@@ -1,0 +1,23 @@
+{
+  "background":            { "$type": "color", "$value": "{color.white}" },
+  "foreground":            { "$type": "color", "$value": "{color.zinc.950}" },
+  "card":                  { "$type": "color", "$value": "{color.white}" },
+  "card-foreground":       { "$type": "color", "$value": "{color.zinc.950}" },
+  "popover":               { "$type": "color", "$value": "{color.white}" },
+  "popover-foreground":    { "$type": "color", "$value": "{color.zinc.950}" },
+  "primary":               { "$type": "color", "$value": "{color.zinc.900}" },
+  "primary-foreground":    { "$type": "color", "$value": "{color.zinc.50}" },
+  "secondary":             { "$type": "color", "$value": "{color.zinc.100}" },
+  "secondary-foreground":  { "$type": "color", "$value": "{color.zinc.900}" },
+  "muted":                 { "$type": "color", "$value": "{color.zinc.100}" },
+  "muted-foreground":      { "$type": "color", "$value": "{color.zinc.500}" },
+  "accent":                { "$type": "color", "$value": "{color.zinc.100}" },
+  "accent-foreground":     { "$type": "color", "$value": "{color.zinc.900}" },
+  "destructive":           { "$type": "color", "$value": "{color.red.600}" },
+  "destructive-foreground":{ "$type": "color", "$value": "{color.white}" },
+  "success":               { "$type": "color", "$value": "{color.green.600}" },
+  "border":                { "$type": "color", "$value": "{color.zinc.200}" },
+  "input":                 { "$type": "color", "$value": "{color.zinc.200}" },
+  "ring":                  { "$type": "color", "$value": "{color.zinc.400}" },
+  "radius":                { "$type": "dimension", "$value": "{radius.base}" }
+}

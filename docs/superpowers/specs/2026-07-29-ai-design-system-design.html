@@ -3,273 +3,601 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 친화 디자인 시스템 설계서</title>
+<title>HiNAS Design System document for AI</title>
 <style>
   :root {
-    --bg: #f7f7f5;
-    --surface: #ffffff;
-    --ink: #1a1a1a;
-    --ink-soft: #555;
-    --ink-faint: #888;
-    --accent: #0d5fd6;
-    --accent-soft: #e8f0fd;
-    --border: #e3e3df;
-    --code-bg: #f1f2f4;
+    --ink: #111111;
+    --muted: #8e8e8e;
+    --line: #e6e6e6;
+    --bg: #ffffff;
+    --surface: #f2f2f2;
+    --inverse-bg: #000000;
+    --inverse-fg: #ffffff;
+    --max-w: 1920px;   /* 콘텐츠 최대 폭. 구분선은 화면 끝까지 가고 내용만 이 폭에서 멈춘다 */
+    --r-fill: 0px;   /* 채움 요소도 각지게 — HiNAS 는 전면 직각 */
+    --r-box: 0px;    /* 아웃라인 박스 — 각지게 */
+    --nav-rest: #6b6b6b;   /* 내비 기본 상태 */
     --mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Apple SD Gothic Neo", Pretendard, "Noto Sans KR", sans-serif;
+    --chev-rest: #dcdcdc;   /* 선택 전 셰브론 — line gray 계열 */
+    /* 픽셀 셰브론 — 1x1 픽셀 5개를 x+1,y+1로만 이어 붙임. 모서리끼리만 닿는다.
+       viewBox 5x7 을 10x14px 로 렌더 → 픽셀 하나가 정확히 2CSS픽셀. */
+    --chev-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 7' shape-rendering='crispEdges'><g fill='black'><rect x='1' y='1' width='1' height='1'/><rect x='2' y='2' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='1' y='5' width='1' height='1'/></g></svg>");
   }
+  :root { --gutter: max(0px, calc((100vw - var(--max-w)) / 2)); }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    background: var(--bg);
+    font-family: var(--sans);
     color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
-    line-height: 1.7;
+    background: var(--bg);
     font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
   }
-  .page {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 56px 32px 120px;
+
+  /* ── Top nav ─────────────────────────────── */
+  .nav {
+    display: flex; align-items: center; gap: 4px;
+    height: 60px; padding: 0 calc(22px + var(--gutter));
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--bg); z-index: 20;
   }
-  header.doc {
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 28px;
-    margin-bottom: 40px;
+  .nav a, .nav .item {
+    font-size: 15px; line-height: 1.35; color: var(--nav-rest); text-decoration: none;
+    padding: 4px 9px; border: 1px solid transparent;
+    border-radius: var(--r-box); cursor: pointer;
   }
-  h1 { font-size: 34px; line-height: 1.25; margin: 0 0 16px; letter-spacing: -0.02em; }
-  .meta { display: flex; gap: 10px; flex-wrap: wrap; }
-  .chip {
-    font-size: 13px; padding: 4px 12px; border-radius: 999px;
-    background: var(--surface); border: 1px solid var(--border); color: var(--ink-soft);
+  .nav a:hover, .nav .item:hover { color: var(--ink); background: var(--surface); }
+  .nav .on { color: var(--ink); border-color: var(--line); }
+  .nav .off { color: var(--muted); opacity: 0.45; pointer-events: none; }
+  .nav .sp { margin-left: auto; }
+  .nav .stamp { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
+
+  /* ── Shell ───────────────────────────────── */
+  .shell {
+    display: grid; grid-template-columns: calc(280px + var(--gutter)) minmax(0,1fr);
+    min-height: calc(100vh - 60px);
   }
-  .chip.ok { background: #e6f4ea; border-color: #c4e4cd; color: #1d7a3a; font-weight: 600; }
-  h2 {
-    font-size: 23px; letter-spacing: -0.01em;
-    margin: 56px 0 16px; padding-top: 24px;
-    border-top: 1px solid var(--border);
+  .shell.wide-visual { grid-template-columns: calc(280px + var(--gutter)) minmax(0,1fr) calc(360px + var(--gutter)); }
+
+  .rail {
+    border-right: 1px solid var(--line);
+    position: sticky; top: 60px; align-self: start;
+    height: calc(100vh - 60px); overflow-y: auto;
   }
-  h2 .num { color: var(--accent); font-variant-numeric: tabular-nums; margin-right: 8px; }
-  h3 { font-size: 17px; margin: 28px 0 8px; }
+  .strip {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 58px; padding: 0 24px; border-bottom: 1px solid var(--line);
+    font-size: 15px;
+  }
+  /* 스트립은 컬럼 전체를 덮어 구분선이 화면 끝까지 닿고, 글자만 1920 안으로 들인다 */
+  /* 가운데 컬럼 제목은 스크롤해도 상단에 고정 (내비 60px 아래) */
+  .maincol .strip {
+    position: sticky; top: 60px; z-index: 10;
+    background: var(--bg);
+  }
+  .rail .strip { padding-left: calc(24px + var(--gutter)); }
+  .shell:not(.wide-visual) .maincol .strip { padding-right: calc(24px + var(--gutter)); }
+  .shell.wide-visual .visual { padding-right: calc(20px + var(--gutter)); }
+  .shell.wide-visual .maincol { border-right: 1px solid var(--line); }
+  .strip .sub { color: var(--muted); font-size: 13px; }
+
+  .rail .list { padding: 6px 12px 40px calc(12px + var(--gutter)); }
+  .rail button {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; height: 44px; padding: 0 12px;
+    background: none; border: 1px solid transparent; border-radius: var(--r-box);
+    font-family: var(--sans); font-size: 15px; color: var(--muted);
+    text-align: left; cursor: pointer;
+  }
+  .rail button:hover { border-color: var(--line); }          /* hover = 각진 박스만 */
+  .rail button.on { color: var(--ink); }                      /* 선택 = 검정 + 밑줄 */
+  .rail button.on .grow { text-decoration: underline; text-underline-offset: 3px; }
+  .rail .num { font-family: var(--mono); font-size: 11px; color: var(--muted); min-width: 18px; }
+  .rail button.on .num { color: var(--ink); }
+  .rail button.on .hchev { background-color: #000; }
+  .rail .grow { flex: 1; }
+
+  /* 픽셀 셰브론 */
+  .hchev {
+    width: 10px; height: 14px; flex: none;
+    background-color: var(--chev-rest);
+    -webkit-mask-image: var(--chev-mask); mask-image: var(--chev-mask);
+    -webkit-mask-size: contain; mask-size: contain;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-position: center; mask-position: center;
+  }
+
+  /* ── Content ─────────────────────────────── */
+  .content { padding: 36px 40px 100px; max-width: calc(820px + var(--gutter)); }
+  .shell:not(.wide-visual) .content { padding-right: calc(40px + var(--gutter)); }
+  .content.full { max-width: calc(var(--max-w) - 280px); }   /* 레일 280px 제외 → 총 1920 */
+  .shell:not(.wide-visual) .content.full { padding-right: calc(40px + var(--gutter)); }
+  .panel { display: none; }
+  .panel > *:first-child { margin-top: 0; }
+  /* 패널 첫 요소 시작점 통일 — 위 8px, 왼쪽 0 (col-head·표 th와 동일 기준) */
+  .panel > h3:first-child { margin-top: 8px; }
+  .panel > .card-grid:first-child { margin-top: 8px; }
+  th:first-child, td:first-child { padding-left: 0; }
+  .panel.on { display: block; }
+
+  /* 섹션 라벨 — 작은 대문자 라벨은 전부 이 한 정의를 쓴다 (h3, .col-head, th) */
+  h3, .col-head, th {
+    font-size: 11px; font-weight: 400;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  h3 { margin: 64px 0 12px; }
+  h4 { font-size: 15px; font-weight: 600; margin: 24px 0 6px; }
   p { margin: 10px 0; }
-  strong { font-weight: 700; }
-  .lead { font-size: 17px; color: var(--ink-soft); }
-  .callout {
-    background: var(--accent-soft); border-left: 4px solid var(--accent);
-    padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 18px 0;
-  }
-  table {
-    width: 100%; border-collapse: collapse; margin: 16px 0;
-    background: var(--surface); border-radius: 10px; overflow: hidden;
-    border: 1px solid var(--border); font-size: 15px;
-  }
-  th {
-    text-align: left; background: #fafaf8; padding: 10px 14px;
-    border-bottom: 2px solid var(--border); font-size: 13px;
-    text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint);
-  }
-  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
-  tr:last-child td { border-bottom: none; }
+  .lead { color: var(--muted); }
+
+  table { width: 100%; border-collapse: collapse; margin: 0 0 16px; font-size: 15px; }
+  th { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+  td { padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+
   pre {
-    background: #22272e; color: #d8dee6; padding: 20px 24px;
-    border-radius: 10px; overflow-x: auto; font-family: var(--mono);
-    font-size: 13px; line-height: 1.55; margin: 16px 0;
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.6;
+    background: var(--bg); border: 1px solid var(--line);
+    padding: 20px 22px; overflow-x: auto; margin: 0 0 16px;
   }
-  code { font-family: var(--mono); font-size: 0.88em; background: var(--code-bg); padding: 2px 6px; border-radius: 4px; }
+  code { font-family: var(--mono); font-size: 0.86em; }
+  p code, li code, td code { background: var(--surface); padding: 1px 5px; border-radius: var(--r-fill); }
   pre code { background: none; padding: 0; }
-  ol, ul { padding-left: 24px; margin: 10px 0; }
+
+  ol, ul { padding-left: 20px; margin: 10px 0; }
   li { margin: 6px 0; }
-  li::marker { color: var(--accent); font-weight: 700; }
-  .principles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0; }
-  .principle {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; padding: 16px 18px;
+  li::marker { color: var(--muted); }
+
+  .note { border-left: 2px solid var(--ink); padding: 2px 0 2px 16px; margin: 20px 0; color: var(--muted); }
+
+  .tag {
+    display: inline-block; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    border: 1px solid var(--line); padding: 2px 7px; margin-right: 8px;
+    border-radius: var(--r-fill);
   }
-  .principle .t { font-weight: 700; margin-bottom: 4px; }
-  .principle .d { font-size: 14px; color: var(--ink-soft); }
-  .flow {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; padding: 8px 20px; margin: 16px 0;
+
+  .card-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
+  .card { border: 1px solid var(--line); }
+  .card-head {
+    display: flex; align-items: center; gap: 10px;
+    height: 58px; padding: 0 20px; border-bottom: 1px solid var(--line);
+    font-size: 15px;
   }
-  .flow-step { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px dashed var(--border); align-items: baseline; }
-  .flow-step:last-child { border-bottom: none; }
-  .flow-step .n {
-    flex: none; width: 26px; height: 26px; border-radius: 50%;
-    background: var(--accent); color: #fff; font-size: 13px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center; align-self: flex-start; margin-top: 2px;
+  .card-head .n { margin-top: 0; }
+  .card-head .hchev { margin-left: auto; }
+  .card-body { padding: 20px; }
+  .card-shot {
+    border: 1px solid var(--line); aspect-ratio: 16 / 9;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    background-color: var(--bg);
+    background-image: radial-gradient(#d9d9d9 1px, transparent 1px);
+    background-size: 8px 8px;
+    margin-bottom: 16px;
   }
-  .badge { font-size: 12px; font-weight: 700; color: var(--accent); background: var(--accent-soft); padding: 2px 8px; border-radius: 4px; margin-right: 6px; }
-  .footer-note { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--ink-faint); }
-  @media (max-width: 640px) { .principles { grid-template-columns: 1fr; } h1 { font-size: 27px; } }
-  @media print { body { background: #fff; } .page { padding: 0; max-width: none; } pre { white-space: pre-wrap; } }
+  .card-shot .lb {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--muted);
+    background: var(--bg); border: 1px solid var(--line); padding: 4px 10px;
+  }
+  .card-shot .cap { font-size: 12px; color: var(--muted); }
+  .card-body p { margin: 0; font-size: 15px; color: var(--muted); }
+
+  /* 키-값 박스 — 불릿·볼드 없이 라벨(회색)/내용(검정) 두 열 */
+  .block .card + .card { margin-top: 16px; }   /* 스택형 카드 간격 — card-grid 의 gap 과 동일 */
+
+  .kv { display: grid; grid-template-columns: 170px minmax(0,1fr); column-gap: 24px; row-gap: 16px; font-size: 15px; }
+  .kv .k { color: var(--muted); }
+  .kv .v { color: var(--ink); }
+
+  .principle { padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .principle:last-child { border-bottom: none; }
+  .principle .t { font-weight: 600; margin-bottom: 2px; }
+  .principle .d { color: var(--muted); font-size: 15px; }
+
+  /* ── Section 01 internal layout ──────────── */
+  .block { margin-bottom: 56px; }
+  .col-head { padding: 8px 0; }   /* 좌측 패딩 없음 — 아래 박스 왼쪽 모서리와 정렬 */
+  .two-col {
+    display: grid; grid-template-columns: minmax(0, 620px) minmax(0, 1fr);
+    gap: 40px; align-items: start;
+  }
+  .three-col { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 28px; }
+  .step .shot {
+    border: 1px solid var(--line); aspect-ratio: 4 / 3;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    background-color: var(--bg);
+    background-image: radial-gradient(#d9d9d9 1px, transparent 1px);
+    background-size: 8px 8px;
+    margin-bottom: 14px;
+  }
+  .step .shot .lb {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--muted);
+    background: var(--bg); border: 1px solid var(--line); padding: 4px 10px;
+  }
+  /* 숫자 배지 — 본문 안의 번호는 전부 이 하나를 쓴다 */
+  .n {
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 50%;
+    width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center;
+    flex: none; margin-top: 2px;
+  }
+  .step-cap { display: flex; align-items: flex-start; gap: 10px; }
+  .step p { margin: 0; font-size: 15px; }
+  .diagram { background: var(--surface); border: 1px solid var(--line); padding: 24px; overflow-x: auto; }
+  .diagram pre { border: none; background: none; padding: 0; margin: 0; font-size: 12.5px; }
+
+  /* ── Visual column ───────────────────────── */
+  .visual { padding: 24px 20px; }
+  .frame {
+    border: 1px solid var(--line); aspect-ratio: 4 / 3;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    margin-bottom: 16px;
+    background-color: var(--bg);
+    background-image: radial-gradient(#d9d9d9 1px, transparent 1px);
+    background-size: 8px 8px;
+  }
+  .frame .lb {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--muted);
+    background: var(--bg); border: 1px solid var(--line); padding: 4px 10px;
+  }
+  .frame .cap { font-size: 12px; color: var(--muted); }
+  .foot { padding: 14px 20px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); font-family: var(--mono); }
+
+  @media (max-width: 1400px) {
+    .card-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  }
+  @media (max-width: 1100px) {
+    .card-grid { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    .three-col { grid-template-columns: 1fr; }
+  }
+  @media print {
+    .shell, .shell.wide-visual { grid-template-columns: 1fr; }
+    .rail, .visual, .nav { display: none; }
+    .panel { display: block !important; page-break-after: always; }
+  }
 </style>
 </head>
 <body>
-<div class="page">
 
-<header class="doc">
-  <h1>AI 친화 디자인 시스템 설계서</h1>
-  <div class="meta">
-    <span class="chip ok">승인됨 — 텍스트 우선 A안</span>
-    <span class="chip">2026-07-29</span>
-    <span class="chip">Avikus 사내 · Figma + Claude</span>
-  </div>
-</header>
-
-<h2><span class="num">1</span>목표</h2>
-<p class="lead">자연어 한 문단을 입력하면 —</p>
-<div class="flow">
-  <div class="flow-step"><span class="n">1</span><div>디자인 시스템을 준수하는 <strong>동작하는 목업 페이지</strong>(코드)가 생성되고,</div></div>
-  <div class="flow-step"><span class="n">2</span><div>사람이 보고 <strong>승인</strong>하면,</div></div>
-  <div class="flow-step"><span class="n">3</span><div>해당 화면이 <strong>피그마에 정식 디자인 산출물로 기록</strong>된다.</div></div>
-</div>
-<div class="callout">예시 프롬프트: "어드민이 회원 관리하는 테이블 리스트 페이지, 유저 추가 시 해당 유저의 로그인 페이지, 로그인 후 수치·지표 메인 페이지 만들어줘"<br>우선순위는 <strong>코드 &gt; 디자인</strong>. 피그마는 기록 보관소(하류)다.</div>
-
-<h2><span class="num">2</span>확정된 요구사항</h2>
-<table>
-  <tr><th>항목</th><th>결정</th></tr>
-  <tr><td><strong>산출물</strong></td><td>코드 우선. 승인된 화면을 피그마에 기록 (둘 다, 코드 &gt; 디자인)</td></tr>
-  <tr><td><strong>기존 자산</strong></td><td>피그마·코드에 조금씩 있으나 정리 안 됨 → 수확 후 정규화</td></tr>
-  <tr><td><strong>주 사용자</strong></td><td>디자이너, 개발자, 기획/PM 등 전 직군</td></tr>
-  <tr><td><strong>기술 스택</strong></td><td>여러 스택 혼재 → 토큰은 프레임워크 중립, 목업은 React 기준</td></tr>
-  <tr><td><strong>비개발 직군 접점</strong></td><td>claude.ai + 커넥터, design.md를 지식으로 첨부해 사용</td></tr>
-</table>
-
-<h2><span class="num">3</span>핵심 원칙</h2>
-<div class="principles">
-  <div class="principle"><div class="t">① 단일 원천</div><div class="d">git 저장소 하나(design.md + tokens + components + recipes)가 진실의 원천. 피그마 라이브러리, 목업 코드, claude.ai용 문서는 전부 파생 산출물.</div></div>
-  <div class="principle"><div class="t">② 텍스트 우선</div><div class="d">AI가 가장 잘 읽는 형식은 마크다운 + JSON. 피그마 캔버스를 매번 MCP로 읽는 방식은 쓰지 않는다.</div></div>
-  <div class="principle"><div class="t">③ 선택지 제한</div><div class="d">시맨틱 토큰과 등록된 컴포넌트만 사용. 임의 값(hex, arbitrary spacing) 금지. 이 제약이 일관성을 만든다.</div></div>
-  <div class="principle"><div class="t">④ 레시피 기반 조립</div><div class="d">반복되는 페이지 유형을 레시피로 문서화. 자연어 요청 → 레시피 매칭 → 컴포넌트 조립.</div></div>
-  <div class="principle"><div class="t">⑤ 단방향 동기화</div><div class="d">코드 → 피그마. 피그마에서의 직접 수정은 원천에 반영 안 됨. 규칙 변경은 저장소에서. (팀 공지 필요한 운영 규칙)</div></div>
-  <div class="principle"><div class="t">⑥ 규정 우선</div><div class="d">제품별 특수 규정(도메인 규제·사내 정책·법적 요건)은 다른 모든 규칙보다 우선. <code>regulations/&lt;제품&gt;.md</code>에 명시하고, 요청이 규정과 충돌하면 AI가 생성 전에 검토 결과를 알리고 확인을 받는다.</div></div>
+<div class="nav">
+  <span class="item on">HINAS DS</span>
+  <a href="365.html">365</a>
+  <span class="item off">CLOUD</span>
+  <span class="item off">CONTROL</span>
+  <span class="sp"></span>
+  <span class="stamp">2026-07-29 · 승인됨</span>
 </div>
 
-<h2><span class="num">4</span>아키텍처</h2>
-<pre>
-                ┌─────────────────────────────┐
-                │  디자인 시스템 저장소 (git)    │
-                │  tokens/  design.md         │
-                │  components/  recipes/      │
-                └──────┬───────────┬──────────┘
-                       │           │
-        ┌──────────────┘           └──────────────┐
-        ▼                                         ▼
-[생성 접점 1] Claude Code                 [생성 접점 2] claude.ai
-개발자·디자이너                            기획/PM·비개발 직군
-저장소에서 페이지 생성                      프로젝트에 design-standalone.md 첨부
-→ playground dev 서버 미리보기            → 아티팩트로 즉시 미리보기
-        │                                         │
-        └──────────────┬──────────────────────────┘
-                       ▼
-                 사람이 보고 승인
-                       ▼
-          [기록] Figma MCP로 승인 화면을 피그마에 기록
-          (피그마 Variables·컴포넌트 라이브러리도 토큰에서 생성)
-</pre>
+<div class="shell" id="shell">
 
-<h2><span class="num">5</span>저장소 구조</h2>
-<pre>
-design-system/
+  <aside class="rail">
+    <div class="strip"><span>Contents</span><span class="sub">4</span></div>
+    <div class="list" id="list"></div>
+  </aside>
+
+  <div class="maincol">
+    <div class="strip">
+      <span id="crumb">HiNAS Design System document for AI</span>
+      <span class="sub" id="crumb-num">01</span>
+    </div>
+    <div class="content" id="content">
+
+      <!-- ══ 01 사용방법 ══ -->
+      <section class="panel on" data-full="1" data-title="사용방법">
+
+
+        <div class="block">
+          <div class="two-col">
+            <div>
+              <div class="col-head">아키텍처</div>
+              <div class="diagram">
+<pre>[원천]  디자인 시스템 저장소 (git)
+        │
+        ├── design.md        · AI 규칙서, 시스템의 헌법
+        ├── dstk/            · 디자인 토큰 (W3C DTCG)
+        ├── components/      · 레퍼런스 컴포넌트
+        ├── recipes/         · 페이지 레시피
+        └── regulations/     · 제품별 우선 규정
+        │
+        ▼
+[생성]  두 접점에서 페이지를 만든다
+        │
+        ├── Claude Code    개발자·디자이너
+        │   저장소에서 생성 → playground dev 서버 미리보기
+        │
+        └── claude.ai      기획/PM·비개발 직군
+            design-standalone.md 첨부 → 아티팩트 미리보기
+        │
+        ▼
+[승인]  사람이 보고 승인
+        │
+        ▼
+[기록]  Figma MCP 로 승인 화면을 피그마에 기록
+        피그마 Variables·컴포넌트 라이브러리도 토큰에서 생성</pre>
+              </div>
+            </div>
+            <div>
+              <table>
+                <tr><th>항목</th><th>결정</th></tr>
+                <tr><td>git</td><td>source of truth</td></tr>
+                <tr><td>Figma</td><td>git의 design.md를 바탕으로 승인된 목업이 기록됨</td></tr>
+                <tr><td>design.md</td><td>업데이트는 대형선 디자인파트 승인 후 커밋</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>생성 워크플로우</h3>
+
+          <div class="card">
+            <div class="card-head"><span>원천과 배포 — 버전 관리</span></div>
+            <div class="card-body kv">
+              <div class="k">원천</div>
+              <div class="v">design.md를 포함한 모든 규칙의 원천은 사내 git 원격 저장소 하나다. 개인이 파일을 복사해 각자 첨부하는 방식은 금지한다. 버전 분기가 생기는 즉시 시스템이 무너진다.</div>
+              <div class="k">Claude Code</div>
+              <div class="v">항상 저장소를 pull 받아 사용하므로 자연히 최신 버전이다.</div>
+              <div class="k">claude.ai</div>
+              <div class="v">개인 프로젝트가 아니라 팀 공유 프로젝트 1개만 운영한다. 프로젝트 지식은 GitHub 연동으로 <code>dist/design-standalone.md</code>에 연결해, 저장소가 갱신되면 함께 갱신된다. 연동이 불가한 환경이면 CI 빌드 후 담당자 1인이 지식을 갱신한다.</div>
+              <div class="k">standalone</div>
+              <div class="v"><code>dist/design-standalone.md</code>는 손으로 편집하지 않는다. CI가 main 브랜치에서 자동 빌드한다.</div>
+              <div class="k">버전 스탬프</div>
+              <div class="v">빌드 시 문서 머리에 버전 번호·날짜·커밋 해시를 자동 삽입하고, 생성된 목업 하단에도 사용 버전을 표기한다. 구버전 문서로 생성된 결과물을 즉시 식별할 수 있다.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><span>경로 1 — Claude Code</span></div>
+            <div class="card-body kv">
+              <div class="k">대상</div>
+              <div class="v">개발자·디자이너</div>
+              <div class="k">절차</div>
+              <div class="v">페이지 생성 요청 → 해당 제품 <code>regulations/</code> 검토 (충돌·주의사항 발견 시 생성 전에 알림) → design.md + 해당 레시피 읽기 → playground에 페이지 생성 → 기계 검증(lint) → dev 서버 미리보기 → 스크린샷 셀프 리뷰. CLAUDE.md가 이 절차를 강제한다.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><span>경로 2 — claude.ai</span></div>
+            <div class="card-body kv">
+              <div class="k">대상</div>
+              <div class="v">기획/PM·비개발 직군</div>
+              <div class="k">절차</div>
+              <div class="v">팀 공유 claude.ai 프로젝트에서 대화로 요청하면 React 아티팩트로 미리보기. standalone 문서에는 규정 검토 지침과 아티팩트 제약 대응 지침이 포함된다. 결과가 채택되면 개발자·디자이너가 경로 1에서 정식 목업화한다.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>사용하기</h3>
+          <p class="lead" style="margin-bottom:20px">자연어 한 문단을 입력하면 —</p>
+          <div class="three-col">
+            <div class="step">
+              <div class="shot"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+              <div class="step-cap">
+                <span class="n">1</span>
+                <p>디자인 시스템을 준수하는 <strong>동작하는 목업 페이지</strong>(코드)가 생성되고,</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="shot"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+              <div class="step-cap">
+                <span class="n">2</span>
+                <p>사람이 보고 <strong>승인</strong>하면,</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="shot"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+              <div class="step-cap">
+                <span class="n">3</span>
+                <p>해당 화면이 <strong>피그마에 정식 디자인 산출물로 기록</strong>된다.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ 02 파이프라인 ══ -->
+      <section class="panel" data-title="파이프라인">
+        <h3>저장소 구조</h3>
+
+<div class="diagram">
+<pre>design-system/
 ├── design.md               # AI 규칙서 — 시스템의 헌법
 ├── CLAUDE.md               # Claude Code용 절차 지침
-├── tokens/
+├── dstk/
 │   ├── core.json           # 원시 값: 팔레트, 타입 스케일, 간격 스케일 (W3C DTCG)
-│   └── semantic.json       # 의미 토큰: bg-surface, text-primary, border-danger…
+│   └── semantic.json       # 의미 토큰: background, foreground, primary…
 ├── components/
 │   ├── ui/                 # Button, Input, Table, Card, Badge, Dialog… (~15개)
-│   └── patterns/           # DataTable+툴바, StatCard 그리드, AuthForm 등 조립 패턴
+│   └── patterns/           # DataTable+툴바, StatCard 그리드, AuthForm 등
 ├── recipes/
 │   ├── admin-list.md       # 어드민 테이블 리스트 페이지
 │   ├── auth.md             # 로그인/가입 페이지
 │   ├── dashboard.md        # 수치·지표 대시보드
 │   └── form-detail.md      # 상세/편집 폼 페이지
 ├── regulations/            # 제품별 우선 규정 — 생성 전 필수 검토
-│   └── &lt;product&gt;.md        # 도메인 규제·사내 정책·법적 요건 (제품별 명시)
+│   └── &lt;product&gt;.md        # 도메인 규제·사내 정책·법적 요건
 ├── playground/             # Next.js 앱 — 생성된 목업 미리보기
 ├── dist/
 │   ├── design-standalone.md  # claude.ai 첨부용 단일 문서 (자동 생성)
-│   └── tokens.css / tailwind # Style Dictionary 산출물
+│   └── dstk.css              # 빌드 산출물
 └── scripts/
-    ├── build-tokens.ts     # 토큰 → CSS 변수 / Tailwind / 피그마 Variables
-    └── build-standalone.ts # design.md+토큰+레시피 → 단일 문서
-</pre>
-<p>레퍼런스 구현 스택: <strong>React + Tailwind + shadcn/ui 계열</strong>. 목업·승인용이며, 토큰 JSON은 중립이므로 다른 스택 제품도 토큰을 가져다 쓸 수 있다.</p>
+    ├── build-dstk.ts       # 토큰 → CSS 변수 / 피그마 Variables
+    └── build-standalone.ts # design.md+토큰+레시피 → 단일 문서</pre>
+</div>
+        <p>레퍼런스 구현 스택: <strong>React + Tailwind + shadcn/ui 계열</strong>. 목업·승인용이며, 토큰 JSON은 중립이므로 다른 스택 제품도 토큰을 가져다 쓸 수 있다.</p>
+        <h3>design.md 구성 — AI 규칙서</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">전제</div>
+            <div class="v">사람용 가이드라인이 아니라 AI에게 내리는 명령문 형태로 작성한다.</div>
+            <div class="k">강제 규칙</div>
+            <div class="v">색·간격·라운드·그림자는 시맨틱 토큰만 사용. 임의 값 금지 (<code>#3B82F6</code>, <code>p-[13px]</code> 등).</div>
+            <div class="k">컴포넌트 카탈로그</div>
+            <div class="v">컴포넌트마다 {언제 쓴다 / 언제 안 쓴다 / props / 예시 코드} 블록.</div>
+            <div class="k">페이지 레시피 인덱스</div>
+            <div class="v">요청 유형 → 레시피 매핑 표.</div>
+            <div class="k">레이아웃 규칙</div>
+            <div class="v">사이드바/헤더 셸, 그리드, 반응형 브레이크포인트.</div>
+            <div class="k">금지 목록</div>
+            <div class="v">그라데이션 남발, 카드 안의 카드, 임의 그림자 등 안티패턴.</div>
+            <div class="k">레시피 형식 예</div>
+            <div class="v">admin-list — 사이드바 셸 + 페이지 헤더(제목, 주요 액션 버튼) + 필터 툴바 + DataTable + 페이지네이션. 각 구역에 사용할 컴포넌트와 토큰을 명시.</div>
+          </div>
+        </div>
+      <h3>토큰 파이프라인</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">원천</div>
+            <div class="v"><code>dstk/*.json</code> — W3C DTCG 표준, core → semantic 참조 구조.</div>
+            <div class="k">산출 1</div>
+            <div class="v">CSS 변수 + Tailwind 프리셋 → playground/목업용.</div>
+            <div class="k">산출 2</div>
+            <div class="v">피그마 Variables (라이트/다크 모드 포함) → Figma MCP로 주입.</div>
+            <div class="k">산출 3</div>
+            <div class="v">design-standalone.md 내 토큰 표 → claude.ai용.</div>
+          </div>
+        </div>
+      <h3>피그마 기록 파이프라인</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">1회 셋업</div>
+            <div class="v">토큰 → 피그마 Variables 생성, 핵심 컴포넌트 → 피그마 컴포넌트 라이브러리 생성. Code Connect로 피그마 ↔ 코드 컴포넌트 매핑.</div>
+            <div class="k">화면 기록</div>
+            <div class="v">승인된 목업 → 라이브러리 컴포넌트 인스턴스 + Variables 바인딩으로 화면 조립. 하드코딩 값 없는 정식 산출물.</div>
+            <div class="k">재동기화</div>
+            <div class="v">토큰/컴포넌트 변경 시 피그마 Variables·라이브러리 재생성.</div>
+            <div class="k">히스토리 기록</div>
+            <div class="v">피그마 파일에 전용 "History" 페이지를 두고, 화면을 기록·갱신할 때마다 날짜, 요청 내용(프롬프트 요약), 변경 사항, 디자인 시스템 버전, 승인자 엔트리를 시간순으로 추가. 기록된 각 화면 옆에도 동일 메타를 담은 주석 카드를 붙인다.</div>
+          </div>
+        </div>
+              <h3>범위 제외 (v1)</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">역방향 동기화</div>
+            <div class="v">피그마 → 코드 방향은 하지 않는다.</div>
+            <div class="k">npm 배포</div>
+            <div class="v">프로덕션 패키지 배포는 하지 않는다. 목업·승인용 레퍼런스 구현까지만.</div>
+            <div class="k">타 스택 구현</div>
+            <div class="v">React 외 스택용 컴포넌트는 만들지 않는다. 토큰만 중립 제공.</div>
+            <div class="k">전용 웹 툴</div>
+            <div class="v">사내 전용 웹 툴은 만들지 않는다. claude.ai로 대체.</div>
+          </div>
+        </div>
+      </section>
 
-<h2><span class="num">6</span>design.md 구성 — AI 규칙서</h2>
-<p>사람용 가이드라인이 아니라 <strong>AI에게 내리는 명령문</strong> 형태로 작성한다.</p>
-<ol>
-  <li><strong>강제 규칙</strong> — 색·간격·라운드·그림자는 시맨틱 토큰만 사용. 임의 값 금지 (<code>#3B82F6</code>, <code>p-[13px]</code> 등).</li>
-  <li><strong>컴포넌트 카탈로그</strong> — 컴포넌트마다 {언제 쓴다 / 언제 안 쓴다 / props / 예시 코드} 블록.</li>
-  <li><strong>페이지 레시피 인덱스</strong> — 요청 유형 → 레시피 매핑 표.</li>
-  <li><strong>레이아웃 규칙</strong> — 사이드바/헤더 셸, 그리드, 반응형 브레이크포인트.</li>
-  <li><strong>금지 목록(안티패턴)</strong> — 그라데이션 남발, 카드 안의 카드, 임의 그림자 등 AI가 습관적으로 저지르는 것들.</li>
-</ol>
-<div class="callout"><strong>레시피 형식 예 (admin-list):</strong> 사이드바 셸 + 페이지 헤더(제목, 주요 액션 버튼) + 필터 툴바 + DataTable + 페이지네이션. 각 구역에 사용할 컴포넌트와 토큰을 명시.</div>
+      <!-- ══ 02 핵심 원칙 ══ -->
+      <section class="panel" data-full="1" data-title="핵심 원칙">
+        <div class="card-grid">
+        <div class="card">
+          <div class="card-head"><span class="n">1</span><span>단일 원천</span><span class="hchev"></span></div>
+          <div class="card-body">
+            <div class="card-shot"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+            <p>git 저장소 하나(design.md + 토큰 + components + recipes)가 진실의 원천. 피그마 라이브러리, 목업 코드, claude.ai용 문서는 전부 파생 산출물.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="n">2</span><span>텍스트 우선</span><span class="hchev"></span></div>
+          <div class="card-body">
+            <div class="card-shot"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+            <p>AI가 가장 잘 읽는 형식은 마크다운 + JSON. 피그마 캔버스를 매번 MCP로 읽는 방식은 쓰지 않는다.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="n">3</span><span>선택지 제한</span><span class="hchev"></span></div>
+          <div class="card-body">
+            <div class="card-shot"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+            <p>시맨틱 토큰과 등록된 컴포넌트만 사용. 임의 값(hex, arbitrary spacing) 금지. 이 제약이 일관성을 만든다.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="n">4</span><span>레시피 기반 조립</span><span class="hchev"></span></div>
+          <div class="card-body">
+            <div class="card-shot"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+            <p>반복되는 페이지 유형을 레시피로 문서화. 자연어 요청 → 레시피 매칭 → 컴포넌트 조립.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="n">5</span><span>단방향 동기화</span><span class="hchev"></span></div>
+          <div class="card-body">
+            <div class="card-shot"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+            <p>코드 → 피그마. 피그마에서의 직접 수정은 원천에 반영 안 됨. 규칙 변경은 저장소에서. (팀 공지 필요한 운영 규칙)</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="n">6</span><span>규정 우선</span><span class="hchev"></span></div>
+          <div class="card-body">
+            <div class="card-shot"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+            <p>제품별 특수 규정(도메인 규제·사내 정책·법적 요건)은 다른 모든 규칙보다 우선. <code>regulations/&lt;제품&gt;.md</code>에 명시하고, 요청이 규정과 충돌하면 AI가 생성 전에 검토 결과를 알리고 확인을 받는다.</p>
+          </div>
+        </div>
+        </div>
+      </section>
 
-<h2><span class="num">7</span>토큰 파이프라인</h2>
-<p>원천: <code>tokens/*.json</code> (W3C DTCG 표준, core → semantic 참조 구조). 빌드 스크립트가 세 갈래로 산출:</p>
-<ol>
-  <li>CSS 변수 + Tailwind 프리셋 → playground/목업용</li>
-  <li>피그마 Variables (라이트/다크 모드 포함) → Figma MCP로 주입</li>
-  <li>design-standalone.md 내 토큰 표 → claude.ai용</li>
-</ol>
+      <!-- ══ 09 품질 검증 ══ -->
+      <section class="panel" data-title="품질 검증">
 
-<h2><span class="num">8</span>생성 워크플로우</h2>
-<h3><span class="badge">원천</span>원천과 배포 — 버전 관리</h3>
-<p>design.md를 포함한 모든 규칙의 원천은 <strong>사내 git 원격 저장소(예: GitHub) 하나</strong>다. 개인이 파일을 복사해 각자 첨부하는 방식은 금지한다 — 버전 분기가 생기는 즉시 시스템이 무너진다.</p>
-<ul>
-  <li><strong>Claude Code 경로</strong> — 항상 저장소를 pull 받아 사용하므로 자연히 최신 버전.</li>
-  <li><strong>claude.ai 경로</strong> — 개인 프로젝트가 아니라 <strong>팀 공유 프로젝트 1개</strong>만 운영. 프로젝트 지식은 claude.ai의 GitHub 연동(지식 동기화)으로 <code>dist/design-standalone.md</code>에 연결해, 저장소가 갱신되면 프로젝트 지식도 함께 갱신. 연동 불가 환경이면 "CI 빌드 → 담당자 1인이 지식 갱신"으로 대체.</li>
-  <li><code>dist/design-standalone.md</code>는 손으로 편집하지 않는다. CI가 main 브랜치에서 자동 빌드.</li>
-  <li>빌드 시 문서 머리에 <strong>버전 스탬프(버전 번호·날짜·커밋 해시)</strong>를 자동 삽입하고, 생성된 목업 하단에도 사용 버전을 표기 → 구버전 문서로 생성된 결과물을 즉시 식별.</li>
-</ul>
-<h3><span class="badge">경로 1</span>Claude Code — 개발자·디자이너</h3>
-<p>CLAUDE.md가 절차를 강제: 페이지 생성 요청 → <strong>해당 제품 <code>regulations/</code> 검토 (충돌·주의사항 발견 시 생성 전에 알림)</strong> → design.md + 해당 레시피 읽기 → playground에 페이지 생성 → 기계 검증(lint) → dev 서버 미리보기 → 스크린샷 셀프 리뷰.</p>
-<h3><span class="badge">경로 2</span>claude.ai — 기획/PM</h3>
-<p>팀 공유 claude.ai 프로젝트(위 참조)에서 대화로 요청하면 React 아티팩트로 미리보기. standalone 문서에는 규정 검토 지침과 아티팩트 제약 대응 지침 포함(토큰을 CSS 변수 블록으로 인라인, 컴포넌트는 문서 내 스니펫 사용). 결과가 채택되면 개발자/디자이너가 경로 1에서 정식 목업화.</p>
+        <table>
+          <tr><th>층위</th><th>내용</th></tr>
+          <tr><td>기계 검증</td><td>ESLint 커스텀 룰 또는 스크립트로 임의 색상·간격 값 검출. 생성 직후 자동 실행.</td></tr>
+          <tr><td>시각 검증</td><td>생성 후 스크린샷을 Claude가 셀프 리뷰 (정렬, 대비, 오버플로). CLAUDE.md 절차에 포함.</td></tr>
+          <tr><td>사람 승인</td><td>최종 게이트. 승인된 것만 피그마에 기록.</td></tr>
+        </table>
+      </section>
 
-<h2><span class="num">9</span>피그마 기록 파이프라인</h2>
-<ul>
-  <li><strong>1회 셋업</strong> — 토큰 → 피그마 Variables 생성, 핵심 컴포넌트 → 피그마 컴포넌트 라이브러리 생성 (figma-generate-library). Code Connect로 피그마 ↔ 코드 컴포넌트 매핑.</li>
-  <li><strong>화면 기록</strong> — 승인된 목업 → 라이브러리 컴포넌트 인스턴스 + Variables 바인딩으로 화면 조립 (figma-generate-design). 하드코딩 값 없는 정식 산출물.</li>
-  <li><strong>재동기화</strong> — 토큰/컴포넌트 변경 시 피그마 Variables·라이브러리 재생성.</li>
-  <li><strong>히스토리 기록</strong> — 피그마 파일에 전용 "History" 페이지를 두고, 화면을 기록·갱신할 때마다 {날짜, 요청 내용(프롬프트 요약), 변경 사항, 디자인 시스템 버전, 승인자} 엔트리를 시간순으로 추가. 기록된 각 화면 옆에도 동일 메타를 담은 주석 카드를 붙여, 화면만 봐도 언제·왜·어떤 요청으로 만들어졌는지 추적 가능하게 한다.</li>
-</ul>
+    </div>
+  </div>
 
-<h2><span class="num">10</span>기존 자산 수확 (Phase 0)</h2>
-<p>기존 피그마 파일·코드베이스에서 실제 사용 중인 색/타이포/간격/컴포넌트를 인벤토리로 추출 → 중복 통합, 명명 정리 → 토큰과 컴포넌트 목록 초안으로 확정. <strong>발명이 아닌 정규화.</strong></p>
-
-<h2><span class="num">11</span>품질 검증</h2>
-<table>
-  <tr><th>층위</th><th>내용</th></tr>
-  <tr><td><strong>기계 검증</strong></td><td>ESLint 커스텀 룰 또는 스크립트로 임의 색상·간격 값 검출. 생성 직후 자동 실행.</td></tr>
-  <tr><td><strong>시각 검증</strong></td><td>생성 후 스크린샷을 Claude가 셀프 리뷰 (정렬, 대비, 오버플로). CLAUDE.md 절차에 포함.</td></tr>
-  <tr><td><strong>사람 승인</strong></td><td>최종 게이트. 승인된 것만 피그마에 기록.</td></tr>
-</table>
-
-<h2><span class="num">12</span>단계별 로드맵</h2>
-<table>
-  <tr><th>단계</th><th>내용</th><th>완료 판정</th></tr>
-  <tr><td><strong>0</strong></td><td>기존 자산 수확 → 토큰 확정</td><td>tokens/*.json 확정, 팀 리뷰 통과</td></tr>
-  <tr><td><strong>1</strong></td><td>design.md + 레퍼런스 컴포넌트 ~15개 + playground</td><td>단일 페이지 생성이 일관되게 나옴</td></tr>
-  <tr><td><strong>2</strong></td><td>레시피 4종 + Claude Code 워크플로우(CLAUDE.md, lint)</td><td>예시 프롬프트가 한 번에 3페이지 목업으로 나옴</td></tr>
-  <tr><td><strong>3</strong></td><td>피그마 파이프라인 (Variables·라이브러리·화면 기록)</td><td>승인 화면이 피그마에 정식 산출물로 기록됨</td></tr>
-  <tr><td><strong>4</strong></td><td>claude.ai 접점 (standalone 빌드 + 프로젝트 셋업)</td><td>기획자가 대화만으로 아티팩트 목업을 뽑음</td></tr>
-</table>
-
-<h2><span class="num">13</span>성공 기준</h2>
-<div class="callout">자연어 한 문단 요청 → 어드민 리스트 + 로그인 + 대시보드 3페이지가 디자인 시스템을 준수하는 <strong>동작하는 목업</strong>으로 생성되고, 승인 시 피그마에 <strong>라이브러리 기반 산출물</strong>로 기록된다.</div>
-
-<h2><span class="num">14</span>범위 제외 (v1)</h2>
-<ul>
-  <li>피그마 → 코드 역방향 동기화</li>
-  <li>프로덕션 npm 패키지 배포 (목업·승인용 레퍼런스 구현까지만)</li>
-  <li>React 외 스택용 컴포넌트 구현 (토큰만 중립 제공)</li>
-  <li>사내 전용 웹 툴 (claude.ai로 대체)</li>
-</ul>
-
-<div class="footer-note">원본: docs/superpowers/specs/2026-07-29-ai-design-system-design.md · 커밋 8ffa47e</div>
+  <aside class="visual" id="visual-col" style="display:none">
+    <div class="strip" style="margin:-24px -20px 24px; padding:0 20px"><span>Visual</span><span class="sub">준비 중</span></div>
+    <div class="frame"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+    <div class="frame"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+  </aside>
 
 </div>
+
+<script>
+  const panels = [...document.querySelectorAll('.panel')];
+  const list = document.getElementById('list');
+  const shell = document.getElementById('shell');
+  const visualCol = document.getElementById('visual-col');
+  const content = document.getElementById('content');
+  const crumb = document.getElementById('crumb');
+  const crumbNum = document.getElementById('crumb-num');
+  const pad = (n) => String(n + 1).padStart(2, '0');
+
+  panels.forEach((panel, i) => {
+    const btn = document.createElement('button');
+    btn.innerHTML =
+      `<span class="num">${pad(i)}</span>` +
+      `<span class="grow">${panel.dataset.title}</span>` +
+      `<span class="hchev"></span>`;
+    btn.addEventListener('click', () => select(i));
+    list.appendChild(btn);
+  });
+  const buttons = [...list.children];
+
+  function select(i) {
+    panels.forEach((p, j) => p.classList.toggle('on', j === i));
+    buttons.forEach((b, j) => b.classList.toggle('on', j === i));
+
+    const panel = panels[i];
+    const isFull = panel.dataset.full === '1';
+    const hasVisual = panel.dataset.visual === '1';
+
+    content.classList.toggle('full', isFull);
+    shell.classList.toggle('wide-visual', hasVisual);
+    visualCol.style.display = hasVisual ? '' : 'none';
+
+    crumb.textContent = panels[i].dataset.title;
+    crumbNum.textContent = pad(i);
+    window.scrollTo(0, 0);
+  }
+
+  select(0);
+</script>
+
 </body>
 </html>

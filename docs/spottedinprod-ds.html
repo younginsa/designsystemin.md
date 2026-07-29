@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>spottedinprod-ds — 디자인 시스템 추출</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --ink: #111111;
+    --muted: #8e8e8e;
+    --nav-rest: #6b6b6b;
+    --line: #e6e6e6;
+    --surface: #f2f2f2;
+    --inverse-bg: #000000;
+    --inverse-fg: #ffffff;
+    --max-w: 1920px;   /* 콘텐츠 최대 폭. 구분선은 화면 끝까지 가고 내용만 이 폭에서 멈춘다 */
+    --r-fill: 4px;
+    --r-box: 0px;
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Apple SD Gothic Neo", Pretendard, "Noto Sans KR", sans-serif;
+    --mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --chev-rest: #dcdcdc;   /* 선택 전 셰브론 — line gray 계열 */
+    /* 픽셀 셰브론 — 1x1 픽셀 5개를 x+1,y+1로만 이어 붙임. 모서리끼리만 닿는다.
+       viewBox 5x7 을 10x14px 로 렌더 → 픽셀 하나가 정확히 2CSS픽셀. */
+    --chev-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 7' shape-rendering='crispEdges'><g fill='black'><rect x='1' y='1' width='1' height='1'/><rect x='2' y='2' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='2' y='4' width='1' height='1'/><rect x='1' y='5' width='1' height='1'/></g></svg>");
+    /* 비교용 — 안티앨리어싱을 켠 일반 벡터 */
+    --chev-mask-plain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 7'><path d='M1.5 1.5 L3.5 3.5 L1.5 5.5' fill='none' stroke='black' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  }
+  :root { --gutter: max(0px, calc((100vw - var(--max-w)) / 2)); }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--font); font-size: 16px; line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Top nav ─────────────────────────────── */
+  .nav {
+    display: flex; align-items: center; gap: 4px;
+    height: 60px; padding: 0 calc(22px + var(--gutter));
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--bg); z-index: 20;
+  }
+  .nav a, .nav .item {
+    font-size: 15px; line-height: 1.35; color: var(--nav-rest); text-decoration: none;
+    padding: 4px 9px; border: 1px solid transparent;
+    border-radius: var(--r-box); cursor: pointer;
+  }
+  .nav a:hover, .nav .item:hover { color: var(--ink); background: var(--surface); }
+  .nav .on { color: var(--ink); border-color: var(--line); }
+  .nav .sp { margin-left: auto; }
+  .nav .stamp { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
+
+  /* ── Shell ───────────────────────────────── */
+  .shell {
+    display: grid; grid-template-columns: calc(300px + var(--gutter)) minmax(0,1fr);
+    min-height: calc(100vh - 60px);
+  }
+  .rail {
+    border-right: 1px solid var(--line);
+    position: sticky; top: 60px; align-self: start;
+    height: calc(100vh - 60px); overflow-y: auto;
+  }
+  .strip {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 58px; padding: 0 24px; border-bottom: 1px solid var(--line);
+    font-size: 15px;
+  }
+  /* 스트립은 컬럼 전체를 덮어 구분선이 화면 끝까지 닿고, 글자만 1920 안으로 들인다 */
+  /* 가운데 컬럼 제목은 스크롤해도 상단에 고정 (내비 60px 아래) */
+  .maincol .strip {
+    position: sticky; top: 60px; z-index: 10;
+    background: var(--bg);
+  }
+  .rail .strip { padding-left: calc(24px + var(--gutter)); }
+  .maincol .strip { padding-right: calc(24px + var(--gutter)); }
+  .strip .sub { color: var(--muted); font-size: 13px; }
+  .strip .num-badge { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+  .rail .list { padding: 6px 12px 40px calc(12px + var(--gutter)); }
+  .rail button {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; height: 44px; padding: 0 12px;
+    background: none; border: 1px solid transparent; border-radius: var(--r-box);
+    font-family: var(--font); font-size: 15px; color: var(--muted);
+    text-align: left; cursor: pointer;
+  }
+  .rail button:hover { border-color: var(--line); }          /* hover = 각진 박스만 */
+  .rail button.on { color: var(--ink); }                     /* 선택 = 검정 + 밑줄 */
+  .rail button.on .label { text-decoration: underline; text-underline-offset: 3px; }
+  .rail .num { font-family: var(--mono); font-size: 11px; color: var(--muted); min-width: 18px; }
+  .rail button.on .num { color: var(--ink); }
+  .rail button.on .hchev { background-color: #000; }
+  .rail .label { flex: 1; }
+
+  /* 숫자 배지 — 본문 안의 번호는 전부 이 하나를 쓴다 (HiNAS DS 와 공통) */
+  .n {
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+    border: 1px solid var(--line); border-radius: 50%;
+    width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center;
+    flex: none; margin-top: 2px;
+  }
+
+  /* 픽셀 셰브론 */
+  .hchev {
+    width: 10px; height: 14px; flex: none;
+    background-color: var(--chev-rest);
+    -webkit-mask-image: var(--chev-mask); mask-image: var(--chev-mask);
+    -webkit-mask-size: contain; mask-size: contain;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-position: center; mask-position: center;
+  }
+  .plainchev {
+    width: 10px; height: 14px; flex: none; background: var(--chev-rest);
+    -webkit-mask-image: var(--chev-mask-plain); mask-image: var(--chev-mask-plain);
+    -webkit-mask-size: contain; mask-size: contain;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-position: center; mask-position: center;
+  }
+
+  /* ── Content ─────────────────────────────── */
+  .content { padding: 36px 44px 100px; padding-right: calc(44px + var(--gutter)); max-width: calc(1200px + var(--gutter)); }
+  /* 프로즈 가독폭은 860 유지 — 표·데모·코드만 넓게 쓴다 */
+  .content p, .content ul, .content ol, .content .note { max-width: 860px; }
+  .panel { display: none; }
+  .panel.on { display: block; }
+
+  /* 섹션 라벨 — 작은 대문자 라벨은 전부 이 한 정의를 쓴다 (h3, th, .demo-label) */
+  h3, th, .demo-label {
+    font-size: 11px; font-weight: 400;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  h3 { margin: 64px 0 12px; }
+  h3:first-child { margin-top: 0; }
+  p { margin: 12px 0; }
+  strong { font-weight: 600; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15px; }
+  th { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+
+  ul, ol { padding-left: 20px; }
+  li { margin: 6px 0; }
+  li::marker { color: var(--muted); }
+
+  .font-table td:nth-child(1), .font-table td:nth-child(2), .font-table td:nth-child(4) { white-space: nowrap; }
+  a.link { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  a.link:hover { background: var(--surface); }
+
+  code { font-family: var(--mono); font-size: 0.85em; background: var(--surface); padding: 1px 5px; border-radius: var(--r-fill); }
+  pre { font-family: var(--mono); font-size: 12.5px; line-height: 1.6; background: var(--bg); border: 1px solid var(--line); padding: 18px 20px; overflow-x: auto; }
+  pre code { background: none; padding: 0; }
+
+  .note { border-left: 2px solid var(--ink); padding-left: 16px; margin: 20px 0; color: var(--muted); }
+
+  /* ── Demos ───────────────────────────────── */
+  .demo { border: 1px solid var(--line); padding: 20px 24px; margin: 16px 0; }
+  .demo-label { margin-bottom: 14px; }
+
+  .row-demo {
+    display: flex; align-items: center; gap: 12px;
+    height: 48px; padding: 0 12px;
+    border: 1px solid transparent; border-radius: var(--r-box);
+    color: var(--muted); font-size: 15px;
+  }
+  .row-demo .grow { flex: 1; }
+  .row-demo.is-hover { border-color: var(--line); }
+  .row-demo.is-sel { color: var(--ink); }
+  .row-demo.is-sel .grow { text-decoration: underline; text-underline-offset: 3px; }
+  .row-demo.is-sel .hchev { background-color: #000; }
+  .row-demo.is-fill { background: var(--surface); color: var(--ink); }
+  .row-demo.is-fill .hchev { background-color: #000; }
+
+  .navdemo { display: flex; gap: 6px; align-items: center; }
+  .navdemo span {
+    font-size: 15px; line-height: 1.35; color: var(--nav-rest);
+    padding: 4px 9px; border: 1px solid transparent; border-radius: var(--r-box);
+  }
+  .navdemo span.hov { color: var(--ink); background: var(--surface); }
+  .navdemo span.sel { color: var(--ink); border-color: var(--line); }
+
+  .swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 16px 0; }
+  .sw .chip { height: 56px; border: 1px solid var(--line); margin-bottom: 6px; }
+  .sw .nm { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+  .btnrow { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .b { font-size: 14px; padding: 8px 20px; border: 1px solid transparent; background: none; font-family: var(--font); color: var(--ink); }
+  .b.outline { border-color: var(--line); border-radius: var(--r-box); }
+  .b.inverse { background: var(--inverse-bg); color: var(--inverse-fg); border-radius: var(--r-fill); }
+  .b.subtle { background: var(--surface); border-radius: var(--r-fill); }
+
+  .chev-compare { display: flex; gap: 44px; align-items: center; }
+  .chev-compare figure { margin: 0; text-align: center; }
+  .chev-compare .big { transform: scale(4); transform-origin: center; margin: 24px 0; }
+  .chev-compare figcaption { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 28px; }
+
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; }
+    .rail { display: none; }
+    .content { padding: 32px 24px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <span class="item on">SIP DS</span>
+  <span class="sp"></span>
+  <span class="stamp">reference · 2026-07-29</span>
+</div>
+
+<div class="shell">
+
+  <aside class="rail">
+    <div class="strip"><span>spottedinprod-ds</span><span class="sub">8</span></div>
+    <div class="list" id="list"></div>
+  </aside>
+
+  <div class="maincol">
+    <div class="strip">
+      <span id="crumb">컬러</span>
+      <span class="num-badge" id="crumb-num">01</span>
+    </div>
+    <div class="content">
+
+      <!-- ══ 01 컬러 ══ -->
+      <section class="panel on" data-title="컬러">
+        <h3>팔레트</h3>
+        <div class="swatches">
+          <div class="sw"><div class="chip" style="background:#ffffff"></div><div class="nm">--bg #ffffff</div></div>
+          <div class="sw"><div class="chip" style="background:#111111"></div><div class="nm">--ink #111111</div></div>
+          <div class="sw"><div class="chip" style="background:#6b6b6b"></div><div class="nm">--nav-rest #6b6b6b</div></div>
+          <div class="sw"><div class="chip" style="background:#8e8e8e"></div><div class="nm">--muted #8e8e8e</div></div>
+          <div class="sw"><div class="chip" style="background:#dcdcdc"></div><div class="nm">--chev-rest #dcdcdc</div></div>
+          <div class="sw"><div class="chip" style="background:#e6e6e6"></div><div class="nm">--line #e6e6e6</div></div>
+          <div class="sw"><div class="chip" style="background:#f2f2f2"></div><div class="nm">--surface #f2f2f2</div></div>
+          <div class="sw"><div class="chip" style="background:#000000"></div><div class="nm">--inverse-bg</div></div>
+        </div>
+        <h3>토큰</h3>
+        <table>
+          <tr><th>토큰</th><th>용도</th></tr>
+          <tr><td><code>--bg</code></td><td>페이지·패널 배경</td></tr>
+          <tr><td><code>--ink</code></td><td>기본 텍스트, 활성·hover 항목</td></tr>
+          <tr><td><code>--nav-rest</code></td><td>내비 기본 상태 (진한 회색)</td></tr>
+          <tr><td><code>--muted</code></td><td>보조 텍스트, 비활성 리스트 항목</td></tr>
+          <tr><td><code>--chev-rest</code></td><td>선택 전 셰브론. 텍스트보다 훨씬 옅게 둔다</td></tr>
+          <tr><td><code>--line</code></td><td>모든 구분선·테두리·아웃라인 박스</td></tr>
+          <tr><td><code>--surface</code></td><td><strong>연회색 채움</strong> — 내비 hover, 커맨드 팔레트 활성 행, 보조 버튼, Esc 칩</td></tr>
+          <tr><td><code>--inverse-bg / fg</code></td><td>주요 CTA (화면당 1개)</td></tr>
+        </table>
+      </section>
+
+      <!-- ══ 02 타이포그래피 ══ -->
+      <section class="panel" data-title="타이포그래피">
+        <h3>서체</h3>
+        <table class="font-table">
+          <tr><th>환경</th><th>서체</th><th>설명</th><th>다운로드</th></tr>
+          <tr>
+            <td>Apple 기기 (원본)</td>
+            <td><strong>SF Pro Text / SF Pro Display</strong></td>
+            <td>Apple 시스템 서체</td>
+            <td><a class="link" href="https://developer.apple.com/fonts/" target="_blank" rel="noopener">developer.apple.com/fonts</a></td>
+          </tr>
+          <tr>
+            <td>웹·크로스플랫폼 대체</td>
+            <td><strong>Inter</strong></td>
+            <td>SF Pro와 가장 가까운 오픈소스 서체</td>
+            <td><a class="link" href="https://rsms.me/inter/" target="_blank" rel="noopener">rsms.me/inter</a></td>
+          </tr>
+          <tr>
+            <td>한글</td>
+            <td><strong>Pretendard</strong></td>
+            <td>라틴 자소가 Inter 계열이라 혼용 시 이질감이 적다</td>
+            <td><a class="link" href="https://github.com/orioncactus/pretendard" target="_blank" rel="noopener">github.com/orioncactus/pretendard</a></td>
+          </tr>
+        </table>
+        <p>원본은 별도 웹폰트를 싣지 않고 <code>-apple-system</code>으로 OS 서체를 그대로 부른다. 재현할 때의 CSS 스택:</p>
+<pre><code>font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+             Inter, "Apple SD Gothic Neo", Pretendard, sans-serif;</code></pre>
+
+        <h3>스케일</h3>
+        <table>
+          <tr><th>역할</th><th>크기</th><th>굵기</th><th>색</th></tr>
+          <tr><td>본문</td><td>16px / 1.6</td><td>400</td><td>ink</td></tr>
+          <tr><td>내비</td><td>15px</td><td>400</td><td>nav-rest → ink</td></tr>
+          <tr><td>패널 제목</td><td>15~16px</td><td>400</td><td>ink</td></tr>
+          <tr><td>리스트 항목</td><td>15px</td><td>400</td><td>muted → ink</td></tr>
+          <tr><td>번호 라벨</td><td>11px</td><td>400</td><td>muted, 모노스페이스</td></tr>
+          <tr><td>섹션 라벨</td><td>11~12px</td><td>400~500</td><td>muted, 대문자 +0.08em</td></tr>
+        </table>
+      </section>
+
+      <!-- ══ 03 선·라운드 ══ -->
+      <section class="panel" data-title="선 · 테두리 · 라운드">
+        <h3>규격</h3>
+        <table>
+          <tr><th>항목</th><th>값</th><th>비고</th></tr>
+          <tr><td>선 두께</td><td>1px</td><td>예외 없음</td></tr>
+          <tr><td>선 색</td><td><code>--line</code></td><td>예외 없음</td></tr>
+          <tr><td>라운드 (채움 버튼·칩)</td><td>3~4px</td><td>검정 CTA, 연회색 버튼, Esc 칩</td></tr>
+          <tr><td>라운드 (<strong>아웃라인 박스</strong>)</td><td><strong>0px</strong></td><td><strong>각진 모서리.</strong> 내비 활성, 레일 hover</td></tr>
+          <tr><td>라운드 (앱 아이콘)</td><td>8px</td><td>콘텐츠 요소</td></tr>
+          <tr><td>그림자</td><td><strong>없음</strong></td><td>모달에도 없다</td></tr>
+        </table>
+        <p>라운드 규칙이 <strong>채움과 아웃라인에서 다르다.</strong> 배경을 채우는 요소는 3~4px로 살짝 둥글게, 테두리만 있는 선택·hover 박스는 <strong>각지게(0px)</strong> 둔다. 아웃라인 박스를 둥글게 만들면 격자 선과의 각진 대비가 무너져 즉시 다른 시스템처럼 보인다.</p>
+      </section>
+
+      <!-- ══ 04 간격·치수 ══ -->
+      <section class="panel" data-title="간격 · 치수">
+        <h3>실측값</h3>
+        <p>뷰포트 폭 약 1480px 기준 역산값.</p>
+        <table>
+          <tr><th>항목</th><th>값</th><th>항목</th><th>값</th></tr>
+          <tr><td>상단 내비 높이</td><td>60px</td><td>리스트 행 높이</td><td>44~50px</td></tr>
+          <tr><td>컬럼 헤더 스트립</td><td>58px</td><td>행 아이콘</td><td>32px</td></tr>
+          <tr><td>하단 푸터 스트립</td><td>58px</td><td>번호 ↔ 제목 간격</td><td>10px</td></tr>
+          <tr><td>컬럼 좌우 패딩</td><td>20~24px</td><td>내비 항목 패딩</td><td>4px 9px (타이트)</td></tr>
+        </table>
+      </section>
+
+      <!-- ══ 05 레이아웃 ══ -->
+      <section class="panel" data-title="레이아웃">
+        <h3>앱 셸</h3>
+<pre><code>┌──────────────────────────────────────────────────────┐
+│  Home Clips Community [Jobs]   [Search] [Filter]  ■  │  60px, 하단 1px 선
+├────────────┬────────────────────┬────────────────────┤
+│ 제목  액션 │ 제목          Esc  │ 제목               │  58px, 하단 1px 선
+├────────────┼────────────────────┼────────────────────┤
+│  리스트    │      본문          │   비주얼 / 부가    │  가변, 사이 1px 선
+├────────────┼────────────────────┼────────────────────┤
+│ 9 Companies│ 7 Positions   ‹ ›  │                    │  58px, 상단 1px 선
+└────────────┴────────────────────┴────────────────────┘</code></pre>
+        <ul>
+          <li>내비: 좌측 메뉴 / 중앙 액션 / 우측 CTA 3분할.</li>
+          <li>컬럼 수는 화면마다 다르다. 목록형 2컬럼, 상세형 3컬럼.</li>
+          <li>고정 그리드가 아니다. 관찰값 — 좌 280~340px, 중앙 가변, 우 340~540px.</li>
+          <li>모든 컬럼이 헤더·푸터 스트립을 공유한다.</li>
+        </ul>
+
+        <h3>목록 → 상세 전환</h3>
+        <p>좌측에서 항목을 고르면 <strong>페이지 전체가 스크롤되는 것이 아니라 가운데 컬럼만 바뀐다.</strong> 가운데 헤더 스트립에 선택한 항목의 제목이 뜨고 그 아래에 해당 내용만 나타난다. 좌측 목록은 자리를 지키고 선택된 항목만 검정 + 밑줄로 바뀐다. 헤더 우측의 <code>Esc</code>로 목록 상태로 돌아간다. 이 페이지도 같은 방식으로 동작한다.</p>
+
+        <h3>격자 그리드</h3>
+        <p>4열 그리드. 셀 사이에 gap을 두지 않고 <strong>1px 선으로 격자를 그린다.</strong> 카드가 아니라 표에 가깝다.</p>
+      </section>
+
+      <!-- ══ 06 컴포넌트 ══ -->
+      <section class="panel" data-title="컴포넌트 패턴">
+        <h3>내비 항목 — 3단계</h3>
+        <div class="demo">
+          <div class="demo-label">live · 3번째=hover, 4번째=활성</div>
+          <div class="navdemo">
+            <span>Home</span>
+            <span>Clips</span>
+            <span class="hov">Community</span>
+            <span class="sel">Jobs</span>
+          </div>
+        </div>
+        <table>
+          <tr><th>상태</th><th>표현</th></tr>
+          <tr><td>기본</td><td>텍스트만, <code>--nav-rest</code> (진한 회색)</td></tr>
+          <tr><td>hover</td><td>텍스트 <code>--ink</code> + <strong>연회색 채움</strong>, 테두리 없음</td></tr>
+          <tr><td>활성</td><td>텍스트 <code>--ink</code> + <strong>각진 1px 테두리 박스</strong> (radius 0)</td></tr>
+        </table>
+        <p>활성 항목의 테두리는 <code>--ink</code>가 아니라 <strong><code>--line</code>(연회색)</strong>이다. 텍스트만 검정으로 올리고 박스는 옅게 둔다.</p>
+
+        <h3>리스트 행 — hover와 선택이 서로 다른 수단</h3>
+        <div class="demo">
+          <div class="demo-label">live · 좌측 레일</div>
+          <div class="row-demo"><span class="grow">기본 항목</span><span class="hchev"></span></div>
+          <div class="row-demo is-hover"><span class="grow">hover — 각진 박스만</span><span class="hchev"></span></div>
+          <div class="row-demo is-sel"><span class="grow">선택 — 검정 + 밑줄</span><span class="hchev"></span></div>
+          <div class="row-demo is-sel is-hover"><span class="grow">선택 + hover — 둘 다</span><span class="hchev"></span></div>
+          <div class="demo-label" style="margin-top:22px">live · 커맨드 팔레트 (다른 규칙)</div>
+          <div class="row-demo is-fill"><span class="grow">활성 결과 — 연회색 채움</span><span class="hchev"></span></div>
+          <div class="row-demo"><span class="grow">기본 결과</span><span class="hchev"></span></div>
+        </div>
+        <table>
+          <tr><th>상태</th><th>표현</th></tr>
+          <tr><td>기본</td><td>라벨 muted, 박스 없음</td></tr>
+          <tr><td><strong>hover</strong></td><td><strong>각진 1px 테두리 박스</strong> (radius 0, 행 전체 폭). 라벨 색은 그대로</td></tr>
+          <tr><td><strong>선택</strong></td><td><strong>라벨 ink + 밑줄, 셰브론도 검정.</strong> 박스 없음</td></tr>
+          <tr><td>선택 + hover</td><td>밑줄과 박스가 함께 나타난다</td></tr>
+        </table>
+        <p>커맨드 팔레트(검색 모달)의 결과 목록만 다른 규칙을 쓴다. 활성 행을 <strong>연회색 채움</strong>으로 표시하고 테두리도 밑줄도 쓰지 않는다. 키보드로 빠르게 훑는 목록이라 덩어리로 인지되는 편이 낫기 때문으로 보인다.</p>
+
+        <h3>버튼 — 4종만 존재</h3>
+        <div class="demo">
+          <div class="demo-label">live</div>
+          <div class="btnrow">
+            <button class="b outline">Search</button>
+            <button class="b inverse">Join SIP</button>
+            <button class="b subtle">Follow</button>
+            <button class="b">Post a job</button>
+          </div>
+        </div>
+        <p>채움은 검정과 연회색 두 가지뿐이다. 컬러 버튼이 존재하지 않는다. 아웃라인 버튼은 <strong>각지게</strong>, 채움 버튼은 <strong>4px 라운드</strong>로 둔다.</p>
+
+        <h3>픽셀 셰브론</h3>
+        <p>이 시스템의 서명이다. 셰브론과 방향 화살표가 매끈한 벡터가 아니라 <strong>1×1 픽셀 5개가 모서리에서만 닿으며 대각선으로 이어진 비트맵</strong>으로 렌더링된다.</p>
+        <div class="demo">
+          <div class="demo-label">400% 확대 비교</div>
+          <div class="chev-compare">
+            <figure><div class="big"><span class="hchev"></span></div><figcaption>픽셀 (원본 방식)</figcaption></figure>
+            <figure><div class="big"><span class="plainchev"></span></div><figcaption>일반 벡터 (사용 안 함)</figcaption></figure>
+          </div>
+        </div>
+<pre><code>viewBox 0 0 5 7 · 렌더 10×14px · shape-rendering=crispEdges
+rect(x, y, w=1, h=1) 5개:
+(1,1) (2,2) (3,3) (2,4) (1,5)</code></pre>
+        <p>렌더 크기는 viewBox의 <strong>정수배</strong>로 둔다. 1.5배 같은 어중간한 배율이면 픽셀이 1px과 2px로 들쭉날쭉해져 계단이 지저분해진다. 점을 늘리거나 크기를 줄이면 굵고 성근 인상이 사라지고 그냥 가는 선처럼 보인다. <strong>적고 굵게</strong>가 원칙이다.</p>
+        <p>픽셀 질감은 <strong>셰브론과 화살표에만</strong> 쓰이고 다른 UI 요소는 전부 깨끗한 1px 선이다.</p>
+
+        <h3>필터 칩 · Esc 칩</h3>
+        <div class="demo">
+          <div class="demo-label">live</div>
+          <div class="btnrow">
+            <button class="b outline">Any</button>
+            <button class="b" style="color:var(--nav-rest)">Engineering</button>
+            <button class="b" style="color:var(--nav-rest)">Design</button>
+            <button class="b" style="color:var(--nav-rest)">Product</button>
+            <span style="margin-left:auto"></span>
+            <button class="b subtle" style="font-size:13px;padding:5px 12px">Esc</button>
+          </div>
+        </div>
+        <p>선택된 칩은 각진 1px 테두리 박스, 나머지는 텍스트만. <code>Esc</code> 칩은 연회색 채움에 muted 텍스트로 패널·모달 헤더 우측에 상시 노출된다.</p>
+
+        <h3>모달</h3>
+        <ul>
+          <li>배경: <strong>dim 아님. backdrop-filter로 강하게 blur만 건다.</strong></li>
+          <li>패널: 흰 배경, 1px 테두리, 그림자 없음, radius 거의 없음.</li>
+          <li>폭: 검색 모달 약 680px, 필터 모달 약 640px.</li>
+          <li>내부는 가로 1px 선으로 구역을 나눈다.</li>
+        </ul>
+      </section>
+
+      <!-- ══ 07 인터랙션 ══ -->
+      <section class="panel" data-title="인터랙션 규칙">
+        <h3>규칙</h3>
+        <ul>
+          <li>상태 변화는 <strong>테두리 유무 · 밑줄 · 연회색 채움</strong> 셋으로만 표현한다. 색상(hue)은 바꾸지 않는다.</li>
+          <li><strong>hover와 선택에 서로 다른 수단을 배정한다.</strong> 겹쳐도 정보가 손실되지 않는다.</li>
+          <li>모달 진입 시 배경 blur. 닫기는 <code>Esc</code> 또는 우측 상단 칩.</li>
+          <li>픽셀 셰브론이 "더 있음"의 유일한 표식이다. 화살표·플러스 등 다른 기호를 섞지 않는다.</li>
+          <li>로딩·빈 상태에서도 격자 선은 유지된다.</li>
+        </ul>
+      </section>
+
+      <!-- ══ 08 토큰 ══ -->
+      <section class="panel" data-title="바로 쓸 수 있는 토큰">
+        <h3>CSS 변수</h3>
+<pre><code>:root {
+  /* color */
+  --sip-bg:            #ffffff;
+  --sip-ink:           #111111;
+  --sip-nav-rest:      #6b6b6b;   /* 내비 기본 상태 */
+  --sip-ink-muted:     #8e8e8e;
+  --sip-chev-rest:     #dcdcdc;   /* 선택 전 셰브론 */
+  --sip-line:          #e6e6e6;
+  --sip-surface:       #f2f2f2;   /* 내비 hover, 팔레트 활성 행, 보조 버튼, Esc 칩 */
+  --sip-inverse-bg:    #000000;
+  --sip-inverse-fg:    #ffffff;
+
+  /* radius — 채움은 살짝 둥글게, 아웃라인은 각지게 */
+  --sip-radius-fill:   4px;
+  --sip-radius-box:    0px;
+
+  /* line */
+  --sip-border:        1px solid var(--sip-line);
+
+  /* type */
+  --sip-font: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+              Inter, "Apple SD Gothic Neo", Pretendard, sans-serif;
+  --sip-text-body:     16px;
+  --sip-text-ui:       15px;
+  --sip-text-label:    11px;
+  --sip-tracking-label: 0.08em;
+  --sip-leading-body:  1.6;
+
+  /* size */
+  --sip-nav-h:         60px;
+  --sip-strip-h:       58px;
+  --sip-row-h:         44px;
+  --sip-icon:          32px;
+  --sip-gap-num:       10px;      /* 번호 ↔ 제목 */
+  --sip-pad-col:       24px;
+}</code></pre>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const panels = [...document.querySelectorAll('.panel')];
+  const list = document.getElementById('list');
+  const crumb = document.getElementById('crumb');
+  const crumbNum = document.getElementById('crumb-num');
+  const pad = (n) => String(n + 1).padStart(2, '0');
+
+  panels.forEach((panel, i) => {
+    const btn = document.createElement('button');
+    btn.innerHTML =
+      `<span class="num">${pad(i)}</span>` +
+      `<span class="label">${panel.dataset.title}</span>` +
+      `<span class="hchev"></span>`;
+    btn.addEventListener('click', () => select(i));
+    list.appendChild(btn);
+  });
+  const buttons = [...list.children];
+
+  function select(i) {
+    panels.forEach((p, j) => p.classList.toggle('on', j === i));
+    buttons.forEach((b, j) => b.classList.toggle('on', j === i));
+    crumb.textContent = panels[i].dataset.title;
+    crumbNum.textContent = pad(i);
+    window.scrollTo(0, 0);
+  }
+
+  select(0);
+</script>
+
+</body>
+</html>
