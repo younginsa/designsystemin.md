@@ -1,0 +1,36 @@
+{
+  "color": {
+    "white": { "$type": "color", "$value": "#ffffff" },
+    "zinc": {
+      "50":  { "$type": "color", "$value": "#fafafa" },
+      "100": { "$type": "color", "$value": "#f4f4f5" },
+      "200": { "$type": "color", "$value": "#e4e4e7" },
+      "300": { "$type": "color", "$value": "#d4d4d8" },
+      "400": { "$type": "color", "$value": "#a1a1aa" },
+      "500": { "$type": "color", "$value": "#71717a" },
+      "600": { "$type": "color", "$value": "#52525b" },
+      "700": { "$type": "color", "$value": "#3f3f46" },
+      "800": { "$type": "color", "$value": "#27272a" },
+      "900": { "$type": "color", "$value": "#18181b" },
+      "950": { "$type": "color", "$value": "#09090b" }
+    },
+    "blue": {
+      "500": { "$type": "color", "$value": "#3b82f6" },
+      "600": { "$type": "color", "$value": "#2563eb" }
+    },
+    "red": {
+      "500": { "$type": "color", "$value": "#ef4444" },
+      "600": { "$type": "color", "$value": "#dc2626" }
+    },
+    "green": {
+      "600": { "$type": "color", "$value": "#16a34a" }
+    }
+  },
+  "radius": {
+    "base": { "$type": "dimension", "$value": "0.625rem" }
+  },
+  "font": {
+    "sans": { "$type": "fontFamily", "$value": "-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', Pretendard, 'Noto Sans KR', sans-serif" },
+    "mono": { "$type": "fontFamily", "$value": "'SF Mono', 'JetBrains Mono', Menlo, monospace" }
+  }
+}

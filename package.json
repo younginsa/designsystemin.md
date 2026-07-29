@@ -2,9 +2,9 @@
   "name": "designsystemin",
   "private": true,
   "scripts": {
-    "tokens:build": "tsx scripts/build-tokens.ts",
+    "ds:build": "tsx scripts/build-foundations.ts",
     "test": "vitest run",
     "dev": "pnpm --filter playground dev",
-    "build": "pnpm tokens:build && pnpm --filter playground build"
+    "build": "pnpm ds:build && pnpm --filter playground build"
   }
 }
