@@ -2,9 +2,13 @@
   "name": "designsystemin",
   "private": true,
   "scripts": {
-    "ds:build": "tsx scripts/build-foundations.ts",
-    "test": "vitest run",
+    "ds:build": "tsx scripts/build-dstk.ts",
     "dev": "pnpm --filter playground dev",
     "build": "pnpm ds:build && pnpm --filter playground build"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2"
   }
 }
