@@ -1,0 +1,14 @@
+{
+  "updated": "2026-07-31",
+  "tokens": {
+    "radius": "0px",
+    "_note": "임시 테스트 값 — 365 토큰 정의 전 파이프라인 검증용"
+  },
+  "components": {
+    "btn-basic": { "render": "done", "note": "임시 토큰 테스트 렌더 (radius 0px)" },
+    "form-text": { "render": "done", "note": "임시 토큰 테스트 렌더 (radius 0px)" },
+    "data-kv": { "overrides": { "row-padding-x": "0" }, "note": "행 좌측 패딩 제거 — 타이틀과 좌측 정렬 · 임시 토큰 렌더 포함", "render": "done" },
+    "form-segment": { "render": "done", "note": "임시 토큰 테스트 렌더 (radius 0px)" },
+    "ov-dialog": { "render": "done", "note": "임시 토큰 테스트 렌더 (radius 0px)" }
+  }
+}
