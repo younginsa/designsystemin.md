@@ -119,6 +119,9 @@
   /* 패널 첫 요소 시작점 통일 — 위 8px, 왼쪽 0 (col-head·표 th와 동일 기준) */
   .panel > h3:first-child { margin-top: 8px; }
   .panel > .card-grid:first-child { margin-top: 8px; }
+  .panel > .block:first-child { margin-top: 0; }
+  .panel > .block:first-child > h3:first-child { margin-top: 8px; }
+  .panel > .card:first-child, .panel > p:first-child { margin-top: 8px; }
   th:first-child, td:first-child { padding-left: 0; }
   .panel.on { display: block; }
 
@@ -127,7 +130,7 @@
     font-size: 11px; font-weight: 400;
     color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em;
   }
-  h3 { margin: 64px 0 12px; }
+  h3 { margin: 128px 0 12px; }   /* 섹션 간 호흡 ×2 (2026-07-31) */
   h4 { font-size: 15px; font-weight: 600; margin: 24px 0 6px; }
   p { margin: 10px 0; }
   .lead { color: var(--muted); }
@@ -197,8 +200,11 @@
   .principle .d { color: var(--muted); font-size: 15px; }
 
   /* ── Section 01 internal layout ──────────── */
-  .block { margin-bottom: 56px; }
+  .block { margin-bottom: 112px; }
   .col-head { padding: 8px 0; }   /* 좌측 패딩 없음 — 아래 박스 왼쪽 모서리와 정렬 */
+  .two-col.even { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 24px; margin-top: 24px;
+    align-items: stretch; }   /* T자 간격 24px 통일 · 두 카드 높이 동일 */
+  .two-col > .card + .card { margin-top: 0; }   /* 그리드 안에서는 스택 간격 무효 */
   .two-col {
     display: grid; grid-template-columns: minmax(0, 620px) minmax(0, 1fr);
     gap: 40px; align-items: start;
@@ -267,7 +273,9 @@
   /* ── 365 시각 자료 (암호화 스크린샷) ─────── */
   .lockbar { border: 1px solid var(--line); padding: 16px 20px; margin: 0 0 24px;
     display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .lockbar .msg { color: var(--muted); font-size: 14px; flex: 1 1 100%; margin-top: 2px; }
+  /* 한 줄 고정 — 시각 컬럼 모드에서 줄바꿈으로 섹션 시작점이 밀리지 않게 */
+  .lockbar .msg { color: var(--muted); font-size: 14px; flex: 1 1 100%; margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .lockbar input { font-family: var(--sans); font-size: 14px; padding: 6px 10px;
     border: 1px solid var(--line); border-radius: var(--r-box); width: 200px; }
   .lockbar button { font-family: var(--sans); font-size: 14px; padding: 6px 16px;
@@ -448,27 +456,42 @@
             </div>
           </div>
 
-          <div class="card">
-            <div class="card-head"><span>경로 1 — Claude Code</span></div>
-            <div class="card-body kv">
-              <div class="k">대상</div>
-              <div class="v">개발자·디자이너</div>
-              <div class="k">절차</div>
-              <div class="v">페이지 생성 요청 → 해당 제품 <code>regulations/</code> 검토 (충돌·주의사항 발견 시 생성 전에 알림) → design.md + 해당 레시피 읽기 → playground에 페이지 생성 → 기계 검증(lint) → dev 서버 미리보기 → 스크린샷 셀프 리뷰. CLAUDE.md가 이 절차를 강제한다.</div>
+          <div class="two-col even">
+            <div class="card">
+              <div class="card-head"><span>경로 1 — Claude Code</span></div>
+              <div class="card-body kv">
+                <div class="k">대상</div>
+                <div class="v">개발자·디자이너</div>
+                <div class="k">절차</div>
+                <div class="v">페이지 생성 요청 → 해당 제품 <code>regulations/</code> 검토 (충돌·주의사항 발견 시 생성 전에 알림) → design.md + 해당 레시피 읽기 → playground에 페이지 생성 → 기계 검증(lint) → dev 서버 미리보기 → 스크린샷 셀프 리뷰. CLAUDE.md가 이 절차를 강제한다.</div>
+              </div>
             </div>
-          </div>
-
-          <div class="card">
-            <div class="card-head"><span>경로 2 — claude.ai</span></div>
-            <div class="card-body kv">
-              <div class="k">대상</div>
-              <div class="v">기획/PM·비개발 직군</div>
-              <div class="k">절차</div>
-              <div class="v">팀 공유 claude.ai 프로젝트에서 대화로 요청하면 React 아티팩트로 미리보기. standalone 문서에는 규정 검토 지침과 아티팩트 제약 대응 지침이 포함된다. 결과가 채택되면 개발자·디자이너가 경로 1에서 정식 목업화한다.</div>
+            <div class="card">
+              <div class="card-head"><span>경로 2 — claude.ai</span></div>
+              <div class="card-body kv">
+                <div class="k">대상</div>
+                <div class="v">기획/PM·비개발 직군</div>
+                <div class="k">절차</div>
+                <div class="v">팀 공유 claude.ai 프로젝트에서 대화로 요청하면 React 아티팩트로 미리보기. standalone 문서에는 규정 검토 지침과 아티팩트 제약 대응 지침이 포함된다. 결과가 채택되면 개발자·디자이너가 경로 1에서 정식 목업화한다.</div>
+              </div>
             </div>
           </div>
         </div>
 
+        <div class="block">
+          <h3>품질 검증</h3>
+          <div class="card">
+            <div class="card-head"><span>3단 게이트</span></div>
+            <div class="card-body kv">
+              <div class="k">기계 검증</div>
+              <div class="v">ESLint 커스텀 룰 또는 스크립트로 임의 색상·간격 값 검출. 생성 직후 자동 실행.</div>
+              <div class="k">시각 검증</div>
+              <div class="v">생성 후 스크린샷을 Claude가 셀프 리뷰 (정렬, 대비, 오버플로). CLAUDE.md 절차에 포함.</div>
+              <div class="k">사람 승인</div>
+              <div class="v">최종 게이트. 승인된 것만 피그마에 기록.</div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- ══ 02 파이프라인 ══ -->
@@ -609,17 +632,6 @@
         </div>
       </section>
 
-      <!-- ══ 09 품질 검증 ══ -->
-      <section class="panel" data-title="품질 검증">
-
-        <table>
-          <tr><th>층위</th><th>내용</th></tr>
-          <tr><td>기계 검증</td><td>ESLint 커스텀 룰 또는 스크립트로 임의 색상·간격 값 검출. 생성 직후 자동 실행.</td></tr>
-          <tr><td>시각 검증</td><td>생성 후 스크린샷을 Claude가 셀프 리뷰 (정렬, 대비, 오버플로). CLAUDE.md 절차에 포함.</td></tr>
-          <tr><td>사람 승인</td><td>최종 게이트. 승인된 것만 피그마에 기록.</td></tr>
-        </table>
-      </section>
-
       </div><!-- /doc-hinas -->
 
       <div class="doc" id="doc-365" style="display:none">
@@ -635,18 +647,30 @@
             <div class="k">대상 제품</div>
             <div class="v">HiNAS 365 — 함대(선단) 관리·업데이트 콘솔. <span class="mono">hinas365-dev.avikus.ai</span> (DEV) · <span class="mono">localhost:5173</span> (LOCAL, v1.3.0)</div>
             <div class="k">입력</div>
-            <div class="v">스크린샷 55장, 1920×1080 · <span class="mono">screens/</span></div>
+            <div class="v">스크린샷 55장, 1920×1080 · <span class="mono">screens/</span> — 앞으로는 스크린샷·HTML 파일 업로드로 확장</div>
             <div class="k">분석일</div>
-            <div class="v">2026-07-29</div>
-            <div class="k">방법</div>
-            <div class="v">전 화면 판독 → 화면 그룹 분류 → 컴포넌트 추출 → SIP DS 보유분과 대조해 ○ 있음 / △ 변형 필요 / ● 신규 제작으로 분류</div>
+            <div class="v">2026-07-29 · 파이프라인 개편 2026-07-31</div>
             <div class="k">결과 요약</div>
-            <div class="v">화면 그룹 13종 · 추출 컴포넌트 58종 — ○ 10 / △ 9 / ● 39. 폼·피드백·시각화 계열이 거의 전부 비어 있다.</div>
+            <div class="v">화면 그룹 13종 · 컴포넌트 카드 57장 — shadcn 매핑 52 · 커스텀 제작 대상 5(마크다운 에디터·스테퍼·타임라인·히트맵·토폴로지)</div>
           </div>
         </div>
-        <div class="note">
-          시각 언어 충돌 주의 — 현 제품은 파랑 primary·다색 칩·8~12px 라운드·채움 배경 중심이고, SIP DS는 무채색·1px 선·직각 문법이다.
-          리디자인은 스타일 이식이 아니라 <strong>SIP 문법으로의 재해석</strong>이 된다. 색은 상태 의미(성공·경고·위험·정보)에만 제한적으로 허용할지 결정이 필요하다.
+
+        <h3>파이프라인</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">1 업로드</div>
+            <div class="v">제품 스크린샷 또는 HTML 파일을 입력으로 올린다.</div>
+            <div class="k">2 컴포넌트 추출</div>
+            <div class="v">화면을 판독해 UI 컴포넌트를 추출하고 그룹으로 분류한다 → <strong>03 컴포넌트 추출</strong>.</div>
+            <div class="k">3 shadcn 매핑</div>
+            <div class="v">추출된 각 컴포넌트를 shadcn 기본형과 매핑한다. 03 카드의 기본 상태가 shadcn 렌더, hover가 원본 컷, 칩이 매핑 결과다. 직접 대응이 없으면 <span class="mono">shadcn: 없음</span>으로 표기하고 커스텀 제작 대상으로 남긴다.</div>
+            <div class="k">4 승인 <span class="chip">적용 예정</span></div>
+            <div class="v">03 카드에서 컴포넌트별 <strong>승인/보류</strong>를 클릭으로 결정한다. 결과는 <span class="mono">approved.json</span>으로 저장소에 커밋되어 팀과 공유된다 — git이 승인 기록의 원천.</div>
+            <div class="k">5 페이지 생성 <span class="chip">적용 예정</span></div>
+            <div class="v">새 페이지의 요구사항을 입력하면, <strong>승인된 컴포넌트만으로</strong> 경로 1(Claude Code)·경로 2(claude.ai 팀 프로젝트)에서 HTML 페이지를 생성한다.</div>
+            <div class="k">6 365 브랜딩 <span class="chip">적용 예정</span></div>
+            <div class="v">생성된 페이지를 미리보기 패널에서 확인하고 <strong>[365 DS 적용]</strong>으로 타이포·컬러·라운드 등 365 토큰을 입힌다. [shadcn]/[DS 적용] 탭으로 전환 비교, 우측에 HTML 코드 블록과 복사 버튼. 선행 조건: 365 토큰 값 정의(상태 색 도입 범위 포함).</div>
+          </div>
         </div>
       </section>
 
@@ -675,129 +699,84 @@
         <h3>셸 · 내비게이션</h3>
         <div class="card-grid">
           <div class="card comp"><div class="card-head"><span>예시</span><span class="hchev"></span></div><div class="card-body shot-strip"><span class="shot" data-shot="ships-list"></span><span class="shot" data-shot="ship-detail"></span></div></div>
-          <div class="card comp"><div class="card-head"><span>앱 셸</span></div><div class="comp-vis"><img class="pv" src="shadcn/app-shell.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="0,0,1920,1080"></span></div><div class="comp-chips"><span class="chip">○ 있음</span><span class="chip">shadcn: Sidebar</span></div></div>
-          <div class="card comp"><div class="card-head"><span>사이드바 내비</span></div><div class="comp-vis"><img class="pv" src="shadcn/sidebar-nav.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="0,55,215,720"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: SidebarMenu</span></div></div>
-          <div class="card comp"><div class="card-head"><span>페이지 헤더</span></div><div class="comp-vis"><img class="pv" src="shadcn/page-header.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-detail" data-crop="233,75,1450,60"></span></div><div class="comp-chips"><span class="chip">△ 변형</span><span class="chip">shadcn: 조합</span></div></div>
-          <div class="card comp"><div class="card-head"><span>브레드크럼</span></div><div class="comp-vis"><img class="pv" src="shadcn/breadcrumb.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="update-wizard" data-crop="225,10,570,35"></span></div><div class="comp-chips"><span class="chip">△ 변형</span><span class="chip p1">P1</span><span class="chip">shadcn: Breadcrumb</span></div></div>
+          <div class="card comp"><div class="card-head"><span>앱 셸</span></div><div class="comp-vis"><img class="pv" src="shadcn/app-shell.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="0,0,1920,1080"></span></div><div class="comp-chips"><span class="chip">shadcn: Sidebar</span></div></div>
+          <div class="card comp"><div class="card-head"><span>사이드바 내비</span></div><div class="comp-vis"><img class="pv" src="shadcn/sidebar-nav.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="0,55,215,720"></span></div><div class="comp-chips"><span class="chip">shadcn: SidebarMenu</span></div></div>
+          <div class="card comp"><div class="card-head"><span>페이지 헤더</span></div><div class="comp-vis"><img class="pv" src="shadcn/page-header.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-detail" data-crop="233,75,1450,60"></span></div><div class="comp-chips"><span class="chip">shadcn: 조합</span></div></div>
+          <div class="card comp"><div class="card-head"><span>브레드크럼</span></div><div class="comp-vis"><img class="pv" src="shadcn/breadcrumb.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="update-wizard" data-crop="225,10,570,35"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: Breadcrumb</span></div></div>
         </div>
         <h3>버튼</h3>
         <div class="card-grid">
           <div class="card comp"><div class="card-head"><span>예시</span><span class="hchev"></span></div><div class="card-body shot-strip"><span class="shot" data-shot="install-modal"></span><span class="shot" data-shot="update-overview"></span></div></div>
-          <div class="card comp"><div class="card-head"><span>기본 버튼 (채움·아웃라인·텍스트)</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-basic.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-detail" data-crop="1255,75,640,60"></span></div><div class="comp-chips"><span class="chip">○ 있음</span><span class="chip">shadcn: Button</span></div></div>
-          <div class="card comp"><div class="card-head"><span>파괴 버튼</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-destructive.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="product-delete" data-crop="1070,640,150,60"></span></div><div class="comp-chips"><span class="chip">△ 변형</span><span class="chip">shadcn: Button(destructive)</span></div></div>
-          <div class="card comp"><div class="card-head"><span>비활성 · 로딩 변형</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-states.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="install-modal" data-crop="1120,630,225,140"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: Button+Spinner</span></div></div>
-          <div class="card comp"><div class="card-head"><span>스플릿 드롭다운</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-split.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="1760,115,150,55"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: ButtonGroup</span></div></div>
-          <div class="card comp"><div class="card-head"><span>아이콘 버튼</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-icon.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="sysdiag-detail" data-crop="1555,30,340,50"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: Button(icon)</span></div></div>
-          <div class="card comp"><div class="card-head"><span>점선 추가 버튼</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-dashed.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="topo-3" data-crop="730,630,455,60"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: Button 변형</span></div></div>
-          <div class="card comp"><div class="card-head"><span>원형 FAB</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-fab.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="diagnosis" data-crop="1595,1000,300,65"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P3</span><span class="chip">shadcn: Button 변형</span></div></div>
+          <div class="card comp"><div class="card-head"><span>기본 버튼 (채움·아웃라인·텍스트)</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-basic.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-detail" data-crop="1255,75,640,60"></span></div><div class="comp-chips"><span class="chip">shadcn: Button</span></div></div>
+          <div class="card comp"><div class="card-head"><span>파괴 버튼</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-destructive.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="product-delete" data-crop="1070,640,150,60"></span></div><div class="comp-chips"><span class="chip">shadcn: Button(destructive)</span></div></div>
+          <div class="card comp"><div class="card-head"><span>비활성 · 로딩 변형</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-states.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="install-modal" data-crop="1120,630,225,140"></span></div><div class="comp-chips"><span class="chip">shadcn: Button+Spinner</span></div></div>
+          <div class="card comp"><div class="card-head"><span>스플릿 드롭다운</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-split.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="1760,115,150,55"></span></div><div class="comp-chips"><span class="chip">shadcn: ButtonGroup</span></div></div>
+          <div class="card comp"><div class="card-head"><span>아이콘 버튼</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-icon.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="sysdiag-detail" data-crop="1555,30,340,50"></span></div><div class="comp-chips"><span class="chip">shadcn: Button(icon)</span></div></div>
+          <div class="card comp"><div class="card-head"><span>점선 추가 버튼</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-dashed.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="topo-3" data-crop="730,630,455,60"></span></div><div class="comp-chips"><span class="chip">shadcn: Button 변형</span></div></div>
+          <div class="card comp"><div class="card-head"><span>원형 FAB</span></div><div class="comp-vis"><img class="pv" src="shadcn/btn-fab.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="diagnosis" data-crop="1595,1000,300,65"></span></div><div class="comp-chips"><span class="chip">P3</span><span class="chip">shadcn: Button 변형</span></div></div>
         </div>
         <h3>폼</h3>
         <div class="card-grid">
           <div class="card comp"><div class="card-head"><span>예시</span><span class="hchev"></span></div><div class="card-body shot-strip"><span class="shot" data-shot="version-options"></span><span class="shot" data-shot="filter-modal"></span><span class="shot" data-shot="release-editor"></span></div></div>
-          <div class="card comp"><div class="card-head"><span>텍스트 인풋 (필수·placeholder)</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-text.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="update-wizard" data-crop="575,875,630,160"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: Field+Input</span></div></div>
-          <div class="card comp"><div class="card-head"><span>숫자 인풋</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-number.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-create" data-crop="980,440,205,80"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: Input(number)</span></div></div>
-          <div class="card comp"><div class="card-head"><span>검색 인풋</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-search.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="233,115,325,60"></span></div><div class="comp-chips"><span class="chip">△ 변형</span><span class="chip">shadcn: InputGroup</span></div></div>
-          <div class="card comp"><div class="card-head"><span>텍스트에어리어 · 글자수</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-textarea.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="compat-add-2" data-crop="725,635,470,100"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: Textarea 조합</span></div></div>
-          <div class="card comp"><div class="card-head"><span>셀렉트 계열</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-select.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="version-options" data-crop="795,260,620,95"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip p1">P1</span><span class="chip">shadcn: Select·Combobox</span></div></div>
-          <div class="card comp"><div class="card-head"><span>체크박스 · 라디오 · 토글</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-controls.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="version-options" data-crop="1115,425,330,440"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip p1">P1</span><span class="chip">shadcn: Checkbox·Radio·Switch</span></div></div>
-          <div class="card comp"><div class="card-head"><span>라디오 · 체크 카드</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-choicecard.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-create" data-crop="735,330,480,190"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: RadioGroup 조합</span></div></div>
-          <div class="card comp"><div class="card-head"><span>3상태 세그먼트</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-segment.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="filter-modal" data-crop="745,590,430,120"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: ToggleGroup</span></div></div>
-          <div class="card comp"><div class="card-head"><span>태그 인풋</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-tags.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-detail" data-crop="233,150,1200,80"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P2</span><span class="chip">shadcn: Badge+Input 조합</span></div></div>
-          <div class="card comp"><div class="card-head"><span>날짜 범위 피커</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-daterange.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="datepicker" data-crop="1120,220,395,250"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P2</span><span class="chip">shadcn: Calendar(range)</span></div></div>
-          <div class="card comp"><div class="card-head"><span>마크다운 에디터</span></div><div class="comp-vis"><div class="ph"><span class="lb">UI 예정</span><span class="cap">컴포넌트 제작 후 교체</span></div><span class="cut hovercut" data-shot="release-editor" data-crop="650,235,625,510"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P2</span><span class="chip">shadcn: 없음</span></div></div>
-          <div class="card comp"><div class="card-head"><span>파일 첨부</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-file.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="release-editor" data-crop="650,780,625,90"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: Input(file)</span></div></div>
-          <div class="card comp"><div class="card-head"><span>칩 멀티셀렉트 그리드</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-chipgrid.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="compat-chips" data-crop="700,340,520,400"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P3</span><span class="chip">shadcn: ToggleGroup(multiple)</span></div></div>
+          <div class="card comp"><div class="card-head"><span>텍스트 인풋 (필수·placeholder)</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-text.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="update-wizard" data-crop="575,875,630,160"></span></div><div class="comp-chips"><span class="chip">shadcn: Field+Input</span></div></div>
+          <div class="card comp"><div class="card-head"><span>숫자 인풋</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-number.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-create" data-crop="980,440,205,80"></span></div><div class="comp-chips"><span class="chip">shadcn: Input(number)</span></div></div>
+          <div class="card comp"><div class="card-head"><span>검색 인풋</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-search.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="233,115,325,60"></span></div><div class="comp-chips"><span class="chip">shadcn: InputGroup</span></div></div>
+          <div class="card comp"><div class="card-head"><span>텍스트에어리어 · 글자수</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-textarea.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="compat-add-2" data-crop="725,635,470,100"></span></div><div class="comp-chips"><span class="chip">shadcn: Textarea 조합</span></div></div>
+          <div class="card comp"><div class="card-head"><span>셀렉트 계열</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-select.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="version-options" data-crop="795,260,620,95"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: Select·Combobox</span></div></div>
+          <div class="card comp"><div class="card-head"><span>체크박스 · 라디오 · 토글</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-controls.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="version-options" data-crop="1115,425,330,440"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: Checkbox·Radio·Switch</span></div></div>
+          <div class="card comp"><div class="card-head"><span>라디오 · 체크 카드</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-choicecard.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-create" data-crop="735,330,480,190"></span></div><div class="comp-chips"><span class="chip">shadcn: RadioGroup 조합</span></div></div>
+          <div class="card comp"><div class="card-head"><span>3상태 세그먼트</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-segment.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="filter-modal" data-crop="745,590,430,120"></span></div><div class="comp-chips"><span class="chip">shadcn: ToggleGroup</span></div></div>
+          <div class="card comp"><div class="card-head"><span>태그 인풋</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-tags.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-detail" data-crop="233,150,1200,80"></span></div><div class="comp-chips"><span class="chip">P2</span><span class="chip">shadcn: Badge+Input 조합</span></div></div>
+          <div class="card comp"><div class="card-head"><span>날짜 범위 피커</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-daterange.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="datepicker" data-crop="1120,220,395,250"></span></div><div class="comp-chips"><span class="chip">P2</span><span class="chip">shadcn: Calendar(range)</span></div></div>
+          <div class="card comp"><div class="card-head"><span>마크다운 에디터</span></div><div class="comp-vis"><div class="ph"><span class="lb">UI 예정</span><span class="cap">컴포넌트 제작 후 교체</span></div><span class="cut hovercut" data-shot="release-editor" data-crop="650,235,625,510"></span></div><div class="comp-chips"><span class="chip">P2</span><span class="chip">shadcn: 없음</span></div></div>
+          <div class="card comp"><div class="card-head"><span>파일 첨부</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-file.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="release-editor" data-crop="650,780,625,90"></span></div><div class="comp-chips"><span class="chip">shadcn: Input(file)</span></div></div>
+          <div class="card comp"><div class="card-head"><span>칩 멀티셀렉트 그리드</span></div><div class="comp-vis"><img class="pv" src="shadcn/form-chipgrid.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="compat-chips" data-crop="700,340,520,400"></span></div><div class="comp-chips"><span class="chip">P3</span><span class="chip">shadcn: ToggleGroup(multiple)</span></div></div>
         </div>
         <h3>데이터 표시</h3>
         <div class="card-grid">
           <div class="card comp"><div class="card-head"><span>예시</span><span class="hchev"></span></div><div class="card-body shot-strip"><span class="shot" data-shot="compat"></span><span class="shot" data-shot="sysdiag"></span><span class="shot" data-shot="dashboard"></span></div></div>
-          <div class="card comp"><div class="card-head"><span>테이블</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-table.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="233,185,1660,280"></span></div><div class="comp-chips"><span class="chip">○ 있음</span><span class="chip">shadcn: Table</span></div></div>
-          <div class="card comp"><div class="card-head"><span>kv 정의 목록</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-kv.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-detail" data-crop="250,270,600,330"></span></div><div class="comp-chips"><span class="chip">○ 있음</span><span class="chip">shadcn: Item 조합</span></div></div>
-          <div class="card comp"><div class="card-head"><span>정렬 · 컬럼 필터 헤더</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-colhead.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-colfilter" data-crop="1225,190,190,240"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: DataTable 패턴</span></div></div>
-          <div class="card comp"><div class="card-head"><span>테이블 셀 변형 (링크·2줄·행 액션·중첩 헤더)</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-cells.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="233,250,1660,150"></span></div><div class="comp-chips"><span class="chip">△ 변형</span><span class="chip">shadcn: Table 조합</span></div></div>
-          <div class="card comp"><div class="card-head"><span>상태 필 · 도트</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-status.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="sysdiag" data-crop="1000,325,545,55"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip p1">P1</span><span class="chip">shadcn: Badge</span></div></div>
-          <div class="card comp"><div class="card-head"><span>칩 · 뱃지</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-badge.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="905,960,290,100"></span></div><div class="comp-chips"><span class="chip">△ 변형</span><span class="chip">shadcn: Badge</span></div></div>
-          <div class="card comp"><div class="card-head"><span>버전 칩 (before→after)</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-verchip.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="update-wizard" data-crop="245,240,260,90"></span></div><div class="comp-chips"><span class="chip">△ 변형</span><span class="chip">shadcn: Badge(mono)</span></div></div>
-          <div class="card comp"><div class="card-head"><span>역할 태그 칩</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-roletag.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="accounts" data-crop="945,235,390,330"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P2</span><span class="chip">shadcn: Badge 조합</span></div></div>
-          <div class="card comp"><div class="card-head"><span>스테퍼</span></div><div class="comp-vis"><div class="ph"><span class="lb">UI 예정</span><span class="cap">컴포넌트 제작 후 교체</span></div><span class="cut hovercut" data-shot="update-wizard" data-crop="600,150,1200,75"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip p1">P1</span><span class="chip">shadcn: 없음</span></div></div>
-          <div class="card comp"><div class="card-head"><span>매트릭스 편집 표</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-matrix.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="compat-edit" data-crop="233,355,1010,310"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P2</span><span class="chip">shadcn: Table 조합</span></div></div>
-          <div class="card comp"><div class="card-head"><span>권한 매트릭스</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-perm.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="permissions" data-crop="233,150,1600,280"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: Table+Checkbox</span></div></div>
-          <div class="card comp"><div class="card-head"><span>스탯 · 퍼널 · 랭킹</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-stat.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="dashboard" data-crop="1005,130,890,170"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P2</span><span class="chip">shadcn: Card 조합</span></div></div>
-          <div class="card comp"><div class="card-head"><span>타임라인</span></div><div class="comp-vis"><div class="ph"><span class="lb">UI 예정</span><span class="cap">컴포넌트 제작 후 교체</span></div><span class="cut hovercut" data-shot="timeline-detail" data-crop="228,350,300,555"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip p1">P1</span><span class="chip">shadcn: 없음</span></div></div>
-          <div class="card comp"><div class="card-head"><span>아코디언</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-accordion.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="diagnosis" data-crop="240,300,270,580"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip p1">P1</span><span class="chip">shadcn: Accordion</span></div></div>
-          <div class="card comp"><div class="card-head"><span>탭 3종</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-tabs.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="release-notes" data-crop="233,130,420,55"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip p1">P1</span><span class="chip">shadcn: Tabs·ToggleGroup</span></div></div>
-          <div class="card comp"><div class="card-head"><span>페이지네이션</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-pagination.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="sysdiag-detail" data-crop="1635,920,255,50"></span></div><div class="comp-chips"><span class="chip">△ 변형</span><span class="chip p1">P1</span><span class="chip">shadcn: Pagination</span></div></div>
-          <div class="card comp"><div class="card-head"><span>히트맵 그리드</span></div><div class="comp-vis"><div class="ph"><span class="lb">UI 예정</span><span class="cap">컴포넌트 제작 후 교체</span></div><span class="cut hovercut" data-shot="diagnosis-heatmap" data-crop="555,290,1340,420"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P2</span><span class="chip">shadcn: 없음</span></div></div>
-          <div class="card comp"><div class="card-head"><span>진행률 바</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-progress.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="progress" data-crop="545,450,1335,95"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P2</span><span class="chip">shadcn: Progress</span></div></div>
-          <div class="card comp"><div class="card-head"><span>트리 목록</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-tree.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="compat-tree" data-crop="233,240,300,430"></span></div><div class="comp-chips"><span class="chip">△ 변형</span><span class="chip">shadcn: Collapsible 조합</span></div></div>
-          <div class="card comp"><div class="card-head"><span>리스트 행 (아이콘·라벨·카운트·셰브론)</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-listrow.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="diagnosis-heatmap" data-crop="245,945,260,130"></span></div><div class="comp-chips"><span class="chip">○ 있음</span><span class="chip">shadcn: Item</span></div></div>
+          <div class="card comp"><div class="card-head"><span>테이블</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-table.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="233,185,1660,280"></span></div><div class="comp-chips"><span class="chip">shadcn: Table</span></div></div>
+          <div class="card comp"><div class="card-head"><span>kv 정의 목록</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-kv.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-detail" data-crop="250,270,600,330"></span></div><div class="comp-chips"><span class="chip">shadcn: Item 조합</span></div></div>
+          <div class="card comp"><div class="card-head"><span>정렬 · 컬럼 필터 헤더</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-colhead.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-colfilter" data-crop="1225,190,190,240"></span></div><div class="comp-chips"><span class="chip">shadcn: DataTable 패턴</span></div></div>
+          <div class="card comp"><div class="card-head"><span>테이블 셀 변형 (링크·2줄·행 액션·중첩 헤더)</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-cells.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="233,250,1660,150"></span></div><div class="comp-chips"><span class="chip">shadcn: Table 조합</span></div></div>
+          <div class="card comp"><div class="card-head"><span>상태 필 · 도트</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-status.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="sysdiag" data-crop="1000,325,545,55"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: Badge</span></div></div>
+          <div class="card comp"><div class="card-head"><span>칩 · 뱃지</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-badge.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ships-list" data-crop="905,960,290,100"></span></div><div class="comp-chips"><span class="chip">shadcn: Badge</span></div></div>
+          <div class="card comp"><div class="card-head"><span>버전 칩 (before→after)</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-verchip.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="update-wizard" data-crop="245,240,260,90"></span></div><div class="comp-chips"><span class="chip">shadcn: Badge(mono)</span></div></div>
+          <div class="card comp"><div class="card-head"><span>역할 태그 칩</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-roletag.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="accounts" data-crop="945,235,390,330"></span></div><div class="comp-chips"><span class="chip">P2</span><span class="chip">shadcn: Badge 조합</span></div></div>
+          <div class="card comp"><div class="card-head"><span>스테퍼</span></div><div class="comp-vis"><div class="ph"><span class="lb">UI 예정</span><span class="cap">컴포넌트 제작 후 교체</span></div><span class="cut hovercut" data-shot="update-wizard" data-crop="600,150,1200,75"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: 없음</span></div></div>
+          <div class="card comp"><div class="card-head"><span>매트릭스 편집 표</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-matrix.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="compat-edit" data-crop="233,355,1010,310"></span></div><div class="comp-chips"><span class="chip">P2</span><span class="chip">shadcn: Table 조합</span></div></div>
+          <div class="card comp"><div class="card-head"><span>권한 매트릭스</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-perm.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="permissions" data-crop="233,150,1600,280"></span></div><div class="comp-chips"><span class="chip">shadcn: Table+Checkbox</span></div></div>
+          <div class="card comp"><div class="card-head"><span>스탯 · 퍼널 · 랭킹</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-stat.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="dashboard" data-crop="1005,130,890,170"></span></div><div class="comp-chips"><span class="chip">P2</span><span class="chip">shadcn: Card 조합</span></div></div>
+          <div class="card comp"><div class="card-head"><span>타임라인</span></div><div class="comp-vis"><div class="ph"><span class="lb">UI 예정</span><span class="cap">컴포넌트 제작 후 교체</span></div><span class="cut hovercut" data-shot="timeline-detail" data-crop="228,350,300,555"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: 없음</span></div></div>
+          <div class="card comp"><div class="card-head"><span>아코디언</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-accordion.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="diagnosis" data-crop="240,300,270,580"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: Accordion</span></div></div>
+          <div class="card comp"><div class="card-head"><span>탭 3종</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-tabs.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="release-notes" data-crop="233,130,420,55"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: Tabs·ToggleGroup</span></div></div>
+          <div class="card comp"><div class="card-head"><span>페이지네이션</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-pagination.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="sysdiag-detail" data-crop="1635,920,255,50"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: Pagination</span></div></div>
+          <div class="card comp"><div class="card-head"><span>히트맵 그리드</span></div><div class="comp-vis"><div class="ph"><span class="lb">UI 예정</span><span class="cap">컴포넌트 제작 후 교체</span></div><span class="cut hovercut" data-shot="diagnosis-heatmap" data-crop="555,290,1340,420"></span></div><div class="comp-chips"><span class="chip">P2</span><span class="chip">shadcn: 없음</span></div></div>
+          <div class="card comp"><div class="card-head"><span>진행률 바</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-progress.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="progress" data-crop="545,450,1335,95"></span></div><div class="comp-chips"><span class="chip">P2</span><span class="chip">shadcn: Progress</span></div></div>
+          <div class="card comp"><div class="card-head"><span>트리 목록</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-tree.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="compat-tree" data-crop="233,240,300,430"></span></div><div class="comp-chips"><span class="chip">shadcn: Collapsible 조합</span></div></div>
+          <div class="card comp"><div class="card-head"><span>리스트 행 (아이콘·라벨·카운트·셰브론)</span></div><div class="comp-vis"><img class="pv" src="shadcn/data-listrow.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="diagnosis-heatmap" data-crop="245,945,260,130"></span></div><div class="comp-chips"><span class="chip">shadcn: Item</span></div></div>
         </div>
         <h3>피드백 · 오버레이</h3>
         <div class="card-grid">
           <div class="card comp"><div class="card-head"><span>예시</span><span class="hchev"></span></div><div class="card-body shot-strip"><span class="shot" data-shot="update-result"></span><span class="shot" data-shot="notif"></span><span class="shot" data-shot="timeline-detail"></span></div></div>
-          <div class="card comp"><div class="card-head"><span>모달</span></div><div class="comp-vis"><img class="pv" src="shadcn/ov-dialog.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-create" data-crop="450,130,1020,830"></span></div><div class="comp-chips"><span class="chip">○ 있음</span><span class="chip">shadcn: Dialog·AlertDialog</span></div></div>
-          <div class="card comp"><div class="card-head"><span>슬라이드오버 패널</span></div><div class="comp-vis"><img class="pv" src="shadcn/ov-sheet.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="sysdiag-detail" data-crop="1005,5,910,520"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip p1">P1</span><span class="chip">shadcn: Sheet</span></div></div>
-          <div class="card comp"><div class="card-head"><span>드롭다운 메뉴 · 팝오버</span></div><div class="comp-vis"><img class="pv" src="shadcn/ov-menus.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="timezone" data-crop="1630,50,190,360"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip p1">P1</span><span class="chip">shadcn: DropdownMenu·Popover</span></div></div>
-          <div class="card comp"><div class="card-head"><span>알림 팝오버</span></div><div class="comp-vis"><img class="pv" src="shadcn/ov-notif.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="notif" data-crop="1420,55,435,570"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: Popover 조합</span></div></div>
-          <div class="card comp"><div class="card-head"><span>배너 · 결과 카드</span></div><div class="comp-vis"><img class="pv" src="shadcn/fb-banner.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="update-download" data-crop="595,350,1290,95"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip p1">P1</span><span class="chip">shadcn: Alert</span></div></div>
-          <div class="card comp"><div class="card-head"><span>빈 상태</span></div><div class="comp-vis"><img class="pv" src="shadcn/fb-empty.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="bundle-compare" data-crop="870,770,390,180"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip p1">P1</span><span class="chip">shadcn: Empty</span></div></div>
-          <div class="card comp"><div class="card-head"><span>에러 콘솔</span></div><div class="comp-vis"><img class="pv" src="shadcn/fb-console.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="timeline-detail" data-crop="525,585,1360,280"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P2</span><span class="chip">shadcn: 조합(mono 로그)</span></div></div>
-          <div class="card comp"><div class="card-head"><span>툴팁 (ⓘ)</span></div><div class="comp-vis"><img class="pv" src="shadcn/ov-tooltip.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="update-wizard" data-crop="1230,355,340,130"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip p1">P1</span><span class="chip">shadcn: Tooltip</span></div></div>
-          <div class="card comp"><div class="card-head"><span>안내 노트</span></div><div class="comp-vis"><img class="pv" src="shadcn/fb-note.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="release-notes" data-crop="638,258,684,72"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: Alert</span></div></div>
-          <div class="card comp"><div class="card-head"><span>토스트</span></div><div class="comp-vis"><img class="pv" src="shadcn/ov-toast.png" alt="shadcn 기본형"></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">shadcn: Sonner</span></div></div>
+          <div class="card comp"><div class="card-head"><span>모달</span></div><div class="comp-vis"><img class="pv" src="shadcn/ov-dialog.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="ship-create" data-crop="450,130,1020,830"></span></div><div class="comp-chips"><span class="chip">shadcn: Dialog·AlertDialog</span></div></div>
+          <div class="card comp"><div class="card-head"><span>슬라이드오버 패널</span></div><div class="comp-vis"><img class="pv" src="shadcn/ov-sheet.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="sysdiag-detail" data-crop="1005,5,910,520"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: Sheet</span></div></div>
+          <div class="card comp"><div class="card-head"><span>드롭다운 메뉴 · 팝오버</span></div><div class="comp-vis"><img class="pv" src="shadcn/ov-menus.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="timezone" data-crop="1630,50,190,360"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: DropdownMenu·Popover</span></div></div>
+          <div class="card comp"><div class="card-head"><span>알림 팝오버</span></div><div class="comp-vis"><img class="pv" src="shadcn/ov-notif.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="notif" data-crop="1420,55,435,570"></span></div><div class="comp-chips"><span class="chip">shadcn: Popover 조합</span></div></div>
+          <div class="card comp"><div class="card-head"><span>배너 · 결과 카드</span></div><div class="comp-vis"><img class="pv" src="shadcn/fb-banner.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="update-download" data-crop="595,350,1290,95"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: Alert</span></div></div>
+          <div class="card comp"><div class="card-head"><span>빈 상태</span></div><div class="comp-vis"><img class="pv" src="shadcn/fb-empty.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="bundle-compare" data-crop="870,770,390,180"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: Empty</span></div></div>
+          <div class="card comp"><div class="card-head"><span>에러 콘솔</span></div><div class="comp-vis"><img class="pv" src="shadcn/fb-console.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="timeline-detail" data-crop="525,585,1360,280"></span></div><div class="comp-chips"><span class="chip">P2</span><span class="chip">shadcn: 조합(mono 로그)</span></div></div>
+          <div class="card comp"><div class="card-head"><span>툴팁 (ⓘ)</span></div><div class="comp-vis"><img class="pv" src="shadcn/ov-tooltip.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="update-wizard" data-crop="1230,355,340,130"></span></div><div class="comp-chips"><span class="chip p1">P1</span><span class="chip">shadcn: Tooltip</span></div></div>
+          <div class="card comp"><div class="card-head"><span>안내 노트</span></div><div class="comp-vis"><img class="pv" src="shadcn/fb-note.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="release-notes" data-crop="638,258,684,72"></span></div><div class="comp-chips"><span class="chip">shadcn: Alert</span></div></div>
+          <div class="card comp"><div class="card-head"><span>토스트</span></div><div class="comp-vis"><img class="pv" src="shadcn/ov-toast.png" alt="shadcn 기본형"></div><div class="comp-chips"><span class="chip">shadcn: Sonner</span></div></div>
         </div>
         <h3>시각화</h3>
         <div class="card-grid">
           <div class="card comp"><div class="card-head"><span>예시</span><span class="hchev"></span></div><div class="card-body shot-strip"><span class="shot" data-shot="diagnosis"></span><span class="shot" data-shot="version-donut"></span><span class="shot" data-shot="topology"></span></div></div>
-          <div class="card comp"><div class="card-head"><span>라인 차트</span></div><div class="comp-vis"><img class="pv" src="shadcn/viz-line.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="diagnosis" data-crop="555,165,1340,370"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P2</span><span class="chip">shadcn: Chart(Line)</span></div></div>
-          <div class="card comp"><div class="card-head"><span>도넛 차트</span></div><div class="comp-vis"><img class="pv" src="shadcn/viz-donut.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="version-donut" data-crop="1240,210,660,470"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P2</span><span class="chip">shadcn: Chart(Pie)</span></div></div>
-          <div class="card comp"><div class="card-head"><span>노드-링크 토폴로지</span></div><div class="comp-vis"><div class="ph"><span class="lb">UI 예정</span><span class="cap">컴포넌트 제작 후 교체</span></div><span class="cut hovercut" data-shot="topology" data-crop="245,195,970,660"></span></div><div class="comp-chips"><span class="chip">● 신규</span><span class="chip">P3</span><span class="chip">shadcn: 없음</span></div></div>
+          <div class="card comp"><div class="card-head"><span>라인 차트</span></div><div class="comp-vis"><img class="pv" src="shadcn/viz-line.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="diagnosis" data-crop="555,165,1340,370"></span></div><div class="comp-chips"><span class="chip">P2</span><span class="chip">shadcn: Chart(Line)</span></div></div>
+          <div class="card comp"><div class="card-head"><span>도넛 차트</span></div><div class="comp-vis"><img class="pv" src="shadcn/viz-donut.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="version-donut" data-crop="1240,210,660,470"></span></div><div class="comp-chips"><span class="chip">P2</span><span class="chip">shadcn: Chart(Pie)</span></div></div>
+          <div class="card comp"><div class="card-head"><span>노드-링크 토폴로지</span></div><div class="comp-vis"><div class="ph"><span class="lb">UI 예정</span><span class="cap">컴포넌트 제작 후 교체</span></div><span class="cut hovercut" data-shot="topology" data-crop="245,195,970,660"></span></div><div class="comp-chips"><span class="chip">P3</span><span class="chip">shadcn: 없음</span></div></div>
         </div>
-      </section>
-
-      <!-- 04 SIP DS 갭 분석 -->
-      <section class="panel" data-full="1" data-title="SIP DS 갭 분석">
-        <p class="lead">기준: <span class="mono">docs/spottedinprod-ds.md</span> 의 8개 섹션. ○ 그대로 쓴다 · △ 변형해서 쓴다 · ● 새로 만든다.</p>
-
-        <h3>○ 그대로 쓴다 — 10</h3>
-        <table>
-          <tr><th>컴포넌트</th><th>SIP DS 근거</th></tr>
-          <tr><td>상단 내비 · 앱 셸(2~3컬럼, 스트립)</td><td>앱 셸 + 헤더·푸터 스트립 구조</td></tr>
-          <tr><td>좌측 목록/레일 (hover 박스, 선택 밑줄)</td><td>리스트 행 상태 규칙</td></tr>
-          <tr><td>버튼 — 채움·아웃라인·텍스트</td><td>버튼 4종 중 3종</td></tr>
-          <tr><td>보조 버튼(연회색 채움)</td><td>버튼 4종 중 1종</td></tr>
-          <tr><td>기본 테이블</td><td>표 + 1px 선 격자</td></tr>
-          <tr><td>모달 기초(blur 오버레이, 무그림자 패널)</td><td>모달 규칙</td></tr>
-          <tr><td>Esc 칩 · 키보드 우선</td><td>Esc 칩</td></tr>
-          <tr><td>kv 정의 목록</td><td>HiNAS DS 확장(키-값 박스)으로 이미 정의</td></tr>
-          <tr><td>셰브론(더 있음 표식)</td><td>픽셀 셰브론</td></tr>
-          <tr><td>격자 그리드(카드 대신 선)</td><td>격자 그리드</td></tr>
-        </table>
-
-        <h3>△ 변형해서 쓴다 — 9</h3>
-        <table>
-          <tr><th>컴포넌트</th><th>필요한 변형</th><th style="width:300px">예시 컷</th></tr>
-          <tr><td>검색 인풋</td><td>커맨드 팔레트 입력 → 인라인 검색 필드로. 테두리 없는 원본 방식 유지 여부 결정</td><td></td></tr>
-          <tr><td>필터 칩</td><td>선택=박스 규칙은 유지, 값이 붙는 필터(Level·전체 ▾)로 확장</td><td></td></tr>
-          <tr><td>파괴(빨강) 버튼</td><td>SIP에 없는 유일한 유채색 버튼 — destructive 계열 정의 필요(md 10장에 이미 예고됨)</td><td></td></tr>
-          <tr><td>페이지네이션</td><td>푸터 스트립의 ‹ › + 요약 수치를 숫자+… 형태로 확장</td><td></td></tr>
-          <tr><td>내비 활성 박스 → 언더라인 탭</td><td>제품 탭(COMMON/SVM…)은 선택=밑줄 규칙을 탭으로 승격</td><td></td></tr>
-          <tr><td>비활성 상태</td><td>SIP 내비의 muted 처리 → 버튼·인풋 전반의 disabled 규격화</td><td></td></tr>
-          <tr class="rowlink" data-shots="update-wizard"><td>브레드크럼</td><td>셰브론 구분자 재사용, 계층 색(muted→ink) 규칙 신설</td><td><span class="cut" data-shot="update-wizard" data-crop="225,10,570,35"></span></td></tr>
-          <tr><td>트리 목록(버전 트리)</td><td>레일 행 규칙 + 들여쓰기·카운트 결합</td><td></td></tr>
-          <tr><td>모노 표기 규칙</td><td>SIP 번호 라벨(11px mono) → 버전·ID·IP 전반으로 확장</td><td></td></tr>
-        </table>
-
-        <h3>● 새로 만든다 — 39</h3>
-        <table>
-          <tr><th style="width:130px">분류</th><th>컴포넌트</th><th style="width:300px">예시 컷</th></tr>
-          <tr><td>폼 (12)</td><td>셀렉트(기본·검색형·의존형·프리픽스·페어), 체크박스, 라디오, 토글 스위치, 라디오/체크 카드, 3상태 세그먼트, 태그 인풋, 텍스트에어리어+글자수, 날짜 범위 피커, 마크다운 에디터, 파일 첨부, 필수·오류 표시 규칙</td><td><span class="cut" data-shot="version-options" data-crop="795,260,620,95"></span></td></tr>
-          <tr><td>상태 (6)</td><td>상태 필(의미 색 체계), 상태 도트, 결과 카드(완료·취소·실패), 배너(성공·경고), 빈 상태, 진행률 바·스피너</td><td><span class="cut" data-shot="sysdiag" data-crop="1000,325,545,55"></span></td></tr>
-          <tr><td>내비·구조 (6)</td><td>스테퍼(위저드), 아코디언, 언더라인 탭·필 서브탭·세그먼티드 컨트롤, 슬라이드오버 패널, 드롭다운 메뉴, 사이드바 내비(그룹·아이콘)</td><td><span class="cut" data-shot="update-wizard" data-crop="600,150,1200,75"></span></td></tr>
-          <tr><td>데이터 (8)</td><td>컬럼 정렬·필터 헤더, 상태 칩 그리드, 매트릭스 편집 표, 권한 매트릭스, 랭킹 리스트, 스탯·퍼널 타일, 타임라인, 히트맵 그리드</td><td><span class="cut" data-shot="compat" data-crop="233,240,1000,330"></span></td></tr>
-          <tr><td>피드백 (4)</td><td>알림 팝오버, 툴팁(ⓘ), 에러 콘솔(다크 로그+복사), 토스트(관찰 안 됐으나 필요 예상)</td><td><span class="cut" data-shot="notif" data-crop="1420,55,435,570"></span></td></tr>
-          <tr><td>시각화 (3)</td><td>라인 차트, 도넛 차트, 노드-링크 토폴로지</td><td><span class="cut" data-shot="version-donut" data-crop="1240,210,660,470"></span></td></tr>
-        </table>
       </section>
 
       <!-- 05 우선 제작 목록 -->
@@ -840,12 +819,12 @@
         <table>
           <tr><th>컴포넌트</th><th>근거</th><th style="width:300px">줌 컷</th></tr>
           <tr class="rowlink" data-shots="topology"><td>노드-링크 토폴로지</td><td>네트워크 토폴로지 1개 화면</td><td><span class="cut" data-shot="topology" data-crop="245,195,970,660"></span></td></tr>
-          <tr class="rowlink" data-shots="diagnosis"><td>원형 FAB · 플로팅 컨트롤</td><td>자가 진단 — SIP 문법과 충돌, 대체 UI 검토 권장</td><td><span class="cut" data-shot="diagnosis" data-crop="1595,1000,300,65"></span></td></tr>
+          <tr class="rowlink" data-shots="diagnosis"><td>원형 FAB · 플로팅 컨트롤</td><td>자가 진단 — 플로팅 패턴 재검토(대체 UI) 권장</td><td><span class="cut" data-shot="diagnosis" data-crop="1595,1000,300,65"></span></td></tr>
           <tr class="rowlink" data-shots="compat-chips"><td>칩 멀티셀렉트 그리드</td><td>호환성 버전 선택 모달</td><td><span class="cut" data-shot="compat-chips" data-crop="700,340,520,400"></span></td></tr>
         </table>
 
         <div class="note">
-          다음 단계 제안 — ① 상태 색 도입 범위 결정(P1 선행 조건) ② P1 13종을 design.md 컴포넌트 카탈로그 형식(언제 쓴다/안 쓴다)으로 정의 ③ 대시보드·호선 리스트 2개 화면을 파일럿으로 SIP 문법 재해석 목업 제작.
+          다음 단계 제안 — ① 상태 색 도입 범위 결정(P1 선행 조건) ② P1 13종을 design.md 컴포넌트 카탈로그 형식(언제 쓴다/안 쓴다)으로 정의 ③ 대시보드·호선 리스트 2개 화면을 파일럿으로 365 DS 재해석 목업 제작.
         </div>
       </section>
       </div><!-- /doc-365 -->
