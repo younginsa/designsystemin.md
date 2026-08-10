@@ -346,24 +346,6 @@
   .approve-bar .dirty { color: var(--ink); }
   .approve-bar button { margin-left: auto; }
   /* 페이지 생성 (파이프라인 5단계) */
-  .gen-drop { border: 1px dashed var(--line); padding: 26px 16px; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center; gap: 6px; margin-bottom: 12px;
-    background-color: var(--bg);
-    background-image: radial-gradient(#d9d9d9 1px, transparent 1px); background-size: 8px 8px; }
-  .gen-drop.onover { border-color: var(--ink); }
-  .gen-drop .lb { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; color: var(--muted);
-    background: var(--bg); border: 1px solid var(--line); padding: 3px 9px; }
-  .gen-drop .cap { font-size: 12px; color: var(--muted); background: var(--bg); }
-  .gen-filelist { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-  .gen-filelist:empty { display: none; }
-  .gen-filelist .x { cursor: pointer; margin-left: 6px; }
-  #gen-req { width: 100%; font-family: var(--sans); font-size: 14px; line-height: 1.6;
-    padding: 12px; border: 1px solid var(--line); border-radius: var(--r-box);
-    resize: vertical; background: var(--bg); box-sizing: border-box; }
-  #gen-req:focus { outline: none; border-color: var(--muted); }
-  .gen-actions { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
-  .gen-actions .chip { margin-left: auto; }
-  .gen-hint { font-family: var(--mono); font-size: 11px; color: var(--muted); }
   .gen-row { display: flex; align-items: center; gap: 12px; padding: 10px 0;
     border-bottom: 1px solid var(--line); cursor: pointer; }
   .gen-row:last-child { border-bottom: none; }
@@ -743,7 +725,7 @@
             <div class="k">4 채택 판정</div>
             <div class="v">03 카드에서 컴포넌트별 <strong>shadcn 채택</strong> 여부를 토글로 결정한다 — 채택되면 기본형 위에 값 조정·토큰을 얹고, 미채택이면 <strong>원본 디자인을 커스텀으로 재현</strong>한다(365 DS 섹션의 두 그룹). 결과는 <span class="mono">approved.json</span>으로 커밋되어 팀과 공유된다.</div>
             <div class="k">5 페이지 생성</div>
-            <div class="v"><strong>05 페이지 생성</strong>에서 요구사항을 쓰고 [생성 요청서 복사] — 승인 목록·계약이 포함된 요청서를 경로 1(Claude Code)·경로 2(claude.ai 팀 프로젝트)에 붙여넣으면 <strong>승인된 컴포넌트만으로</strong> 페이지가 생성되고, 커밋·배포되면 목록에 나타난다.</div>
+            <div class="v">저장소를 클론한 폴더에서 <strong>Claude Code 세션에 바로 채팅</strong>하면 된다 — CLAUDE.md 계약이 자동 적용되어, 시작 시 git pull로 최신 DS를 받고 <strong>채택 컴포넌트·365 토큰만으로</strong> 뼈대 페이지를 만들어 대화로 다듬는다(기본·빈·로딩·에러 4개 상태 포함). 결과물은 각자 로컬 보관 — 절차는 <strong>05 사용법 · 갤러리</strong> 참고.</div>
             <div class="k">6 365 브랜딩 <span class="chip">적용 예정</span></div>
             <div class="v">생성된 페이지를 미리보기 패널에서 확인하고 <strong>[365 DS 적용]</strong>으로 타이포·컬러·라운드 등 365 토큰을 입힌다. [shadcn]/[DS 적용] 탭으로 전환 비교, 우측에 HTML 코드 블록과 복사 버튼. 선행 조건: 365 토큰 값 정의(상태 색 도입 범위 포함).</div>
           </div>
@@ -931,29 +913,22 @@
       </section>
 
       <!-- 06 페이지 생성 -->
-      <section class="panel" data-full="1" data-title="페이지 생성">
-        <h3>요구사항</h3>
+      <section class="panel" data-full="1" data-title="사용법 · 갤러리">
+        <h3>사용법 — 세션에서 바로 생성</h3>
         <div class="card">
-          <div class="card-head"><span>새 페이지 요청</span></div>
-          <div class="card-body">
-            <div class="gen-drop" id="gen-drop">
-              <input type="file" id="gen-files" multiple accept="image/*,.html,.htm,.svg,.pdf" hidden>
-              <span class="lb">파일 업로드</span>
-              <span class="cap">클릭 또는 드래그 — 참고 스크린샷·와이어프레임·HTML (이미지, .html 등)</span>
-            </div>
-            <div class="gen-filelist" id="gen-filelist"></div>
-            <textarea id="gen-req" rows="5" placeholder="예: 호선 리스트 화면 — 검색·필터 툴바, 제품 칩이 있는 테이블, 페이지네이션. 상단에 페이지 헤더."></textarea>
-            <div class="gen-actions">
-              <span class="gen-hint" id="gen-hint"></span>
-              <button type="button" class="chip" id="gen-copy">생성 요청서 복사</button>
-            </div>
+          <div class="card-body kv">
+            <div class="k">1 클론 (최초 1회)</div>
+            <div class="v"><span class="mono">git clone github.com/younginsa/designsystemin.md</span> — 저장소 읽기 권한과 <strong>본인 계정으로 로그인한 Claude Code</strong>만 있으면 된다. 토큰은 각자 좌석에서 쓴다.</div>
+            <div class="k">2 폴더에서 실행</div>
+            <div class="v">클론한 폴더에서 <span class="mono">claude</span> 실행. 규칙(<span class="mono">CLAUDE.md</span>)·채택 어휘(<span class="mono">approved.json</span>)·365 토큰(<span class="mono">ds365.json</span>)이 자동 적용되고, 세션이 시작할 때 <span class="mono">git pull</span>로 항상 최신 DS를 받는다.</div>
+            <div class="k">3 채팅</div>
+            <div class="v">"재고 목록 화면 만들어줘" — 참고자료(스크린샷·HTML·문서)는 대화에 드래그하면 된다. <strong>뼈대가 먼저 나오고</strong>, 채팅으로 그 자리에서 다듬는다(재생성 없음). 모든 화면은 <strong>기본·빈·로딩·에러</strong> 4개 상태를 포함한다.</div>
+            <div class="k">결과물</div>
+            <div class="v">본인 로컬 <span class="mono">playground/app/generated/&lt;이름&gt;/</span>에 남는다 — 커밋하지 않고 각자 팀에서 활용한다. 채택 목록 밖 컴포넌트가 필요하면 세션이 만들지 않고 자리표시 후 보고한다.</div>
           </div>
         </div>
-        <p class="lead">복사한 요청서를 <strong>경로 1</strong>(Claude Code) 또는 <strong>경로 2</strong>(claude.ai 팀 프로젝트)에 붙여넣는다.
-        세션이 <strong>승인된 컴포넌트만으로</strong> <span class="mono">playground/app/generated/&lt;slug&gt;/page.tsx</span>를 생성하고
-        <span class="mono">pages.json</span>에 등록해 커밋하면, 배포 후 아래 목록에 나타난다.</p>
 
-        <h3>생성된 페이지</h3>
+        <h3>갤러리 — 대표 화면</h3>
         <div class="card">
           <div class="card-head"><span>목록</span></div>
           <div class="card-body" id="gen-list"></div>
@@ -1214,115 +1189,24 @@
     });
   })();
 
-  // ── 페이지 생성 (파이프라인 5단계) — 요청서 컴포저 + 생성 목록 ──
+  // ── 사용법 · 갤러리 — 대표 화면 목록 + 미리보기 ──
   (function(){
-    const ta = document.getElementById('gen-req');
-    if (!ta) return;
-    const DKEY = 'ds365-gen-draft';
-    ta.value = localStorage.getItem(DKEY) || '';
-    ta.addEventListener('input', () => localStorage.setItem(DKEY, ta.value));
-
-    // 파일 업로드 — 정적 페이지라 파일은 요청서에 이름으로 실리고, 세션에 함께 첨부한다
-    const drop = document.getElementById('gen-drop');
-    const fileInput = document.getElementById('gen-files');
-    const fl = document.getElementById('gen-filelist');
-    let files = [];
-    const addFiles = (fs) => {
-      fs.forEach((f) => { if (!files.some((x) => x.name === f.name && x.size === f.size)) files.push(f); });
-      renderFiles();
-    };
-    function renderFiles(){
-      fl.innerHTML = '';
-      files.forEach((f, i) => {
-        const c = document.createElement('span');
-        c.className = 'chip';
-        c.append(f.name + ' (' + Math.max(1, Math.round(f.size / 1024)) + 'KB)');
-        const x = document.createElement('span');
-        x.className = 'x'; x.textContent = '×';
-        x.addEventListener('click', () => { files.splice(i, 1); renderFiles(); });
-        c.appendChild(x);
-        fl.appendChild(c);
-      });
-    }
-    drop.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', () => { addFiles([...fileInput.files]); fileInput.value = ''; });
-    drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('onover'); });
-    drop.addEventListener('dragleave', () => drop.classList.remove('onover'));
-    drop.addEventListener('drop', (e) => {
-      e.preventDefault(); drop.classList.remove('onover');
-      addFiles([...e.dataTransfer.files]);
-    });
-
-    const hint = document.getElementById('gen-hint');
-    const approvedRows = () => [...document.querySelectorAll('#doc-365 [data-comp]')]
-      .filter((c) => c.querySelector('.chip.approve')?.classList.contains('on'))
-      .map((c) => ({
-        slug: c.dataset.comp,
-        name: c.querySelector('.card-head span').textContent,
-        map: ([...c.querySelectorAll('.comp-chips .chip')].map(x => x.textContent)
-          .find(t => t.indexOf('shadcn:') === 0) || '').replace('shadcn: ', ''),
-      }));
-
-    function updateHint(){
-      const n = approvedRows().length;
-      hint.textContent = n ? '채택된 컴포넌트 ' + n + '종이 요청서에 포함된다' : '채택된 컴포넌트가 없다 — 03에서 먼저 shadcn 채택을 켜세요';
-    }
-    document.addEventListener('click', (e) => {
-      if (e.target.closest && e.target.closest('.chip.approve')) setTimeout(updateHint, 0);
-    });
-    setTimeout(updateHint, 900);
-
-    function compose(){
-      const rows = approvedRows();
-      const list = rows.map(r => '- ' + r.name + ' (' + r.slug + ')' + (r.map ? ' — shadcn: ' + r.map : '')).join('\n');
-      const attach = files.length
-        ? ['첨부 파일 ' + files.length + '건 — 이 요청과 함께 세션에 드래그해 첨부할 것:',
-           files.map((f) => '- ' + f.name + ' (' + Math.max(1, Math.round(f.size / 1024)) + 'KB)').join('\n'), '']
-        : [];
-      return [
-        '[HiNAS 365 페이지 생성 요청 — 파이프라인 5단계]',
-        '',
-        '요구사항:',
-        (ta.value.trim() || '(요구사항 미기재)'),
-        '',
-        ...attach,
-        '사용 가능 컴포넌트 (approved.json 승인분 — 이 외 사용 금지):',
-        (list || '(없음 — 생성 불가, 승인 먼저 요청)'),
-        '',
-        '계약:',
-        '1. CLAUDE.md의 페이지 생성 절차를 따른다 (regulations 검토 → design.md 로드 → self-check → dev 미리보기 → 승인 후 커밋).',
-        '2. 산출물: playground/app/generated/<slug>/page.tsx — @ds/ui 컴포넌트와 시맨틱 토큰만 사용.',
-        '3. playground/public/generated/pages.json 에 { "slug", "title", "requested"(1줄 요약), "created", "source" } 항목을 추가한다.',
-        '4. 승인 목록에 없는 컴포넌트가 필요하면 만들지 말고 먼저 보고한다.',
-      ].join('\n');
-    }
-
-    const btn = document.getElementById('gen-copy');
-    btn.addEventListener('click', async () => {
-      const text = compose();
-      sessionStorage.setItem('ds365-gen-last', text);
-      try { await navigator.clipboard.writeText(text); } catch (e) {
-        const tmp = document.createElement('textarea');
-        tmp.value = text; tmp.style.position = 'fixed'; tmp.style.opacity = '0';
-        document.body.appendChild(tmp); tmp.select();
-        document.execCommand && document.execCommand('copy');
-        tmp.remove();
-      }
-      btn.textContent = '복사됨 ✓';
-      setTimeout(() => { btn.textContent = '생성 요청서 복사'; }, 1400);
-    });
-
     const listBox = document.getElementById('gen-list');
+    if (!listBox) return;
     fetch('generated/pages.json').then(r => r.ok ? r.json() : []).catch(() => []).then((pages) => {
       if (!Array.isArray(pages) || !pages.length) {
-        listBox.innerHTML = '<div class="gen-empty">아직 생성된 페이지가 없다 — 위에서 첫 요청서를 만들어 세션에 붙여넣어 보세요.</div>';
+        listBox.innerHTML = '<div class="gen-empty">아직 전시된 화면이 없다 — 세션에서 만든 화면 중 대표작을 디자이너가 등재한다.</div>';
         return;
       }
       pages.forEach((pg) => {
+        const draft = pg.stage === 'draft';
         const row = document.createElement('div');
         row.className = 'gen-row';
-        row.innerHTML = '<span class="t"></span><span class="req"></span><span class="d"></span>';
+        row.innerHTML = '<span class="t"></span><span class="chip stage"></span><span class="req"></span><span class="d"></span>';
         row.querySelector('.t').textContent = pg.title || pg.slug;
+        const st = row.querySelector('.stage');
+        st.textContent = draft ? '다듬는 중' : '완성';
+        st.classList.toggle('p1', !draft);
         row.querySelector('.req').textContent = pg.requested || '';
         row.querySelector('.d').textContent = pg.created || '';
         row.addEventListener('click', () => {
@@ -1373,8 +1257,8 @@
       const card = document.createElement('div');
       card.className = 'card comp ds-card';
       card.dataset.slug = s.slug;
-      const e = entry(s.slug);
-      const rest365 = (e.render === 'done') ? 'shadcn365/' + s.slug + '.png' : s.pv;
+      // 365 렌더를 항상 우선 사용 — 파일이 없으면 onerror로 shadcn 원형 폴백
+      const rest365 = 'shadcn365/' + s.slug + '.png';
       const vis = adopted
         ? (s.pv ? '<div class="comp-vis"><img class="pv pv-rest" src="' + rest365 + '" alt="365 DS 적용">' +
                   '<img class="pv pv-hover" src="' + s.pv + '" alt="shadcn 원형"></div>'
