@@ -79,7 +79,9 @@ import {
   TableHeader,
   TableRow,
 } from "@ds/ui/ui/table";
+import { Stepper, StepperItem } from "@ds/ui/ui/stepper";
 import { Tabs, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
+import { Timeline, TimelineItem, TimelineMeta, TimelineTitle } from "@ds/ui/ui/timeline";
 import { ButtonGroup } from "@ds/ui/ui/button-group";
 import { Calendar } from "@ds/ui/ui/calendar";
 import { Checkbox } from "@ds/ui/ui/checkbox";
@@ -713,6 +715,31 @@ export default function ShadcnPreview() {
             <ChevronRight className="size-4" /> v1.0 <Badge variant="secondary" className="ml-auto rounded-full">1</Badge>
           </CollapsibleTrigger>
         </Collapsible>
+      </section>
+      <section id="pv-data-timeline" className="border border-border bg-background p-6" style={{ width: 400 }}>
+        <Timeline>
+          <TimelineItem status="error">
+            <TimelineTitle>SYSTEM ROLLBACK FAILED</TimelineTitle>
+            <TimelineMeta>20일 20시간 전</TimelineMeta>
+          </TimelineItem>
+          <TimelineItem status="error">
+            <TimelineTitle>SYSTEM ROLLING BACK</TimelineTitle>
+            <TimelineMeta>20일 20시간 전 · 소요 1분 37초</TimelineMeta>
+          </TimelineItem>
+          <TimelineItem>
+            <TimelineTitle>SYSTEM UPDATING</TimelineTitle>
+            <TimelineMeta>20일 20시간 전 · 소요 3분 4초</TimelineMeta>
+          </TimelineItem>
+        </Timeline>
+      </section>
+      <section id="pv-data-stepper" className="border border-border bg-background p-6" style={{ width: 720 }}>
+        <Stepper>
+          <StepperItem step={1} state="completed">업데이트 옵션 설정</StepperItem>
+          <StepperItem step={2} state="completed">업데이트 내용</StepperItem>
+          <StepperItem step={3} state="completed">업데이트 항목 조회</StepperItem>
+          <StepperItem step={4} state="current">이미지 다운로드</StepperItem>
+          <StepperItem step={5} state="upcoming">업데이트 적용</StepperItem>
+        </Stepper>
       </section>
       <section id="pv-data-listrow" className="border border-border bg-background p-4" style={{ width: 480 }}>
         <ItemGroup className="gap-2">
