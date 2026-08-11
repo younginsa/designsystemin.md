@@ -377,6 +377,20 @@
   .ds-card .ds-meta .ov { color: var(--ink); }
   .ds-card .ds-foot { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 16px 16px; align-items: center; }
   .ds-card .ds-foot .chip.edit { margin-left: auto; }
+  /* 페이지 템플릿 카드 — 순수 CSS 미니 와이어프레임 */
+  .tpl .tpl-wire { position: relative; aspect-ratio: 16/10; margin: 16px 16px 0;
+    border: 1px solid var(--line); background: var(--bg); overflow: hidden; }
+  .tpl .tw-top { position: absolute; top: 0; left: 0; right: 0; height: 9%;
+    background: var(--surface); border-bottom: 1px solid var(--line); }
+  .tpl .tw-side { position: absolute; top: 9%; left: 0; bottom: 0; width: 22%;
+    background: var(--surface); border-right: 1px solid var(--line); }
+  .tpl .tw-body { position: absolute; top: 18%; left: 28%; right: 6%; bottom: 8%; background: var(--surface); }
+  .tpl .tw-steps { position: absolute; top: 16%; left: 10%; right: 10%; height: 5%;
+    background: repeating-linear-gradient(90deg, var(--line) 0 14px, transparent 14px 30px); }
+  .tpl .tw-form { position: absolute; top: 30%; left: 10%; right: 10%; bottom: 22%; background: var(--surface); }
+  .tpl .tw-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 11%;
+    background: var(--surface); border-top: 1px solid var(--line); }
+  .tpl .tpl-desc { padding: 12px 16px 16px; font-size: 13px; color: var(--muted); }
   .ds-editor { border-top: 1px solid var(--line); padding: 12px 16px 16px; display: grid; gap: 8px; }
   .ds-editor[hidden] { display: none; }
   /* 채택 카드 hover — 기본: 365 렌더, hover: shadcn 원형 (03과 동일한 상호작용) */
@@ -913,7 +927,23 @@
       </section>
 
       <!-- 06 페이지 생성 -->
-      <section class="panel" data-full="1" data-title="사용법 · 갤러리">
+      <section class="panel" data-full="1" data-title="페이지 템플릿">
+        <h3>템플릿 — 신규 레이아웃일 때 번호로 고르는 선례</h3>
+        <p class="lead">세션이 처음 보는 레이아웃을 만나면 이 목록의 <strong>번호로 물어본다</strong> —
+        여기 카드와 모달 선택지의 번호는 항상 같다 (원천: <span class="mono">recipes/</span> 목록 순서).</p>
+        <div class="card-grid">
+          <div class="card tpl">
+            <div class="card-head"><span><span class="n">1</span> 관리 콘솔</span></div>
+            <div class="tpl-wire"><div class="tw-top"></div><div class="tw-side"></div><div class="tw-body"></div></div>
+            <div class="tpl-desc">앱 셸(사이드바+상단바) 안 전폭 — 리스트·상세·대시보드의 기본값</div>
+          </div>
+          <div class="card tpl">
+            <div class="card-head"><span><span class="n">2</span> 위저드</span></div>
+            <div class="tpl-wire"><div class="tw-top"></div><div class="tw-steps"></div><div class="tw-form"></div><div class="tw-bar"></div></div>
+            <div class="tpl-desc">다단계 입력 — 상단 스테퍼 + 하단 이전/다음 바 (셸 안에 놓임)</div>
+          </div>
+        </div>
+
         <h3>사용법 — 세션에서 바로 생성</h3>
         <div class="card">
           <div class="card-body kv">
@@ -1029,6 +1059,12 @@
   navTabs.hinas.addEventListener('click', () => switchDoc('hinas'));
   navTabs.d365.addEventListener('click', () => switchDoc('d365'));
   switchDoc('hinas');
+  // 딥링크: #templates → 365 탭의 페이지 템플릿 섹션으로 바로 (ask-first 모달이 주는 링크)
+  if (location.hash === '#templates') {
+    switchDoc('d365');
+    const ti = panels.findIndex((p) => p.dataset.title === '페이지 템플릿');
+    if (ti >= 0) select(ti);
+  }
 </script>
 
 
