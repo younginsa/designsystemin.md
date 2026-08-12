@@ -1,4 +1,8 @@
 {
+  "statusLine": {
+    "type": "command",
+    "command": "d=$(git log -1 --format=%cd --date=format:%y.%m.%d 2>/dev/null); b=$(git rev-list --count HEAD..origin/main 2>/dev/null); if [ -z \"$b\" ]; then echo \"365 DS${d:+ · $d판}\"; elif [ \"$b\" = \"0\" ]; then echo \"365 DS 최신 ✓ · ${d}판\"; else echo \"365 DS ${d}판 · ${b}커밋 뒤처짐 — 새 세션이 자동 최신화\"; fi"
+  },
   "hooks": {
     "SessionStart": [
       {
