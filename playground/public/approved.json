@@ -1,6 +1,8 @@
 {
-  "updated": "2026-08-11",
+  "updated": "2026-08-12",
   "approved": [
+    "app-shell",
+    "breadcrumb",
     "btn-basic",
     "btn-dashed",
     "btn-destructive",
@@ -35,7 +37,9 @@
     "form-number",
     "form-search",
     "form-segment",
+    "form-select",
     "form-tags",
+    "form-text",
     "form-textarea",
     "markdown-editor",
     "ov-dialog",
@@ -44,6 +48,7 @@
     "ov-sheet",
     "ov-toast",
     "ov-tooltip",
+    "sidebar-nav",
     "timeline"
   ]
 }

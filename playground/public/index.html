@@ -385,11 +385,8 @@
   .tpl .tw-side { position: absolute; top: 9%; left: 0; bottom: 0; width: 22%;
     background: var(--surface); border-right: 1px solid var(--line); }
   .tpl .tw-body { position: absolute; top: 18%; left: 28%; right: 6%; bottom: 8%; background: var(--surface); }
-  .tpl .tw-steps { position: absolute; top: 16%; left: 10%; right: 10%; height: 5%;
-    background: repeating-linear-gradient(90deg, var(--line) 0 14px, transparent 14px 30px); }
-  .tpl .tw-form { position: absolute; top: 30%; left: 10%; right: 10%; bottom: 22%; background: var(--surface); }
-  .tpl .tw-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 11%;
-    background: var(--surface); border-top: 1px solid var(--line); }
+  .tpl .tw-top, .tpl .tw-side, .tpl .tw-body { display: flex; align-items: center; justify-content: center; }
+  .tpl .tw-label { font-size: 10px; letter-spacing: .04em; color: var(--muted); text-align: center; padding: 0 6px; }
   .tpl .tpl-desc { padding: 12px 16px 16px; font-size: 13px; color: var(--muted); }
   .ds-editor { border-top: 1px solid var(--line); padding: 12px 16px 16px; display: grid; gap: 8px; }
   .ds-editor[hidden] { display: none; }
@@ -928,19 +925,17 @@
 
       <!-- 06 페이지 생성 -->
       <section class="panel" data-full="1" data-title="페이지 템플릿">
-        <h3>템플릿 — 신규 레이아웃일 때 번호로 고르는 선례</h3>
-        <p class="lead">세션이 처음 보는 레이아웃을 만나면 이 목록의 <strong>번호로 물어본다</strong> —
-        여기 카드와 모달 선택지의 번호는 항상 같다 (원천: <span class="mono">recipes/</span> 목록 순서).</p>
+        <h3>템플릿 — 레이아웃 프레임을 번호로 고르는 선례</h3>
+        <p class="lead">레시피는 페이지 유형이 아니라 <strong>레이아웃 프레임</strong>이다. 세션이 애매한
+        레이아웃을 만나면 <strong>"어느 프레임의 본문인가, 단독 화면인가"</strong>를 이 목록의 번호로
+        물어본다 — 여기 카드와 모달 선택지의 번호는 항상 같다 (원천: <span class="mono">recipes/</span> 목록 순서).
+        본문 내용은 요청자가 가져오는 스크린샷·와이어프레임이 결정한다.</p>
         <div class="card-grid">
           <div class="card tpl">
-            <div class="card-head"><span><span class="n">1</span> 관리 콘솔</span></div>
-            <div class="tpl-wire"><div class="tw-top"></div><div class="tw-side"></div><div class="tw-body"></div></div>
-            <div class="tpl-desc">앱 셸(사이드바+상단바) 안 전폭 — 리스트·상세·대시보드의 기본값</div>
-          </div>
-          <div class="card tpl">
-            <div class="card-head"><span><span class="n">2</span> 위저드</span></div>
-            <div class="tpl-wire"><div class="tw-top"></div><div class="tw-steps"></div><div class="tw-form"></div><div class="tw-bar"></div></div>
-            <div class="tpl-desc">다단계 입력 — 상단 스테퍼 + 하단 이전/다음 바 (셸 안에 놓임)</div>
+            <div class="card-head"><span><span class="n">1</span> 관리 콘솔 프레임</span></div>
+            <div class="tpl-wire"><div class="tw-top"><span class="tw-label">상단바</span></div><div class="tw-side"><span class="tw-label">메뉴</span></div><div class="tw-body"><span class="tw-label">본문 — 요청한 화면이 들어가는 곳</span></div></div>
+            <div class="tpl-desc">메뉴(사이드바) + 상단바 + 본문 — 내부 화면 전부의 기본 프레임.
+            표준 요청 문장: <span class="mono">"스샷을 관리 콘솔 본문에 넣어줘"</span>. 프레임에 안 담기면 단독 화면.</div>
           </div>
         </div>
 
@@ -952,7 +947,7 @@
             <div class="k">2 폴더에서 실행</div>
             <div class="v">클론한 폴더에서 <span class="mono">claude</span> 실행. 규칙(<span class="mono">CLAUDE.md</span>)·채택 어휘(<span class="mono">approved.json</span>)·365 토큰(<span class="mono">ds365.json</span>)이 자동 적용되고, 세션이 시작할 때 <span class="mono">git pull</span>로 항상 최신 DS를 받는다.</div>
             <div class="k">3 채팅</div>
-            <div class="v">"재고 목록 화면 만들어줘" — 참고자료(스크린샷·HTML·문서)는 대화에 드래그하면 된다. <strong>뼈대가 먼저 나오고</strong>, 채팅으로 그 자리에서 다듬는다(재생성 없음). 모든 화면은 <strong>기본·빈·로딩·에러</strong> 4개 상태를 포함한다.</div>
+            <div class="v">화면 스크린샷·와이어프레임을 드래그하고 <strong>"관리 콘솔 본문에 넣어줘"</strong>처럼 말한다 (영역 이름: 메뉴·상단바·본문). <strong>뼈대가 먼저 나오고</strong>, 채팅으로 그 자리에서 다듬는다(재생성 없음). 모든 화면은 <strong>기본·빈·로딩·에러</strong> 4개 상태를 포함한다.</div>
             <div class="k">결과물</div>
             <div class="v">본인 로컬 <span class="mono">playground/app/generated/&lt;이름&gt;/</span>에 남는다 — 커밋하지 않고 각자 팀에서 활용한다. 채택 목록 밖 컴포넌트가 필요하면 세션이 만들지 않고 자리표시 후 보고한다.</div>
           </div>
