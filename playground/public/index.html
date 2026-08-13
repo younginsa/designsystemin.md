@@ -340,10 +340,8 @@
   .chip.approve.on { color: #217a39; border-color: #cde9d4; background: #eef8f0; }
   .chip.approve.on:hover { color: #217a39; background: #e3f2e7; }
   .chip.approve[disabled] { opacity: .45; cursor: not-allowed; }
-  /* 컴포넌트 채택 — 우측 현황 레일 */
-  .adopt-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; align-items: start; }
-  .adopt-main { min-width: 0; }
-  .adopt-rail { position: sticky; top: 24px; display: grid; gap: 16px; }
+  /* 컴포넌트 채택 — 우측(3번째) 컬럼 채택 현황 */
+  .adopt-rail { display: grid; gap: 16px; }
   .adopt-rail .card { margin: 0; }
   .adopt-rail .rail-top { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; }
   .adopt-rail .rail-top .dirty { font-family: var(--mono); font-size: 12px; color: var(--ink); }
@@ -354,7 +352,6 @@
     max-height: 320px; overflow: auto; }
   .adopt-rail .rail-list .chip { cursor: default; }
   .adopt-rail .rail-list .chip.off { color: var(--muted); border-style: dashed; }
-  @media (max-width: 1100px) { .adopt-layout { grid-template-columns: 1fr; } .adopt-rail { position: static; } }
   /* 페이지 생성 (파이프라인 5단계) */
   .gen-row { display: flex; align-items: center; gap: 12px; padding: 10px 0;
     border-bottom: 1px solid var(--line); cursor: pointer; }
@@ -774,9 +771,7 @@
       </section>
 
       <!-- 03 컴포넌트 채택 -->
-      <section class="panel" data-full="1" data-title="컴포넌트 채택">
-        <div class="adopt-layout">
-        <div class="adopt-main">
+      <section class="panel" data-full="1" data-visual="1" data-title="컴포넌트 채택">
         <h3>셸 · 내비게이션</h3>
         <div class="card-grid">
           <div class="card comp"><div class="card-head"><span>예시</span><span class="hchev"></span></div><div class="card-body shot-strip"><span class="shot" data-shot="ships-list"></span><span class="shot" data-shot="ship-detail"></span></div></div>
@@ -858,9 +853,6 @@
           <div class="card comp" data-comp="viz-donut"><div class="card-head"><span>도넛 차트</span></div><div class="comp-vis"><img class="pv" src="shadcn/viz-donut.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="version-donut" data-crop="1240,210,660,470"></span></div><div class="comp-chips"><span class="chip">P2</span><span class="chip">shadcn: Chart(Pie)</span></div></div>
           <div class="card comp" data-comp="topology"><div class="card-head"><span>노드-링크 토폴로지</span></div><div class="comp-vis"><div class="ph"><span class="lb">UI 예정</span><span class="cap">컴포넌트 제작 후 교체</span></div><span class="cut hovercut" data-shot="topology" data-crop="245,195,970,660"></span></div><div class="comp-chips"><span class="chip">P3</span><span class="chip">shadcn: 없음</span></div></div>
         </div>
-        </div><!-- /adopt-main -->
-        <aside class="adopt-rail" id="adopt-rail"></aside>
-        </div><!-- /adopt-layout -->
       </section>
 
       <!-- 365 DS -->
@@ -992,6 +984,7 @@
       <div class="frame"><span class="lb">PLACEHOLDER</span><span class="cap">행을 클릭하면 화면이 표시됩니다</span></div>
     </div>
     <div id="visual-stack" class="vstack" style="display:none"></div>
+    <div id="visual-adopt" class="adopt-rail" style="display:none"></div>
   </aside>
 
 </div>
@@ -1034,9 +1027,16 @@
     shell.classList.toggle('wide-visual', hasVisual);
     visualCol.style.display = hasVisual ? '' : 'none';
     const vd = document.getElementById('visual-default'), vs = document.getElementById('visual-stack');
+    const va = document.getElementById('visual-adopt');
     if (vd) { vd.style.display = ''; vs.style.display = 'none'; vs.innerHTML = '';
       document.getElementById('visual-title').textContent = 'Visual';
       document.getElementById('visual-sub').textContent = '준비 중'; }
+    if (va) va.style.display = 'none';
+    if (panel.dataset.title === '컴포넌트 채택' && va) {
+      vd.style.display = 'none'; va.style.display = '';
+      document.getElementById('visual-title').textContent = '채택 현황';
+      document.getElementById('visual-sub').textContent = 'approved.json';
+    }
     crumb.textContent = panel.dataset.title;
     crumbNum.textContent = pad(i);
     window.scrollTo(0, 0);
@@ -1192,7 +1192,7 @@
     });
     const mapped = cards.map(c => c.dataset.comp).filter(x => !isNone[x]);
 
-    const rail = document.getElementById('adopt-rail');
+    const rail = document.getElementById('visual-adopt');
     rail.innerHTML =
       '<div class="card"><div class="rail-top">' +
         '<button type="button" class="chip" id="approve-export">approved.json 내보내기</button>' +
