@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-12",
+  "updated": "2026-08-13",
   "approved": [
     "app-shell",
     "breadcrumb",
@@ -41,7 +41,6 @@
     "form-tags",
     "form-text",
     "form-textarea",
-    "markdown-editor",
     "ov-dialog",
     "ov-menus",
     "ov-notif",

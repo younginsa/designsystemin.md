@@ -339,12 +339,22 @@
   .comp-chips .chip.approve { margin-left: auto; }
   .chip.approve.on { color: #217a39; border-color: #cde9d4; background: #eef8f0; }
   .chip.approve.on:hover { color: #217a39; background: #e3f2e7; }
-  .approve-bar { display: flex; align-items: center; gap: 10px; margin: 8px 0 28px;
+  .chip.approve[disabled] { opacity: .45; cursor: not-allowed; }
+  /* 컴포넌트 채택 — 우측 현황 레일 */
+  .adopt-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; align-items: start; }
+  .adopt-main { min-width: 0; }
+  .adopt-rail { position: sticky; top: 24px; display: grid; gap: 16px; }
+  .adopt-rail .card { margin: 0; }
+  .adopt-rail .rail-top { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; }
+  .adopt-rail .rail-top .dirty { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+  .adopt-rail .rail-head { padding: 12px 16px; border-bottom: 1px solid var(--line);
     font-family: var(--mono); font-size: 12px; color: var(--muted); }
-  .panel > .approve-bar:first-child { margin-top: 8px; }
-  .approve-bar .cnt strong { color: var(--ink); font-weight: 600; }
-  .approve-bar .dirty { color: var(--ink); }
-  .approve-bar button { margin-left: auto; }
+  .adopt-rail .rail-head strong { color: var(--ink); font-weight: 600; }
+  .adopt-rail .rail-list { padding: 10px 16px 14px; display: flex; flex-wrap: wrap; gap: 6px;
+    max-height: 320px; overflow: auto; }
+  .adopt-rail .rail-list .chip { cursor: default; }
+  .adopt-rail .rail-list .chip.off { color: var(--muted); border-style: dashed; }
+  @media (max-width: 1100px) { .adopt-layout { grid-template-columns: 1fr; } .adopt-rail { position: static; } }
   /* 페이지 생성 (파이프라인 5단계) */
   .gen-row { display: flex; align-items: center; gap: 12px; padding: 10px 0;
     border-bottom: 1px solid var(--line); cursor: pointer; }
@@ -730,11 +740,11 @@
             <div class="k">1 업로드</div>
             <div class="v">제품 스크린샷 또는 HTML 파일을 입력으로 올린다.</div>
             <div class="k">2 컴포넌트 추출</div>
-            <div class="v">화면을 판독해 UI 컴포넌트를 추출하고 그룹으로 분류한다 → <strong>03 컴포넌트 추출</strong>.</div>
+            <div class="v">화면을 판독해 UI 컴포넌트를 추출하고 그룹으로 분류한다 → <strong>03 컴포넌트 채택</strong>에 카드로 등재.</div>
             <div class="k">3 shadcn 매핑</div>
             <div class="v">추출된 각 컴포넌트를 shadcn 기본형과 매핑한다. 03 카드의 기본 상태가 shadcn 렌더, hover가 원본 컷, 칩이 매핑 결과다. 직접 대응이 없으면 <span class="mono">shadcn: 없음</span>으로 표기하고 커스텀 제작 대상으로 남긴다.</div>
             <div class="k">4 채택 판정</div>
-            <div class="v">03 카드에서 컴포넌트별 <strong>shadcn 채택</strong> 여부를 토글로 결정한다 — 채택되면 기본형 위에 값 조정·토큰을 얹고, 미채택이면 <strong>원본 디자인을 커스텀으로 재현</strong>한다(365 DS 섹션의 두 그룹). 결과는 <span class="mono">approved.json</span>으로 커밋되어 팀과 공유된다.</div>
+            <div class="v">03 카드에서 컴포넌트별 채택 여부를 토글로 결정한다 — <strong>채택된 것만이 DS 어휘다(유일한 게이트)</strong>. shadcn 매핑분은 기본형 위에 값 조정·토큰을 얹고, 매핑 없는 것은 <strong>원본 재현으로 제작 완료된 뒤</strong> 같은 채택 절차를 밟는다. 결과는 <span class="mono">approved.json</span>으로 커밋되어 팀과 공유된다.</div>
             <div class="k">5 페이지 생성</div>
             <div class="v">저장소를 클론한 폴더에서 <strong>Claude Code 세션에 바로 채팅</strong>하면 된다 — CLAUDE.md 계약이 자동 적용되어, 시작 시 git pull로 최신 DS를 받고 <strong>채택 컴포넌트·365 토큰만으로</strong> 뼈대 페이지를 만들어 대화로 다듬는다(기본·빈·로딩·에러 4개 상태 포함). 결과물은 각자 로컬 보관 — 절차는 <strong>05 사용법 · 갤러리</strong> 참고.</div>
             <div class="k">6 365 브랜딩 <span class="chip">적용 예정</span></div>
@@ -763,8 +773,10 @@
         </table>
       </section>
 
-      <!-- 03 컴포넌트 추출 -->
-      <section class="panel" data-full="1" data-title="컴포넌트 추출">
+      <!-- 03 컴포넌트 채택 -->
+      <section class="panel" data-full="1" data-title="컴포넌트 채택">
+        <div class="adopt-layout">
+        <div class="adopt-main">
         <h3>셸 · 내비게이션</h3>
         <div class="card-grid">
           <div class="card comp"><div class="card-head"><span>예시</span><span class="hchev"></span></div><div class="card-body shot-strip"><span class="shot" data-shot="ships-list"></span><span class="shot" data-shot="ship-detail"></span></div></div>
@@ -846,6 +858,9 @@
           <div class="card comp" data-comp="viz-donut"><div class="card-head"><span>도넛 차트</span></div><div class="comp-vis"><img class="pv" src="shadcn/viz-donut.png" alt="shadcn 기본형"><span class="cut hovercut" data-shot="version-donut" data-crop="1240,210,660,470"></span></div><div class="comp-chips"><span class="chip">P2</span><span class="chip">shadcn: Chart(Pie)</span></div></div>
           <div class="card comp" data-comp="topology"><div class="card-head"><span>노드-링크 토폴로지</span></div><div class="comp-vis"><div class="ph"><span class="lb">UI 예정</span><span class="cap">컴포넌트 제작 후 교체</span></div><span class="cut hovercut" data-shot="topology" data-crop="245,195,970,660"></span></div><div class="comp-chips"><span class="chip">P3</span><span class="chip">shadcn: 없음</span></div></div>
         </div>
+        </div><!-- /adopt-main -->
+        <aside class="adopt-rail" id="adopt-rail"></aside>
+        </div><!-- /adopt-layout -->
       </section>
 
       <!-- 365 DS -->
@@ -855,9 +870,10 @@
           <span class="dirty" id="ds365-dirty"></span>
           <button type="button" class="chip" id="ds365-export">ds365.json 내보내기</button>
         </div>
-        <p class="lead">03에서 추출된 컴포넌트가 두 갈래로 365 DS가 된다 — <strong>shadcn 채택</strong>분은 기본형 위에
-        값 조정과 365 토큰을 얹고, <strong>원본 재현</strong>분은 스크린샷의 원본 디자인을 커스텀으로 재현한 뒤
-        같은 토큰을 적용한다. 365 토큰 값은 아직 미정의(선행 디자인 작업)라 현재는 dstk 기본값으로 표시된다.</p>
+        <p class="lead"><strong>365 DS = 채택 어휘에 365 토큰을 얹은 모습.</strong> 03에서 채택된 컴포넌트만
+        여기 올라온다 — shadcn 매핑분은 기본형 위에 값 조정·토큰, 원본 재현 제작분은 재현 코드에 같은 토큰.
+        미채택분은 여기 없다(현황은 03 우측 레일, 제작 대기열은 05). 365 토큰 값은 아직 1차(네이비·각짐)만
+        정의된 상태다.</p>
 
         <div class="card-grid" style="margin-bottom:8px">
           <div class="card ds-add" id="ds365-add">
@@ -867,11 +883,8 @@
           </div>
         </div>
 
-        <h3>shadcn 기반 — 채택됨</h3>
+        <h3>채택 어휘 — 365 토큰 적용</h3>
         <div class="card-grid" id="ds365-adopted"></div>
-
-        <h3>원본 재현 — 미채택 · 매핑 없음</h3>
-        <div class="card-grid" id="ds365-custom"></div>
       </section>
 
       <!-- 05 우선 제작 목록 -->
@@ -1056,10 +1069,11 @@
   navTabs.hinas.addEventListener('click', () => switchDoc('hinas'));
   navTabs.d365.addEventListener('click', () => switchDoc('d365'));
   switchDoc('hinas');
-  // 딥링크: #templates → 365 탭의 페이지 템플릿 섹션으로 바로 (ask-first 모달이 주는 링크)
-  if (location.hash === '#templates') {
+  // 딥링크: 365 탭 섹션 바로가기 — #templates(ask-first 모달 링크) · #adopt(채택 대장) · #ds365(카탈로그)
+  const deepLinks = { '#templates': '페이지 템플릿', '#adopt': '컴포넌트 채택', '#ds365': '365 DS' };
+  if (deepLinks[location.hash]) {
     switchDoc('d365');
-    const ti = panels.findIndex((p) => p.dataset.title === '페이지 템플릿');
+    const ti = panels.findIndex((p) => p.dataset.title === deepLinks[location.hash]);
     if (ti >= 0) select(ti);
   }
 </script>
@@ -1162,19 +1176,29 @@
   });
   lb.addEventListener('click', () => lb.classList.remove('on'));
 
-  // ── 승인 토글 (파이프라인 4단계) — localStorage + approved.json ──
+  // ── 컴포넌트 채택 (파이프라인 4단계) — localStorage + approved.json + 우측 현황 레일 ──
+  // 어휘 = approved.json 채택분뿐. 재현 컴포넌트도 제작 완료(build:done) 후 같은 토글로 채택한다.
   (function(){
     const KEY = 'ds365-approved';
     const cards = [...document.querySelectorAll('#doc-365 [data-comp]')];
     if (!cards.length) return;
-    let fileList = [], local = null;
+    let fileList = [], local = null, rebuilt = [];   // rebuilt = ds365.json에서 build:done인 슬러그
 
-    const sec = [...document.querySelectorAll('#doc-365 .panel')].find(p => p.dataset.title === '컴포넌트 추출');
-    const bar = document.createElement('div');
-    bar.className = 'approve-bar';
-    bar.innerHTML = '<span class="cnt"></span><span class="dirty"></span>' +
-      '<button type="button" class="chip" id="approve-export">approved.json 내보내기</button>';
-    sec.insertBefore(bar, sec.firstElementChild);
+    const nameOf = {};
+    const isNone = {};
+    cards.forEach((c) => {
+      nameOf[c.dataset.comp] = c.querySelector('.card-head span').textContent;
+      isNone[c.dataset.comp] = [...c.querySelectorAll('.comp-chips .chip')].some(x => x.textContent === 'shadcn: 없음');
+    });
+    const mapped = cards.map(c => c.dataset.comp).filter(x => !isNone[x]);
+
+    const rail = document.getElementById('adopt-rail');
+    rail.innerHTML =
+      '<div class="card"><div class="rail-top">' +
+        '<button type="button" class="chip" id="approve-export">approved.json 내보내기</button>' +
+        '<span class="dirty" id="approve-dirty"></span></div></div>' +
+      '<div class="card"><div class="rail-head" id="rail-shadcn-head"></div><div class="rail-list" id="rail-shadcn"></div></div>' +
+      '<div class="card"><div class="rail-head" id="rail-rebuilt-head"></div><div class="rail-list" id="rail-rebuilt"></div></div>';
 
     const current = () => new Set(local ?? fileList);
     const eq = (a, b) => JSON.stringify([...a].sort()) === JSON.stringify([...b].sort());
@@ -1184,6 +1208,7 @@
       b.type = 'button'; b.className = 'chip approve';
       c.querySelector('.comp-chips').appendChild(b);
       b.addEventListener('click', () => {
+        if (b.disabled) return;
         const s = current(); const id = c.dataset.comp;
         if (s.has(id)) s.delete(id); else s.add(id);
         local = [...s];
@@ -1192,21 +1217,39 @@
       });
     });
 
+    const chipRow = (slug, on, offNote) =>
+      '<span class="chip' + (on ? ' approve on' : ' off') + '">' + (nameOf[slug] || slug) +
+      (on ? ' ✓' : (offNote ? ' — ' + offNote : '')) + '</span>';
+
     function render(){
       const s = current();
       cards.forEach((c) => {
         const b = c.querySelector('.chip.approve');
-        const on = s.has(c.dataset.comp);
-        b.textContent = on ? 'shadcn 채택됨 ✓' : 'shadcn 채택';
+        const id = c.dataset.comp;
+        const on = s.has(id);
+        // 매핑 없는 카드는 재현 제작 완료 전까지 채택 불가 (어휘 단일 게이트)
+        const locked = isNone[id] && !rebuilt.includes(id) && !on;
+        b.disabled = locked;
+        b.title = locked ? '원본 재현 제작 완료 후 채택 가능' : '';
+        b.textContent = on ? '채택됨 ✓' : (locked ? '재현 대기' : '채택');
         b.classList.toggle('on', on);
       });
-      bar.querySelector('.cnt').innerHTML = 'shadcn 채택 <strong>' + s.size + '</strong> / ' + cards.length;
+      const sa = mapped.filter(x => s.has(x));
+      document.getElementById('rail-shadcn-head').innerHTML =
+        'shadcn 채택 <strong>' + sa.length + '</strong> / ' + mapped.length;
+      document.getElementById('rail-shadcn').innerHTML =
+        sa.map(x => chipRow(x, true)).join('') || '<span class="chip off">아직 없음</span>';
+      const ra = rebuilt.filter(x => s.has(x));
+      document.getElementById('rail-rebuilt-head').innerHTML =
+        '재현(365 제작) 채택 <strong>' + ra.length + '</strong> / ' + rebuilt.length;
+      document.getElementById('rail-rebuilt').innerHTML =
+        rebuilt.map(x => chipRow(x, s.has(x), '미채택')).join('') || '<span class="chip off">제작 완료분 없음</span>';
       const dirty = local !== null && !eq(new Set(local), new Set(fileList));
-      bar.querySelector('.dirty').textContent = dirty ? '· 커밋 안 된 변경 있음 — 내보내기 후 커밋' : '';
+      document.getElementById('approve-dirty').textContent = dirty ? '커밋 안 된 변경 있음 — 내보내기 후 커밋' : '';
       document.dispatchEvent(new CustomEvent('ds365:approvals', { detail: [...s] }));
     }
 
-    bar.querySelector('#approve-export').addEventListener('click', () => {
+    document.getElementById('approve-export').addEventListener('click', () => {
       const data = { updated: new Date().toISOString().slice(0, 10), approved: [...current()].sort() };
       const a = document.createElement('a');
       a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2) + '\n'], { type: 'application/json' }));
@@ -1214,8 +1257,13 @@
       a.click(); URL.revokeObjectURL(a.href);
     });
 
-    fetch('approved.json').then(r => r.ok ? r.json() : null).catch(() => null).then((j) => {
-      fileList = (j && j.approved) || [];
+    Promise.all([
+      fetch('approved.json').then(r => r.ok ? r.json() : null).catch(() => null),
+      fetch('ds365.json').then(r => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([aj, dj]) => {
+      fileList = (aj && aj.approved) || [];
+      const comps = (dj && dj.components) || {};
+      rebuilt = Object.keys(comps).filter(k => comps[k].build === 'done');
       try { const saved = JSON.parse(localStorage.getItem(KEY)); if (Array.isArray(saved)) local = saved; } catch (e) {}
       if (local && eq(new Set(local), new Set(fileList))) { local = null; localStorage.removeItem(KEY); }
       render();
@@ -1254,11 +1302,10 @@
     });
   })();
 
-  // ── 365 DS 카탈로그 (파이프라인 산출) — 채택/재현 그룹 + 값 조정 편집 ──
+  // ── 365 DS 카탈로그 (파이프라인 산출) — 채택 어휘 전용 + 값 조정 편집 ──
   (function(){
     const adoptedBox = document.getElementById('ds365-adopted');
     if (!adoptedBox) return;
-    const customBox = document.getElementById('ds365-custom');
     const LKEY = 'ds365-local';
     let fileComponents = {}, fileTokens = {}, local = null, approvedSet = new Set();
 
@@ -1286,18 +1333,18 @@
       render();
     }
 
-    function makeCard(s, adopted){
+    function makeCard(s){
       const card = document.createElement('div');
       card.className = 'card comp ds-card';
       card.dataset.slug = s.slug;
-      // 365 렌더를 항상 우선 사용 — 파일이 없으면 onerror로 shadcn 원형 폴백
+      // 365 렌더를 항상 우선 사용 — 파일이 없으면 onerror로 shadcn 원형 폴백.
+      // 재현 컴포넌트(pv 없음)는 원본 컷이 프리뷰다.
       const rest365 = 'shadcn365/' + s.slug + '.png';
-      const vis = adopted
-        ? (s.pv ? '<div class="comp-vis"><img class="pv pv-rest" src="' + rest365 + '" alt="365 DS 적용">' +
-                  '<img class="pv pv-hover" src="' + s.pv + '" alt="shadcn 원형"></div>'
-                : '<div class="comp-vis"><div class="ph"><span class="lb">미리보기 없음</span></div></div>')
+      const vis = s.pv
+        ? '<div class="comp-vis"><img class="pv pv-rest" src="' + rest365 + '" alt="365 DS 적용">' +
+          '<img class="pv pv-hover" src="' + s.pv + '" alt="shadcn 원형"></div>'
         : (s.shot ? '<div class="comp-vis"><div class="cutwrap"><span class="cut" data-shot="' + s.shot + '" data-crop="' + s.crop + '"></span></div></div>'
-                  : '<div class="comp-vis"><div class="ph"><span class="lb">원본 컷 없음</span><span class="cap">참고 자료 필요</span></div></div>');
+                  : '<div class="comp-vis"><div class="ph"><span class="lb">미리보기 없음</span></div></div>');
       card.innerHTML =
         '<div class="card-head"><span></span></div>' + vis +
         '<div class="ds-meta"></div>' +
@@ -1369,25 +1416,26 @@
     }
 
     function render(){
-      adoptedBox.innerHTML = ''; customBox.innerHTML = '';
-      let adjusted = 0;
+      adoptedBox.innerHTML = '';
+      let adjusted = 0, rebuiltCnt = 0;
       source.forEach((s) => {
-        const adopted = approvedSet.has(s.slug);
-        const card = makeCard(s, adopted);
+        if (!approvedSet.has(s.slug)) return;   // 채택 어휘만 — 미채택은 카탈로그에 없다
+        const card = makeCard(s);
         const e = entry(s.slug);
         const adj = isAdjusted(e);
         if (adj) adjusted++;
         const state = card.querySelector('.chip.state');
         const sub = card.querySelector('.chip.sub');
-        if (adopted) {
+        if (e.build === 'done') {
+          rebuiltCnt++;
+          state.textContent = '재현 제작됨';
+          state.classList.add('p1');
+          if (adj) { sub.textContent = '조정 메모 있음'; } else sub.remove();
+        } else {
           state.textContent = adj ? '조정됨' : '기본';
           state.classList.toggle('p1', !!adj);
           if (adj && e.render !== 'done') { sub.textContent = '재렌더 대기'; sub.classList.add('warn'); }
           else sub.remove();
-        } else {
-          state.textContent = e.build === 'done' ? '제작됨' : '제작 대기';
-          state.classList.toggle('p1', e.build === 'done');
-          if (adj) { sub.textContent = '조정 메모 있음'; } else sub.remove();
         }
         const meta = card.querySelector('.ds-meta');
         const parts = metaText(e);
@@ -1395,11 +1443,10 @@
           meta.innerHTML = parts.map(p => '<div class="ov">' + p + '</div>').join('') +
             (e.note ? '<div>' + e.note + '</div>' : '');
         } else meta.remove();
-        (adopted ? adoptedBox : customBox).appendChild(card);
+        adoptedBox.appendChild(card);
       });
-      const total = source.length;
       document.getElementById('ds365-cnt').innerHTML =
-        'shadcn 기반 <strong>' + approvedSet.size + '</strong> · 원본 재현 <strong>' + (total - approvedSet.size) + '</strong> · 조정 <strong>' + adjusted + '</strong>';
+        '채택 <strong>' + approvedSet.size + '</strong> · 조정 <strong>' + adjusted + '</strong> · 재현 제작 <strong>' + rebuiltCnt + '</strong>';
       const dirty = local !== null && JSON.stringify(local) !== JSON.stringify(fileComponents);
       document.getElementById('ds365-dirty').textContent = dirty ? '· 커밋 안 된 변경 있음 — 내보내기 후 커밋' : '';
       hydrate();   // 잠금 해제 이후 재렌더 시 원본 컷 채움 (해제 전엔 no-op)
