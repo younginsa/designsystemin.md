@@ -447,6 +447,30 @@
       <section class="panel on" data-full="1" data-title="사용방법">
 
         <div class="block">
+          <h3>처음부터 따라하기 — 빠른 시작</h3>
+          <div class="card">
+            <div class="card-body kv">
+              <div class="k">1 준비물 (최초 1회)</div>
+              <div class="v"><strong>Claude Code</strong>(본인 유료 좌석으로 로그인) · <strong>git</strong> · <strong>Node 22.15+</strong>가 있는 터미널, 그리고 저장소 읽기 권한. Claude Code 설치: <span class="mono">npm install -g @anthropic-ai/claude-code</span> 후 <span class="mono">claude</span> 실행해 로그인.</div>
+              <div class="k">2 클론 (최초 1회)</div>
+              <div class="v">원하는 폴더에서 <span class="mono">git clone https://github.com/younginsa/designsystemin.md</span> — 규칙(CLAUDE.md)·채택 어휘·365 토큰·페이지 템플릿이 전부 이 안에 있다.</div>
+              <div class="k">3 Jira 연동 (최초 1회 · 권장)</div>
+              <div class="v">DS 요청 티켓을 올리기 위한 설정. <span class="mono">id.atlassian.com/manage-profile/security/api-tokens</span>에서 본인 API 토큰을 발급받아 셸 프로필(<span class="mono">~/.zshrc</span>)에 <span class="mono">JIRA_EMAIL</span>(회사 Atlassian 이메일)·<span class="mono">JIRA_API_TOKEN</span>(발급 토큰) 두 변수를 등록하고 터미널 재시작. 건너뛰어도 페이지 생성은 되지만 DS 요청을 못 올린다.</div>
+              <div class="k">4 실행</div>
+              <div class="v">클론한 폴더에서 <span class="mono">claude</span> 입력. 최초 1회 "프로젝트 훅 신뢰" 물음에 승인. 이후 켤 때마다 자동으로 최신 DS를 받는다 — 첫 응답 첫 줄 <span class="mono">[365 DS] 이미 최신 상태 ✓</span>와 하단 배지로 확인.</div>
+              <div class="k">5 페이지 만들기</div>
+              <div class="v">화면 스크린샷·와이어프레임을 대화창에 드래그하고 <strong>"관리 콘솔 본문에 넣어줘"</strong>처럼 말한다. 세션이 질문하면(프레임 선택·주석 해석 등) 안내대로 <strong>맨 아래 한 줄 양식으로 답</strong>한다: 예) <span class="mono">1 a 가 go</span>. 뼈대가 먼저 나오고, 수정은 재생성 없이 채팅으로 그 자리에서.</div>
+              <div class="k">6 미리보기</div>
+              <div class="v">세션이 알려주는 URL(예: <span class="mono">localhost:3000/generated/…</span>)을 브라우저로 연다. 우측 상단 상태 미리보기 토글로 <strong>기본·빈·로딩·에러</strong> 4상태 확인. 참고: <a href="index.html#templates">페이지 템플릿</a> · <a href="index.html#adopt">컴포넌트 채택 현황</a></div>
+              <div class="k">7 없는 컴포넌트 = DS 요청</div>
+              <div class="v">채택 목록 밖 요소는 회색 자리표시로 나오고, 세션이 <strong>"Jira에 DS 요청으로 올릴까요?"</strong>를 먼저 제안한다. 직접 올리려면 <strong>"DS 요청: ○○ 추가 필요"</strong> 한 마디면 끝 — DES 보드로 접수되고(요청자=본인), 디자이너가 반영해 커밋하면 다음 세션부터 전원 자동 적용.</div>
+              <div class="k">8 결과물</div>
+              <div class="v">본인 로컬 <span class="mono">playground/app/generated/</span>에 남는다 — 커밋하지 않고 각자 팀에서 활용. 최신화·규칙·어휘 적용은 전부 자동이므로, 이후로는 <strong>4→5→6만 반복</strong>하면 된다. 팁: 매 턴 요약(recap)이 거슬리면 <span class="mono">/config</span>에서 끌 수 있다.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="block">
           <h3>사용하기</h3>
           <p class="lead" style="margin-bottom:20px">자연어 한 문단을 입력하면 —</p>
           <div class="three-col">
