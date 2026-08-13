@@ -461,11 +461,11 @@
               <div class="k">5 페이지 만들기</div>
               <div class="v">화면 스크린샷·와이어프레임을 대화창에 드래그하고 <strong>"관리 콘솔 본문에 넣어줘"</strong>처럼 말한다. 세션이 질문하면(프레임 선택·주석 해석 등) 안내대로 <strong>맨 아래 한 줄 양식으로 답</strong>한다: 예) <span class="mono">1 a 가 go</span>. 뼈대가 먼저 나오고, 수정은 재생성 없이 채팅으로 그 자리에서.</div>
               <div class="k">6 미리보기</div>
-              <div class="v">세션이 알려주는 URL(예: <span class="mono">localhost:3000/generated/…</span>)을 브라우저로 연다. 우측 상단 상태 미리보기 토글로 <strong>기본·빈·로딩·에러</strong> 4상태 확인. 참고: <a href="index.html#templates">페이지 템플릿</a> · <a href="index.html#adopt">컴포넌트 채택 현황</a></div>
+              <div class="v">세션이 알려주는 URL(예: <span class="mono">localhost:3000/generated/…</span>)을 브라우저로 연다. 우측 상단 상태 미리보기 토글로 <strong>기본·빈·로딩·에러</strong> 4상태 확인. 파일로 받고 싶으면 세션에 <strong>"HTML로 줘"</strong> — 서버·설치 없이 열리는 정적 HTML을 만들어준다. 참고: <a href="index.html#templates">페이지 템플릿</a> · <a href="index.html#adopt">컴포넌트 채택 현황</a></div>
               <div class="k">7 없는 컴포넌트 = DS 요청</div>
               <div class="v">채택 목록 밖 요소는 회색 자리표시로 나오고, 세션이 <strong>"Jira에 DS 요청으로 올릴까요?"</strong>를 먼저 제안한다. 직접 올리려면 <strong>"DS 요청: ○○ 추가 필요"</strong> 한 마디면 끝 — DES 보드로 접수되고(요청자=본인), 디자이너가 반영해 커밋하면 다음 세션부터 전원 자동 적용.</div>
               <div class="k">8 결과물</div>
-              <div class="v">본인 로컬 <span class="mono">playground/app/generated/</span>에 남는다 — 커밋하지 않고 각자 팀에서 활용. 최신화·규칙·어휘 적용은 전부 자동이므로, 이후로는 <strong>4→5→6만 반복</strong>하면 된다. 팁: 매 턴 요약(recap)이 거슬리면 <span class="mono">/config</span>에서 끌 수 있다.</div>
+              <div class="v">본인 로컬 <span class="mono">playground/app/generated/</span>에 남는다 — 커밋하지 않고 각자 팀에서 활용. <strong>화면만 볼 팀원·PM에겐 6번의 HTML 파일만 전달</strong>하면 된다(받는 쪽 설치 불필요). 최신화·규칙·어휘 적용은 전부 자동이므로, 이후로는 <strong>4→5→6만 반복</strong>하면 된다. 팁: 매 턴 요약(recap)이 거슬리면 <span class="mono">/config</span>에서 끌 수 있다.</div>
             </div>
           </div>
         </div>
@@ -980,7 +980,7 @@
             <div class="k">3 채팅</div>
             <div class="v">화면 스크린샷·와이어프레임을 드래그하고 <strong>"관리 콘솔 본문에 넣어줘"</strong>처럼 말한다 (영역 이름: 메뉴·상단바·본문). <strong>뼈대가 먼저 나오고</strong>, 채팅으로 그 자리에서 다듬는다(재생성 없음). 모든 화면은 <strong>기본·빈·로딩·에러</strong> 4개 상태를 포함한다.</div>
             <div class="k">결과물</div>
-            <div class="v">본인 로컬 <span class="mono">playground/app/generated/&lt;이름&gt;/</span>에 남는다 — 커밋하지 않고 각자 팀에서 활용한다. 채택 목록 밖 컴포넌트가 필요하면 세션이 만들지 않고 자리표시 후 보고한다.</div>
+            <div class="v">본인 로컬 <span class="mono">playground/app/generated/&lt;이름&gt;/</span>에 남는다 — 커밋하지 않고 각자 팀에서 활용한다. 화면만 볼 사람에겐 <strong>"HTML로 줘"</strong>로 뽑은 정적 파일만 전달하면 된다(설치 불필요). 채택 목록 밖 컴포넌트가 필요하면 세션이 만들지 않고 자리표시 후 보고한다.</div>
             <div class="k">DS 요청</div>
             <div class="v">쓰다가 필요한 게 생기면 세션에 <strong>"DS 요청: ○○ 추가 필요"</strong>라고 말한다 — Jira <span class="mono">DES</span> 보드로 티켓이 올라가고(본인 계정, 최초 1회 API 토큰 설정 필요), 디자이너가 반영해 커밋하면 모두에게 자동 배포된다. 자리표시가 발생하면 세션이 먼저 올릴지 물어본다.</div>
           </div>
