@@ -341,17 +341,19 @@
   .chip.approve.on:hover { color: #217a39; background: #e3f2e7; }
   .chip.approve[disabled] { opacity: .45; cursor: not-allowed; }
   /* 컴포넌트 채택 — 우측(3번째) 컬럼 채택 현황 */
+  .shell.wide-visual.adopt-visual { grid-template-columns: calc(280px + var(--gutter)) minmax(0,1fr) calc(320px + var(--gutter)); }
   .adopt-rail { display: grid; gap: 16px; }
   .adopt-rail .card { margin: 0; }
-  .adopt-rail .rail-top { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; }
-  .adopt-rail .rail-top .dirty { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+  .adopt-rail .rail-dirty { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+  .adopt-rail .rail-dirty:empty { display: none; }
   .adopt-rail .rail-head { padding: 12px 16px; border-bottom: 1px solid var(--line);
     font-family: var(--mono); font-size: 12px; color: var(--muted); }
   .adopt-rail .rail-head strong { color: var(--ink); font-weight: 600; }
-  .adopt-rail .rail-list { padding: 10px 16px 14px; display: flex; flex-wrap: wrap; gap: 6px;
-    max-height: 320px; overflow: auto; }
-  .adopt-rail .rail-list .chip { cursor: default; }
+  .adopt-rail .rail-list { padding: 10px 16px 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .adopt-rail .rail-list .chip { cursor: pointer; }
+  .adopt-rail .rail-list .chip:hover { background: var(--surface); }
   .adopt-rail .rail-list .chip.off { color: var(--muted); border-style: dashed; }
+  .card.comp.flash { outline: 2px solid #217a39; outline-offset: 2px; }
   /* 페이지 생성 (파이프라인 5단계) */
   .gen-row { display: flex; align-items: center; gap: 12px; padding: 10px 0;
     border-bottom: 1px solid var(--line); cursor: pointer; }
@@ -979,7 +981,7 @@
   </div>
 
   <aside class="visual" id="visual-col" style="display:none">
-    <div class="strip" style="margin:0 -20px 24px; padding:0 20px"><span id="visual-title">Visual</span><span class="sub" id="visual-sub">준비 중</span></div>
+    <div class="strip" style="margin:0 -20px 24px; padding:0 20px"><span id="visual-title">Visual</span><span class="sub" id="visual-sub">준비 중</span><span id="visual-act" style="margin-left:auto; display:none"></span></div>
     <div id="visual-default">
       <div class="frame"><span class="lb">PLACEHOLDER</span><span class="cap">행을 클릭하면 화면이 표시됩니다</span></div>
     </div>
@@ -1032,10 +1034,14 @@
       document.getElementById('visual-title').textContent = 'Visual';
       document.getElementById('visual-sub').textContent = '준비 중'; }
     if (va) va.style.display = 'none';
-    if (panel.dataset.title === '컴포넌트 채택' && va) {
+    const isAdopt = panel.dataset.title === '컴포넌트 채택';
+    const act = document.getElementById('visual-act');
+    if (act) act.style.display = isAdopt ? '' : 'none';
+    shell.classList.toggle('adopt-visual', isAdopt);
+    if (isAdopt && va) {
       vd.style.display = 'none'; va.style.display = '';
-      document.getElementById('visual-title').textContent = '채택 현황';
-      document.getElementById('visual-sub').textContent = 'approved.json';
+      document.getElementById('visual-title').textContent = '';
+      document.getElementById('visual-sub').textContent = '';
     }
     crumb.textContent = panel.dataset.title;
     crumbNum.textContent = pad(i);
@@ -1194,11 +1200,25 @@
 
     const rail = document.getElementById('visual-adopt');
     rail.innerHTML =
-      '<div class="card"><div class="rail-top">' +
-        '<button type="button" class="chip" id="approve-export">approved.json 내보내기</button>' +
-        '<span class="dirty" id="approve-dirty"></span></div></div>' +
+      '<div class="rail-dirty" id="approve-dirty"></div>' +
       '<div class="card"><div class="rail-head" id="rail-shadcn-head"></div><div class="rail-list" id="rail-shadcn"></div></div>' +
       '<div class="card"><div class="rail-head" id="rail-rebuilt-head"></div><div class="rail-list" id="rail-rebuilt"></div></div>';
+    // 내보내기 버튼은 3번째 컬럼 스트립(우측 정렬 슬롯)에 놓는다
+    const act = document.getElementById('visual-act');
+    const exp = document.createElement('button');
+    exp.type = 'button'; exp.className = 'chip'; exp.id = 'approve-export';
+    exp.textContent = 'approved.json 내보내기';
+    act.appendChild(exp);
+    // 칩 클릭 → 본문 컬럼의 해당 카드로 앵커 스크롤 + 하이라이트
+    rail.addEventListener('click', (ev) => {
+      const chip = ev.target.closest('.chip[data-slug]');
+      if (!chip) return;
+      const card = document.querySelector('#doc-365 [data-comp="' + chip.dataset.slug + '"]');
+      if (!card) return;
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('flash');
+      setTimeout(() => card.classList.remove('flash'), 1400);
+    });
 
     const current = () => new Set(local ?? fileList);
     const eq = (a, b) => JSON.stringify([...a].sort()) === JSON.stringify([...b].sort());
@@ -1218,7 +1238,7 @@
     });
 
     const chipRow = (slug, on, offNote) =>
-      '<span class="chip' + (on ? ' approve on' : ' off') + '">' + (nameOf[slug] || slug) +
+      '<span class="chip' + (on ? ' approve on' : ' off') + '" data-slug="' + slug + '">' + (nameOf[slug] || slug) +
       (on ? ' ✓' : (offNote ? ' — ' + offNote : '')) + '</span>';
 
     function render(){
