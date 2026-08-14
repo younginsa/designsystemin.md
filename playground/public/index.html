@@ -59,7 +59,10 @@
     display: grid; grid-template-columns: calc(280px + var(--gutter)) minmax(0,1fr);
     min-height: calc(100vh - 60px);
   }
-  .shell.wide-visual { grid-template-columns: calc(280px + var(--gutter)) minmax(0,1fr) calc(440px + var(--gutter)); }
+  /* 3컬럼(비주얼 동반) 화면 공통: 전폭 유동 — 3번째 컬럼은 우측 끝 고정(--visual-w),
+     남는 폭은 가운데 컬럼이 흡수. 컬럼 폭만 페이지별 변수로 조정한다 */
+  .shell.wide-visual { --visual-w: 440px; grid-template-columns: calc(280px + var(--gutter)) minmax(0,1fr) var(--visual-w); }
+  .shell.wide-visual .content.full { max-width: none; }
 
   .rail {
     border-right: 1px solid var(--line);
@@ -79,7 +82,7 @@
   }
   .rail .strip { padding-left: calc(24px + var(--gutter)); }
   .shell:not(.wide-visual) .maincol .strip { padding-right: calc(24px + var(--gutter)); }
-  .shell.wide-visual .visual { padding-right: calc(20px + var(--gutter)); }
+  .shell.wide-visual .visual { padding-right: 20px; }
   .shell.wide-visual .maincol { border-right: 1px solid var(--line); }
   .strip .sub { color: var(--muted); font-size: 13px; }
 
@@ -340,11 +343,8 @@
   .chip.approve.on { color: #217a39; border-color: #cde9d4; background: #eef8f0; }
   .chip.approve.on:hover { color: #217a39; background: #e3f2e7; }
   .chip.approve[disabled] { opacity: .45; cursor: not-allowed; }
-  /* 컴포넌트 채택 — 우측(3번째) 컬럼 채택 현황.
-     이 페이지는 전폭 유동: 3컬럼은 화면 우측 끝에 고정(320px), 남는 폭은 가운데 컬럼이 흡수 */
-  .shell.wide-visual.adopt-visual { grid-template-columns: calc(280px + var(--gutter)) minmax(0,1fr) 320px; }
-  .shell.adopt-visual .visual { padding-right: 20px; }
-  .shell.adopt-visual .content.full { max-width: none; }
+  /* 컴포넌트 채택 — 3번째 컬럼 폭만 좁게 (레이아웃 규칙은 .wide-visual 공통) */
+  .shell.adopt-visual { --visual-w: 320px; }
   .adopt-rail { display: grid; gap: 16px; }
   .adopt-rail .card { margin: 0; }
   .adopt-rail .rail-dirty { font-family: var(--mono); font-size: 12px; color: var(--ink); }
