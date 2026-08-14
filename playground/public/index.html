@@ -125,6 +125,7 @@
   .panel > .card-grid:first-child { margin-top: 8px; }
   .panel > .block:first-child { margin-top: 0; }
   .panel > .block:first-child > h3:first-child { margin-top: 8px; }
+  .panel > .hist-entry:first-child > h3:first-child { margin-top: 8px; }
   .panel > .card:first-child, .panel > p:first-child { margin-top: 8px; }
   th:first-child, td:first-child { padding-left: 0; }
   .panel.on { display: block; }
@@ -360,9 +361,12 @@
   .adopt-rail .rail-list .chip:hover { background: var(--surface); }
   .adopt-rail .rail-list .chip.off { color: var(--muted); border-style: dashed; }
   .card.comp.flash { outline: 2px solid #217a39; outline-offset: 2px; }
-  /* 히스토리 — 타이틀 자리 드롭다운 */
-  #hist-select { font-family: var(--mono); font-size: 13px; color: var(--ink);
-    border: 1px solid var(--line); background: var(--bg); padding: 4px 8px; max-width: 440px; }
+  /* 히스토리 — 타이틀 자리 드롭다운 (커스텀 셰브런 — 우측 여백 확보) */
+  #hist-select { -webkit-appearance: none; appearance: none;
+    font-family: var(--mono); font-size: 13px; color: var(--ink);
+    border: 1px solid var(--line);
+    background: var(--bg) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%23999' stroke-width='1.5'/></svg>") no-repeat right 12px center;
+    padding: 5px 34px 5px 12px; max-width: 460px; }
   /* 페이지 생성 (파이프라인 5단계) */
   .gen-row { display: flex; align-items: center; gap: 12px; padding: 10px 0;
     border-bottom: 1px solid var(--line); cursor: pointer; }
