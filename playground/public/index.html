@@ -59,10 +59,10 @@
     display: grid; grid-template-columns: calc(280px + var(--gutter)) minmax(0,1fr);
     min-height: calc(100vh - 60px);
   }
-  /* 3컬럼(비주얼 동반) 화면 공통: 전폭 유동 — 3번째 컬럼은 우측 끝 고정(--visual-w),
-     남는 폭은 가운데 컬럼이 흡수. 컬럼 폭만 페이지별 변수로 조정한다 */
-  .shell.wide-visual { --visual-w: 440px; grid-template-columns: calc(280px + var(--gutter)) minmax(0,1fr) var(--visual-w); }
-  .shell.wide-visual .content.full { max-width: none; }
+  /* 3컬럼(비주얼 동반) 화면 공통: 콘텐츠는 --max-w(1920) 안에서 3컬럼 배치, 그 안에서
+     가운데가 남는 폭을 흡수. 화면이 더 넓어지면 거터가 좌우를 채우고 가로 구분선만
+     풀블리드로 화면 끝까지 간다. 3번째 컬럼 폭은 --visual-w 변수로만 조정 */
+  .shell.wide-visual { --visual-w: 440px; grid-template-columns: calc(280px + var(--gutter)) minmax(0,1fr) calc(var(--visual-w) + var(--gutter)); }
 
   .rail {
     border-right: 1px solid var(--line);
@@ -82,7 +82,7 @@
   }
   .rail .strip { padding-left: calc(24px + var(--gutter)); }
   .shell:not(.wide-visual) .maincol .strip { padding-right: calc(24px + var(--gutter)); }
-  .shell.wide-visual .visual { padding-right: 20px; }
+  .shell.wide-visual .visual { padding-right: calc(20px + var(--gutter)); }
   .shell.wide-visual .maincol { border-right: 1px solid var(--line); }
   .strip .sub { color: var(--muted); font-size: 13px; }
 
