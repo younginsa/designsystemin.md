@@ -354,6 +354,9 @@
   .adopt-rail .rail-list .chip:hover { background: var(--surface); }
   .adopt-rail .rail-list .chip.off { color: var(--muted); border-style: dashed; }
   .card.comp.flash { outline: 2px solid #217a39; outline-offset: 2px; }
+  /* 히스토리 — 타이틀 자리 드롭다운 */
+  #hist-select { font-family: var(--mono); font-size: 13px; color: var(--ink);
+    border: 1px solid var(--line); background: var(--bg); padding: 4px 8px; max-width: 440px; }
   /* 페이지 생성 (파이프라인 5단계) */
   .gen-row { display: flex; align-items: center; gap: 12px; padding: 10px 0;
     border-bottom: 1px solid var(--line); cursor: pointer; }
@@ -437,6 +440,7 @@
   <div class="maincol">
     <div class="strip">
       <span id="crumb">HiNAS Design System document for AI</span>
+      <select id="hist-select" style="display:none"></select>
       <span class="sub" id="crumb-num">01</span>
     </div>
     <div class="content" id="content">
@@ -742,61 +746,7 @@
         <button id="unlock">시각 자료 잠금 해제</button>
         <span class="msg" id="lockmsg">스크린샷은 암호화되어 있습니다. 비밀번호를 입력하면 이 페이지의 모든 썸네일·줌 컷이 열립니다.</span>
       </div>
-<!-- 01 분석 개요 -->
-      <section class="panel" data-full="1" data-title="분석 개요">
-        <div class="card">
-          <div class="card-body kv">
-            <div class="k">대상 제품</div>
-            <div class="v">HiNAS 365 — 함대(선단) 관리·업데이트 콘솔. <span class="mono">hinas365-dev.avikus.ai</span> (DEV) · <span class="mono">localhost:5173</span> (LOCAL, v1.3.0)</div>
-            <div class="k">입력</div>
-            <div class="v">스크린샷 55장, 1920×1080 · <span class="mono">screens/</span> — 앞으로는 스크린샷·HTML 파일 업로드로 확장</div>
-            <div class="k">분석일</div>
-            <div class="v">2026-07-29 · 파이프라인 개편 2026-07-31</div>
-            <div class="k">결과 요약</div>
-            <div class="v">화면 그룹 13종 · 컴포넌트 카드 57장 — shadcn 매핑 52 · 커스텀 제작 대상 5(마크다운 에디터·스테퍼·타임라인·히트맵·토폴로지)</div>
-          </div>
-        </div>
-
-        <h3>파이프라인</h3>
-        <div class="card">
-          <div class="card-body kv">
-            <div class="k">1 업로드</div>
-            <div class="v">제품 스크린샷 또는 HTML 파일을 입력으로 올린다.</div>
-            <div class="k">2 컴포넌트 추출</div>
-            <div class="v">화면을 판독해 UI 컴포넌트를 추출하고 그룹으로 분류한다 → <strong>03 컴포넌트 채택</strong>에 카드로 등재.</div>
-            <div class="k">3 shadcn 매핑</div>
-            <div class="v">추출된 각 컴포넌트를 shadcn 기본형과 매핑한다. 03 카드의 기본 상태가 shadcn 렌더, hover가 원본 컷, 칩이 매핑 결과다. 직접 대응이 없으면 <span class="mono">shadcn: 없음</span>으로 표기하고 커스텀 제작 대상으로 남긴다.</div>
-            <div class="k">4 채택 판정</div>
-            <div class="v">03 카드에서 컴포넌트별 채택 여부를 토글로 결정한다 — <strong>채택된 것만이 DS 어휘다(유일한 게이트)</strong>. shadcn 매핑분은 기본형 위에 값 조정·토큰을 얹고, 매핑 없는 것은 <strong>원본 재현으로 제작 완료된 뒤</strong> 같은 채택 절차를 밟는다. 결과는 <span class="mono">approved.json</span>으로 커밋되어 팀과 공유된다.</div>
-            <div class="k">5 페이지 생성</div>
-            <div class="v">저장소를 클론한 폴더에서 <strong>Claude Code 세션에 바로 채팅</strong>하면 된다 — CLAUDE.md 계약이 자동 적용되어, 시작 시 git pull로 최신 DS를 받고 <strong>채택 컴포넌트·365 토큰만으로</strong> 뼈대 페이지를 만들어 대화로 다듬는다(기본·빈·로딩·에러 4개 상태 포함). 결과물은 각자 로컬 보관 — 절차는 <strong>05 사용법 · 갤러리</strong> 참고.</div>
-            <div class="k">6 365 브랜딩 <span class="chip">적용 예정</span></div>
-            <div class="v">생성된 페이지를 미리보기 패널에서 확인하고 <strong>[365 DS 적용]</strong>으로 타이포·컬러·라운드 등 365 토큰을 입힌다. [shadcn]/[DS 적용] 탭으로 전환 비교, 우측에 HTML 코드 블록과 복사 버튼. 선행 조건: 365 토큰 값 정의(상태 색 도입 범위 포함).</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 02 화면 인벤토리 -->
-      <section class="panel" data-full="1" data-visual="1" data-title="화면 인벤토리">
-        <table>
-          <tr><th>화면 그룹</th><th style="width:56px">장수</th><th class="shot-cell">화면</th><th>주요 내용</th></tr>
-          <tr class="rowlink" data-shots="dashboard,timezone,notif,avatar-menu,version-donut"><td class="nowrap">대시보드</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="dashboard"></span></td><td>운영 현황 스탯 카드, 진단 결과 색상 타일, 업데이트 단계 퍼널, 제품별 버전 랭킹, 타임존·알림·프로필 팝오버</td></tr>
-          <tr class="rowlink" data-shots="ships-list,ships-scroll,ships-colfilter,filter-modal"><td class="nowrap">호선 리스트 (납품·테스트)</td><td class="num-r">4</td><td class="shot-cell"><span class="shot" data-shot="ships-list"></span></td><td>검색+필터 툴바, 데이터 테이블(정렬·컬럼 필터), 제품 칩, 구독 상태 도트, 호선 필터 모달, 내보내기 스플릿 버튼</td></tr>
-          <tr class="rowlink" data-shots="ship-create,ship-review"><td class="nowrap">호선 생성 위저드</td><td class="num-r">2</td><td class="shot-cell"><span class="shot" data-shot="ship-create"></span></td><td>3단 스테퍼 모달, 폼 섹션 박스, 라디오/체크박스 카드, 검토 요약(히어로 밴드 + 수정 링크)</td></tr>
-          <tr class="rowlink" data-shots="ship-detail,ship-detail-2,spec-history,product-delete,install-modal"><td class="nowrap">호선 상세</td><td class="num-r">6</td><td class="shot-cell"><span class="shot" data-shot="ship-detail"></span></td><td>액션바(드롭다운 2종), 태그 인풋, 정보 카드 kv, 메모 사이드패널, 제원 아코디언, 언더라인 탭 + 필 서브탭, Spec 이력·제품 삭제·설치파일 모달</td></tr>
-          <tr class="rowlink" data-shots="product-select,version-options"><td class="nowrap">제품/버전 선택 모달</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="product-select"></span></td><td>2단 스테퍼, 제품 체크리스트(택1 제약), 서버 선택 카드, 버전 페어 셀렉트, FEATURE TOGGLE 체크리스트</td></tr>
-          <tr class="rowlink" data-shots="update-overview,update-wizard,version-select,cloud-toggle,progress,update-download,update-result,update-step5,update-loading,update-rollback,datepicker,timeline-detail"><td class="nowrap">업데이트 개요·위저드</td><td class="num-r">12</td><td class="shot-cell"><span class="shot" data-shot="update-wizard"></span></td><td>5단 스테퍼, 좌측 요약 패널(버전 before→after, 복사 버튼), 상태 히스토리 타임라인, 진행률 바, IMAGE/BINARY 상태 표, 에러 콘솔, 결과 카드(완료·취소·실패), Cloud 토글 모달, 날짜 범위 피커</td></tr>
-          <tr class="rowlink" data-shots="diagnosis,diagnosis-heatmap,diag-json,diag-quickview,diag-charts"><td class="nowrap">자가 진단</td><td class="num-r">6</td><td class="shot-cell"><span class="shot" data-shot="diagnosis"></span></td><td>진단 아코디언(상태 필), 라인 차트(크로스헤어·툴팁), 히트맵 타임라인, JSON 상세 모달(세그먼트), Quick View 슬라이드오버, 플로팅 기간·제품 컨트롤</td></tr>
-          <tr class="rowlink" data-shots="sysdiag,sysdiag-detail"><td class="nowrap">시스템 진단 호선</td><td class="num-r">2</td><td class="shot-cell"><span class="shot" data-shot="sysdiag"></span></td><td>호선별 진단 칩 그리드, 필터 드롭다운 4종, 슬라이드오버 상세(히스토리 표 2종)</td></tr>
-          <tr class="rowlink" data-shots="compat,compat-edit,compat-chips,compat-tree,compat-add,compat-add-2"><td class="nowrap">버전 호환성</td><td class="num-r">6</td><td class="shot-cell"><span class="shot" data-shot="compat"></span></td><td>호환성 매트릭스(버전 칩+권장 별), 실시간 편집 모드(경고 배너·행 삭제), 칩 멀티셀렉트 모달, 업데이트 호환성 트리+표</td></tr>
-          <tr class="rowlink" data-shots="release-notes,release-dev,release-editor"><td class="nowrap">릴리즈 노트</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="release-notes"></span></td><td>버전 트리 내비, 마크다운 렌더·에디터(작성/미리보기), 메타 패널, 사용자용/개발자용 세그먼트, Helm/Binary 표</td></tr>
-          <tr class="rowlink" data-shots="topology,topo-2,topo-3"><td class="nowrap">네트워크 토폴로지</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="topology"></span></td><td>노드-링크 그래프(상태 범례), 노드 상세 패널, Add Node 모달</td></tr>
-          <tr class="rowlink" data-shots="security-scan,devqa-select,bundle-compare"><td class="nowrap">Developer / QA</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="security-scan"></span></td><td>보안 취약점 스캔(심각도 타일 6종 + 표), 번들 버전 비교(FROM→TO), 의존형 셀렉트</td></tr>
-          <tr class="rowlink" data-shots="permissions,accounts"><td class="nowrap">계정 · 권한</td><td class="num-r">2</td><td class="shot-cell"><span class="shot" data-shot="permissions"></span></td><td>권한 매트릭스(카테고리×역할 체크박스), 역할 태그 칩 편집(검색형 드롭다운)</td></tr>
-        </table>
-      </section>
-
-      <!-- 03 컴포넌트 채택 -->
+      <!-- 01 컴포넌트 채택 -->
       <section class="panel" data-full="1" data-visual="1" data-title="컴포넌트 채택">
         <h3>셸 · 내비게이션</h3>
         <div class="card-grid">
@@ -881,7 +831,7 @@
         </div>
       </section>
 
-      <!-- 365 DS -->
+      <!-- 02 365 DS -->
       <section class="panel" data-full="1" data-title="365 DS">
         <div class="ds365-bar">
           <span class="cnt" id="ds365-cnt"></span>
@@ -890,7 +840,7 @@
         </div>
         <p class="lead"><strong>365 DS = 채택 어휘에 365 토큰을 얹은 모습.</strong> 03에서 채택된 컴포넌트만
         여기 올라온다 — shadcn 매핑분은 기본형 위에 값 조정·토큰, 원본 재현 제작분은 재현 코드에 같은 토큰.
-        미채택분은 여기 없다(현황은 03 우측 레일, 제작 대기열은 05). 365 토큰 값은 아직 1차(네이비·각짐)만
+        미채택분은 여기 없다(현황은 01 컴포넌트 채택의 우측 레일, 과거 분석 자료는 04 히스토리). 365 토큰 값은 아직 1차(네이비·각짐)만
         정의된 상태다.</p>
 
         <div class="card-grid" style="margin-bottom:8px">
@@ -905,8 +855,107 @@
         <div class="card-grid" id="ds365-adopted"></div>
       </section>
 
-      <!-- 05 우선 제작 목록 -->
-      <section class="panel" data-full="1" data-visual="1" data-title="우선 제작 목록">
+      <!-- 03 페이지 템플릿 -->
+      <section class="panel" data-full="1" data-title="페이지 템플릿">
+        <h3>템플릿 — 레이아웃 프레임을 번호로 고르는 선례</h3>
+        <p class="lead">레시피는 페이지 유형이 아니라 <strong>레이아웃 프레임</strong>이다. 세션이 애매한
+        레이아웃을 만나면 <strong>"어느 프레임의 본문인가, 단독 화면인가"</strong>를 이 목록의 번호로
+        물어본다 — 여기 카드와 모달 선택지의 번호는 항상 같다 (원천: <span class="mono">recipes/</span> 목록 순서).
+        본문 내용은 요청자가 가져오는 스크린샷·와이어프레임이 결정한다.</p>
+        <div class="card-grid">
+          <div class="card tpl">
+            <div class="card-head"><span><span class="n">1</span> 관리 콘솔 프레임</span></div>
+            <div class="tpl-wire"><div class="tw-top"><span class="tw-label">상단바</span></div><div class="tw-side"><span class="tw-label">메뉴</span></div><div class="tw-body"><span class="tw-label">본문 — 요청한 화면이 들어가는 곳</span></div></div>
+            <div class="tpl-desc">메뉴(사이드바) + 상단바 + 본문 — 내부 화면 전부의 기본 프레임.
+            표준 요청 문장: <span class="mono">"스샷을 관리 콘솔 본문에 넣어줘"</span>. 프레임에 안 담기면 단독 화면.</div>
+          </div>
+        </div>
+
+        <h3>사용법 — 세션에서 바로 생성</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">1 클론 (최초 1회)</div>
+            <div class="v"><span class="mono">git clone github.com/younginsa/designsystemin.md</span> — 저장소 읽기 권한과 <strong>본인 계정으로 로그인한 Claude Code</strong>만 있으면 된다. 토큰은 각자 좌석에서 쓴다.</div>
+            <div class="k">2 폴더에서 실행</div>
+            <div class="v">클론한 폴더에서 <span class="mono">claude</span> 실행. 규칙(<span class="mono">CLAUDE.md</span>)·채택 어휘(<span class="mono">approved.json</span>)·365 토큰(<span class="mono">ds365.json</span>)이 자동 적용되고, 세션이 시작할 때 <span class="mono">git pull</span>로 항상 최신 DS를 받는다.</div>
+            <div class="k">3 채팅</div>
+            <div class="v">화면 스크린샷·와이어프레임을 드래그하고 <strong>"관리 콘솔 본문에 넣어줘"</strong>처럼 말한다 (영역 이름: 메뉴·상단바·본문). <strong>뼈대가 먼저 나오고</strong>, 채팅으로 그 자리에서 다듬는다(재생성 없음). 모든 화면은 <strong>기본·빈·로딩·에러</strong> 4개 상태를 포함한다.</div>
+            <div class="k">결과물</div>
+            <div class="v">본인 로컬 <span class="mono">playground/app/generated/&lt;이름&gt;/</span>에 남는다 — 커밋하지 않고 각자 팀에서 활용한다. 화면만 볼 사람에겐 <strong>"HTML로 줘"</strong>로 뽑은 정적 파일만 전달하면 된다(설치 불필요). 채택 목록 밖 컴포넌트가 필요하면 세션이 만들지 않고 자리표시 후 보고한다.</div>
+            <div class="k">DS 요청</div>
+            <div class="v">쓰다가 필요한 게 생기면 세션에 <strong>"DS 요청: ○○ 추가 필요"</strong>라고 말한다 — Jira <span class="mono">DES</span> 보드로 티켓이 올라가고(본인 계정, 최초 1회 API 토큰 설정 필요), 디자이너가 반영해 커밋하면 모두에게 자동 배포된다. 자리표시가 발생하면 세션이 먼저 올릴지 물어본다.</div>
+          </div>
+        </div>
+
+        <h3>갤러리 — 대표 화면</h3>
+        <div class="card">
+          <div class="card-head"><span>목록</span></div>
+          <div class="card-body" id="gen-list"></div>
+        </div>
+        <div id="gen-preview" style="display:none">
+          <div class="gen-prevbar">
+            <span id="gen-prev-title"></span>
+            <a id="gen-prev-open" class="chip" target="_blank" rel="noopener">새 탭에서 열기</a>
+          </div>
+          <iframe id="gen-frame" title="생성 페이지 미리보기"></iframe>
+        </div>
+      </section>
+      <!-- 04 히스토리 — 기획 입력의 기록 (관리자 등재) -->
+      <section class="panel" data-full="1" data-visual="1" data-title="히스토리">
+        <p class="lead">이 DS를 만들기 위해 <strong>무엇을 입력했는지</strong>의 기록이다. 항목은 관리자가
+        "이번 작업 히스토리로 등재해줘"라고 지시할 때만 추가되며, 상단 타이틀의 드롭다운으로 시점을 고른다.</p>
+
+        <h3>파이프라인</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">1 업로드</div>
+            <div class="v">제품 스크린샷 또는 HTML 파일을 입력으로 올린다.</div>
+            <div class="k">2 컴포넌트 추출</div>
+            <div class="v">화면을 판독해 UI 컴포넌트를 추출하고 그룹으로 분류한다 → <strong>01 컴포넌트 채택</strong>에 카드로 등재.</div>
+            <div class="k">3 shadcn 매핑</div>
+            <div class="v">추출된 각 컴포넌트를 shadcn 기본형과 매핑한다. 01 카드의 기본 상태가 shadcn 렌더, hover가 원본 컷, 칩이 매핑 결과다. 직접 대응이 없으면 <span class="mono">shadcn: 없음</span>으로 표기하고 커스텀 제작 대상으로 남긴다.</div>
+            <div class="k">4 채택 판정</div>
+            <div class="v">01 카드에서 컴포넌트별 채택 여부를 토글로 결정한다 — <strong>채택된 것만이 DS 어휘다(유일한 게이트)</strong>. shadcn 매핑분은 기본형 위에 값 조정·토큰을 얹고, 매핑 없는 것은 <strong>원본 재현으로 제작 완료된 뒤</strong> 같은 채택 절차를 밟는다. 결과는 <span class="mono">approved.json</span>으로 커밋되어 팀과 공유된다.</div>
+            <div class="k">5 페이지 생성</div>
+            <div class="v">저장소를 클론한 폴더에서 <strong>Claude Code 세션에 바로 채팅</strong>하면 된다 — CLAUDE.md 계약이 자동 적용되어, 시작 시 git pull로 최신 DS를 받고 <strong>채택 컴포넌트·365 토큰만으로</strong> 뼈대 페이지를 만들어 대화로 다듬는다(기본·빈·로딩·에러 4개 상태 포함). 결과물은 각자 로컬 보관 — 절차는 <strong>03 페이지 템플릿</strong>의 사용법·갤러리 참고.</div>
+            <div class="k">6 365 브랜딩 <span class="chip">적용 예정</span></div>
+            <div class="v">생성된 페이지를 미리보기 패널에서 확인하고 <strong>[365 DS 적용]</strong>으로 타이포·컬러·라운드 등 365 토큰을 입힌다. [shadcn]/[DS 적용] 탭으로 전환 비교, 우측에 HTML 코드 블록과 복사 버튼. 선행 조건: 365 토큰 값 정의(상태 색 도입 범위 포함).</div>
+          </div>
+        </div>
+
+        <div class="hist-entry" data-date="26.07.29" data-summary="최초 분석 — 스크린샷 55장 · 컴포넌트 57종 추출">
+          <h3>분석 개요</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">대상 제품</div>
+            <div class="v">HiNAS 365 — 함대(선단) 관리·업데이트 콘솔. <span class="mono">hinas365-dev.avikus.ai</span> (DEV) · <span class="mono">localhost:5173</span> (LOCAL, v1.3.0)</div>
+            <div class="k">입력</div>
+            <div class="v">스크린샷 55장, 1920×1080 · <span class="mono">screens/</span> — 앞으로는 스크린샷·HTML 파일 업로드로 확장</div>
+            <div class="k">분석일</div>
+            <div class="v">2026-07-29 · 파이프라인 개편 2026-07-31</div>
+            <div class="k">결과 요약</div>
+            <div class="v">화면 그룹 13종 · 컴포넌트 카드 57장 — shadcn 매핑 52 · 커스텀 제작 대상 5(마크다운 에디터·스테퍼·타임라인·히트맵·토폴로지)</div>
+          </div>
+        </div>
+
+          <h3>화면 인벤토리</h3>
+        <table>
+          <tr><th>화면 그룹</th><th style="width:56px">장수</th><th class="shot-cell">화면</th><th>주요 내용</th></tr>
+          <tr class="rowlink" data-shots="dashboard,timezone,notif,avatar-menu,version-donut"><td class="nowrap">대시보드</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="dashboard"></span></td><td>운영 현황 스탯 카드, 진단 결과 색상 타일, 업데이트 단계 퍼널, 제품별 버전 랭킹, 타임존·알림·프로필 팝오버</td></tr>
+          <tr class="rowlink" data-shots="ships-list,ships-scroll,ships-colfilter,filter-modal"><td class="nowrap">호선 리스트 (납품·테스트)</td><td class="num-r">4</td><td class="shot-cell"><span class="shot" data-shot="ships-list"></span></td><td>검색+필터 툴바, 데이터 테이블(정렬·컬럼 필터), 제품 칩, 구독 상태 도트, 호선 필터 모달, 내보내기 스플릿 버튼</td></tr>
+          <tr class="rowlink" data-shots="ship-create,ship-review"><td class="nowrap">호선 생성 위저드</td><td class="num-r">2</td><td class="shot-cell"><span class="shot" data-shot="ship-create"></span></td><td>3단 스테퍼 모달, 폼 섹션 박스, 라디오/체크박스 카드, 검토 요약(히어로 밴드 + 수정 링크)</td></tr>
+          <tr class="rowlink" data-shots="ship-detail,ship-detail-2,spec-history,product-delete,install-modal"><td class="nowrap">호선 상세</td><td class="num-r">6</td><td class="shot-cell"><span class="shot" data-shot="ship-detail"></span></td><td>액션바(드롭다운 2종), 태그 인풋, 정보 카드 kv, 메모 사이드패널, 제원 아코디언, 언더라인 탭 + 필 서브탭, Spec 이력·제품 삭제·설치파일 모달</td></tr>
+          <tr class="rowlink" data-shots="product-select,version-options"><td class="nowrap">제품/버전 선택 모달</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="product-select"></span></td><td>2단 스테퍼, 제품 체크리스트(택1 제약), 서버 선택 카드, 버전 페어 셀렉트, FEATURE TOGGLE 체크리스트</td></tr>
+          <tr class="rowlink" data-shots="update-overview,update-wizard,version-select,cloud-toggle,progress,update-download,update-result,update-step5,update-loading,update-rollback,datepicker,timeline-detail"><td class="nowrap">업데이트 개요·위저드</td><td class="num-r">12</td><td class="shot-cell"><span class="shot" data-shot="update-wizard"></span></td><td>5단 스테퍼, 좌측 요약 패널(버전 before→after, 복사 버튼), 상태 히스토리 타임라인, 진행률 바, IMAGE/BINARY 상태 표, 에러 콘솔, 결과 카드(완료·취소·실패), Cloud 토글 모달, 날짜 범위 피커</td></tr>
+          <tr class="rowlink" data-shots="diagnosis,diagnosis-heatmap,diag-json,diag-quickview,diag-charts"><td class="nowrap">자가 진단</td><td class="num-r">6</td><td class="shot-cell"><span class="shot" data-shot="diagnosis"></span></td><td>진단 아코디언(상태 필), 라인 차트(크로스헤어·툴팁), 히트맵 타임라인, JSON 상세 모달(세그먼트), Quick View 슬라이드오버, 플로팅 기간·제품 컨트롤</td></tr>
+          <tr class="rowlink" data-shots="sysdiag,sysdiag-detail"><td class="nowrap">시스템 진단 호선</td><td class="num-r">2</td><td class="shot-cell"><span class="shot" data-shot="sysdiag"></span></td><td>호선별 진단 칩 그리드, 필터 드롭다운 4종, 슬라이드오버 상세(히스토리 표 2종)</td></tr>
+          <tr class="rowlink" data-shots="compat,compat-edit,compat-chips,compat-tree,compat-add,compat-add-2"><td class="nowrap">버전 호환성</td><td class="num-r">6</td><td class="shot-cell"><span class="shot" data-shot="compat"></span></td><td>호환성 매트릭스(버전 칩+권장 별), 실시간 편집 모드(경고 배너·행 삭제), 칩 멀티셀렉트 모달, 업데이트 호환성 트리+표</td></tr>
+          <tr class="rowlink" data-shots="release-notes,release-dev,release-editor"><td class="nowrap">릴리즈 노트</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="release-notes"></span></td><td>버전 트리 내비, 마크다운 렌더·에디터(작성/미리보기), 메타 패널, 사용자용/개발자용 세그먼트, Helm/Binary 표</td></tr>
+          <tr class="rowlink" data-shots="topology,topo-2,topo-3"><td class="nowrap">네트워크 토폴로지</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="topology"></span></td><td>노드-링크 그래프(상태 범례), 노드 상세 패널, Add Node 모달</td></tr>
+          <tr class="rowlink" data-shots="security-scan,devqa-select,bundle-compare"><td class="nowrap">Developer / QA</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="security-scan"></span></td><td>보안 취약점 스캔(심각도 타일 6종 + 표), 번들 버전 비교(FROM→TO), 의존형 셀렉트</td></tr>
+          <tr class="rowlink" data-shots="permissions,accounts"><td class="nowrap">계정 · 권한</td><td class="num-r">2</td><td class="shot-cell"><span class="shot" data-shot="permissions"></span></td><td>권한 매트릭스(카테고리×역할 체크박스), 역할 태그 칩 편집(검색형 드롭다운)</td></tr>
+        </table>
+          <h3>우선 제작 목록</h3>
         <p class="lead">기준: 등장 화면 수. P1 없이는 어떤 화면도 리디자인할 수 없다.</p>
 
         <h3>P1 — 전 화면 공통 (13)</h3>
@@ -952,53 +1001,9 @@
         <div class="note">
           다음 단계 제안 — ① 상태 색 도입 범위 결정(P1 선행 조건) ② P1 13종을 design.md 컴포넌트 카탈로그 형식(언제 쓴다/안 쓴다)으로 정의 ③ 대시보드·호선 리스트 2개 화면을 파일럿으로 365 DS 재해석 목업 제작.
         </div>
-      </section>
-
-      <!-- 06 페이지 생성 -->
-      <section class="panel" data-full="1" data-title="페이지 템플릿">
-        <h3>템플릿 — 레이아웃 프레임을 번호로 고르는 선례</h3>
-        <p class="lead">레시피는 페이지 유형이 아니라 <strong>레이아웃 프레임</strong>이다. 세션이 애매한
-        레이아웃을 만나면 <strong>"어느 프레임의 본문인가, 단독 화면인가"</strong>를 이 목록의 번호로
-        물어본다 — 여기 카드와 모달 선택지의 번호는 항상 같다 (원천: <span class="mono">recipes/</span> 목록 순서).
-        본문 내용은 요청자가 가져오는 스크린샷·와이어프레임이 결정한다.</p>
-        <div class="card-grid">
-          <div class="card tpl">
-            <div class="card-head"><span><span class="n">1</span> 관리 콘솔 프레임</span></div>
-            <div class="tpl-wire"><div class="tw-top"><span class="tw-label">상단바</span></div><div class="tw-side"><span class="tw-label">메뉴</span></div><div class="tw-body"><span class="tw-label">본문 — 요청한 화면이 들어가는 곳</span></div></div>
-            <div class="tpl-desc">메뉴(사이드바) + 상단바 + 본문 — 내부 화면 전부의 기본 프레임.
-            표준 요청 문장: <span class="mono">"스샷을 관리 콘솔 본문에 넣어줘"</span>. 프레임에 안 담기면 단독 화면.</div>
-          </div>
-        </div>
-
-        <h3>사용법 — 세션에서 바로 생성</h3>
-        <div class="card">
-          <div class="card-body kv">
-            <div class="k">1 클론 (최초 1회)</div>
-            <div class="v"><span class="mono">git clone github.com/younginsa/designsystemin.md</span> — 저장소 읽기 권한과 <strong>본인 계정으로 로그인한 Claude Code</strong>만 있으면 된다. 토큰은 각자 좌석에서 쓴다.</div>
-            <div class="k">2 폴더에서 실행</div>
-            <div class="v">클론한 폴더에서 <span class="mono">claude</span> 실행. 규칙(<span class="mono">CLAUDE.md</span>)·채택 어휘(<span class="mono">approved.json</span>)·365 토큰(<span class="mono">ds365.json</span>)이 자동 적용되고, 세션이 시작할 때 <span class="mono">git pull</span>로 항상 최신 DS를 받는다.</div>
-            <div class="k">3 채팅</div>
-            <div class="v">화면 스크린샷·와이어프레임을 드래그하고 <strong>"관리 콘솔 본문에 넣어줘"</strong>처럼 말한다 (영역 이름: 메뉴·상단바·본문). <strong>뼈대가 먼저 나오고</strong>, 채팅으로 그 자리에서 다듬는다(재생성 없음). 모든 화면은 <strong>기본·빈·로딩·에러</strong> 4개 상태를 포함한다.</div>
-            <div class="k">결과물</div>
-            <div class="v">본인 로컬 <span class="mono">playground/app/generated/&lt;이름&gt;/</span>에 남는다 — 커밋하지 않고 각자 팀에서 활용한다. 화면만 볼 사람에겐 <strong>"HTML로 줘"</strong>로 뽑은 정적 파일만 전달하면 된다(설치 불필요). 채택 목록 밖 컴포넌트가 필요하면 세션이 만들지 않고 자리표시 후 보고한다.</div>
-            <div class="k">DS 요청</div>
-            <div class="v">쓰다가 필요한 게 생기면 세션에 <strong>"DS 요청: ○○ 추가 필요"</strong>라고 말한다 — Jira <span class="mono">DES</span> 보드로 티켓이 올라가고(본인 계정, 최초 1회 API 토큰 설정 필요), 디자이너가 반영해 커밋하면 모두에게 자동 배포된다. 자리표시가 발생하면 세션이 먼저 올릴지 물어본다.</div>
-          </div>
-        </div>
-
-        <h3>갤러리 — 대표 화면</h3>
-        <div class="card">
-          <div class="card-head"><span>목록</span></div>
-          <div class="card-body" id="gen-list"></div>
-        </div>
-        <div id="gen-preview" style="display:none">
-          <div class="gen-prevbar">
-            <span id="gen-prev-title"></span>
-            <a id="gen-prev-open" class="chip" target="_blank" rel="noopener">새 탭에서 열기</a>
-          </div>
-          <iframe id="gen-frame" title="생성 페이지 미리보기"></iframe>
         </div>
       </section>
+
       </div><!-- /doc-365 -->
 
     </div>
@@ -1067,6 +1072,11 @@
       document.getElementById('visual-title').textContent = '';
       document.getElementById('visual-sub').textContent = '';
     }
+    // 히스토리 — 타이틀 자리를 드롭다운으로 교체
+    const hs = document.getElementById('hist-select');
+    const isHist = panel.dataset.title === '히스토리';
+    if (hs) hs.style.display = isHist ? '' : 'none';
+    crumb.style.display = isHist ? 'none' : '';
     crumb.textContent = panel.dataset.title;
     crumbNum.textContent = pad(i);
     window.scrollTo(0, 0);
@@ -1100,7 +1110,7 @@
   navTabs.d365.addEventListener('click', () => switchDoc('d365'));
   switchDoc('hinas');
   // 딥링크: 365 탭 섹션 바로가기 — #templates(ask-first 모달 링크) · #adopt(채택 대장) · #ds365(카탈로그)
-  const deepLinks = { '#templates': '페이지 템플릿', '#adopt': '컴포넌트 채택', '#ds365': '365 DS' };
+  const deepLinks = { '#templates': '페이지 템플릿', '#adopt': '컴포넌트 채택', '#ds365': '365 DS', '#history': '히스토리' };
   if (deepLinks[location.hash]) {
     switchDoc('d365');
     const ti = panels.findIndex((p) => p.dataset.title === deepLinks[location.hash]);
@@ -1312,6 +1322,22 @@
       if (local && eq(new Set(local), new Set(fileList))) { local = null; localStorage.removeItem(KEY); }
       render();
     });
+  })();
+
+  // ── 히스토리 — 타이틀 드롭다운(날짜+요약)으로 시점 선택. 항목 추가는 관리자 등재로만 ──
+  (function(){
+    const sel = document.getElementById('hist-select');
+    const entries = [...document.querySelectorAll('.hist-entry')];
+    if (!sel || !entries.length) return;
+    entries.forEach((en, i) => {
+      const o = document.createElement('option');
+      o.value = String(i);
+      o.textContent = en.dataset.date + ' — ' + en.dataset.summary;
+      sel.appendChild(o);
+    });
+    const show = (i) => entries.forEach((en, j) => { en.style.display = j === i ? '' : 'none'; });
+    sel.addEventListener('change', () => show(Number(sel.value)));
+    show(0);
   })();
 
   // ── 사용법 · 갤러리 — 대표 화면 목록 + 미리보기 ──
