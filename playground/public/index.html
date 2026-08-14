@@ -190,6 +190,9 @@
     background: var(--bg); border: 1px solid var(--line); padding: 4px 10px;
   }
   .card-shot .cap { font-size: 12px; color: var(--muted); }
+  /* Resources — 썸네일 이미지 (실패 시 onerror로 제거되어 점 패턴 placeholder가 드러남) */
+  .card-shot { position: relative; overflow: hidden; }
+  .card-shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .card-body p { margin: 0; font-size: 15px; color: var(--muted); }
 
   /* 키-값 박스 — 불릿·볼드 없이 라벨(회색)/내용(검정) 두 열 */
@@ -361,12 +364,14 @@
   .adopt-rail .rail-list .chip:hover { background: var(--surface); }
   .adopt-rail .rail-list .chip.off { color: var(--muted); border-style: dashed; }
   .card.comp.flash { outline: 2px solid #217a39; outline-offset: 2px; }
-  /* 공통 DS — 3번째 컬럼 문서 메뉴 */
+  /* 공통 DS — 3번째 컬럼 문서 메뉴 (박스 없는 순수 리스트) */
   .shell.dsnav-visual { --visual-w: 260px; }
-  #visual-dsnav .rail-list { flex-direction: column; align-items: stretch; }
-  #visual-dsnav .chip { cursor: pointer; text-align: left; padding: 8px 12px; }
-  #visual-dsnav .chip.on { background: var(--surface); border-color: var(--ink); color: var(--ink); }
-  #visual-dsnav .chip[disabled] { opacity: .45; cursor: default; }
+  #visual-dsnav { display: flex; flex-direction: column; gap: 2px; align-items: stretch; }
+  #visual-dsnav .dn-item { font-family: var(--mono); font-size: 13px; color: var(--muted);
+    background: none; border: 0; text-align: left; padding: 8px 10px; cursor: pointer; }
+  #visual-dsnav .dn-item:hover { background: var(--surface); color: var(--ink); }
+  #visual-dsnav .dn-item.on { color: var(--ink); font-weight: 600; }
+  #visual-dsnav .dn-item[disabled] { opacity: .45; cursor: default; background: none; }
   .dsnav-sec > h3:first-child { margin-top: 8px; }
   /* 히스토리 — 타이틀 자리 드롭다운 (커스텀 셰브런 — 우측 여백 확보) */
   #hist-select { -webkit-appearance: none; appearance: none;
@@ -664,6 +669,21 @@
           </div>
         </div>
         </div><!-- /dsnav-sec common -->
+
+        <div class="dsnav-sec" data-sec="d365" style="display:none">
+        <p style="margin:8px 0 28px"><a class="chip" id="dsnav-open-365" href="#adopt">365 탭 열기 →</a></p>
+        <h3>HiNAS 365 DS — 공통 DS 위의 제품 층</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">무엇</div>
+            <div class="v">공통 DS 위에 <strong>채택 어휘</strong>(<span class="mono">approved.json</span>)와 <strong>365 토큰</strong>(<span class="mono">ds365.json</span>)을 얹은 HiNAS 365 전용 층. 채택된 것만이 어휘다.</div>
+            <div class="k">관리 위치</div>
+            <div class="v">채택 토글·현황은 「컴포넌트 채택」, 토큰·값 조정은 「365 DS」, 레이아웃 프레임은 「페이지 템플릿」, 기획 입력 기록은 「히스토리」 — 모두 365 탭.</div>
+            <div class="k">현재 상태</div>
+            <div class="v">365 토큰 1차(네이비·각짐) 정의됨 — 상태 색·타이포·간격 정의가 다음 단계(6단계 브랜딩의 선행 조건).</div>
+          </div>
+        </div>
+        </div><!-- /dsnav-sec d365 -->
       </section>
 
       <!-- ══ 02 핵심 원칙 ══ -->
@@ -672,6 +692,7 @@
         <div class="card">
           <div class="card-head"><span class="n">1</span><span>GitHub — DS 저장소</span></div>
           <div class="card-body">
+            <div class="card-shot"><img src="https://opengraph.githubassets.com/1/younginsa/designsystemin.md" alt="" loading="lazy" onerror="this.remove()"><span class="lb">PLACEHOLDER</span><span class="cap">github.com</span></div>
             <p>규칙·채택 어휘·토큰·템플릿의 원천. 클론하면 바로 사용 가능.</p>
             <p><a class="mono" href="https://github.com/younginsa/designsystemin.md" target="_blank" rel="noopener">github.com/younginsa/designsystemin.md</a></p>
           </div>
@@ -679,6 +700,7 @@
         <div class="card">
           <div class="card-head"><span class="n">2</span><span>shadcn/ui</span></div>
           <div class="card-body">
+            <div class="card-shot"><img src="https://ui.shadcn.com/opengraph-image.png" alt="" loading="lazy" onerror="this.remove()"><span class="lb">PLACEHOLDER</span><span class="cap">ui.shadcn.com</span></div>
             <p>컴포넌트 기본형 문서 — 변형·props·예시 코드.</p>
             <p><a class="mono" href="https://ui.shadcn.com" target="_blank" rel="noopener">ui.shadcn.com</a></p>
           </div>
@@ -686,6 +708,7 @@
         <div class="card">
           <div class="card-head"><span class="n">3</span><span>lucide 아이콘</span></div>
           <div class="card-body">
+            <div class="card-shot"><img src="https://lucide.dev/og.png" alt="" loading="lazy" onerror="this.remove()"><span class="lb">PLACEHOLDER</span><span class="cap">lucide.dev</span></div>
             <p>전 컴포넌트가 쓰는 아이콘 세트(lucide-react). 이름으로 검색.</p>
             <p><a class="mono" href="https://lucide.dev/icons" target="_blank" rel="noopener">lucide.dev/icons</a></p>
           </div>
@@ -693,6 +716,7 @@
         <div class="card">
           <div class="card-head"><span class="n">4</span><span>Radix UI</span></div>
           <div class="card-body">
+            <div class="card-shot"><span class="lb">PLACEHOLDER</span><span class="cap">radix-ui.com</span></div>
             <p>shadcn이 기반하는 프리미티브 — 접근성·키보드·동작 스펙.</p>
             <p><a class="mono" href="https://www.radix-ui.com" target="_blank" rel="noopener">radix-ui.com</a></p>
           </div>
@@ -700,6 +724,7 @@
         <div class="card">
           <div class="card-head"><span class="n">5</span><span>Tailwind CSS</span></div>
           <div class="card-body">
+            <div class="card-shot"><img src="https://tailwindcss.com/api/og" alt="" loading="lazy" onerror="this.remove()"><span class="lb">PLACEHOLDER</span><span class="cap">tailwindcss.com</span></div>
             <p>유틸리티 클래스 레퍼런스 — 생성 코드의 스타일 문법.</p>
             <p><a class="mono" href="https://tailwindcss.com/docs" target="_blank" rel="noopener">tailwindcss.com/docs</a></p>
           </div>
@@ -707,6 +732,7 @@
         <div class="card">
           <div class="card-head"><span class="n">6</span><span>Jira DES 보드</span></div>
           <div class="card-body">
+            <div class="card-shot"><span class="lb">PLACEHOLDER</span><span class="cap">avikus.atlassian.net</span></div>
             <p>DS 요청 접수·진행 현황 — "DS 요청: ○○"이 여기로 모인다.</p>
             <p><a class="mono" href="https://avikus.atlassian.net/jira/software/c/projects/DES/boards/71" target="_blank" rel="noopener">avikus.atlassian.net · DES 보드</a></p>
           </div>
@@ -971,14 +997,12 @@
     </div>
     <div id="visual-stack" class="vstack" style="display:none"></div>
     <div id="visual-adopt" class="adopt-rail" style="display:none"></div>
-    <div id="visual-dsnav" class="adopt-rail" style="display:none">
-      <div class="card"><div class="rail-list dsnav-list">
-        <button type="button" class="chip on" data-sec="pipeline">파이프라인</button>
-        <button type="button" class="chip" data-sec="common">공통 DS</button>
-        <button type="button" class="chip" data-jump="d365">365 →</button>
-        <button type="button" class="chip" disabled>Cloud — 예정</button>
-        <button type="button" class="chip" disabled>Control — 예정</button>
-      </div></div>
+    <div id="visual-dsnav" style="display:none">
+      <button type="button" class="dn-item on" data-sec="pipeline">파이프라인</button>
+      <button type="button" class="dn-item" data-sec="common">공통 DS</button>
+      <button type="button" class="dn-item" data-sec="d365">365</button>
+      <button type="button" class="dn-item" disabled>Cloud — 예정</button>
+      <button type="button" class="dn-item" disabled>Control — 예정</button>
     </div>
   </aside>
 
@@ -1309,14 +1333,14 @@
     if (!nav) return;
     const secs = [...document.querySelectorAll('.dsnav-sec')];
     nav.addEventListener('click', (e) => {
-      const b = e.target.closest('button.chip');
-      if (!b || b.disabled) return;
-      if (b.dataset.jump) { switchDoc(b.dataset.jump); select(0); return; }
-      if (!b.dataset.sec) return;
-      [...nav.querySelectorAll('.chip')].forEach((c) => c.classList.toggle('on', c === b));
+      const b = e.target.closest('button.dn-item');
+      if (!b || b.disabled || !b.dataset.sec) return;
+      [...nav.querySelectorAll('.dn-item')].forEach((c) => c.classList.toggle('on', c === b));
       secs.forEach((s) => { s.style.display = s.dataset.sec === b.dataset.sec ? '' : 'none'; });
       window.scrollTo(0, 0);
     });
+    const open365 = document.getElementById('dsnav-open-365');
+    if (open365) open365.addEventListener('click', (e) => { e.preventDefault(); switchDoc('d365'); select(0); });
   })();
 
   // ── 히스토리 — 타이틀 드롭다운(날짜+요약)으로 시점 선택. 항목 추가는 관리자 등재로만 ──
