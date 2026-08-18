@@ -23,11 +23,11 @@ export default function Page() {
     <div className="flex h-screen items-start justify-center gap-24 bg-white pt-16">
       <style>{`nextjs-portal { display: none; }`}</style>
       <div className="flex flex-col items-center gap-6">
-        <IconSelect icon={Clock} value="KST" sub="2026-08-18 13:00" items={TZ} heading="Timezone" />
+        <IconSelect icon={Clock} value="KST" sub="+9 · 2026-08-18 13:00" items={TZ} heading="Timezone" />
         <IconSelect icon={Ship} value="s1" items={SHIPS} />
       </div>
       <div className="pt-2">
-        <IconSelect icon={Clock} value="KST" sub="2026-08-18 13:00" items={TZ} heading="Timezone" defaultOpen align="start" />
+        <IconSelect icon={Clock} value="KST" sub="+9 · 2026-08-18 13:00" items={TZ} heading="Timezone" defaultOpen align="start" />
       </div>
     </div>
   );

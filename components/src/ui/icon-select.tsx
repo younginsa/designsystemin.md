@@ -51,9 +51,10 @@ function IconSelect({
   return (
     <DropdownMenu defaultOpen={defaultOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className={cn("gap-2 font-normal", className)}>
-          <Icon className="size-4 shrink-0 text-muted-foreground" />
-          <span className="flex min-w-0 flex-col items-start leading-none">
+        {/* 트리거: 아웃라인 · 높이 40px · 아이콘-텍스트 간격 2배(16px) · 텍스트 블록 세로 2줄 + 우측 4px */}
+        <Button variant="outline" className={cn("h-10 gap-2 px-3 font-normal", className)}>
+          <Icon className="mr-2 size-4 shrink-0 text-muted-foreground" />
+          <span className="flex min-w-0 flex-col items-start pr-1 leading-none">
             <span className="truncate text-sm">{current?.label ?? "선택"}</span>
             {sub ? (
               <span className="mt-0.5 text-[10px] leading-none text-muted-foreground">{sub}</span>
