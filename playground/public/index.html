@@ -428,6 +428,29 @@
   .tpl .tw-zone { font-family: var(--mono); font-size: 8px; color: var(--muted);
     border: 1px dashed var(--line); background: var(--bg); padding: 2px 5px; white-space: nowrap; }
   .tpl .tpl-desc { padding: 12px 16px 16px; font-size: 13px; color: var(--muted); }
+  /* 본문 패턴 카드 미니 와이어 (A 리스트 · B 상세 · C 위저드) */
+  .tpl .bp-wire { position: relative; aspect-ratio: 16/10; margin: 16px 16px 0;
+    border: 1px solid var(--line); background: var(--bg); overflow: hidden; }
+  .tpl .bp-toolbar { position: absolute; top: 6%; left: 6%; width: 44%; height: 9%;
+    background: var(--surface); border: 1px solid var(--line); }
+  .tpl .bp-row { position: absolute; left: 6%; right: 6%; height: 10%;
+    background: var(--surface); border: 1px solid var(--line); }
+  .tpl .bp-row:nth-of-type(2) { top: 23%; }
+  .tpl .bp-row:nth-of-type(3) { top: 37%; }
+  .tpl .bp-row:nth-of-type(4) { top: 51%; }
+  .tpl .bp-pg { position: absolute; right: 6%; bottom: 8%; width: 26%; height: 8%;
+    background: var(--surface); border: 1px solid var(--line); }
+  .tpl .bp-panel { position: absolute; top: 8%; left: 6%; bottom: 8%; width: 26%;
+    background: var(--surface); border: 1px solid var(--line); }
+  .tpl .bp-main { position: absolute; top: 8%; left: 38%; right: 6%; bottom: 8%;
+    background: var(--surface); border: 1px solid var(--line); }
+  .tpl .bp-steps { position: absolute; top: 8%; left: 14%; right: 14%; height: 6%;
+    background: repeating-linear-gradient(90deg, var(--line) 0 12px, transparent 12px 28px); }
+  .tpl .bp-form { position: absolute; top: 22%; left: 14%; right: 14%; bottom: 26%;
+    background: var(--surface); border: 1px solid var(--line); }
+  .tpl .bp-bar { position: absolute; left: 6%; right: 6%; bottom: 6%; height: 12%;
+    background: var(--surface); border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center; }
   .ds-editor { border-top: 1px solid var(--line); padding: 12px 16px 16px; display: grid; gap: 8px; }
   .ds-editor[hidden] { display: none; }
   /* 채택 카드 hover — 기본: 365 렌더, hover: shadcn 원형 (03과 동일한 상호작용) */
@@ -883,6 +906,39 @@
             </div>
             <div class="tpl-desc">2컬럼 — 풀하이트 사이드바(상단 브랜드·하단 계정/접기) + 상단바(시계·알림) + 본문.
             표준 요청 문장: <span class="mono">"스샷을 메인 레이아웃 본문에 넣어줘"</span>. 레이아웃에 안 담기면 단독 화면. hover = 실제 화면.</div>
+          </div>
+        </div>
+
+        <h3>본문 패턴 — 본문 영역의 구성 선례 (문자 매김)</h3>
+        <p class="lead">프레임 안 <strong>본문</strong>의 선례다 — 프레임 번호와 조합해 <strong>"① 프레임 + C 본문"</strong>처럼
+        쓴다. 고정 요소(하단 바 포함)는 <strong>본문 컬럼을 벗어나지 않는다</strong>
+        (원천: <span class="mono">layout/body-patterns.md</span>).</p>
+        <div class="card-grid">
+          <div class="card tpl">
+            <div class="card-head"><span><span class="n">A</span> 리스트</span></div>
+            <div class="bp-wire">
+              <div class="bp-toolbar"></div>
+              <div class="bp-row"></div><div class="bp-row"></div><div class="bp-row"></div>
+              <div class="bp-pg"></div>
+            </div>
+            <div class="tpl-desc">검색·필터 툴바 + 테이블 + 페이지네이션. 빈 결과는 Empty(조건 초기화).</div>
+          </div>
+          <div class="card tpl">
+            <div class="card-head"><span><span class="n">B</span> 상세</span></div>
+            <div class="bp-wire">
+              <div class="bp-panel"></div>
+              <div class="bp-main"></div>
+            </div>
+            <div class="tpl-desc">좌측 요약 패널(kv) + 우측 본문(아코디언·탭·타임라인). 브레드크럼에 개체명.</div>
+          </div>
+          <div class="card tpl">
+            <div class="card-head"><span><span class="n">C</span> 위저드</span></div>
+            <div class="bp-wire">
+              <div class="bp-steps"></div>
+              <div class="bp-form"></div>
+              <div class="bp-bar"><span class="tw-label">하단 바 — 본문 폭 안</span></div>
+            </div>
+            <div class="tpl-desc">상단 스테퍼 + 단계별 폼 + 하단 이전/다음 바 — <strong>사이드바를 덮지 않는다</strong>.</div>
           </div>
         </div>
 

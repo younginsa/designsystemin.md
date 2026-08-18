@@ -8,6 +8,11 @@
     "_note": "1차 365 토큰 — 메인 다크 네이비 + 각짐. 상태 색 등 나머지는 미정의"
   },
   "components": {
+    "data-table": {
+      "overrides": { "cell-padding-x": "12px" },
+      "note": "셀 좌우 패딩 8→12px(px-3) — 제품 동일값, 첫 컬럼이 테이블 왼끝에 붙던 답답함 해소",
+      "render": "pending"
+    },
     "data-kv": {
       "overrides": { "row-padding-x": "0" },
       "note": "행 좌측 패딩 제거 — 타이틀과 좌측 정렬",
