@@ -24,9 +24,12 @@ if (!email || !token) {
 const args = process.argv.slice(2);
 const typeIdx = args.indexOf('--type');
 const reqType = typeIdx >= 0 ? args.splice(typeIdx, 2)[1] : '추가';
+const attachments = [];
+let ai;
+while ((ai = args.indexOf('--attach')) >= 0) attachments.push(args.splice(ai, 2)[1]);
 const [title, body] = args;
 if (!title) {
-  console.log('사용법: node --use-system-ca scripts/ds-jira.mjs "<제목>" "<본문>" [--type 추가|수정|버그]');
+  console.log('사용법: node --use-system-ca scripts/ds-jira.mjs "<제목>" "<본문>" [--type 추가|수정|버그] [--attach <스크린샷 경로>]');
   process.exit(1);
 }
 
@@ -80,6 +83,27 @@ try {
   console.log('[DS 요청] 접수 완료 ✓');
   console.log('  티켓: ' + j.key);
   console.log('  링크: ' + BASE + '/browse/' + j.key);
+  // 스크린샷 첨부 (선택) — 발생 화면을 티켓에 남긴다
+  const { readFileSync } = await import('node:fs');
+  const { basename } = await import('node:path');
+  for (const path of attachments) {
+    try {
+      const form = new FormData();
+      form.append('file', new Blob([readFileSync(path)], { type: 'image/png' }), basename(path));
+      const ar = await fetch(BASE + '/rest/api/3/issue/' + j.key + '/attachments', {
+        method: 'POST',
+        headers: {
+          Authorization: 'Basic ' + Buffer.from(email + ':' + token).toString('base64'),
+          'X-Atlassian-Token': 'no-check',
+        },
+        body: form,
+        signal: AbortSignal.timeout(20000),
+      });
+      console.log(ar.ok ? '  첨부 ✓ ' + basename(path) : '  첨부 실패(' + ar.status + ') ' + path);
+    } catch (e) {
+      console.log('  첨부 실패: ' + path + ' — ' + (e.cause?.code || e.message));
+    }
+  }
 } catch (e) {
   const code = e.cause && e.cause.code;
   if (code === 'SELF_SIGNED_CERT_IN_CHAIN' || code === 'UNABLE_TO_GET_ISSUER_CERT_LOCALLY') {
