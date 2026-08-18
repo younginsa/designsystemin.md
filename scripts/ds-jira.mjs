@@ -27,9 +27,12 @@ const reqType = typeIdx >= 0 ? args.splice(typeIdx, 2)[1] : '추가';
 const attachments = [];
 let ai;
 while ((ai = args.indexOf('--attach')) >= 0) attachments.push(args.splice(ai, 2)[1]);
+const links = [];
+let li;
+while ((li = args.indexOf('--link')) >= 0) links.push(args.splice(li, 2)[1]);
 const [title, body] = args;
 if (!title) {
-  console.log('사용법: node --use-system-ca scripts/ds-jira.mjs "<제목>" "<본문>" [--type 추가|수정|버그] [--attach <스크린샷 경로>]');
+  console.log('사용법: node --use-system-ca scripts/ds-jira.mjs "<제목>" "<본문>" [--type 추가|수정|버그] [--attach <AS-IS/TO-BE png>] [--link <리뷰 URL>]');
   process.exit(1);
 }
 
@@ -42,11 +45,16 @@ const dsCommit = sh('git rev-parse --short HEAD') || '?';
 const dsDate = sh('git log -1 --format=%cd --date=format:%y.%m.%d') || '?';
 
 const para = (text) => ({ type: 'paragraph', content: [{ type: 'text', text }] });
+const linkPara = (url) => ({ type: 'paragraph', content: [
+  { type: 'text', text: '리뷰: ' },
+  { type: 'text', text: url, marks: [{ type: 'link', attrs: { href: url } }] },
+] });
 const description = {
   type: 'doc',
   version: 1,
   content: [
     ...(body ? body.split('\n').filter(Boolean).map(para) : [para('(본문 없음)')]),
+    ...links.map(linkPara),
     para('—'),
     para(`요청자: ${requester} · 유형: ${reqType} · DS 버전: ${dsDate}판 (${dsCommit})`),
     para('생성 경로: 365 DS 세션 리포터 (scripts/ds-jira.mjs)'),
