@@ -1,5 +1,5 @@
 // DS 요청 리포터 — Jira DES(Product Design) 보드로 티켓 생성
-// 사용법: node --use-system-ca scripts/ds-report.mjs "<제목>" "<본문>" [--type 추가|수정|버그]
+// 사용법: node --use-system-ca scripts/ds-jira.mjs "<제목>" "<본문>" [--type 추가|수정|버그]
 // (--use-system-ca: 사내 TLS 검사 대응, Node 22.15+ 필요)
 // 필요 환경변수: JIRA_EMAIL(본인 Atlassian 이메일), JIRA_API_TOKEN(본인 API 토큰 —
 //   https://id.atlassian.com/manage-profile/security/api-tokens 에서 발급)
@@ -26,7 +26,7 @@ const typeIdx = args.indexOf('--type');
 const reqType = typeIdx >= 0 ? args.splice(typeIdx, 2)[1] : '추가';
 const [title, body] = args;
 if (!title) {
-  console.log('사용법: node --use-system-ca scripts/ds-report.mjs "<제목>" "<본문>" [--type 추가|수정|버그]');
+  console.log('사용법: node --use-system-ca scripts/ds-jira.mjs "<제목>" "<본문>" [--type 추가|수정|버그]');
   process.exit(1);
 }
 
@@ -46,7 +46,7 @@ const description = {
     ...(body ? body.split('\n').filter(Boolean).map(para) : [para('(본문 없음)')]),
     para('—'),
     para(`요청자: ${requester} · 유형: ${reqType} · DS 버전: ${dsDate}판 (${dsCommit})`),
-    para('생성 경로: 365 DS 세션 리포터 (scripts/ds-report.mjs)'),
+    para('생성 경로: 365 DS 세션 리포터 (scripts/ds-jira.mjs)'),
   ],
 };
 
