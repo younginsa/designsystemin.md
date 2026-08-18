@@ -10,11 +10,11 @@
   "components": {
     "icon-select": {
       "build": "done",
-      "note": "조합 제작 — @ds/ui/ui/icon-select. shadcn DropdownMenu 프리셋(좌측 아이콘+라벨+목록). 타임존·호선 전환 등 인스턴스는 props만 다름 — 손 구현 금지"
+      "note": "조합 제작 — @ds/ui/ui/icon-select. shadcn DropdownMenu 프리셋. 타입 2종: 아이콘형(icon 지정)·텍스트형(icon 생략). h-9(36px)·아이콘 간격 8px — 손 구현 금지"
     },
     "data-table": {
-      "overrides": { "cell-padding-x": "12px" },
-      "note": "셀 좌우 패딩 8→12px(px-3) — 제품 동일값, 첫 컬럼이 테이블 왼끝에 붙던 답답함 해소",
+      "overrides": { "cell-padding-x": "16px" },
+      "note": "셀 좌우 패딩 8→16px(px-4) — 12px 검토 후 16으로 확정, 첫 컬럼이 테이블 왼끝에 붙던 답답함 해소",
       "render": "pending"
     },
     "data-kv": {

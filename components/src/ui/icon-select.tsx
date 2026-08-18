@@ -25,7 +25,8 @@ export interface IconSelectItem {
 }
 
 export interface IconSelectProps {
-  icon: LucideIcon
+  /** 아이콘형/텍스트형 — 아이콘을 생략하면 텍스트형 트리거가 된다 */
+  icon?: LucideIcon
   value?: string
   items: IconSelectItem[]
   onValueChange?: (value: string) => void
@@ -51,9 +52,9 @@ function IconSelect({
   return (
     <DropdownMenu defaultOpen={defaultOpen}>
       <DropdownMenuTrigger asChild>
-        {/* 트리거: 아웃라인 · 높이 40px · 아이콘-텍스트 간격 2배(16px) · 라벨+시간 가로 한 줄 + 우측 4px */}
-        <Button variant="outline" className={cn("h-10 gap-2 px-3 font-normal", className)}>
-          <Icon className="mr-2 size-4 shrink-0 text-muted-foreground" />
+        {/* 트리거: 아웃라인 · 높이 36px(h-9, CTA·인풋과 동일 스케일) · 아이콘 간격 8px · 라벨+시간 가로 한 줄 + 우측 4px */}
+        <Button variant="outline" className={cn("h-9 gap-2 px-3 font-normal", className)}>
+          {Icon ? <Icon className="size-4 shrink-0 text-muted-foreground" /> : null}
           <span className="flex min-w-0 items-baseline gap-1.5 pr-1">
             <span className="truncate text-sm">{current?.label ?? "선택"}</span>
             {sub ? (
