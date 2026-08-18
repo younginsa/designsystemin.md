@@ -4,6 +4,17 @@
     "command": "d=$(git log -1 --format=%cd --date=format:%y.%m.%d 2>/dev/null); b=$(git rev-list --count HEAD..origin/main 2>/dev/null); if [ -z \"$b\" ]; then echo \"365 DS${d:+ · $d판}\"; elif [ \"$b\" = \"0\" ]; then echo \"365 DS 최신 ✓ · ${d}판\"; else echo \"365 DS ${d}판 · ${b}커밋 뒤처짐 — 새 세션이 자동 최신화\"; fi"
   },
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=.git/FETCH_HEAD; now=$(date +%s); last=$(stat -f %m \"$f\" 2>/dev/null || echo 0); if [ $((now - last)) -gt 3600 ]; then before=$(git rev-parse HEAD 2>/dev/null); if GIT_TERMINAL_PROMPT=0 git pull --ff-only --quiet >/dev/null 2>&1; then after=$(git rev-parse HEAD 2>/dev/null); if [ \"$before\" != \"$after\" ]; then echo \"[365 DS] 1시간 경과 자동 최신화 ✓ — 받은 변경:\"; git diff --stat \"$before\" \"$after\" | tail -n 8; fi; else touch \"$f\" 2>/dev/null; fi; fi",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "matcher": "startup|resume|clear",
