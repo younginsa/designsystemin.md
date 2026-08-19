@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-13",
+  "updated": "2026-08-19",
   "approved": [
     "app-shell",
     "breadcrumb",
@@ -49,6 +49,8 @@
     "ov-toast",
     "ov-tooltip",
     "sidebar-nav",
-    "timeline"
+    "timeline",
+    "viz-donut",
+    "viz-line"
   ]
 }
