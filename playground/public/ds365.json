@@ -18,8 +18,8 @@
       "render": "pending"
     },
     "data-status": {
-      "note": "위험·에러 계열(이상·Expired 등)은 도트뿐 아니라 텍스트도 같은 색(text-destructive) — 도트만 착색 금지. 강조는 색 쌍으로",
-      "render": "pending"
+      "note": "위험·에러 계열(이상·Expired 등)은 도트+텍스트 같은 색(text-destructive) + 배경 12% 채움(bg-destructive/12) — 도트만 착색 금지",
+      "render": "done"
     },
     "data-kv": {
       "overrides": { "row-padding-x": "0" },
