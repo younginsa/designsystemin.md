@@ -1,5 +1,5 @@
 /* 자동 생성 — 손으로 편집 금지. 원천: dstk/*.json */
-/* generated 2026-08-19 · commit e491857 */
+/* generated 2026-08-19 · commit 73b1e17 */
 :root {
   --background: #ffffff;
   --foreground: #09090b;
@@ -20,6 +20,11 @@
   --success: #16a34a;
   --info: #3b82f6;
   --info-foreground: #ffffff;
+  --chart-1: #1e3a8a;
+  --chart-2: #1d4ed8;
+  --chart-3: #3b82f6;
+  --chart-4: #93c5fd;
+  --chart-5: #bfdbfe;
   --border: #e4e4e7;
   --input: #e4e4e7;
   --ring: #a1a1aa;
@@ -46,6 +51,11 @@
   --success: #16a34a;
   --info: #3b82f6;
   --info-foreground: #ffffff;
+  --chart-1: #1e3a8a;
+  --chart-2: #1d4ed8;
+  --chart-3: #3b82f6;
+  --chart-4: #93c5fd;
+  --chart-5: #bfdbfe;
   --border: #27272a;
   --input: #27272a;
   --ring: #52525b;
