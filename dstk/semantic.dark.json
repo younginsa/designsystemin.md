@@ -16,6 +16,8 @@
   "destructive":           { "$type": "color", "$value": "{color.red.500}" },
   "destructive-foreground":{ "$type": "color", "$value": "{color.white}" },
   "success":               { "$type": "color", "$value": "{color.green.600}" },
+  "info":                  { "$type": "color", "$value": "{color.blue.500}" },
+  "info-foreground":       { "$type": "color", "$value": "{color.white}" },
   "border":                { "$type": "color", "$value": "{color.zinc.800}" },
   "input":                 { "$type": "color", "$value": "{color.zinc.800}" },
   "ring":                  { "$type": "color", "$value": "{color.zinc.600}" }
