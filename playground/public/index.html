@@ -1309,7 +1309,8 @@
     rail.innerHTML =
       '<div class="rail-dirty" id="approve-dirty"></div>' +
       '<div class="card"><div class="rail-head" id="rail-shadcn-head"></div><div class="rail-list" id="rail-shadcn"></div></div>' +
-      '<div class="card"><div class="rail-head" id="rail-rebuilt-head"></div><div class="rail-list" id="rail-rebuilt"></div></div>';
+      '<div class="card"><div class="rail-head" id="rail-rebuilt-head"></div><div class="rail-list" id="rail-rebuilt"></div></div>' +
+      '<div class="card" id="rail-pending-card"><div class="rail-head" id="rail-pending-head"></div><div class="rail-list" id="rail-pending"></div></div>';
     // 내보내기 버튼은 3번째 컬럼 스트립(우측 정렬 슬롯)에 놓는다
     const act = document.getElementById('visual-act');
     const exp = document.createElement('button');
@@ -1364,13 +1365,21 @@
       const sa = mapped.filter(x => s.has(x));
       document.getElementById('rail-shadcn-head').innerHTML =
         'shadcn 채택 <strong>' + sa.length + '</strong> / ' + mapped.length;
+      // 전체 mapped를 그린다 — 미채택도 회색 칩으로 보여야 공백이 보인다(재현 그룹과 대칭)
       document.getElementById('rail-shadcn').innerHTML =
-        sa.map(x => chipRow(x, true)).join('') || '<span class="chip off">아직 없음</span>';
+        mapped.map(x => chipRow(x, s.has(x), '미채택')).join('') || '<span class="chip off">아직 없음</span>';
       const ra = rebuilt.filter(x => s.has(x));
       document.getElementById('rail-rebuilt-head').innerHTML =
         '재현(365 제작) 채택 <strong>' + ra.length + '</strong> / ' + rebuilt.length;
       document.getElementById('rail-rebuilt').innerHTML =
         rebuilt.map(x => chipRow(x, s.has(x), '미채택')).join('') || '<span class="chip off">제작 완료분 없음</span>';
+      // 재현 대기(shadcn 없음 + 미제작) — 어느 그룹에도 안 보이던 카드를 회색 칩으로 노출
+      const pend = cards.map(c => c.dataset.comp).filter(x => isNone[x] && !rebuilt.includes(x));
+      document.getElementById('rail-pending-head').innerHTML =
+        '원본 재현 대기 <strong>' + pend.length + '</strong>';
+      document.getElementById('rail-pending').innerHTML =
+        pend.map(x => chipRow(x, false)).join('');
+      document.getElementById('rail-pending-card').style.display = pend.length ? '' : 'none';
       const dirty = local !== null && !eq(new Set(local), new Set(fileList));
       document.getElementById('approve-dirty').textContent = dirty ? '커밋 안 된 변경 있음 — 내보내기 후 커밋' : '';
       document.dispatchEvent(new CustomEvent('ds365:approvals', { detail: [...s] }));
