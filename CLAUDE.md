@@ -41,9 +41,12 @@ AI 친화 디자인 시스템 저장소다.
    훅이 자동 재동기화한다. 그래도 생성 직전에는 `git pull` 1회를 직접 실행한다
    (원격 최신 DS·채택 목록 반영). pull 결과에 CLAUDE.md 변경이 포함되어 있으면
    CLAUDE.md를 다시 읽고 새 절차를 따른다.
-   **pull에 approved.json·ds365.json 변경이 포함되면** 새 항목의 노트까지 읽고,
-   기존 생성 화면(`playground/app/generated/`)에 소급 적용 대상이 있는지 1회 스캔해
-   보고한다 — 적용 자체는 요청자 승인 후.
+   **pull에 approved.json·ds365.json·CLAUDE.md·components/ 변경이 포함되면** 새 항목의
+   노트까지 읽고, 기존 생성 화면(`playground/app/generated/`)에 소급 적용 대상이 있는지
+   1회 스캔해 보고한다 — 적용 자체는 요청자 승인 후.
+   훅 pull 요약의 "N files changed" 총계와 나열된 파일 수를 대조한다(산수만 — 추가
+   명령 없음). 불일치하면 `git diff --stat`으로 전체 목록을 직접 확인한 뒤 소급 스캔한다.
+   pull에 package.json·pnpm-lock.yaml 변경이 포함되면 `pnpm install`을 1회 실행하고 진행한다.
 1. **규정 검토** — `regulations/`에서 해당 제품 파일 확인. 충돌·주의사항이 있으면
    생성 전에 알리고 확인받는다. 파일이 없으면 한 줄 보고 후 진행.
 2. **규칙·어휘 로드** — `design.md` 전체 + `playground/public/approved.json`(채택 어휘)
