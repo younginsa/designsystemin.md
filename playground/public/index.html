@@ -332,7 +332,7 @@
   .comp-vis .ph .cap { font-size: 11px; color: var(--muted); }
   .comp-vis .pv { position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: contain; padding: 4%; box-sizing: border-box; }
-  .comp-vis .hovercut { display: none; position: absolute; inset: 0; margin: 0;
+  .comp-vis .hovercut, .bp-wire .hovercut { display: none; position: absolute; inset: 0; margin: 0;
     width: auto; height: auto; border: none; background-color: var(--bg);
     background-image: radial-gradient(#d9d9d9 1px, transparent 1px); background-size: 8px 8px;
     align-items: center; justify-content: center; }
@@ -915,31 +915,34 @@
         쓴다. 고정 요소(하단 바 포함)는 <strong>본문 컬럼을 벗어나지 않는다</strong>
         (원천: <span class="mono">layout/body-patterns.md</span>).</p>
         <div class="card-grid">
-          <div class="card tpl">
+          <div class="card tpl comp">
             <div class="card-head"><span><span class="n">A</span> 리스트</span></div>
             <div class="bp-wire">
               <div class="bp-toolbar"></div>
               <div class="bp-row"></div><div class="bp-row"></div><div class="bp-row"></div>
               <div class="bp-pg"></div>
+              <span class="cut hovercut" data-shot="ships-list" data-crop="215,55,1705,1025"></span>
             </div>
-            <div class="tpl-desc">검색·필터 툴바 + 테이블 + 페이지네이션. 빈 결과는 Empty(조건 초기화).</div>
+            <div class="tpl-desc">검색·필터 툴바 + 테이블 + 페이지네이션. 빈 결과는 Empty(조건 초기화). hover = 실제 화면.</div>
           </div>
-          <div class="card tpl">
+          <div class="card tpl comp">
             <div class="card-head"><span><span class="n">B</span> 상세</span></div>
             <div class="bp-wire">
               <div class="bp-panel"></div>
               <div class="bp-main"></div>
+              <span class="cut hovercut" data-shot="ship-detail" data-crop="215,55,1705,1025"></span>
             </div>
-            <div class="tpl-desc">좌측 요약 패널(kv) + 우측 본문(아코디언·탭·타임라인). 브레드크럼에 개체명.</div>
+            <div class="tpl-desc">좌측 요약 패널(kv) + 우측 본문(아코디언·탭·타임라인). 브레드크럼에 개체명. hover = 실제 화면.</div>
           </div>
-          <div class="card tpl">
+          <div class="card tpl comp">
             <div class="card-head"><span><span class="n">C</span> 위저드</span></div>
             <div class="bp-wire">
               <div class="bp-steps"></div>
               <div class="bp-form"></div>
               <div class="bp-bar"><span class="tw-label">하단 바 — 본문 폭 안</span></div>
+              <span class="cut hovercut" data-shot="update-wizard" data-crop="215,55,1705,1025"></span>
             </div>
-            <div class="tpl-desc">상단 스테퍼 + 단계별 폼 + 하단 이전/다음 바 — <strong>사이드바를 덮지 않는다</strong>.</div>
+            <div class="tpl-desc">상단 스테퍼 + 단계별 폼 + 하단 이전/다음 바 — <strong>사이드바를 덮지 않는다</strong>. hover = 실제 화면.</div>
           </div>
         </div>
 
