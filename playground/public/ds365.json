@@ -10,7 +10,22 @@
   "components": {
     "icon-select": {
       "build": "done",
-      "note": "조합 제작 — @ds/ui/ui/icon-select. shadcn DropdownMenu 프리셋. 타입 2종: 아이콘형(icon 지정)·텍스트형(icon 생략). h-9(36px)·아이콘 간격 8px — 손 구현 금지"
+      "note": "조합 제작 — @ds/ui/ui/icon-select. shadcn DropdownMenu 프리셋. 타입 2종: 아이콘형(icon 지정)·텍스트형(icon 생략). h-9(36px)·아이콘 간격 8px·그림자 없음(플랫) — 손 구현 금지"
+    },
+    "form-text": {
+      "overrides": { "shadow": "none" },
+      "note": "폼 컨트롤 플랫 규칙 — 인풋·셀렉트·검색 박스·드롭다운 트리거 그림자 제거(shadow-xs 삭제). 플로팅 패널의 elevation 그림자는 유지",
+      "render": "pending"
+    },
+    "form-select": {
+      "overrides": { "shadow": "none" },
+      "note": "폼 컨트롤 플랫 규칙 — 트리거 그림자 제거",
+      "render": "pending"
+    },
+    "form-search": {
+      "overrides": { "shadow": "none" },
+      "note": "폼 컨트롤 플랫 규칙 — 검색 박스 그림자 제거",
+      "render": "pending"
     },
     "data-table": {
       "overrides": { "cell-padding-x": "16px", "outline": "border + rounded-md (컴포넌트 내장)", "header-bg": "muted/50", "header-color": "muted-foreground" },

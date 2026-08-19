@@ -53,7 +53,7 @@ function IconSelect({
     <DropdownMenu defaultOpen={defaultOpen}>
       <DropdownMenuTrigger asChild>
         {/* 트리거: 아웃라인 · 높이 36px(h-9, CTA·인풋과 동일 스케일) · 아이콘 간격 8px · 라벨+시간 가로 한 줄 + 우측 4px */}
-        <Button variant="outline" className={cn("h-9 gap-2 px-3 font-normal", className)}>
+        <Button variant="outline" className={cn("h-9 gap-2 px-3 font-normal shadow-none", className)}>
           {Icon ? <Icon className="size-4 shrink-0 text-muted-foreground" /> : null}
           <span className="flex min-w-0 items-baseline gap-1.5 pr-1">
             <span className="truncate text-sm">{current?.label ?? "선택"}</span>
