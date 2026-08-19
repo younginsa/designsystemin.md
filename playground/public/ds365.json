@@ -29,11 +29,11 @@
     },
     "data-table": {
       "overrides": { "cell-padding-x": "16px", "outline": "border + rounded-md (컴포넌트 내장)", "header-bg": "muted/50", "header-color": "muted-foreground" },
-      "note": "셀 좌우 패딩 16px · 아웃라인·헤더 배경을 컴포넌트에 내장(세션별 래퍼 제각각 문제 해소) · 헤더 폰트는 본문보다 흐리게",
-      "render": "pending"
+      "note": "셀 좌우 패딩 16px · 아웃라인·헤더 배경을 컴포넌트에 내장(세션별 래퍼 제각각 문제 해소) · 헤더 폰트는 본문보다 흐리게. 원형(hover)은 내장 조정을 되돌린 순정 재구성",
+      "render": "done"
     },
     "data-status": {
-      "note": "라운드 필 통일. 정상·중립 = bg-muted(시스템 회색) 필. 위험·에러 = 도트+텍스트 destructive + bg 12% — 도트만 착색 금지. 원형(hover)은 순정 shadcn Badge",
+      "note": "라운드 필 통일. 정상·중립 대표 = bg-muted 필, 동의어 보조 상태(Ready 등)는 배경 없이 도트+텍스트. 위험·에러 = 도트+텍스트 destructive + bg 12% — 도트만 착색 금지. 원형(hover)은 순정 shadcn Badge",
       "render": "done"
     },
     "data-kv": {

@@ -33,7 +33,7 @@ export default function Page() {
         <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
           COMPLETED
         </span>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-0.5 text-sm">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-sm">
           <span className="size-1.5 rounded-full bg-emerald-500" /> Ready
         </span>
       </div>
