@@ -22,6 +22,11 @@
       "note": "아웃라인 버튼(이전·취소·필터 등) 그림자 제거 — 플랫 규칙 확장. 렌더 차이 없음 — 재캡처 생략",
       "render": "done"
     },
+    "btn-destructive": {
+      "overrides": { "outline-border": "destructive/40" },
+      "note": "파괴 아웃라인 정식 변형 destructive-outline 신설 — 테두리 40%(텍스트보다 연하게)·hover bg 5%. 손 조합(border-destructive text-destructive) 금지",
+      "render": "done"
+    },
     "form-text": {
       "overrides": { "shadow": "none" },
       "note": "폼 컨트롤 플랫 규칙 — 인풋·셀렉트·검색 박스·드롭다운 트리거 그림자 제거(shadow-xs 삭제). 플로팅 패널의 elevation 그림자는 유지. 카드 축척에서 렌더 차이 없음 — 재캡처 생략",

@@ -310,9 +310,7 @@ export default function ShadcnPreview() {
       </Strip>
       <Strip id="pv-btn-destructive">
         <Button variant="destructive">삭제</Button>
-        <Button variant="outline" className="border-destructive text-destructive">
-          제품 삭제
-        </Button>
+        <Button variant="destructive-outline">제품 삭제</Button>
       </Strip>
       <Strip id="pv-btn-states">
         <Button disabled>비활성</Button>

@@ -4,7 +4,8 @@
 #
 # 사용법:
 #   python3 scripts/crop-center.py pair   <캡처.png> <상단블록출력.png> <하단블록출력.png>
-#   python3 scripts/crop-center.py single <캡처.png> <출력.png>
+#   python3 scripts/crop-center.py single <캡처.png> <출력.png> [최소W 최소H]
+#     최소W/H: 캔버스 하한(px) — 작은 콘텐츠가 카드에서 과확대되지 않게 이웃 카드와 축척을 맞출 때 사용
 #
 # pair: 세로로 쌓인 두 변형(상단=원형 스톡, 하단=365 조정판)을 각각 잘라
 #       두 슬롯이 동일한 캔버스 크기·정중앙 배치를 갖게 한다.
@@ -87,14 +88,14 @@ def run_pair(src, out_top, out_bottom):
     center_on_canvas(img, bbs[1], W, H, out_bottom)
 
 
-def run_single(src, out):
+def run_single(src, out, min_w=0, min_h=0):
     img = Image.open(src).convert("RGB")
     mask = img.convert("L").point(lambda p: 255 if p < THR else 0)
     bb = mask.getbbox()
     if not bb:
         sys.exit(f"{src}: 콘텐츠 없음(전부 흰색)")
-    W = bb[2] - bb[0] + MARGIN
-    H = max(bb[3] - bb[1] + MARGIN, int(W * MIN_ASPECT))
+    W = max(bb[2] - bb[0] + MARGIN, min_w)
+    H = max(bb[3] - bb[1] + MARGIN, int(W * MIN_ASPECT), min_h)
     center_on_canvas(img, bb, W, H, out)
 
 
@@ -102,7 +103,9 @@ if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else ""
     if mode == "pair" and len(sys.argv) == 5:
         run_pair(sys.argv[2], sys.argv[3], sys.argv[4])
-    elif mode == "single" and len(sys.argv) == 4:
-        run_single(sys.argv[2], sys.argv[3])
+    elif mode == "single" and len(sys.argv) in (4, 6):
+        run_single(sys.argv[2], sys.argv[3],
+                   int(sys.argv[4]) if len(sys.argv) == 6 else 0,
+                   int(sys.argv[5]) if len(sys.argv) == 6 else 0)
     else:
         sys.exit(__doc__)
