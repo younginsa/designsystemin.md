@@ -63,7 +63,7 @@ export default function Page() {
     <div className="flex h-screen flex-col items-center justify-start gap-24 bg-white pt-16">
       <style>{`nextjs-portal { display: none; }`}</style>
       {/* 순정 shadcn 원형 — 내장 조정(테두리·헤더 배경·패딩·헤더 색) 되돌림 */}
-      <div className="w-[640px] [&>div]:rounded-none [&>div]:border-0 [&_thead]:bg-transparent [&_th]:text-foreground [&_th]:px-2 [&_td]:px-2">
+      <div className="w-[640px] [&>div]:rounded-none [&>div]:border-0 [&_thead]:bg-transparent [&_th]:text-foreground [&_th]:px-2 [&_td]:px-2 [&_td]:py-2">
         <Table>
           <Head />
           <Rows />

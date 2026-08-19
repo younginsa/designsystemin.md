@@ -38,8 +38,8 @@
       "render": "done"
     },
     "data-table": {
-      "overrides": { "cell-padding-x": "16px", "outline": "border + rounded-md (컴포넌트 내장)", "header-bg": "muted/50", "header-color": "muted-foreground" },
-      "note": "셀 좌우 패딩 16px · 아웃라인·헤더 배경을 컴포넌트에 내장(세션별 래퍼 제각각 문제 해소) · 헤더 폰트는 본문보다 흐리게. 원형(hover)은 내장 조정을 되돌린 순정 재구성",
+      "overrides": { "cell-padding-x": "16px", "cell-padding-y": "12px", "outline": "border + rounded-md (컴포넌트 내장)", "header-bg": "muted/50", "header-color": "muted-foreground" },
+      "note": "셀 좌우 패딩 16px · 상하 패딩 12px(1줄 행 ≈48px — 페이지별 표 밀도 제각각 해소) · 아웃라인·헤더 배경을 컴포넌트에 내장(세션별 래퍼 제각각 문제 해소) · 헤더 폰트는 본문보다 흐리게. 원형(hover)은 내장 조정을 되돌린 순정 재구성",
       "render": "done"
     },
     "data-status": {
