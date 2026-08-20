@@ -1,22 +1,22 @@
 /* 365 제품 토큰 — build-dstk.ts 생성 */
 
 .theme-365 {
-  --primary: #002D9C;
+  --primary: #4589FF;
   --primary-foreground: #FFFFFF;
-  --ring: #002D9C;
+  --ring: #4589FF;
   --radius: 0px;
 }
 
 .dark .theme-365 {
-  --primary: #8FCAFC;
+  --primary: #348FF4;
   --primary-foreground: #FFFFFF;
-  --ring: #8FCAFC;
+  --ring: #348FF4;
   --radius: 0px;
 }
 
 .night .theme-365 {
-  --primary: #005653;
+  --primary: #003836;
   --primary-foreground: #FFFFFF;
-  --ring: #005653;
+  --ring: #003836;
   --radius: 0px;
 }

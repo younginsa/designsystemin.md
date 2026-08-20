@@ -1,12 +1,13 @@
 {
   "updated": "2026-08-03",
   "tokens": {
-    "primary": "#002D9C",
+    "primary": "#4589FF",
     "primary-foreground": "#ffffff",
-    "ring": "#002D9C",
+    "ring": "#4589FF",
     "radius": "0px",
-    "_note": "2차 — Avikus 팔레트 3층 구조 도입(dstk/palette.json이 유일한 색 원천). 365 primary = palette blue-800 #002D9C(구 #1e3a8a 대체), 원천 파일은 dstk/products/365.json. 상태 색은 공통 시맨틱 anchor 참조(destructive=red·success=green·info=blue)로 흡수"
+    "_note": "3차(디자이너 결정 회신) — 365 primary·ring = palette blue-500 #4589FF 스냅(구 blue-800). 원천 파일은 dstk/products/365.json. 상태 색은 공통 시맨틱 anchor 참조(destructive=red·success=green·info=blue·warning=orange)로 흡수"
   },
+  "status-mapping": "상태 이름과 토큰 이름은 다른 층위 — 제품 상태 표기를 시맨틱 토큰으로 매핑한다: WARNING(심각)=destructive · CAUTION(주의)=warning · UNREAD(미확인)=info · NORMAL(정상)=success. 위계: 빨강 > 주황 > 파랑 > 초록. WARNING이라는 상태명이라고 warning 토큰을 쓰지 않는다(심각 상태는 destructive).",
   "motion": "오버레이(시트·다이얼로그·팝오버·드롭다운)는 슬라이드/페이드 인아웃 필수 — 애니메이션 없는 팝업 등장 금지. 시트 = 슬라이드 열림 500ms·닫힘 300ms(shadcn 기본), 다이얼로그·팝오버·드롭다운 = 페이드·줌 기본 속도(150~200ms). ease-in-out.",
   "components": {
     "icon-select": {

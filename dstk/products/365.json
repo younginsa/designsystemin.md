@@ -1,7 +1,7 @@
 {
   "$description": "HiNAS 365 제품 토큰 — 공통 시맨틱 오버라이드. palette 참조만 허용.",
-  "primary":               { "$type": "color", "$value": "{palette.blue.800}" },
+  "primary":               { "$type": "color", "$value": "{palette.blue.500}" },
   "primary-foreground":    { "$type": "color", "$value": "{palette.basic.white.100}" },
-  "ring":                  { "$type": "color", "$value": "{palette.blue.800}" },
+  "ring":                  { "$type": "color", "$value": "{palette.blue.500}" },
   "radius":                { "$type": "dimension", "$value": "0px" }
 }

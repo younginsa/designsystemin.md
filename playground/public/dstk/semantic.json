@@ -75,6 +75,11 @@
     "$type": "color",
     "$value": "{palette.basic.white.100}"
   },
+  "warning": {
+    "$type": "color",
+    "$value": "{palette.orange.anchor}",
+    "$note": "주의(CAUTION) 상태 축 — yellow는 차트·면 틴트용 유보. 필요 시 warning-surface={palette.orange.100} 추가"
+  },
   "chart-1": {
     "$type": "color",
     "$value": "{palette.blue.800}"
