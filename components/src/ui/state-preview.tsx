@@ -29,7 +29,7 @@ function StatePreview({ value, onChange, states = DEFAULT_STATES, className }: S
   return (
     <div
       className={cn(
-        "fixed left-1/2 top-3 z-50 flex -translate-x-1/2 items-center gap-1 rounded-full border bg-background/95 p-1 shadow-sm backdrop-blur",
+        "fixed left-1/2 top-3 z-50 flex -translate-x-1/2 items-center gap-1 rounded-full border bg-card/95 p-1 shadow-sm backdrop-blur",
         className
       )}
     >

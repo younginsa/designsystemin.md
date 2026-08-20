@@ -14,6 +14,11 @@
       "build": "done",
       "note": "조합 제작 — @ds/ui/ui/icon-select. shadcn DropdownMenu 프리셋. 타입 2종: 아이콘형(icon 지정)·텍스트형(icon 생략). h-9(36px)·아이콘 간격 8px·그림자 없음(플랫) — 손 구현 금지"
     },
+    "error-state": {
+      "build": "done",
+      "note": "조합 제작 — @ds/ui/ui/error-state. Alert 프리셋(4상태 계약의 에러 표준): 라운드·테두리 없음·bg-destructive/5 틴트, filled CircleAlert 18px(원 destructive·획 card — filled 아이콘은 Lucide Circle 계열만 허용), 타이틀 검정 semibold, CTA ghost sm 틴트 '재시도'. success/warning/info 톤 확장은 추후 — 손 구현 금지",
+      "render": "done"
+    },
     "detail-panel": {
       "build": "done",
       "note": "조합 제작 — @ds/ui/ui/detail-panel. Sheet 프리셋: 폭 md(요약)·4xl(상세), 스크림 basic black-20(overlayClassName 노출), overflow-y-auto 기본, 헤더 스캐폴드(①컨트롤 ②타이틀+보조링크 ③메타 ④유틸 ghost — X 왼쪽 고정). 본문 섹션 = 타이틀 + 표준 Table, 섹션 박스로 감싸지 않음(이중 테두리 금지). 모션 500/300 유지 — 손 구현 금지"

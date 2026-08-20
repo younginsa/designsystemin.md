@@ -28,6 +28,7 @@
     "data-tree",
     "data-verchip",
     "detail-panel",
+    "error-state",
     "fb-banner",
     "fb-console",
     "fb-empty",
