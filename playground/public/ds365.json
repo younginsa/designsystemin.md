@@ -1,11 +1,11 @@
 {
   "updated": "2026-08-03",
   "tokens": {
-    "primary": "#1e3a8a",
+    "primary": "#002D9C",
     "primary-foreground": "#ffffff",
-    "ring": "#1e3a8a",
+    "ring": "#002D9C",
     "radius": "0px",
-    "_note": "1차 365 토큰 — 메인 다크 네이비 + 각짐. 상태 색 등 나머지는 미정의"
+    "_note": "2차 — Avikus 팔레트 3층 구조 도입(dstk/palette.json이 유일한 색 원천). 365 primary = palette blue-800 #002D9C(구 #1e3a8a 대체), 원천 파일은 dstk/products/365.json. 상태 색은 공통 시맨틱 anchor 참조(destructive=red·success=green·info=blue)로 흡수"
   },
   "motion": "오버레이(시트·다이얼로그·팝오버·드롭다운)는 슬라이드/페이드 인아웃 필수 — 애니메이션 없는 팝업 등장 금지. 시트 = 슬라이드 열림 500ms·닫힘 300ms(shadcn 기본), 다이얼로그·팝오버·드롭다운 = 페이드·줌 기본 속도(150~200ms). ease-in-out.",
   "components": {

@@ -1,30 +1,114 @@
 {
-  "background":            { "$type": "color", "$value": "{color.white}" },
-  "foreground":            { "$type": "color", "$value": "{color.zinc.950}" },
-  "card":                  { "$type": "color", "$value": "{color.white}" },
-  "card-foreground":       { "$type": "color", "$value": "{color.zinc.950}" },
-  "popover":               { "$type": "color", "$value": "{color.white}" },
-  "popover-foreground":    { "$type": "color", "$value": "{color.zinc.950}" },
-  "primary":               { "$type": "color", "$value": "{color.zinc.900}" },
-  "primary-foreground":    { "$type": "color", "$value": "{color.zinc.50}" },
-  "secondary":             { "$type": "color", "$value": "{color.zinc.100}" },
-  "secondary-foreground":  { "$type": "color", "$value": "{color.zinc.900}" },
-  "muted":                 { "$type": "color", "$value": "{color.zinc.100}" },
-  "muted-foreground":      { "$type": "color", "$value": "{color.zinc.500}" },
-  "accent":                { "$type": "color", "$value": "{color.zinc.100}" },
-  "accent-foreground":     { "$type": "color", "$value": "{color.zinc.900}" },
-  "destructive":           { "$type": "color", "$value": "{color.red.600}" },
-  "destructive-foreground":{ "$type": "color", "$value": "{color.white}" },
-  "success":               { "$type": "color", "$value": "{color.green.600}" },
-  "info":                  { "$type": "color", "$value": "{color.blue.500}" },
-  "info-foreground":       { "$type": "color", "$value": "{color.white}" },
-  "chart-1":               { "$type": "color", "$value": "{color.blue.900}" },
-  "chart-2":               { "$type": "color", "$value": "{color.blue.700}" },
-  "chart-3":               { "$type": "color", "$value": "{color.blue.500}" },
-  "chart-4":               { "$type": "color", "$value": "{color.blue.300}" },
-  "chart-5":               { "$type": "color", "$value": "{color.blue.200}" },
-  "border":                { "$type": "color", "$value": "{color.zinc.200}" },
-  "input":                 { "$type": "color", "$value": "{color.zinc.200}" },
-  "ring":                  { "$type": "color", "$value": "{color.zinc.400}" },
-  "radius":                { "$type": "dimension", "$value": "{radius.base}" }
+  "background": {
+    "$type": "color",
+    "$value": "{palette.gray.10}"
+  },
+  "foreground": {
+    "$type": "color",
+    "$value": "{palette.gray.900}"
+  },
+  "card": {
+    "$type": "color",
+    "$value": "{palette.basic.white.100}"
+  },
+  "card-foreground": {
+    "$type": "color",
+    "$value": "{palette.gray.900}"
+  },
+  "popover": {
+    "$type": "color",
+    "$value": "{palette.basic.white.100}"
+  },
+  "popover-foreground": {
+    "$type": "color",
+    "$value": "{palette.gray.900}"
+  },
+  "primary": {
+    "$type": "color",
+    "$value": "{palette.gray.900}"
+  },
+  "primary-foreground": {
+    "$type": "color",
+    "$value": "{palette.gray.50}"
+  },
+  "secondary": {
+    "$type": "color",
+    "$value": "{palette.gray.100}"
+  },
+  "secondary-foreground": {
+    "$type": "color",
+    "$value": "{palette.gray.900}"
+  },
+  "muted": {
+    "$type": "color",
+    "$value": "{palette.gray.100}"
+  },
+  "muted-foreground": {
+    "$type": "color",
+    "$value": "{palette.gray.600}"
+  },
+  "accent": {
+    "$type": "color",
+    "$value": "{palette.gray.100}"
+  },
+  "accent-foreground": {
+    "$type": "color",
+    "$value": "{palette.gray.900}"
+  },
+  "destructive": {
+    "$type": "color",
+    "$value": "{palette.red.anchor}"
+  },
+  "destructive-foreground": {
+    "$type": "color",
+    "$value": "{palette.basic.white.100}"
+  },
+  "success": {
+    "$type": "color",
+    "$value": "{palette.green.anchor}"
+  },
+  "info": {
+    "$type": "color",
+    "$value": "{palette.blue.anchor}"
+  },
+  "info-foreground": {
+    "$type": "color",
+    "$value": "{palette.basic.white.100}"
+  },
+  "chart-1": {
+    "$type": "color",
+    "$value": "{palette.blue.800}"
+  },
+  "chart-2": {
+    "$type": "color",
+    "$value": "{palette.blue.700}"
+  },
+  "chart-3": {
+    "$type": "color",
+    "$value": "{palette.blue.600}"
+  },
+  "chart-4": {
+    "$type": "color",
+    "$value": "{palette.blue.400}"
+  },
+  "chart-5": {
+    "$type": "color",
+    "$value": "{palette.blue.200}"
+  },
+  "border": {
+    "$type": "color",
+    "$value": "{palette.gray.200}"
+  },
+  "input": {
+    "$type": "color",
+    "$value": "{palette.gray.200}"
+  },
+  "ring": {
+    "$type": "color",
+    "$value": "{palette.gray.400}"
+  },
+  "radius": {
+    "$type": "dimension",
+    "$value": "{radius.base}"
+  }
 }

@@ -1,0 +1,16 @@
+/* control 제품 토큰 — build-dstk.ts 생성 */
+
+.theme-control {
+  --destructive: #DA1E28;
+  --destructive-surface: #FFEBEB;
+}
+
+.dark .theme-control {
+  --destructive: #FF4141;
+  --destructive-surface: #A50000;
+}
+
+.night .theme-control {
+  --destructive: #5E0303;
+  --destructive-surface: #2A0000;
+}
