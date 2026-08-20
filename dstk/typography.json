@@ -1,0 +1,11 @@
+{
+  "$description": "시거리 기반 타이포 스케일 — 피그마 HiNAS Control DNV TA 실측(4K 캔버스 기준 px). ISO 8468 6.3.4.1 연동: regulations/control.md. TODO 값은 실측 대기 — 빌드에서 방출 생략.",
+  "2m-caption": { "$type": "typography", "$value": { "size": "31px" } },
+  "2m-body1":   { "$type": "typography", "$value": { "size": "34px" } },
+  "2m-body2":   { "$type": "typography", "$value": { "size": "38px", "weight": "700", "family": "mono" }, "$note": "Bold Mono" },
+  "2m-title1":  { "$type": "typography", "$value": { "size": "44px", "weight": "700" }, "$note": "Bold" },
+  "1m-caption": { "$type": "typography", "$value": { "size": "16px" } },
+  "1m-body1":   { "$type": "typography", "$value": "TODO" },
+  "1m-body2":   { "$type": "typography", "$value": "TODO" },
+  "1m-title1":  { "$type": "typography", "$value": "TODO" }
+}

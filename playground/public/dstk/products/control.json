@@ -1,0 +1,5 @@
+{
+  "$description": "HiNAS Control 제품 토큰 — 조명 모드는 dusk/night 기본 사용. destructive 역할 페어: 면(배너·배경)=red-100, 강조(텍스트·카운트)=red-anchor. HiNAS Control DNV TA 2M Dusk 실물 검증(배너 #A50000 · 강조 #FF4141).",
+  "destructive":           { "$type": "color", "$value": "{palette.red.anchor}" },
+  "destructive-surface":   { "$type": "color", "$value": "{palette.red.100}" }
+}

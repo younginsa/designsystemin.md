@@ -1,4 +1,4 @@
-# layout: 본문 패턴 — A 리스트 · B 상세 · C 위저드
+# layout: 본문 패턴 — A 리스트 · B 상세 · C 위저드 · D 대시보드
 
 프레임(①②…)이 화면의 껍데기라면, **본문 패턴은 본문 영역 안의 구성 선례**다.
 번호가 아니라 **문자(A B C…)**로 매긴다 — ask-first에서 "① 프레임 + C 본문"처럼
@@ -31,6 +31,21 @@
   좌측 "커밋 전 저장되지 않음" 안내(muted), 우측 [이전](outline) · [다음/검증하고
   계속](primary). 본문 컬럼 안에서만 — 사이드바를 덮지 않는다.
 - 마지막 단계는 검토 요약(입력 값 kv 나열 + 단계별 수정 링크).
+
+## D — 대시보드 (카드 캔버스)
+
+값은 전부 dstk 토큰 참조 — 임의 hex·px 금지.
+
+- **캔버스**: 본문 배경 = `bg-background`(page-bg = gray-10), 패딩 `p-8`.
+- **카드**: `rounded-lg bg-card shadow-card` — **보더 없음**. 그림자는 `shadow-card`
+  토큰(0 0 12px 0, border 토큰색 — 상하 대칭 확산, 모드 자동).
+- **간격**: 카드 그리드 `gap-4`, 섹션 리듬 `space-y-8`.
+- **카드 형식 ① 타이틀 카드**: 헤더 `px-4 py-3`(밑줄 없음), 타이틀 `text-sm
+  font-medium text-muted-foreground` + 우측 정보 아이콘 슬롯.
+- **카드 형식 ② 타이틀+테이블 카드**: 같은 헤더 + **`Table variant="plain"`**(경량 표 —
+  외곽선·헤더 배경 없음, 행 구분선 마지막 제외, 셀 `px-4 py-3`). 손 unwind 금지 — variant만.
+- **스탯 카드**: 항목 `flex-1` 균등, 첫 항목 `pl-4`, 구분 항목 `border-l pl-8`,
+  숫자 `text-2xl font-bold`, 라벨 `mt-1 text-sm text-muted-foreground`.
 
 ## 등재 규칙
 

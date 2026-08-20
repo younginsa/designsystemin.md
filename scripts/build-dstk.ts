@@ -109,6 +109,23 @@ function tokenVars(tokens: Record<string, any>, mode: Mode, label: string): stri
 }
 
 const semantic = readJson("dstk/semantic.json");
+const typographyPath = join(ROOT, "dstk/typography.json");
+const typography: any = existsSync(typographyPath) ? readJson("dstk/typography.json") : {};
+
+/** 타이포 스케일 → --type-<이름>-size/weight/family (모드 무관, TODO 생략). */
+function typographyVars(): string[] {
+  const lines: string[] = [];
+  for (const [name, tok] of Object.entries<any>(typography)) {
+    if (name.startsWith("$")) continue;
+    const v = tok.$value;
+    if (v === "TODO" || v == null) continue;
+    if (v.size) lines.push(`  --type-${name}-size: ${v.size};`);
+    if (v.weight) lines.push(`  --type-${name}-weight: ${v.weight};`);
+    if (v.family) lines.push(`  --type-${name}-family: ${v.family};`);
+  }
+  return lines;
+}
+
 const block = (sel: string, lines: string[]) => `${sel} {\n${lines.join("\n")}\n}`;
 
 let commit = "unknown";
@@ -122,7 +139,7 @@ const css =
   [
     "/* 자동 생성 — 손으로 편집 금지. 원천: dstk/palette.json + semantic.json */",
     `/* commit ${commit} · 모드: :root=Day · .dark=Dusk · .night=Night */`,
-    block(":root", [...paletteVars("day"), ...tokenVars(semantic, "day", "semantic")]),
+    block(":root", [...paletteVars("day"), ...tokenVars(semantic, "day", "semantic"), ...typographyVars()]),
     block(".dark", [...paletteVars("dusk"), ...tokenVars(semantic, "dusk", "semantic")]),
     block(".night", [...paletteVars("night"), ...tokenVars(semantic, "night", "semantic")]),
   ].join("\n\n") + "\n";
@@ -147,4 +164,16 @@ for (const f of readdirSync(join(ROOT, "dstk/products")).filter((f) => f.endsWit
 
 const pgCss = join(ROOT, "playground", "app", "dstk.css");
 if (existsSync(dirname(pgCss))) copyFileSync(join(ROOT, "dist/dstk.css"), pgCss);
-console.log("built → dist/dstk.css + dist/products/*.css");
+
+// 허브(문서 사이트)가 fetch로 읽는 사본 — playground/public/dstk/
+const pubDstk = join(ROOT, "playground", "public", "dstk");
+if (existsSync(join(ROOT, "playground", "public"))) {
+  mkdirSync(join(pubDstk, "products"), { recursive: true });
+  for (const f of ["palette.json", "semantic.json", "typography.json"]) {
+    if (existsSync(join(ROOT, "dstk", f))) copyFileSync(join(ROOT, "dstk", f), join(pubDstk, f));
+  }
+  for (const f of readdirSync(join(ROOT, "dstk/products")).filter((x) => x.endsWith(".json"))) {
+    copyFileSync(join(ROOT, "dstk/products", f), join(pubDstk, "products", f));
+  }
+}
+console.log("built → dist/dstk.css + dist/products/*.css + public/dstk/*.json");
