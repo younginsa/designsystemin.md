@@ -1,6 +1,6 @@
 /* 자동 생성 — 손으로 편집 금지. 원천: dstk/palette.json + semantic.json */
 
-/* commit 5113977 · 모드: :root=Day · .dark=Dusk · .night=Night */
+/* commit d2274c8 · 모드: :root=Day · .dark=Dusk · .night=Night */
 
 :root {
   --gray-10: #F9FAFB;
@@ -145,6 +145,7 @@
 }
 
 .dark {
+  --gray-10: #07080A;
   --gray-50: #0E0F12;
   --gray-100: #15161A;
   --gray-200: #1B1C21;
@@ -245,6 +246,7 @@
   --basic-white-64: #FFFFFFA3;
   --basic-white-72: #FFFFFFB8;
   --basic-white-100: #FFFFFF;
+  --background: #07080A;
   --foreground: #ECEDF0;
   --card: #FFFFFF;
   --card-foreground: #ECEDF0;
@@ -277,6 +279,7 @@
 }
 
 .night {
+  --gray-10: #040400;
   --gray-50: #0B0B00;
   --gray-100: #121200;
   --gray-200: #191900;
@@ -377,6 +380,7 @@
   --basic-white-64: #FFFFFFA3;
   --basic-white-72: #FFFFFFB8;
   --basic-white-100: #FFFFFF;
+  --background: #040400;
   --foreground: #4A4A00;
   --card: #FFFFFF;
   --card-foreground: #4A4A00;

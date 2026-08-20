@@ -16,10 +16,10 @@
       "$type": "color",
       "$value": {
         "day": "#F9FAFB",
-        "dusk": "TODO",
-        "night": "TODO"
+        "dusk": "#07080A",
+        "night": "#040400"
       },
-      "$note": "페이지 캔버스 단계(gray-50보다 밝은/깊은 배경) — dusk·night 값 디자이너 기입 대기"
+      "$note": "페이지 캔버스 단계(gray-50보다 밝은/깊은 배경). dusk·night = 래더 공식 외삽 확정(2026-08-20) — night 공식: R=G=0x0B+0x07×k, B=0 (50~900 전 단계 정확 일치) · dusk 하부 스텝 ≈ (+7,+7,+8). 피그마 dusk 칩(#010101)은 #07080A로 교정 권장, night 행은 #040400 칩 추가 필요"
     },
     "50": {
       "$type": "color",
