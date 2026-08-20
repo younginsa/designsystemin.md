@@ -8,13 +8,19 @@ import { Button } from "@ds/ui/ui/button"
 import { Input } from "@ds/ui/ui/input"
 import { Textarea } from "@ds/ui/ui/textarea"
 
-function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
+function InputGroup({
+  className,
+  variant = "default",
+  ...props
+}: React.ComponentProps<"div"> & { variant?: "default" | "filled" }) {
   return (
     <div
       data-slot="input-group"
       role="group"
       className={cn(
         "group/input-group relative flex w-full items-center rounded-md border border-input transition-[color,box-shadow] outline-none dark:bg-input/30",
+        // filled = 회색 캔버스(bg-background) 위 시인성용 흰 배경 변형
+        variant === "filled" && "bg-card",
         "h-9 min-w-0 has-[>textarea]:h-auto",
 
         // Variants based on alignment.
