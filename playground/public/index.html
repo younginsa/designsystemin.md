@@ -373,6 +373,22 @@
   #visual-dsnav .dn-item.on { color: var(--ink); font-weight: 600; }
   #visual-dsnav .dn-item[disabled] { opacity: .45; cursor: default; background: none; }
   .dsnav-sec > h3:first-child { margin-top: 8px; }
+  /* 허브 — 팔레트·시맨틱·타이포 뷰어 */
+  .mode-pills { display: flex; gap: 6px; margin: 14px 0 18px; }
+  .mode-pills .chip { cursor: pointer; }
+  .mode-pills .chip.on { color: var(--ink); border-color: var(--ink); }
+  .pal-fam { margin: 0 0 18px; }
+  .pal-fam .pf-name { font-family: var(--mono); font-size: 12px; color: var(--muted); margin: 0 0 6px; }
+  .pal-row { display: flex; gap: 4px; margin-bottom: 4px; }
+  .pal-chip { flex: 1; min-width: 0; }
+  .pal-chip .swatch { height: 42px; border: 1px solid var(--line); position: relative; }
+  .pal-chip .swatch.todo { background: repeating-linear-gradient(45deg, var(--bg), var(--bg) 4px, var(--surface) 4px, var(--surface) 8px); }
+  .pal-chip .swatch .anch { position: absolute; top: 3px; right: 4px; font-size: 10px; color: #fff; text-shadow: 0 0 3px rgba(0,0,0,.9); }
+  .pal-chip .cap { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 3px; display: flex; justify-content: space-between; gap: 4px; overflow: hidden; white-space: nowrap; }
+  .sem-t, .typo-t { width: 100%; border-collapse: collapse; }
+  .sem-t td, .sem-t th, .typo-t td, .typo-t th { border-bottom: 1px solid var(--line); padding: 10px 12px 10px 0; text-align: left; font-size: 13px; vertical-align: middle; }
+  .sem-t th, .typo-t th { font-family: var(--mono); font-size: 11px; color: var(--muted); font-weight: 500; }
+  .sem-sw { display: inline-block; width: 36px; height: 20px; border: 1px solid var(--line); vertical-align: middle; margin-right: 6px; }
   /* 히스토리 — 타이틀 자리 드롭다운 (커스텀 셰브런 — 우측 여백 확보) */
   #hist-select { -webkit-appearance: none; appearance: none;
     font-family: var(--mono); font-size: 13px; color: var(--ink);
@@ -451,6 +467,13 @@
   .tpl .bp-bar { position: absolute; left: 6%; right: 6%; bottom: 6%; height: 12%;
     background: var(--surface); border: 1px solid var(--line);
     display: flex; align-items: center; justify-content: center; }
+  .tpl .bp-dstat { position: absolute; top: 8%; width: 27.3%; height: 22%;
+    background: var(--surface); border: 1px solid var(--line); }
+  .tpl .bp-dstat:nth-of-type(1) { left: 6%; }
+  .tpl .bp-dstat:nth-of-type(2) { left: 36.35%; }
+  .tpl .bp-dstat:nth-of-type(3) { left: 66.7%; }
+  .tpl .bp-dcard { position: absolute; left: 6%; right: 6%; top: 38%; bottom: 10%;
+    background: var(--surface); border: 1px solid var(--line); }
   .ds-editor { border-top: 1px solid var(--line); padding: 12px 16px 16px; display: grid; gap: 8px; }
   .ds-editor[hidden] { display: none; }
   /* 채택 카드 hover — 기본: 365 렌더, hover: shadcn 원형 (03과 동일한 상호작용) */
@@ -713,6 +736,43 @@
           </div>
         </div>
         </div><!-- /dsnav-sec d365 -->
+
+        <div class="dsnav-sec" data-sec="palette" style="display:none">
+        <h3>팔레트 — 유일한 색 원천 <span class="mono" style="font-size:12px;color:var(--muted)">dstk/palette.json · 피그마 fill 실측</span></h3>
+        <p class="lead">번호는 밝기가 아니라 <strong>역할</strong>(50=배경 · 100=면 · 900=최대 대비) — 시맨틱이 번호만 참조하면 조명 모드 전환이 자동이다. ★ = 대비 인증 앵커(Day=600 · Dusk·Night=500).</p>
+        <div class="mode-pills" id="pal-modes"></div>
+        <div id="pal-grid"></div>
+        </div><!-- /dsnav-sec palette -->
+
+        <div class="dsnav-sec" data-sec="semantic" style="display:none">
+        <h3>공통 시맨틱 — 이름표 (동결)</h3>
+        <p class="lead">값 직접 기입 금지 — 전부 팔레트 참조(빌드 게이트가 강제). 모드별 해석값을 나란히 보인다.</p>
+        <div id="sem-table"></div>
+        </div><!-- /dsnav-sec semantic -->
+
+        <div class="dsnav-sec" data-sec="typo" style="display:none">
+        <h3>타이포 스케일 — 시거리 기반(1M/2M)</h3>
+        <p class="lead">피그마 HiNAS Control DNV TA 실측(4K 캔버스 px). 근거: <strong>ISO 8468 6.3.4.1</strong> — 글자 높이(mm) ≥ 3.5 × 시거리(m), 폭 = 0.7 × 높이. 원문·생성 게이트: <span class="mono">regulations/control.md</span></p>
+        <div id="typo-table"></div>
+        </div><!-- /dsnav-sec typo -->
+
+        <div class="dsnav-sec" data-sec="cloud" style="display:none">
+        <h3>HiNAS Cloud — 제품 층</h3>
+        <div class="card"><div class="card-body kv">
+          <div class="k">상태</div><div class="v">제품 토큰 미정의 — <span class="mono">dstk/products/cloud.json</span> 스켈레톤만 등재. 오버라이드가 생기면 이 섹션에 표가 생긴다.</div>
+        </div></div>
+        </div><!-- /dsnav-sec cloud -->
+
+        <div class="dsnav-sec" data-sec="control" style="display:none">
+        <h3>HiNAS Control — 제품 층</h3>
+        <div class="card"><div class="card-body kv">
+          <div class="k">조명 모드</div><div class="v">기본 축 = <strong>Dusk / Night</strong> — 아래 스와치도 Dusk 값을 대표로 보인다.</div>
+          <div class="k">destructive 페어</div><div class="v" id="ctl-tokens">…</div>
+          <div class="k">폰트 규정</div><div class="v"><strong>ISO 8468 6.3.4.1</strong> — 글자 높이(mm) ≥ 3.5 × 시거리(m), 폭 = 0.7 × 높이. 예: 시거리 2m → 높이 7mm · 폭 5mm. Control 화면 생성 시 지정 시거리 스케일 세트(1M/2M) 미만 크기는 <strong>self-check가 차단</strong>. mm→px 환산표는 대상 디스플레이 스펙 확정 후 — <span class="mono">추후 확정</span>.</div>
+          <div class="k">타이포 세트</div><div class="v" id="ctl-typo">…</div>
+          <div class="k">원문</div><div class="v"><span class="mono">regulations/control.md</span> · <span class="mono">dstk/products/control.json</span></div>
+        </div></div>
+        </div><!-- /dsnav-sec control -->
       </section>
 
       <!-- ══ 02 핵심 원칙 ══ -->
@@ -944,6 +1004,15 @@
             </div>
             <div class="tpl-desc">상단 스테퍼 + 단계별 폼 + 하단 이전/다음 바 — <strong>사이드바를 덮지 않는다</strong>. hover = 실제 화면.</div>
           </div>
+          <div class="card tpl comp">
+            <div class="card-head"><span><span class="n">D</span> 대시보드</span></div>
+            <div class="bp-wire">
+              <div class="bp-dstat"></div><div class="bp-dstat"></div><div class="bp-dstat"></div>
+              <div class="bp-dcard"></div>
+              <span class="cut hovercut" data-shot="dashboard" data-crop="215,55,1705,1025"></span>
+            </div>
+            <div class="tpl-desc">카드 캔버스 — gray-10 배경 + 무보더 카드(<span class="mono">shadow-card</span>) + 스탯·타이틀·경량 표(<span class="mono">variant=plain</span>) 카드. hover = 실제 화면.</div>
+          </div>
         </div>
 
         <h3>사용법 — 세션에서 바로 생성</h3>
@@ -1073,9 +1142,12 @@
     <div id="visual-dsnav" style="display:none">
       <button type="button" class="dn-item on" data-sec="pipeline">파이프라인</button>
       <button type="button" class="dn-item" data-sec="common">공통 DS</button>
+      <button type="button" class="dn-item" data-sec="palette">팔레트</button>
+      <button type="button" class="dn-item" data-sec="semantic">시맨틱</button>
+      <button type="button" class="dn-item" data-sec="typo">타이포</button>
       <button type="button" class="dn-item" data-sec="d365">365</button>
-      <button type="button" class="dn-item" disabled>Cloud — 예정</button>
-      <button type="button" class="dn-item" disabled>Control — 예정</button>
+      <button type="button" class="dn-item" data-sec="cloud">Cloud</button>
+      <button type="button" class="dn-item" data-sec="control">Control</button>
     </div>
   </aside>
 
@@ -1423,6 +1495,119 @@
     });
     const open365 = document.getElementById('dsnav-open-365');
     if (open365) open365.addEventListener('click', (e) => { e.preventDefault(); switchDoc('d365'); select(0); });
+  })();
+
+  // ── 허브 뷰어 — 팔레트(모드 토글)·시맨틱 표·타이포 표·Control 토큰 (원천: /dstk/*.json, ds:build가 복사) ──
+  (function(){
+    const palGrid = document.getElementById('pal-grid');
+    if (!palGrid) return;
+    const MODES = ['day', 'dusk', 'night'];
+    const LABEL = { day: 'Day', dusk: 'Dusk', night: 'Night' };
+    let pal = null, sem = null, typo = null, ctl = null;
+    let mode = 'day';
+
+    function resolveRef(ref, m) {
+      const mm = /^\{palette\.([^}]+)\}$/.exec(ref);
+      if (!mm) return null;
+      const path = mm[1].split('.');
+      let node = pal;
+      for (let i = 0; i < path.length; i++) {
+        const k = path[i];
+        if (k === 'anchor' && i === path.length - 1) { node = node[pal.$anchor[m]]; break; }
+        node = node && node[k];
+      }
+      const v = node && node.$value;
+      return typeof v === 'string' ? v : (v ? v[m] : null);
+    }
+
+    function renderPal() {
+      document.getElementById('pal-modes').innerHTML = MODES.map(m =>
+        '<button type="button" class="chip' + (m === mode ? ' on' : '') + '" data-m="' + m + '">' + LABEL[m] + '</button>').join('');
+      const anchor = pal.$anchor[mode];
+      const fams = Object.keys(pal).filter(k => !k.startsWith('$'));
+      palGrid.innerHTML = fams.map(fam => {
+        if (fam === 'basic') {
+          const tones = Object.keys(pal.basic).filter(k => !k.startsWith('$'));
+          return '<div class="pal-fam"><div class="pf-name">basic — 모드 무관 (100% + 불투명도 단계)</div>' +
+            tones.map(t => '<div class="pal-row">' + Object.keys(pal.basic[t]).filter(k => !k.startsWith('$')).map(s =>
+              '<div class="pal-chip"><div class="swatch" style="background:' + pal.basic[t][s].$value + '"></div><div class="cap"><span>' + t + '-' + s + '</span></div></div>').join('') + '</div>').join('') + '</div>';
+        }
+        const steps = Object.keys(pal[fam]).filter(k => !k.startsWith('$'));
+        return '<div class="pal-fam"><div class="pf-name">' + fam + '</div><div class="pal-row">' +
+          steps.map(s => {
+            const v0 = pal[fam][s].$value;
+            const v = typeof v0 === 'string' ? v0 : v0[mode];
+            const todo = v === 'TODO';
+            const isA = fam !== 'gray' && s === anchor;
+            return '<div class="pal-chip"><div class="swatch' + (todo ? ' todo' : '') + '"' + (todo ? '' : ' style="background:' + v + '"') + '>' +
+              (isA ? '<span class="anch">★</span>' : '') + '</div><div class="cap"><span>' + s + '</span><span>' + (todo ? 'TODO' : v) + '</span></div></div>';
+          }).join('') + '</div></div>';
+      }).join('');
+    }
+
+    function renderSem() {
+      const rows = Object.entries(sem).filter(([k]) => !k.startsWith('$')).map(([name, tok]) => {
+        if (tok.$type !== 'color') {
+          return '<tr><td class="mono">' + name + '</td><td class="mono" colspan="4">' + tok.$value + '</td></tr>';
+        }
+        const ref = tok.$value.replace('{palette.', '').replace('}', '');
+        const cells = MODES.map(m => {
+          const v = resolveRef(tok.$value, m);
+          return '<td>' + (v && v !== 'TODO'
+            ? '<span class="sem-sw" style="background:' + v + '"></span><span class="mono">' + v + '</span>'
+            : '<span class="mono" style="color:var(--muted)">TODO</span>') + '</td>';
+        }).join('');
+        return '<tr><td class="mono">' + name + '</td><td class="mono" style="color:var(--muted)">' + ref + '</td>' + cells + '</tr>';
+      }).join('');
+      document.getElementById('sem-table').innerHTML =
+        '<table class="sem-t"><thead><tr><th>이름</th><th>참조</th><th>Day</th><th>Dusk</th><th>Night</th></tr></thead><tbody>' + rows + '</tbody></table>';
+    }
+
+    function renderTypo() {
+      const rows = Object.entries(typo).filter(([k]) => !k.startsWith('$')).map(([name, tok]) => {
+        const v = tok.$value;
+        if (v === 'TODO') return '<tr><td class="mono">' + name + '</td><td class="mono" style="color:var(--muted)" colspan="2">실측 대기</td></tr>';
+        const spec = v.size + (v.weight ? ' · ' + v.weight : '') + (v.family ? ' · ' + v.family : '') + (tok.$note ? ' (' + tok.$note + ')' : '');
+        const fam = v.family === 'mono' ? 'var(--mono)' : 'inherit';
+        return '<tr><td class="mono">' + name + '</td><td class="mono">' + spec + '</td>' +
+          '<td><span style="font-size:' + Math.min(parseInt(v.size, 10), 44) + 'px;font-weight:' + (v.weight || 400) + ';font-family:' + fam + ';line-height:1.1">가나 Aa 09</span></td></tr>';
+      }).join('');
+      document.getElementById('typo-table').innerHTML =
+        '<table class="typo-t"><thead><tr><th>토큰</th><th>스펙(4K px)</th><th>미리보기</th></tr></thead><tbody>' + rows + '</tbody></table>';
+    }
+
+    function renderCtl() {
+      const el = document.getElementById('ctl-tokens');
+      if (el && ctl) el.innerHTML = ['destructive', 'destructive-surface'].map(n => {
+        const tok = ctl[n];
+        if (!tok) return '';
+        const v = resolveRef(tok.$value, 'dusk');
+        return '<span class="sem-sw" style="background:' + v + '"></span><span class="mono">' + n + ' = ' +
+          tok.$value.replace('{palette.', '').replace('}', '') + ' → ' + v + ' (dusk)</span>';
+      }).join('<br>');
+      const tv = document.getElementById('ctl-typo');
+      if (tv && typo) tv.innerHTML = Object.entries(typo).filter(([k]) => !k.startsWith('$')).map(([k, t]) =>
+        '<span class="mono">' + k + ' = ' + (t.$value === 'TODO' ? '실측 대기' : t.$value.size) + '</span>').join(' · ');
+    }
+
+    document.getElementById('pal-modes').addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-m]');
+      if (!b) return;
+      mode = b.dataset.m;
+      renderPal();
+    });
+
+    Promise.all([
+      fetch('dstk/palette.json').then(r => r.json()),
+      fetch('dstk/semantic.json').then(r => r.json()),
+      fetch('dstk/typography.json').then(r => r.json()),
+      fetch('dstk/products/control.json').then(r => r.json()),
+    ]).then(([p, s, t, c]) => {
+      pal = p; sem = s; typo = t; ctl = c;
+      renderPal(); renderSem(); renderTypo(); renderCtl();
+    }).catch(() => {
+      palGrid.innerHTML = '<span class="mono" style="color:var(--muted)">dstk/*.json 로드 실패 — ds:build 실행 여부 확인</span>';
+    });
   })();
 
   // ── 히스토리 — 타이틀 드롭다운(날짜+요약)으로 시점 선택. 항목 추가는 관리자 등재로만 ──
