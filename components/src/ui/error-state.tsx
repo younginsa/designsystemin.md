@@ -38,7 +38,8 @@ function ErrorState({
       )}
       {...props}
     >
-      <CircleAlert className="fill-destructive text-card [&_circle]:stroke-destructive" />
+      {/* stroke를 CSS 속성으로 직접 지정 — Alert의 [&>svg]:text-current가 color를 덮어써도 stroke="currentColor" 프레젠테이션 속성을 이긴다 */}
+      <CircleAlert className="fill-destructive stroke-card [&_circle]:stroke-destructive" />
       <AlertTitle className="font-semibold text-foreground">{title}</AlertTitle>
       {description ? (
         <AlertDescription className="text-sm text-muted-foreground">
