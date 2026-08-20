@@ -118,7 +118,7 @@
   },
   "shadow-card": {
     "$type": "shadow",
-    "$value": "0 0 12px 0 var(--border)",
-    "$note": "D 대시보드 카드 그림자 — 상하 대칭 확산, 색은 border 토큰 연동(모드 자동)"
+    "$value": "0 0 12px 0 color-mix(in srgb, var(--border) 55%, transparent)",
+    "$note": "D 대시보드 카드 그림자 — 상하 대칭 확산, border 토큰 55% 농도(100%는 과함 — 사용자 확정), 모드 자동"
   }
 }

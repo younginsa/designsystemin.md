@@ -11,6 +11,13 @@
   좌측 경계 = 사이드바 우측 끝. `inset-x-0` 같은 전폭 고정 금지.
 - **폼 인풋 폭**: 텍스트 인풋·셀렉트·숫자 인풋은 최대 `max-w-sm`(384px).
   좌우로 나란히 둘 때는 2열 그리드.
+- **섹션 리듬** = `space-y-6`(24px) — 전 페이지 공통(피그마 실측 40px에서 조정, 사용자 확정).
+- **카드 종류 혼용 금지** — A·B·C 본문의 카드 = 보더 카드(`rounded-lg border bg-card`).
+  그림자 카드(`shadow-card`)는 **D 대시보드 전용**.
+- **섹션 타이틀·설명 위계** — 카드/섹션 타이틀 = `text-sm font-medium
+  text-muted-foreground`(14px 회색), 타이틀 바로 아래 설명 = `text-xs
+  text-muted-foreground`(12px). 예외: 문서 본문 대제목(릴리즈 노트 What's Changed류)과
+  정보 패널의 `text-xs uppercase` 라벨은 별개 요소.
 
 ## A — 리스트
 
@@ -39,7 +46,8 @@
 - **캔버스**: 본문 배경 = `bg-background`(page-bg = gray-10), 패딩 `p-8`.
 - **카드**: `rounded-lg bg-card shadow-card` — **보더 없음**. 그림자는 `shadow-card`
   토큰(0 0 12px 0, border 토큰색 — 상하 대칭 확산, 모드 자동).
-- **간격**: 카드 그리드 `gap-4`, 섹션 리듬 `space-y-8`.
+- **간격**: 카드 그리드 `gap-4`, 섹션 리듬 `space-y-6`(공통 규칙과 동일).
+- **적용 범위**: 그림자 카드는 대시보드 전용 — 다른 본문(A/B/C)에 가져가지 않는다.
 - **카드 형식 ① 타이틀 카드**: 헤더 `px-4 py-3`(밑줄 없음), 타이틀 `text-sm
   font-medium text-muted-foreground` + 우측 정보 아이콘 슬롯.
 - **카드 형식 ② 타이틀+테이블 카드**: 같은 헤더 + **`Table variant="plain"`**(경량 표 —
