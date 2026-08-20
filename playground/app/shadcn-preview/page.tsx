@@ -693,6 +693,19 @@ export default function ShadcnPreview() {
           </PaginationContent>
         </Pagination>
       </section>
+      {/* 순정 shadcn 재구성 — 내장 텍스트 강조를 되돌린 outline 활성 룩(원형 슬롯 캡처용) */}
+      <section id="pv-data-pagination-stock" className="flex items-center justify-center border border-border bg-background [&_a]:font-medium [&_a]:text-foreground [&_[aria-current=page]]:border [&_[aria-current=page]]:bg-background" style={{ width: 560, height: 110 }}>
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem><PaginationPrevious href="#" /></PaginationItem>
+            <PaginationItem><PaginationLink href="#" isActive>1</PaginationLink></PaginationItem>
+            <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
+            <PaginationItem><PaginationEllipsis /></PaginationItem>
+            <PaginationItem><PaginationLink href="#">7</PaginationLink></PaginationItem>
+            <PaginationItem><PaginationNext href="#" /></PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </section>
       <section id="pv-data-progress" className="flex items-center gap-4 border border-border bg-background px-10" style={{ width: 560, height: 110 }}>
         <Progress value={62} className="flex-1" />
         <span className="font-mono text-sm text-muted-foreground">62%</span>

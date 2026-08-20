@@ -110,5 +110,10 @@
   "radius": {
     "$type": "dimension",
     "$value": "{radius.base}"
+  },
+  "shadow-card": {
+    "$type": "shadow",
+    "$value": "0 0 12px 0 var(--border)",
+    "$note": "D 대시보드 카드 그림자 — 상하 대칭 확산, 색은 border 토큰 연동(모드 자동)"
   }
 }

@@ -4,11 +4,20 @@ import * as React from "react"
 
 import { cn } from "@ds/ui/lib/utils"
 
-function Table({ className, ...props }: React.ComponentProps<"table">) {
+function Table({
+  className,
+  variant = "default",
+  ...props
+}: React.ComponentProps<"table"> & { variant?: "default" | "plain" }) {
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto rounded-md border"
+      className={
+        // plain = 카드 내부용 경량 표(D 대시보드 패턴) — 외곽선·헤더 배경 없음
+        variant === "plain"
+          ? "relative w-full overflow-x-auto [&_thead]:bg-transparent"
+          : "relative w-full overflow-x-auto rounded-md border"
+      }
     >
       <table
         data-slot="table"

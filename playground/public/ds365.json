@@ -45,7 +45,12 @@
     },
     "data-table": {
       "overrides": { "cell-padding-x": "16px", "cell-padding-y": "12px", "outline": "border + rounded-md (컴포넌트 내장)", "header-bg": "muted/50", "header-color": "muted-foreground" },
-      "note": "셀 좌우 패딩 16px · 상하 패딩 12px(1줄 행 ≈48px — 페이지별 표 밀도 제각각 해소) · 아웃라인·헤더 배경을 컴포넌트에 내장(세션별 래퍼 제각각 문제 해소) · 헤더 폰트는 본문보다 흐리게. 원형(hover)은 내장 조정을 되돌린 순정 재구성",
+      "note": "셀 좌우 패딩 16px · 상하 패딩 12px(1줄 행 ≈48px — 페이지별 표 밀도 제각각 해소) · 아웃라인·헤더 배경을 컴포넌트에 내장(세션별 래퍼 제각각 문제 해소) · 헤더 폰트는 본문보다 흐리게. variant=\"plain\" 추가(D 대시보드 카드 내부용 경량 표 — 외곽선·헤더 배경 없음, 손 unwind 금지). 원형(hover)은 내장 조정을 되돌린 순정 재구성",
+      "render": "done"
+    },
+    "data-pagination": {
+      "overrides": { "active": "텍스트 강조(font-extrabold)" },
+      "note": "선택 페이지 = 테두리·배경 없이 텍스트 강조 + 기본색, 비선택·Previous·Next = font-medium + muted. 원형(hover)은 outline 활성 재구성. 기존 생성 화면의 className 오버라이드(클론 5곳)는 소급 제거 대상",
       "render": "done"
     },
     "data-status": {
