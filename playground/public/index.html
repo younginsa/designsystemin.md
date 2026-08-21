@@ -393,10 +393,14 @@
   .sem-sw { display: inline-block; width: 36px; height: 20px; border: 1px solid var(--line); vertical-align: middle; margin-right: 6px; }
   /* Theme × dstk 대조표 — 컴팩트: 텍스트 높이 1:1 미니 칩, 별칭 강조·hex 흐리게 */
   .map-t { width: 100%; border-collapse: collapse; }
-  .map-t td, .map-t th { border-bottom: 1px solid var(--line); padding: 8px 10px 8px 0; text-align: left; vertical-align: middle; font-size: 13px; }
+  .map-t td, .map-t th { border-bottom: 1px solid var(--line); padding: 8px 10px 8px 0; text-align: left; vertical-align: top; font-size: 13px; }
   .map-t th { font-family: var(--mono); font-size: 11px; color: var(--muted); font-weight: 500; }
   .map-t .mono { font-size: 12px; }
-  .map-sw { display: inline-block; width: 12px; height: 12px; border: 1px solid var(--line); vertical-align: -1px; margin-right: 6px; }
+  .map-main th:nth-child(1) { width: 20%; }
+  .map-main th:nth-child(2), .map-main th:nth-child(3), .map-main th:nth-child(4) { width: 22%; }
+  .map-main th:nth-child(5) { width: 14%; }
+  .map-sw { display: inline-block; width: 12px; height: 12px; border: 1px solid var(--line); vertical-align: top; margin-top: 2px; margin-right: 6px; }
+  .map-t .cellblock { display: inline-block; vertical-align: top; }
   .map-t .al { color: var(--ink); }
   .map-t .hx { color: var(--muted); font-weight: 400; }
   /* 히스토리 — 타이틀 자리 드롭다운 (커스텀 셰브런 — 우측 여백 확보) */
@@ -1561,14 +1565,14 @@
       const box = document.getElementById('theme-map-table');
       if (!box || !map) return;
       const short = (a) => a ? a.replace(' mode/', ' ').replace('Semantic', '').replace('Basic Foreground/', '') : '(고유값)';
-      const cell = (v) => '<td><span class="map-sw" style="background:' + v.hex + '"></span><span class="mono"><span class="al">' + short(v.alias) + '</span> <span class="hx">' + v.hex + '</span></span></td>';
+      const cell = (v) => '<td><span class="map-sw" style="background:' + v.hex + '"></span><span class="mono cellblock"><span class="al">' + short(v.alias) + '</span><br><span class="hx">' + v.hex + '</span></span></td>';
       const rows = map.rows.map(r =>
         '<tr><td class="mono al">' + r.theme + '</td>' + cell(r.light) + cell(r.dark) + cell(r.control) +
         '<td class="mono">' + (r.tokens ? r.tokens.join(' · ') : '<span class="hx">참조 전용</span>') + '</td></tr>').join('');
       const extras = map.extras.map(e =>
         '<tr><td class="mono al">' + e.name + '</td><td class="mono hx">' + e.ref + '</td><td class="hx">' + e.note + '</td></tr>').join('');
       box.innerHTML =
-        '<table class="map-t"><thead><tr><th>Theme 변수</th><th>Light (Cloud)</th><th>Dark (SVM·NAS)</th><th>Control</th><th>dstk 토큰</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+        '<table class="map-t map-main"><thead><tr><th>Theme 변수</th><th>Light (Cloud)</th><th>Dark (SVM·NAS)</th><th>Control</th><th>dstk 토큰</th></tr></thead><tbody>' + rows + '</tbody></table>' +
         '<h3 style="margin-top:28px">Theme 외 dstk 토큰 (상태 축·램프·비색상)</h3>' +
         '<table class="map-t"><thead><tr><th>토큰</th><th>참조</th><th>비고</th></tr></thead><tbody>' + extras + '</tbody></table>';
     }
