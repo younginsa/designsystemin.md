@@ -184,6 +184,96 @@ for (const f of readdirSync(join(ROOT, "dstk/products")).filter((f) => f.endsWit
   writeFileSync(join(ROOT, `dist/products/${name}.css`), parts.join("\n\n") + "\n");
 }
 
+// ── 피그마 스냅샷 대조 게이트 + THEME-MAP.md 자동 생성 ──
+// 스냅샷(dstk/figma-theme-snapshot.json) = 피그마의 마지막 확인 상태. 해석값 불일치 = 빌드 실패.
+const snapPath = join(ROOT, "dstk/figma-theme-snapshot.json");
+if (existsSync(snapPath)) {
+  const snap: any = readJson("dstk/figma-theme-snapshot.json");
+  const T2D: Record<string, string[]> = {
+    "General/background-card-popover-primaryF": ["background", "card", "popover", "primary-foreground"],
+    "General/foreground-card-popover": ["foreground", "card-foreground", "popover-foreground"],
+    "General/primary": ["primary"],
+    "General/primary-accent": ["primary-accent"],
+    "General/secondary": ["secondary"],
+    "General/secondary-foreground": ["secondary-foreground"],
+    "General/muted": ["muted"],
+    "General/muted-foreground": ["muted-foreground"],
+    "General/accent": ["accent"],
+    "General/accent-foreground": ["accent-foreground"],
+    "General/destructive": ["destructive"],
+    "General/border": ["border"],
+    "General/input": ["input"],
+    "General/ring": ["ring"],
+    "Sidebar/background": ["sidebar"],
+    "Sidebar/foreground": ["sidebar-foreground"],
+    "Sidebar/primary": ["sidebar-primary"],
+    "Sidebar/accent": ["sidebar-accent"],
+    "Sidebar/accent-foreground": ["sidebar-accent-foreground"],
+    "Sidebar/border": ["sidebar-border"],
+    "Sidebar/ring": ["sidebar-ring"],
+    "Chart/background": ["chart-background"],
+    "Chart/primary": ["chart-primary"],
+    "Chart/gray": ["chart-gray"],
+    "Chart/yellow": ["chart-yellow"],
+    "Chart/red": ["chart-red"],
+    "Chart/green": ["chart-green"],
+  };
+  const errs: string[] = [];
+  for (const entry of snap.theme) {
+    const tokens = T2D[entry.name];
+    if (!tokens) continue; // Product 2종 — 참조로만 사용
+    for (const mode of THEME_MODES) {
+      const want = String(entry[mode].hex).toUpperCase();
+      for (const tok of tokens) {
+        const got = (resolveToken(tok, semantic[tok], mode) || "").toUpperCase();
+        if (got !== want) errs.push(`${tok}(${mode}): snapshot ${want} ≠ semantic ${got}`);
+      }
+    }
+  }
+  const CMODE: Record<string, Lighting> = { "Day mode": "day", "Dusk mode": "dusk", "Night mode": "night" };
+  const CFAM: Record<string, string> = {
+    Gray: "gray", SemanticRed: "red", SemanticOrange: "orange", SemanticYellow: "yellow",
+    SemanticGreen: "green", SemanticBlue: "blue", Magenta: "magenta", Olive: "olive",
+  };
+  for (const [cname, hexv] of Object.entries<any>(snap.colors)) {
+    const p = cname.split("/");
+    if (p[0] === "Basic Foreground") {
+      const got = palette.basic?.[p[1].toLowerCase()]?.[p[2]]?.$value?.toUpperCase();
+      if (got !== String(hexv).toUpperCase()) errs.push(`basic.${p[1].toLowerCase()}.${p[2]}: snapshot ${hexv} ≠ palette ${got}`);
+      continue;
+    }
+    if (!(p[0] in CMODE)) continue;
+    const got = palette[CFAM[p[1]]]?.[p[2]]?.$value?.[CMODE[p[0]]]?.toUpperCase();
+    if (got !== String(hexv).toUpperCase()) errs.push(`${CFAM[p[1]]}.${p[2]}.${CMODE[p[0]]}: snapshot ${hexv} ≠ palette ${got}`);
+  }
+  if (errs.length) {
+    throw new Error(`피그마 스냅샷 대조 실패 ${errs.length}건:\n  ` + errs.slice(0, 20).join("\n  "));
+  }
+
+  const md: string[] = [
+    "# Theme × dstk 대조표",
+    "",
+    "자동 생성 — `pnpm ds:build`가 `dstk/figma-theme-snapshot.json`에서 만든다. 손 편집 금지.",
+    "피그마 원본: 「Theme × dstk 대조표」 노드 2806:24 (fileKey i5IhnacRAjg6NJdmtctfn2).",
+    `마지막 업데이트: ${snap.$meta?.updated ?? "미상"}`,
+    "",
+    "| Theme 변수 | Light (Cloud) | Dark (SVM·NAS) | Control | dstk 토큰 |",
+    "|---|---|---|---|---|",
+  ];
+  for (const entry of snap.theme) {
+    const cell = (m: ThemeMode) => `${entry[m].alias ?? "(고유값)"} ${entry[m].hex}`;
+    md.push(`| ${entry.name} | ${cell("light")} | ${cell("dark")} | ${cell("control")} | ${(T2D[entry.name] ?? ["(참조 전용)"]).join(" · ")} |`);
+  }
+  md.push("", "## Theme 외 dstk 토큰 (상태 축·램프·비색상)", "", "| 토큰 | 참조 | 비고 |", "|---|---|---|");
+  const covered = new Set(Object.values(T2D).flat());
+  for (const [name, tok] of Object.entries<any>(semantic)) {
+    if (name.startsWith("$") || covered.has(name)) continue;
+    const v = typeof tok.$value === "string" ? tok.$value : JSON.stringify(tok.$value);
+    md.push(`| ${name} | \`${v}\` | ${tok.$note ?? ""} |`);
+  }
+  writeFileSync(join(ROOT, "dstk/THEME-MAP.md"), md.join("\n") + "\n");
+}
+
 const pgCss = join(ROOT, "playground", "app", "dstk.css");
 if (existsSync(dirname(pgCss))) copyFileSync(join(ROOT, "dist/dstk.css"), pgCss);
 
@@ -191,7 +281,7 @@ if (existsSync(dirname(pgCss))) copyFileSync(join(ROOT, "dist/dstk.css"), pgCss)
 const pubDstk = join(ROOT, "playground", "public", "dstk");
 if (existsSync(join(ROOT, "playground", "public"))) {
   mkdirSync(join(pubDstk, "products"), { recursive: true });
-  for (const f of ["palette.json", "semantic.json", "typography.json"]) {
+  for (const f of ["palette.json", "semantic.json", "typography.json", "figma-theme-snapshot.json"]) {
     if (existsSync(join(ROOT, "dstk", f))) copyFileSync(join(ROOT, "dstk", f), join(pubDstk, f));
   }
   for (const f of readdirSync(join(ROOT, "dstk/products")).filter((x) => x.endsWith(".json"))) {

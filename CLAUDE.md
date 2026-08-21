@@ -152,6 +152,20 @@ AI 친화 디자인 시스템 저장소다.
 - 반드시 `--use-system-ca`(Node 22.15+)로 실행한다(사내 TLS 검사 대응).
   실패 시 IT 보안팀 문의를 안내한다.
 
+## 피그마 토큰 동기화 (Avikus Design library)
+
+- 원천: 라이브러리 변수 **Theme(29종 × 제품 3모드)** · **Colors(244종)**. 저장소의
+  "피그마 마지막 확인 상태"는 `dstk/figma-theme-snapshot.json`(스냅샷)이다.
+  `dstk/THEME-MAP.md`는 ds:build가 스냅샷에서 자동 생성하는 대조표다.
+- **검사 시점**: ① 세션 시작 ② 태스크 시작 ③ 세션 중 1시간 경과(훅이 리마인더 출력).
+  검사 방법 = Figma MCP로 **대조표 노드 2806:24**(fileKey i5IhnacRAjg6NJdmtctfn2)를
+  get_design_context로 읽어 텍스트 표를 파싱 → 스냅샷과 diff. (Variables REST API는
+  Enterprise 전용 — 훅에서 직접 호출 불가, 검사는 Figma MCP가 연결된 세션이 수행.)
+- **변경 발견 시**: 보고 → 승인 후 semantic/palette 반영 + 스냅샷 갱신을 **같은 커밋**으로.
+  **무단 반영 금지** — 값 해석·매핑 판단이 필요한 변경은 질문이 먼저다.
+- **빌드 게이트**: ds:build가 스냅샷 ↔ semantic·palette 해석값을 전수 대조한다 —
+  불일치 = 빌드 실패(스냅샷만 고치고 시맨틱을 안 고치면, 또는 그 반대면 빌드가 막는다).
+
 ## 금지
 
 - `dist/dstk.css`, `playground/app/dstk.css` 직접 편집 금지.

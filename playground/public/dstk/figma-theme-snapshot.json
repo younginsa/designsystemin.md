@@ -1,0 +1,695 @@
+{
+  "$meta": {
+    "source": "Avikus Design library (fileKey i5IhnacRAjg6NJdmtctfn2)",
+    "method": "재구성 — 클론 변수 API 추출본(2026-08-20, 원본 파일 소실)을 대조표 노드 2806:24 파싱 + dstk/palette.json으로 등가 재구성(2026-08-21)",
+    "note": "Theme = 시맨틱 원천(29종 × 제품 3모드 Light(Cloud)/Dark(SVM·NAS)/Control). Colors = 팔레트 원천(단일 모드 변수 — 화면설명 주석 2종 제외).",
+    "updated": "2026-08-21",
+    "verification": "2026-08-21 독립 검증 — 대조표 93건·빌드 해석값·팔레트 전수 일치 상태에서 재구성",
+    "themeModes": [
+      "Light (Cloud)",
+      "Dark (SVM/NAS)",
+      "Control"
+    ]
+  },
+  "theme": [
+    {
+      "name": "General/background-card-popover-primaryF",
+      "light": {
+        "alias": "Basic Foreground/White/100",
+        "hex": "#FFFFFF"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/200",
+        "hex": "#1B1C21"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/100",
+        "hex": "#15161A"
+      }
+    },
+    {
+      "name": "General/foreground-card-popover",
+      "light": {
+        "alias": "Day mode/Gray/700",
+        "hex": "#3C3E47"
+      },
+      "dark": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      },
+      "control": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      }
+    },
+    {
+      "name": "General/primary",
+      "light": {
+        "alias": "Product/HiNAS Brand",
+        "hex": "#4477F9"
+      },
+      "dark": {
+        "alias": "Product/HiNAS Brand",
+        "hex": "#348FF4"
+      },
+      "control": {
+        "alias": "Product/HiNAS Brand",
+        "hex": "#348FF4"
+      }
+    },
+    {
+      "name": "General/primary-accent",
+      "light": {
+        "alias": "Dusk mode/SemanticBlue/400",
+        "hex": "#1379F3"
+      },
+      "dark": {
+        "alias": "Dusk mode/SemanticBlue/400",
+        "hex": "#1379F3"
+      },
+      "control": {
+        "alias": "Dusk mode/SemanticBlue/400",
+        "hex": "#1379F3"
+      }
+    },
+    {
+      "name": "General/secondary",
+      "light": {
+        "alias": "Day mode/Gray/20",
+        "hex": "#F9FAFB"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/300",
+        "hex": "#23252B"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/400",
+        "hex": "#3C3E47"
+      }
+    },
+    {
+      "name": "General/secondary-foreground",
+      "light": {
+        "alias": "Day mode/Gray/600",
+        "hex": "#5D6275"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/800",
+        "hex": "#D0D2D9"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/800",
+        "hex": "#D0D2D9"
+      }
+    },
+    {
+      "name": "General/muted",
+      "light": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/350",
+        "hex": "#2F323B"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/350",
+        "hex": "#2F323B"
+      }
+    },
+    {
+      "name": "General/muted-foreground",
+      "light": {
+        "alias": "Basic Foreground/Black/20",
+        "hex": "#00000033"
+      },
+      "dark": {
+        "alias": "Basic Foreground/White/20",
+        "hex": "#FFFFFF33"
+      },
+      "control": {
+        "alias": "Basic Foreground/White/20",
+        "hex": "#FFFFFF33"
+      }
+    },
+    {
+      "name": "General/accent",
+      "light": {
+        "alias": "Day mode/Gray/10",
+        "hex": "#FBFBFB"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/400",
+        "hex": "#3C3E47"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/300",
+        "hex": "#23252B"
+      }
+    },
+    {
+      "name": "General/accent-foreground",
+      "light": {
+        "alias": "Day mode/Gray/700",
+        "hex": "#3C3E47"
+      },
+      "dark": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      },
+      "control": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      }
+    },
+    {
+      "name": "General/destructive",
+      "light": {
+        "alias": "Dusk mode/SemanticRed/600",
+        "hex": "#FF5B5B"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticRed/500",
+        "hex": "#FA454E"
+      },
+      "control": {
+        "alias": "Dusk mode/SemanticRed/100",
+        "hex": "#A50000"
+      }
+    },
+    {
+      "name": "General/border",
+      "light": {
+        "alias": "Day mode/Gray/100",
+        "hex": "#ECEDF0"
+      },
+      "dark": {
+        "alias": "Basic Foreground/White/8",
+        "hex": "#FFFFFF14"
+      },
+      "control": {
+        "alias": "Basic Foreground/White/8",
+        "hex": "#FFFFFF14"
+      }
+    },
+    {
+      "name": "General/input",
+      "light": {
+        "alias": "Day mode/Gray/500",
+        "hex": "#858998"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/600",
+        "hex": "#858998"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/600",
+        "hex": "#858998"
+      }
+    },
+    {
+      "name": "General/ring",
+      "light": {
+        "alias": "Day mode/Gray/200",
+        "hex": "#DBDEE8"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/400",
+        "hex": "#3C3E47"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/400",
+        "hex": "#3C3E47"
+      }
+    },
+    {
+      "name": "Sidebar/background",
+      "light": {
+        "alias": "Day mode/Gray/10",
+        "hex": "#FBFBFB"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/100",
+        "hex": "#15161A"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/100",
+        "hex": "#15161A"
+      }
+    },
+    {
+      "name": "Sidebar/foreground",
+      "light": {
+        "alias": "Day mode/Gray/600",
+        "hex": "#5D6275"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/800",
+        "hex": "#D0D2D9"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/800",
+        "hex": "#D0D2D9"
+      }
+    },
+    {
+      "name": "Sidebar/primary",
+      "light": {
+        "alias": "Product/Cyber security",
+        "hex": "#0367E0"
+      },
+      "dark": {
+        "alias": "Product/Cyber security",
+        "hex": "#0367E0"
+      },
+      "control": {
+        "alias": "Product/Cyber security",
+        "hex": "#0367E0"
+      }
+    },
+    {
+      "name": "Sidebar/accent",
+      "light": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/350",
+        "hex": "#2F323B"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/350",
+        "hex": "#2F323B"
+      }
+    },
+    {
+      "name": "Sidebar/accent-foreground",
+      "light": {
+        "alias": "Day mode/Gray/700",
+        "hex": "#3C3E47"
+      },
+      "dark": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      },
+      "control": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      }
+    },
+    {
+      "name": "Sidebar/border",
+      "light": {
+        "alias": "Dusk mode/Gray/700",
+        "hex": "#B0B3BF"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/500",
+        "hex": "#535661"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/500",
+        "hex": "#535661"
+      }
+    },
+    {
+      "name": "Sidebar/ring",
+      "light": {
+        "alias": "Day mode/Gray/200",
+        "hex": "#DBDEE8"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/400",
+        "hex": "#3C3E47"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/400",
+        "hex": "#3C3E47"
+      }
+    },
+    {
+      "name": "Chart/background",
+      "light": {
+        "alias": "Day mode/SemanticBlue/100",
+        "hex": "#EDF5FF"
+      },
+      "dark": {
+        "alias": "Basic Foreground/White/6",
+        "hex": "#FFFFFF0F"
+      },
+      "control": {
+        "alias": "Basic Foreground/White/6",
+        "hex": "#FFFFFF0F"
+      }
+    },
+    {
+      "name": "Chart/primary",
+      "light": {
+        "alias": "Product/Cyber security",
+        "hex": "#0367E0"
+      },
+      "dark": {
+        "alias": "Product/Cyber security",
+        "hex": "#0367E0"
+      },
+      "control": {
+        "alias": "Product/Cyber security",
+        "hex": "#0367E0"
+      }
+    },
+    {
+      "name": "Chart/gray",
+      "light": {
+        "alias": "Day mode/Gray/600",
+        "hex": "#5D6275"
+      },
+      "dark": {
+        "alias": "Day mode/Gray/600",
+        "hex": "#5D6275"
+      },
+      "control": {
+        "alias": "Day mode/Gray/600",
+        "hex": "#5D6275"
+      }
+    },
+    {
+      "name": "Chart/yellow",
+      "light": {
+        "alias": "Day mode/SemanticOrange/300",
+        "hex": "#FF9639"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticOrange/300",
+        "hex": "#FF9639"
+      },
+      "control": {
+        "alias": "Day mode/SemanticOrange/300",
+        "hex": "#FF9639"
+      }
+    },
+    {
+      "name": "Chart/red",
+      "light": {
+        "alias": "Day mode/SemanticRed/600",
+        "hex": "#DA1E28"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticRed/600",
+        "hex": "#DA1E28"
+      },
+      "control": {
+        "alias": "Day mode/SemanticRed/600",
+        "hex": "#DA1E28"
+      }
+    },
+    {
+      "name": "Chart/green",
+      "light": {
+        "alias": "Day mode/SemanticGreen/500",
+        "hex": "#24A148"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticGreen/500",
+        "hex": "#24A148"
+      },
+      "control": {
+        "alias": "Day mode/SemanticGreen/500",
+        "hex": "#24A148"
+      }
+    },
+    {
+      "name": "Product/HiNAS Brand",
+      "light": {
+        "alias": null,
+        "hex": "#4477F9"
+      },
+      "dark": {
+        "alias": "Dusk mode/SemanticBlue/500",
+        "hex": "#348FF4"
+      },
+      "control": {
+        "alias": "Dusk mode/SemanticBlue/500",
+        "hex": "#348FF4"
+      }
+    },
+    {
+      "name": "Product/Cyber security",
+      "light": {
+        "alias": "Dusk mode/SemanticBlue/300",
+        "hex": "#0367E0"
+      },
+      "dark": {
+        "alias": "Dusk mode/SemanticBlue/300",
+        "hex": "#0367E0"
+      },
+      "control": {
+        "alias": "Dusk mode/SemanticBlue/300",
+        "hex": "#0367E0"
+      }
+    }
+  ],
+  "colors": {
+    "Basic Foreground/White/100": "#FFFFFF",
+    "Basic Foreground/White/72": "#FFFFFFB8",
+    "Basic Foreground/White/64": "#FFFFFFA3",
+    "Basic Foreground/White/36": "#FFFFFF5C",
+    "Basic Foreground/White/20": "#FFFFFF33",
+    "Basic Foreground/White/12": "#FFFFFF1F",
+    "Basic Foreground/White/8": "#FFFFFF14",
+    "Basic Foreground/White/6": "#FFFFFF0F",
+    "Basic Foreground/White/4": "#FFFFFF0A",
+    "Basic Foreground/White/2": "#FFFFFF05",
+    "Basic Foreground/Black/100": "#000000",
+    "Basic Foreground/Black/72": "#000000B8",
+    "Basic Foreground/Black/64": "#000000A3",
+    "Basic Foreground/Black/36": "#0000005C",
+    "Basic Foreground/Black/20": "#00000033",
+    "Basic Foreground/Black/12": "#0000001F",
+    "Basic Foreground/Black/8": "#00000014",
+    "Basic Foreground/Black/6": "#0000000F",
+    "Basic Foreground/Black/4": "#0000000A",
+    "Basic Foreground/Black/2": "#00000005",
+    "Day mode/Gray/10": "#FBFBFB",
+    "Day mode/Gray/20": "#F9FAFB",
+    "Day mode/Gray/50": "#F2F4F8",
+    "Dusk mode/Gray/50": "#0E0F12",
+    "Night mode/Gray/50": "#0B0B00",
+    "Day mode/Gray/100": "#ECEDF0",
+    "Dusk mode/Gray/100": "#15161A",
+    "Night mode/Gray/100": "#121200",
+    "Day mode/Gray/200": "#DBDEE8",
+    "Dusk mode/Gray/200": "#1B1C21",
+    "Night mode/Gray/200": "#191900",
+    "Day mode/Gray/300": "#D0D2D9",
+    "Dusk mode/Gray/300": "#23252B",
+    "Night mode/Gray/300": "#202000",
+    "Dusk mode/Gray/350": "#2F323B",
+    "Day mode/Gray/400": "#B0B3BF",
+    "Dusk mode/Gray/400": "#3C3E47",
+    "Night mode/Gray/400": "#272700",
+    "Day mode/Gray/500": "#858998",
+    "Dusk mode/Gray/500": "#535661",
+    "Night mode/Gray/500": "#2E2E00",
+    "Day mode/Gray/600": "#5D6275",
+    "Dusk mode/Gray/600": "#858998",
+    "Night mode/Gray/600": "#353500",
+    "Day mode/Gray/700": "#3C3E47",
+    "Dusk mode/Gray/700": "#B0B3BF",
+    "Night mode/Gray/700": "#3C3C00",
+    "Day mode/Gray/800": "#23252B",
+    "Dusk mode/Gray/800": "#D0D2D9",
+    "Night mode/Gray/800": "#434300",
+    "Day mode/Gray/900": "#15161A",
+    "Dusk mode/Gray/900": "#ECEDF0",
+    "Night mode/Gray/900": "#4A4A00",
+    "Day mode/SemanticRed/100": "#FFEBEB",
+    "Dusk mode/SemanticRed/100": "#A50000",
+    "Night mode/SemanticRed/100": "#2A0000",
+    "Day mode/SemanticRed/200": "#FFCACD",
+    "Dusk mode/SemanticRed/200": "#BE0303",
+    "Night mode/SemanticRed/200": "#350000",
+    "Day mode/SemanticRed/300": "#FF9DA4",
+    "Dusk mode/SemanticRed/300": "#D71313",
+    "Night mode/SemanticRed/300": "#420000",
+    "Day mode/SemanticRed/400": "#FF737A",
+    "Dusk mode/SemanticRed/400": "#EA2929",
+    "Night mode/SemanticRed/400": "#500000",
+    "Day mode/SemanticRed/500": "#FA454E",
+    "Dusk mode/SemanticRed/500": "#FF4141",
+    "Night mode/SemanticRed/500": "#5E0303",
+    "Day mode/SemanticRed/600": "#DA1E28",
+    "Dusk mode/SemanticRed/600": "#FF5B5B",
+    "Night mode/SemanticRed/600": "#6A100C",
+    "Day mode/SemanticRed/700": "#A2191F",
+    "Dusk mode/SemanticRed/700": "#FF7474",
+    "Night mode/SemanticRed/700": "#722018",
+    "Day mode/SemanticRed/800": "#750E13",
+    "Dusk mode/SemanticRed/800": "#FF9090",
+    "Night mode/SemanticRed/800": "#783024",
+    "Day mode/SemanticRed/900": "#520408",
+    "Dusk mode/SemanticRed/900": "#FFB4B4",
+    "Night mode/SemanticRed/900": "#7A3E33",
+    "Day mode/SemanticOrange/100": "#FFDDC0",
+    "Dusk mode/SemanticOrange/100": "#893700",
+    "Night mode/SemanticOrange/100": "#280D01",
+    "Day mode/SemanticOrange/200": "#FFB270",
+    "Dusk mode/SemanticOrange/200": "#9E4200",
+    "Night mode/SemanticOrange/200": "#341200",
+    "Day mode/SemanticOrange/300": "#FF9639",
+    "Dusk mode/SemanticOrange/300": "#B44E00",
+    "Night mode/SemanticOrange/300": "#401800",
+    "Day mode/SemanticOrange/400": "#F97E08",
+    "Dusk mode/SemanticOrange/400": "#CA5D00",
+    "Night mode/SemanticOrange/400": "#4D1F00",
+    "Day mode/SemanticOrange/500": "#ED6C00",
+    "Dusk mode/SemanticOrange/500": "#E16D00",
+    "Night mode/SemanticOrange/500": "#5B2600",
+    "Day mode/SemanticOrange/600": "#DF5D00",
+    "Dusk mode/SemanticOrange/600": "#F4810C",
+    "Night mode/SemanticOrange/600": "#682E00",
+    "Day mode/SemanticOrange/700": "#C34600",
+    "Dusk mode/SemanticOrange/700": "#FE9A2E",
+    "Night mode/SemanticOrange/700": "#763700",
+    "Day mode/SemanticOrange/800": "#B43C00",
+    "Dusk mode/SemanticOrange/800": "#FFA947",
+    "Night mode/SemanticOrange/800": "#824100",
+    "Day mode/SemanticOrange/900": "#87330A",
+    "Dusk mode/SemanticOrange/900": "#FFC979",
+    "Night mode/SemanticOrange/900": "#8B4D0D",
+    "Day mode/SemanticYellow/100": "#FFF0BF",
+    "Dusk mode/SemanticYellow/100": "#946F00",
+    "Night mode/SemanticYellow/100": "#241800",
+    "Day mode/SemanticYellow/200": "#FFE687",
+    "Dusk mode/SemanticYellow/200": "#A88100",
+    "Night mode/SemanticYellow/200": "#2E2000",
+    "Day mode/SemanticYellow/300": "#FFD738",
+    "Dusk mode/SemanticYellow/300": "#B88A00",
+    "Night mode/SemanticYellow/300": "#3A2A00",
+    "Day mode/SemanticYellow/400": "#FAC709",
+    "Dusk mode/SemanticYellow/400": "#CC9C00",
+    "Night mode/SemanticYellow/400": "#463400",
+    "Day mode/SemanticYellow/500": "#F1B500",
+    "Dusk mode/SemanticYellow/500": "#E0B400",
+    "Night mode/SemanticYellow/500": "#533F00",
+    "Day mode/SemanticYellow/600": "#E8A600",
+    "Dusk mode/SemanticYellow/600": "#F0C000",
+    "Night mode/SemanticYellow/600": "#604900",
+    "Day mode/SemanticYellow/700": "#DF9600",
+    "Dusk mode/SemanticYellow/700": "#FFD505",
+    "Night mode/SemanticYellow/700": "#6D5600",
+    "Day mode/SemanticYellow/800": "#D18300",
+    "Dusk mode/SemanticYellow/800": "#FEE13C",
+    "Night mode/SemanticYellow/800": "#7A6200",
+    "Day mode/SemanticYellow/900": "#B46500",
+    "Dusk mode/SemanticYellow/900": "#F9E867",
+    "Night mode/SemanticYellow/900": "#876E00",
+    "Day mode/SemanticGreen/100": "#DEFBE6",
+    "Dusk mode/SemanticGreen/100": "#005C2E",
+    "Night mode/SemanticGreen/100": "#001804",
+    "Day mode/SemanticGreen/200": "#A7F0BA",
+    "Dusk mode/SemanticGreen/200": "#006C36",
+    "Night mode/SemanticGreen/200": "#002005",
+    "Day mode/SemanticGreen/300": "#6FDC8C",
+    "Dusk mode/SemanticGreen/300": "#007D3F",
+    "Night mode/SemanticGreen/300": "#002806",
+    "Day mode/SemanticGreen/400": "#42BE65",
+    "Dusk mode/SemanticGreen/400": "#008F4C",
+    "Night mode/SemanticGreen/400": "#003108",
+    "Day mode/SemanticGreen/500": "#24A148",
+    "Dusk mode/SemanticGreen/500": "#12A25A",
+    "Night mode/SemanticGreen/500": "#003B08",
+    "Day mode/SemanticGreen/600": "#198038",
+    "Dusk mode/SemanticGreen/600": "#2BB46D",
+    "Night mode/SemanticGreen/600": "#004508",
+    "Day mode/SemanticGreen/700": "#0E6027",
+    "Dusk mode/SemanticGreen/700": "#43C781",
+    "Night mode/SemanticGreen/700": "#004F0A",
+    "Day mode/SemanticGreen/800": "#044317",
+    "Dusk mode/SemanticGreen/800": "#5ED993",
+    "Night mode/SemanticGreen/800": "#075913",
+    "Day mode/SemanticGreen/900": "#022D0D",
+    "Dusk mode/SemanticGreen/900": "#81E9AC",
+    "Night mode/SemanticGreen/900": "#17631E",
+    "Day mode/SemanticBlue/100": "#EDF5FF",
+    "Dusk mode/SemanticBlue/100": "#004DA3",
+    "Night mode/SemanticBlue/100": "#091616",
+    "Day mode/SemanticBlue/200": "#D0E2FF",
+    "Dusk mode/SemanticBlue/200": "#0059C2",
+    "Night mode/SemanticBlue/200": "#0A1E1D",
+    "Day mode/SemanticBlue/300": "#A6C8FF",
+    "Dusk mode/SemanticBlue/300": "#0367E0",
+    "Night mode/SemanticBlue/300": "#082624",
+    "Day mode/SemanticBlue/400": "#78A9FF",
+    "Dusk mode/SemanticBlue/400": "#1379F3",
+    "Night mode/SemanticBlue/400": "#022F2E",
+    "Day mode/SemanticBlue/500": "#4589FF",
+    "Dusk mode/SemanticBlue/500": "#348FF4",
+    "Night mode/SemanticBlue/500": "#003836",
+    "Day mode/SemanticBlue/600": "#0F62FE",
+    "Dusk mode/SemanticBlue/600": "#54A3F6",
+    "Night mode/SemanticBlue/600": "#00423F",
+    "Day mode/SemanticBlue/700": "#0043CE",
+    "Dusk mode/SemanticBlue/700": "#72B7F9",
+    "Night mode/SemanticBlue/700": "#004C49",
+    "Day mode/SemanticBlue/800": "#002D9C",
+    "Dusk mode/SemanticBlue/800": "#8FCAFC",
+    "Night mode/SemanticBlue/800": "#005653",
+    "Day mode/SemanticBlue/900": "#001D6C",
+    "Dusk mode/SemanticBlue/900": "#AEDBFE",
+    "Night mode/SemanticBlue/900": "#0E605D",
+    "Day mode/Magenta/100": "#FFF0F7",
+    "Dusk mode/Magenta/100": "#A0004D",
+    "Night mode/Magenta/100": "#280114",
+    "Day mode/Magenta/200": "#FFD6E8",
+    "Dusk mode/Magenta/200": "#B6125A",
+    "Night mode/Magenta/200": "#330019",
+    "Day mode/Magenta/300": "#FFAFD2",
+    "Dusk mode/Magenta/300": "#CB266D",
+    "Night mode/Magenta/300": "#40001F",
+    "Day mode/Magenta/400": "#FF7EB6",
+    "Dusk mode/Magenta/400": "#DE3D82",
+    "Night mode/Magenta/400": "#4D0025",
+    "Day mode/Magenta/500": "#EE5396",
+    "Dusk mode/Magenta/500": "#ED5795",
+    "Night mode/Magenta/500": "#590B2D",
+    "Day mode/Magenta/600": "#D02670",
+    "Dusk mode/Magenta/600": "#F972A7",
+    "Night mode/Magenta/600": "#641537",
+    "Day mode/Magenta/700": "#9F1853",
+    "Dusk mode/Magenta/700": "#FF8FB9",
+    "Night mode/Magenta/700": "#6D2142",
+    "Day mode/Magenta/800": "#740937",
+    "Dusk mode/Magenta/800": "#FFACCA",
+    "Night mode/Magenta/800": "#742F4B",
+    "Day mode/Magenta/900": "#510224",
+    "Dusk mode/Magenta/900": "#FFC6DA",
+    "Night mode/Magenta/900": "#793C53",
+    "Day mode/Olive/100": "#EDF3B2",
+    "Dusk mode/Olive/100": "#4C6600",
+    "Night mode/Olive/100": "#111600",
+    "Day mode/Olive/200": "#DBE765",
+    "Dusk mode/Olive/200": "#597600",
+    "Night mode/Olive/200": "#161D00",
+    "Day mode/Olive/300": "#C7D444",
+    "Dusk mode/Olive/300": "#668800",
+    "Night mode/Olive/300": "#1C2500",
+    "Day mode/Olive/400": "#B4BF35",
+    "Dusk mode/Olive/400": "#759A00",
+    "Night mode/Olive/400": "#222E00",
+    "Day mode/Olive/500": "#9BA52E",
+    "Dusk mode/Olive/500": "#84AD01",
+    "Night mode/Olive/500": "#293700",
+    "Day mode/Olive/600": "#899128",
+    "Dusk mode/Olive/600": "#94C008",
+    "Night mode/Olive/600": "#304000",
+    "Day mode/Olive/700": "#707721",
+    "Dusk mode/Olive/700": "#A6D312",
+    "Night mode/Olive/700": "#384A00",
+    "Day mode/Olive/800": "#595E1A",
+    "Dusk mode/Olive/800": "#B8E525",
+    "Night mode/Olive/800": "#3F5400",
+    "Day mode/Olive/900": "#494C1B",
+    "Dusk mode/Olive/900": "#CDF547",
+    "Night mode/Olive/900": "#485E02"
+  }
+}

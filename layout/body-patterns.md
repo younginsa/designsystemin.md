@@ -43,7 +43,8 @@
 
 값은 전부 dstk 토큰 참조 — 임의 hex·px 금지.
 
-- **캔버스**: 본문 배경 = `bg-background`(page-bg = gray-10), 패딩 `p-8`.
+- **캔버스**: 본문 배경 = `bg-secondary`(#F9FAFB — Theme 정렬 후 캔버스 의도값,
+  `background`는 White로 카드와 동일), 패딩 `p-8`.
 - **카드**: `rounded-lg bg-card shadow-card` — **보더 없음**. 그림자는 `shadow-card`
   토큰(0 0 12px 0, border 토큰색 — 상하 대칭 확산, 모드 자동).
 - **간격**: 카드 그리드 `gap-4`, 섹션 리듬 `space-y-6`(공통 규칙과 동일).
