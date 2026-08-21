@@ -1509,18 +1509,21 @@
     let pal = null, sem = null, typo = null, ctl = null;
     let mode = 'day';
 
+    // m = 제품 모드(light|dark|control) 또는 조명 모드 — 핀(@) 우선, 없으면 조명 매핑
+    const LIGHT_OF = { light: 'day', dark: 'dusk', control: 'dusk' };
     function resolveRef(ref, m) {
-      const mm = /^\{palette\.([^}]+)\}$/.exec(ref);
+      const mm = /^\{palette\.([^}@]+)(?:@(day|dusk|night))?\}$/.exec(ref);
       if (!mm) return null;
+      const lighting = mm[2] || LIGHT_OF[m] || m;
       const path = mm[1].split('.');
       let node = pal;
       for (let i = 0; i < path.length; i++) {
         const k = path[i];
-        if (k === 'anchor' && i === path.length - 1) { node = node[pal.$anchor[m]]; break; }
+        if (k === 'anchor' && i === path.length - 1) { node = node[pal.$anchor[lighting]]; break; }
         node = node && node[k];
       }
       const v = node && node.$value;
-      return typeof v === 'string' ? v : (v ? v[m] : null);
+      return typeof v === 'string' ? v : (v ? v[lighting] : null);
     }
 
     function renderPal() {
@@ -1549,21 +1552,26 @@
     }
 
     function renderSem() {
+      const SMODES = ['light', 'dark', 'control'];
+      const clean = (r) => (r || '').replace('{palette.', '').replace('}', '');
       const rows = Object.entries(sem).filter(([k]) => !k.startsWith('$')).map(([name, tok]) => {
+        const val = tok.$value;
         if (tok.$type !== 'color') {
-          return '<tr><td class="mono">' + name + '</td><td class="mono" colspan="4">' + tok.$value + '</td></tr>';
+          const raw = typeof val === 'string' ? val : JSON.stringify(val);
+          return '<tr><td class="mono">' + name + '</td><td class="mono" colspan="4">' + raw + '</td></tr>';
         }
-        const ref = tok.$value.replace('{palette.', '').replace('}', '');
-        const cells = MODES.map(m => {
-          const v = resolveRef(tok.$value, m);
+        const refText = typeof val === 'string' ? clean(val) : clean(val.light) + ' 외(모드별)';
+        const cells = SMODES.map(m => {
+          const refStr = typeof val === 'string' ? val : val[m];
+          const v = refStr ? resolveRef(refStr, m) : null;
           return '<td>' + (v && v !== 'TODO'
             ? '<span class="sem-sw" style="background:' + v + '"></span><span class="mono">' + v + '</span>'
-            : '<span class="mono" style="color:var(--muted)">TODO</span>') + '</td>';
+            : '<span class="mono" style="color:var(--muted)">—</span>') + '</td>';
         }).join('');
-        return '<tr><td class="mono">' + name + '</td><td class="mono" style="color:var(--muted)">' + ref + '</td>' + cells + '</tr>';
+        return '<tr><td class="mono">' + name + '</td><td class="mono" style="color:var(--muted)">' + refText + '</td>' + cells + '</tr>';
       }).join('');
       document.getElementById('sem-table').innerHTML =
-        '<table class="sem-t"><thead><tr><th>이름</th><th>참조</th><th>Day</th><th>Dusk</th><th>Night</th></tr></thead><tbody>' + rows + '</tbody></table>';
+        '<table class="sem-t"><thead><tr><th>이름</th><th>참조(Theme)</th><th>Light (Cloud)</th><th>Dark (SVM·NAS)</th><th>Control</th></tr></thead><tbody>' + rows + '</tbody></table>';
     }
 
     function renderTypo() {
@@ -1581,13 +1589,16 @@
 
     function renderCtl() {
       const el = document.getElementById('ctl-tokens');
-      if (el && ctl) el.innerHTML = ['destructive', 'destructive-surface'].map(n => {
-        const tok = ctl[n];
-        if (!tok) return '';
-        const v = resolveRef(tok.$value, 'dusk');
-        return '<span class="sem-sw" style="background:' + v + '"></span><span class="mono">' + n + ' = ' +
-          tok.$value.replace('{palette.', '').replace('}', '') + ' → ' + v + ' (dusk)</span>';
-      }).join('<br>');
+      if (el && ctl && sem) {
+        const parts = [];
+        const dv = sem.destructive && (typeof sem.destructive.$value === 'string' ? sem.destructive.$value : sem.destructive.$value.control);
+        if (dv) parts.push('<span class="sem-sw" style="background:' + resolveRef(dv, 'control') + '"></span><span class="mono">destructive(면) = ' + dv.replace('{palette.', '').replace('}', '') + ' → ' + resolveRef(dv, 'control') + '</span>');
+        if (ctl['destructive-accent']) {
+          const av = ctl['destructive-accent'].$value;
+          parts.push('<span class="sem-sw" style="background:' + resolveRef(av, 'control') + '"></span><span class="mono">destructive-accent(강조) = ' + av.replace('{palette.', '').replace('}', '') + ' → ' + resolveRef(av, 'control') + '</span>');
+        }
+        el.innerHTML = parts.join('<br>');
+      }
       const tv = document.getElementById('ctl-typo');
       if (tv && typo) tv.innerHTML = Object.entries(typo).filter(([k]) => !k.startsWith('$')).map(([k, t]) =>
         '<span class="mono">' + k + ' = ' + (t.$value === 'TODO' ? '실측 대기' : t.$value.size) + '</span>').join(' · ');

@@ -1,5 +1,5 @@
 {
-  "$description": "Avikus Design library 'colors' 보드 fill 실측 등재 (fileKey i5IhnacRAjg6NJdmtctfn2, node 2776:40617, 2026-08-20 MCP 검증 219개). 유일한 색 원천 — 시맨틱·제품 토큰은 여기만 참조. 번호는 밝기가 아니라 역할(50=배경, 100=면, 900=배경과 최대 대비)이라 모드 전환이 자동.",
+  "$description": "Avikus Design library 'Colors' 변수 컬렉션 244종 정식 등재 (fileKey i5IhnacRAjg6NJdmtctfn2, 클론 변수 API 추출 2026-08-20 — colors 보드는 이 컬렉션에 동기화된 시각 사본). 유일한 색 원천 — 시맨틱·제품 토큰은 여기만 참조. 번호는 밝기가 아니라 역할(10·20=페이지 캔버스, 50=배경, 100=면, 900=최대 대비).",
   "$modes": [
     "day",
     "dusk",
@@ -9,17 +9,23 @@
     "day": "600",
     "dusk": "500",
     "night": "500",
-    "$note": "대비 인증 앵커 단계 — 빌드가 <family>-anchor 별칭 7종을 자동 생성"
+    "$note": "대비 인증 앵커 단계 — 빌드가 <family>-anchor 별칭을 자동 생성"
   },
   "gray": {
     "10": {
+      "$type": "color",
+      "$value": {
+        "day": "#FBFBFB"
+      }
+    },
+    "20": {
       "$type": "color",
       "$value": {
         "day": "#F9FAFB",
         "dusk": "#07080A",
         "night": "#040400"
       },
-      "$note": "페이지 캔버스 단계(gray-50보다 밝은/깊은 배경). dusk·night = 래더 공식 외삽 확정(2026-08-20) — night 공식: R=G=0x0B+0x07×k, B=0 (50~900 전 단계 정확 일치) · dusk 하부 스텝 ≈ (+7,+7,+8). 피그마 dusk 칩(#010101)은 #07080A로 교정 권장, night 행은 #040400 칩 추가 필요"
+      "$note": "day #F9FAFB = 컬렉션 Gray/20. dusk #07080A·night #040400은 래더 외삽(컬렉션 외 — 2026-08-20 사용자 확정, night 공식 R=G=0x0B+7k·B=0). 컬렉션 등재 시 교체"
     },
     "50": {
       "$type": "color",
@@ -51,6 +57,12 @@
         "day": "#D0D2D9",
         "dusk": "#23252B",
         "night": "#202000"
+      }
+    },
+    "350": {
+      "$type": "color",
+      "$value": {
+        "dusk": "#2F323B"
       }
     },
     "400": {
@@ -180,7 +192,7 @@
     "100": {
       "$type": "color",
       "$value": {
-        "day": "#FFE0C6",
+        "day": "#FFDDC0",
         "dusk": "#893700",
         "night": "#280D01"
       }
@@ -188,7 +200,7 @@
     "200": {
       "$type": "color",
       "$value": {
-        "day": "#FFC38F",
+        "day": "#FFB270",
         "dusk": "#9E4200",
         "night": "#341200"
       }
@@ -196,7 +208,7 @@
     "300": {
       "$type": "color",
       "$value": {
-        "day": "#FFA453",
+        "day": "#FF9639",
         "dusk": "#B44E00",
         "night": "#401800"
       }
@@ -204,7 +216,7 @@
     "400": {
       "$type": "color",
       "$value": {
-        "day": "#F98F2A",
+        "day": "#F97E08",
         "dusk": "#CA5D00",
         "night": "#4D1F00"
       }
@@ -270,7 +282,7 @@
     "300": {
       "$type": "color",
       "$value": {
-        "day": "#FFD83F",
+        "day": "#FFD738",
         "dusk": "#B88A00",
         "night": "#3A2A00"
       }
@@ -303,7 +315,7 @@
       "$type": "color",
       "$value": {
         "day": "#DF9600",
-        "dusk": "#FFD70D",
+        "dusk": "#FFD505",
         "night": "#6D5600"
       }
     },
@@ -345,7 +357,7 @@
       "$type": "color",
       "$value": {
         "day": "#6FDC8C",
-        "dusk": "#007D3E",
+        "dusk": "#007D3F",
         "night": "#002806"
       }
     },
@@ -706,5 +718,21 @@
       }
     },
     "$note": "Common Basic — 모드 무관. 100% + 불투명도 72/64/36/20/12/8/6/4/2%"
+  },
+  "product": {
+    "hinas-brand": {
+      "$type": "color",
+      "$value": "#4477F9",
+      "$note": "Light 브랜드 — Dark·Control은 hinas-brand-dark"
+    },
+    "hinas-brand-dark": {
+      "$type": "color",
+      "$value": "#348FF4"
+    },
+    "cyber-security": {
+      "$type": "color",
+      "$value": "#0367E0"
+    },
+    "$note": "Product 변수 — 제품 브랜드 색(모드 무관 문자열)"
   }
 }

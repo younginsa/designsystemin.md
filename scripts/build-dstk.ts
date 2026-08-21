@@ -1,15 +1,18 @@
 /**
- * dstk 3층 구조 빌드 — palette(3조명모드 색 원천) → semantic(공통 이름표) → products(제품 오버라이드).
+ * dstk 3층 구조 빌드 — palette(조명 3모드 색 원천) → semantic(Theme 정렬 — 제품 3모드) → products(제품 오버라이드).
  *
- * 규칙(기계 강제):
- *  - 색 토큰($type: color)은 palette 참조({palette.family.step})만 허용 — 직접 값·미존재 참조는 빌드 에러.
- *  - anchor 별칭: palette.$anchor 규칙(day=600, dusk·night=500)으로 <family>-anchor 자동 생성.
- *  - TODO 값(gray-10 dusk/night 등)은 해당 모드에서 방출 생략(:root 값 상속) — day가 TODO면 에러.
+ * 축 두 개:
+ *  - 팔레트 조명 축: day / dusk / night (Colors 변수 컬렉션 래더)
+ *  - 시맨틱 제품 축: light(Cloud) / dark(SVM·NAS) / control (라이브러리 "Theme" 컬렉션 29종 정렬)
+ *    시맨틱 $value는 {light,dark,control} 객체(모드별 팔레트 핀 참조) 또는 단일 참조(조명 매핑으로 해석).
+ *
+ * 참조 문법: {palette.family.step} · 핀 {palette.family.step@day|dusk|night} · anchor {palette.red.anchor}
+ * 게이트: 색 토큰은 palette 참조만 허용 — 직접 값·미존재 참조는 빌드 에러.
  *
  * 방출:
- *  - dist/dstk.css — :root=Day, .dark=Dusk, .night=Night (팔레트 변수 + 시맨틱 변수)
- *  - dist/products/<제품>.css — .theme-<제품> 오버라이드(모드별 동일 구조)
- *  - playground/app/dstk.css 로 복사(있을 때)
+ *  - dist/dstk.css — :root=Light(+Day 팔레트) · .dark=Dark(+Dusk 팔레트) · .night=Night 팔레트만(조명 예비) · .theme-control=Control 시맨틱
+ *  - dist/products/<제품>.css — .theme-<제품> 오버라이드
+ *  - playground/app/dstk.css 복사 + playground/public/dstk/*.json 사본(허브용)
  */
 import { execSync } from "node:child_process";
 import {
@@ -24,83 +27,101 @@ import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const MODES = ["day", "dusk", "night"] as const;
-type Mode = (typeof MODES)[number];
+const LIGHTINGS = ["day", "dusk", "night"] as const;
+type Lighting = (typeof LIGHTINGS)[number];
+const THEME_MODES = ["light", "dark", "control"] as const;
+type ThemeMode = (typeof THEME_MODES)[number];
+/** 핀 없는 참조(anchor·상태 축)의 제품 모드 → 조명 매핑 */
+const LIGHT_OF: Record<ThemeMode, Lighting> = { light: "day", dark: "dusk", control: "dusk" };
 
 const readJson = (p: string) => JSON.parse(readFileSync(join(ROOT, p), "utf-8"));
 const palette: any = readJson("dstk/palette.json");
 const core: any = readJson("dstk/core.json");
 
 const FAMS = Object.keys(palette).filter((k) => !k.startsWith("$"));
-const ANCHOR: Record<Mode, string> = palette.$anchor;
+const ANCHOR: Record<Lighting, string> = palette.$anchor;
 
-/** palette 경로(family.step 또는 basic.tone.step)의 모드별 원시 값. TODO면 null. */
-function paletteValue(path: string[], mode: Mode): string | null {
+/** palette 경로의 조명 모드별 원시 값. TODO·모드 없음이면 null. */
+function paletteValue(path: string[], lighting: Lighting): string | null {
   let node: any = palette;
   for (let i = 0; i < path.length; i++) {
-    const key = path[i];
-    if (key === "anchor" && node !== palette && i === path.length - 1) {
-      node = node[ANCHOR[mode]];
+    const seg = path[i];
+    if (seg === "anchor" && node !== palette && i === path.length - 1) {
+      node = node[ANCHOR[lighting]];
       break;
     }
-    node = node?.[key];
+    node = node?.[seg];
     if (node === undefined) throw new Error(`팔레트에 없는 참조: palette.${path.join(".")}`);
   }
   const v = node?.$value;
   if (v === undefined) throw new Error(`팔레트에 없는 참조: palette.${path.join(".")}`);
-  const raw = typeof v === "string" ? v : v[mode];
-  if (raw === undefined) throw new Error(`palette.${path.join(".")}: ${mode} 모드 값 없음`);
+  const raw = typeof v === "string" ? v : v[lighting];
+  if (raw === undefined) return null;
   return raw === "TODO" ? null : raw;
 }
 
-/** 시맨틱/제품 토큰 해석 — 색은 palette 참조 강제(게이트). */
-function resolveToken(name: string, token: any, mode: Mode): string | null {
-  const value: string = token.$value;
+/** 단일 참조 문자열 해석 — 핀(@모드) 우선, 없으면 조명 매핑. */
+function resolveRef(name: string, refStr: string, themeMode: ThemeMode): string | null {
+  const m = refStr.match(/^\{palette\.([^}@]+)(?:@(day|dusk|night))?\}$/);
+  if (!m) throw new Error(`게이트 위반 — 색 토큰 "${name}"은 palette 참조만 허용: ${refStr}`);
+  const lighting = (m[2] as Lighting) ?? LIGHT_OF[themeMode];
+  return paletteValue(m[1].split("."), lighting);
+}
+
+/** 시맨틱/제품 토큰 해석 — $value가 제품 모드 객체면 해당 모드 키 사용. */
+function resolveToken(name: string, token: any, themeMode: ThemeMode): string | null {
+  const value = token.$value;
   if (token.$type === "color") {
-    const m = value.match(/^\{palette\.([^}]+)\}$/);
-    if (!m) throw new Error(`게이트 위반 — 색 토큰 "${name}"은 palette 참조만 허용: ${value}`);
-    return paletteValue(m[1].split("."), mode);
+    const refStr = typeof value === "string" ? value : value[themeMode];
+    if (refStr === undefined) return null;
+    return resolveRef(name, refStr, themeMode);
   }
-  // 비색상(치수·폰트)은 core 참조 또는 직접 값 허용
-  return value.replace(/\{([^}]+)\}/g, (_, path: string) => {
+  // 비색상(치수·그림자·폰트)은 core 참조 또는 직접 값 허용
+  const s: string = typeof value === "string" ? value : value[themeMode];
+  return s.replace(/\{([^}]+)\}/g, (_, path: string) => {
     const found = path.split(".").reduce<any>((n, k) => (n ? n[k] : undefined), core);
     if (found?.$value === undefined) throw new Error(`해석할 수 없는 참조: {${path}} (토큰 "${name}")`);
     return found.$value;
   });
 }
 
-/** 모드별 팔레트 평탄화(--gray-50 …) + anchor 별칭(--red-anchor …). TODO는 생략. */
-function paletteVars(mode: Mode): string[] {
+/** 조명 모드별 팔레트 평탄화(--gray-50 …) + anchor 별칭. 값 없는 모드는 생략. */
+function paletteVars(lighting: Lighting): string[] {
   const lines: string[] = [];
   for (const fam of FAMS) {
-    if (fam === "basic") {
-      for (const tone of Object.keys(palette.basic).filter((k) => !k.startsWith("$"))) {
-        for (const step of Object.keys(palette.basic[tone]).filter((k) => !k.startsWith("$"))) {
-          lines.push(`  --basic-${tone}-${step}: ${palette.basic[tone][step].$value};`);
+    if (fam === "basic" || fam === "product") {
+      for (const tone of Object.keys(palette[fam]).filter((k) => !k.startsWith("$"))) {
+        const entry = palette[fam][tone];
+        if (entry.$value !== undefined) {
+          lines.push(`  --${fam}-${tone}: ${entry.$value};`);
+          continue;
+        }
+        for (const step of Object.keys(entry).filter((k) => !k.startsWith("$"))) {
+          lines.push(`  --${fam}-${tone}-${step}: ${entry[step].$value};`);
         }
       }
       continue;
     }
     for (const step of Object.keys(palette[fam]).filter((k) => !k.startsWith("$"))) {
-      const v = paletteValue([fam, step], mode);
+      const v = paletteValue([fam, step], lighting);
       if (v !== null) lines.push(`  --${fam}-${step}: ${v};`);
     }
     if (fam !== "gray") {
-      const v = paletteValue([fam, "anchor"], mode);
+      const v = paletteValue([fam, "anchor"], lighting);
       if (v !== null) lines.push(`  --${fam}-anchor: ${v};`);
     }
   }
   return lines;
 }
 
-/** 토큰 파일 → 모드별 CSS 변수 줄. day에서 null(TODO)이면 에러, 그 외 모드는 생략. */
-function tokenVars(tokens: Record<string, any>, mode: Mode, label: string): string[] {
+/** 토큰 파일 → 제품 모드별 CSS 변수 줄. light에서 누락이면 에러, 그 외 모드는 생략. */
+function tokenVars(tokens: Record<string, any>, themeMode: ThemeMode, label: string): string[] {
   const lines: string[] = [];
   for (const [name, token] of Object.entries<any>(tokens)) {
     if (name.startsWith("$")) continue;
-    const v = resolveToken(name, token, mode);
+    const v = resolveToken(name, token, themeMode);
     if (v === null) {
-      if (mode === "day") throw new Error(`${label} "${name}": day 값이 TODO — day는 필수`);
+      if (themeMode === "light") throw new Error(`${label} "${name}": light 값 누락 — light는 필수`);
       continue;
     }
     lines.push(`  --${name}: ${v};`);
@@ -137,11 +158,12 @@ try {
 
 const css =
   [
-    "/* 자동 생성 — 손으로 편집 금지. 원천: dstk/palette.json + semantic.json */",
-    `/* commit ${commit} · 모드: :root=Day · .dark=Dusk · .night=Night */`,
-    block(":root", [...paletteVars("day"), ...tokenVars(semantic, "day", "semantic"), ...typographyVars()]),
-    block(".dark", [...paletteVars("dusk"), ...tokenVars(semantic, "dusk", "semantic")]),
-    block(".night", [...paletteVars("night"), ...tokenVars(semantic, "night", "semantic")]),
+    "/* 자동 생성 — 손으로 편집 금지. 원천: dstk/palette.json + semantic.json (Theme 정렬) */",
+    `/* commit ${commit} · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */`,
+    block(":root", [...paletteVars("day"), ...tokenVars(semantic, "light", "semantic"), ...typographyVars()]),
+    block(".dark", [...paletteVars("dusk"), ...tokenVars(semantic, "dark", "semantic")]),
+    block(".night", paletteVars("night")),
+    block(".theme-control", tokenVars(semantic, "control", "semantic")),
   ].join("\n\n") + "\n";
 
 mkdirSync(join(ROOT, "dist"), { recursive: true });
@@ -153,12 +175,12 @@ for (const f of readdirSync(join(ROOT, "dstk/products")).filter((f) => f.endsWit
   const name = basename(f, ".json");
   const tokens = readJson(`dstk/products/${f}`);
   const parts: string[] = [`/* ${name} 제품 토큰 — build-dstk.ts 생성 */`];
-  const day = tokenVars(tokens, "day", `products/${name}`);
-  if (day.length) parts.push(block(`.theme-${name}`, day));
-  const dusk = tokenVars(tokens, "dusk", `products/${name}`);
-  if (dusk.length) parts.push(block(`.dark .theme-${name}`, dusk));
-  const night = tokenVars(tokens, "night", `products/${name}`);
-  if (night.length) parts.push(block(`.night .theme-${name}`, night));
+  for (const mode of THEME_MODES) {
+    const lines = tokenVars(tokens, mode, `products/${name}`);
+    if (!lines.length) continue;
+    const sel = mode === "light" ? `.theme-${name}` : mode === "dark" ? `.dark .theme-${name}` : `.theme-control .theme-${name}`;
+    parts.push(block(sel, lines));
+  }
   writeFileSync(join(ROOT, `dist/products/${name}.css`), parts.join("\n\n") + "\n");
 }
 

@@ -1,7 +1,4 @@
 {
-  "$description": "HiNAS 365 제품 토큰 — 공통 시맨틱 오버라이드. palette 참조만 허용.",
-  "primary":               { "$type": "color", "$value": "{palette.blue.500}" },
-  "primary-foreground":    { "$type": "color", "$value": "{palette.basic.white.100}" },
-  "ring":                  { "$type": "color", "$value": "{palette.blue.500}" },
+  "$description": "HiNAS 365 제품 토큰 — Theme 정렬 후 primary는 공통 시맨틱(HiNAS Brand)이 담당. 365 전용 오버라이드는 각짐(radius 0)만 잔존.",
   "radius":                { "$type": "dimension", "$value": "0px" }
 }

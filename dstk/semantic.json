@@ -1,75 +1,153 @@
 {
   "background": {
     "$type": "color",
-    "$value": "{palette.gray.10}"
+    "$value": {
+      "light": "{palette.basic.white.100}",
+      "dark": "{palette.gray.200@dusk}",
+      "control": "{palette.gray.100@dusk}"
+    }
   },
   "foreground": {
     "$type": "color",
-    "$value": "{palette.gray.900}"
+    "$value": {
+      "light": "{palette.gray.700@day}",
+      "dark": "{palette.gray.50@day}",
+      "control": "{palette.gray.50@day}"
+    }
   },
   "card": {
     "$type": "color",
-    "$value": "{palette.basic.white.100}"
+    "$value": {
+      "light": "{palette.basic.white.100}",
+      "dark": "{palette.gray.200@dusk}",
+      "control": "{palette.gray.100@dusk}"
+    },
+    "$note": "Theme 번들: background-card-popover-primaryF"
   },
   "card-foreground": {
     "$type": "color",
-    "$value": "{palette.gray.900}"
+    "$value": {
+      "light": "{palette.gray.700@day}",
+      "dark": "{palette.gray.50@day}",
+      "control": "{palette.gray.50@day}"
+    }
   },
   "popover": {
     "$type": "color",
-    "$value": "{palette.basic.white.100}"
+    "$value": {
+      "light": "{palette.basic.white.100}",
+      "dark": "{palette.gray.200@dusk}",
+      "control": "{palette.gray.100@dusk}"
+    }
   },
   "popover-foreground": {
     "$type": "color",
-    "$value": "{palette.gray.900}"
+    "$value": {
+      "light": "{palette.gray.700@day}",
+      "dark": "{palette.gray.50@day}",
+      "control": "{palette.gray.50@day}"
+    }
   },
   "primary": {
     "$type": "color",
-    "$value": "{palette.gray.900}"
+    "$value": {
+      "light": "{palette.product.hinas-brand}",
+      "dark": "{palette.product.hinas-brand-dark}",
+      "control": "{palette.product.hinas-brand-dark}"
+    }
   },
   "primary-foreground": {
     "$type": "color",
-    "$value": "{palette.gray.50}"
+    "$value": {
+      "light": "{palette.basic.white.100}",
+      "dark": "{palette.gray.200@dusk}",
+      "control": "{palette.gray.100@dusk}"
+    },
+    "$note": "Theme 번들 — 흰 면과 동일 축"
+  },
+  "primary-accent": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.blue.400@dusk}",
+      "dark": "{palette.blue.400@dusk}",
+      "control": "{palette.blue.400@dusk}"
+    },
+    "$note": "Theme 신설 — 전 모드 dusk blue-400 고정"
   },
   "secondary": {
     "$type": "color",
-    "$value": "{palette.gray.100}"
+    "$value": {
+      "light": "{palette.gray.20@day}",
+      "dark": "{palette.gray.300@dusk}",
+      "control": "{palette.gray.400@dusk}"
+    }
   },
   "secondary-foreground": {
     "$type": "color",
-    "$value": "{palette.gray.900}"
+    "$value": {
+      "light": "{palette.gray.600@day}",
+      "dark": "{palette.gray.800@dusk}",
+      "control": "{palette.gray.800@dusk}"
+    }
   },
   "muted": {
     "$type": "color",
-    "$value": "{palette.gray.100}"
+    "$value": {
+      "light": "{palette.gray.50@day}",
+      "dark": "{palette.gray.350@dusk}",
+      "control": "{palette.gray.350@dusk}"
+    }
   },
   "muted-foreground": {
     "$type": "color",
-    "$value": "{palette.gray.600}"
+    "$value": {
+      "light": "{palette.basic.black.20}",
+      "dark": "{palette.basic.white.20}",
+      "control": "{palette.basic.white.20}"
+    }
   },
   "accent": {
     "$type": "color",
-    "$value": "{palette.gray.100}"
+    "$value": {
+      "light": "{palette.gray.10@day}",
+      "dark": "{palette.gray.400@dusk}",
+      "control": "{palette.gray.300@dusk}"
+    }
   },
   "accent-foreground": {
     "$type": "color",
-    "$value": "{palette.gray.900}"
+    "$value": {
+      "light": "{palette.gray.700@day}",
+      "dark": "{palette.gray.50@day}",
+      "control": "{palette.gray.50@day}"
+    }
   },
   "destructive": {
     "$type": "color",
-    "$value": "{palette.red.anchor}"
+    "$value": {
+      "light": "{palette.red.600@dusk}",
+      "dark": "{palette.red.500@day}",
+      "control": "{palette.red.100@dusk}"
+    },
+    "$note": "Theme: Light가 dusk red-600을 차용(의도된 설계)"
   },
   "destructive-foreground": {
     "$type": "color",
-    "$value": "{palette.basic.white.100}"
+    "$value": {
+      "light": "{palette.basic.white.100}",
+      "dark": "{palette.basic.white.100}",
+      "control": "{palette.basic.white.100}"
+    }
   },
   "success": {
     "$type": "color",
-    "$value": "{palette.green.anchor}"
+    "$value": "{palette.green.anchor}",
+    "$note": "Theme 외 — 상태 축(모드별 조명 매핑으로 해석)"
   },
   "info": {
     "$type": "color",
-    "$value": "{palette.blue.anchor}"
+    "$value": "{palette.blue.anchor}",
+    "$note": "Theme 외 — 상태 축"
   },
   "info-foreground": {
     "$type": "color",
@@ -78,7 +156,7 @@
   "warning": {
     "$type": "color",
     "$value": "{palette.orange.anchor}",
-    "$note": "주의(CAUTION) 상태 축 — yellow는 차트·면 틴트용 유보. 필요 시 warning-surface={palette.orange.100} 추가"
+    "$note": "Theme 외 — 상태 축. yellow는 차트·면 틴트용 유보"
   },
   "chart-1": {
     "$type": "color",
@@ -100,17 +178,133 @@
     "$type": "color",
     "$value": "{palette.blue.200}"
   },
+  "chart-background": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.blue.100@day}",
+      "dark": "{palette.basic.white.6}",
+      "control": "{palette.basic.white.6}"
+    }
+  },
+  "chart-primary": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.product.cyber-security}",
+      "dark": "{palette.product.cyber-security}",
+      "control": "{palette.product.cyber-security}"
+    }
+  },
+  "chart-gray": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.gray.600@day}",
+      "dark": "{palette.gray.600@day}",
+      "control": "{palette.gray.600@day}"
+    }
+  },
+  "chart-yellow": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.orange.300@day}",
+      "dark": "{palette.orange.300@day}",
+      "control": "{palette.orange.300@day}"
+    }
+  },
+  "chart-red": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.red.600@day}",
+      "dark": "{palette.red.600@day}",
+      "control": "{palette.red.600@day}"
+    }
+  },
+  "chart-green": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.green.500@day}",
+      "dark": "{palette.green.500@day}",
+      "control": "{palette.green.500@day}"
+    }
+  },
   "border": {
     "$type": "color",
-    "$value": "{palette.gray.200}"
+    "$value": {
+      "light": "{palette.gray.100@day}",
+      "dark": "{palette.basic.white.8}",
+      "control": "{palette.basic.white.8}"
+    }
   },
   "input": {
     "$type": "color",
-    "$value": "{palette.gray.200}"
+    "$value": {
+      "light": "{palette.gray.500@day}",
+      "dark": "{palette.gray.600@dusk}",
+      "control": "{palette.gray.600@dusk}"
+    }
   },
   "ring": {
     "$type": "color",
-    "$value": "{palette.gray.400}"
+    "$value": {
+      "light": "{palette.gray.200@day}",
+      "dark": "{palette.gray.400@dusk}",
+      "control": "{palette.gray.400@dusk}"
+    }
+  },
+  "sidebar": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.gray.10@day}",
+      "dark": "{palette.gray.100@dusk}",
+      "control": "{palette.gray.100@dusk}"
+    }
+  },
+  "sidebar-foreground": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.gray.600@day}",
+      "dark": "{palette.gray.800@dusk}",
+      "control": "{palette.gray.800@dusk}"
+    }
+  },
+  "sidebar-primary": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.product.cyber-security}",
+      "dark": "{palette.product.cyber-security}",
+      "control": "{palette.product.cyber-security}"
+    }
+  },
+  "sidebar-accent": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.gray.50@day}",
+      "dark": "{palette.gray.350@dusk}",
+      "control": "{palette.gray.350@dusk}"
+    }
+  },
+  "sidebar-accent-foreground": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.gray.700@day}",
+      "dark": "{palette.gray.50@day}",
+      "control": "{palette.gray.50@day}"
+    }
+  },
+  "sidebar-border": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.gray.700@dusk}",
+      "dark": "{palette.gray.500@dusk}",
+      "control": "{palette.gray.500@dusk}"
+    }
+  },
+  "sidebar-ring": {
+    "$type": "color",
+    "$value": {
+      "light": "{palette.gray.200@day}",
+      "dark": "{palette.gray.400@dusk}",
+      "control": "{palette.gray.400@dusk}"
+    }
   },
   "radius": {
     "$type": "dimension",
@@ -119,6 +313,6 @@
   "shadow-card": {
     "$type": "shadow",
     "$value": "0 0 12px 0 color-mix(in srgb, var(--border) 55%, transparent)",
-    "$note": "D 대시보드 카드 그림자 — 상하 대칭 확산, border 토큰 55% 농도(100%는 과함 — 사용자 확정), 모드 자동"
+    "$note": "D 대시보드 카드 그림자 — border 55% 농도, 모드 자동"
   }
 }
