@@ -60,10 +60,10 @@
     "$type": "color",
     "$value": {
       "light": "{palette.basic.white.100}",
-      "dark": "{palette.gray.200@dusk}",
+      "dark": "{palette.basic.white.100}",
       "control": "{palette.gray.100@dusk}"
     },
-    "$note": "Theme 번들 — 흰 면과 동일 축"
+    "$note": "on-color 대응(Light·Dark = 항상 White — 실물 버튼 교정 2026-08-21). Control은 background 번들 유지(규정 보류)"
   },
   "primary-accent": {
     "$type": "color",

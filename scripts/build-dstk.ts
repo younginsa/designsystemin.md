@@ -189,44 +189,58 @@ for (const f of readdirSync(join(ROOT, "dstk/products")).filter((f) => f.endsWit
 const snapPath = join(ROOT, "dstk/figma-theme-snapshot.json");
 if (existsSync(snapPath)) {
   const snap: any = readJson("dstk/figma-theme-snapshot.json");
-  const T2D: Record<string, string[]> = {
-    "General/background-card-popover-primaryF": ["background", "card", "popover", "primary-foreground"],
-    "General/foreground-card-popover": ["foreground", "card-foreground", "popover-foreground"],
-    "General/primary": ["primary"],
-    "General/primary-accent": ["primary-accent"],
-    "General/secondary": ["secondary"],
-    "General/secondary-foreground": ["secondary-foreground"],
-    "General/muted": ["muted"],
-    "General/muted-foreground": ["muted-foreground"],
-    "General/accent": ["accent"],
-    "General/accent-foreground": ["accent-foreground"],
-    "General/destructive": ["destructive"],
-    "General/border": ["border"],
-    "General/input": ["input"],
-    "General/ring": ["ring"],
-    "Sidebar/background": ["sidebar"],
-    "Sidebar/foreground": ["sidebar-foreground"],
-    "Sidebar/primary": ["sidebar-primary"],
-    "Sidebar/accent": ["sidebar-accent"],
-    "Sidebar/accent-foreground": ["sidebar-accent-foreground"],
-    "Sidebar/border": ["sidebar-border"],
-    "Sidebar/ring": ["sidebar-ring"],
-    "Chart/background": ["chart-background"],
-    "Chart/primary": ["chart-primary"],
-    "Chart/gray": ["chart-gray"],
-    "Chart/yellow": ["chart-yellow"],
-    "Chart/red": ["chart-red"],
-    "Chart/green": ["chart-green"],
+  // 갈림 매핑: 토큰이 모드에 따라 다른 Theme 변수에 대응할 수 있다(예: primary-foreground)
+  type TokenMap = { t: string; modes?: ThemeMode[]; note?: string };
+  const one = (t: string): TokenMap[] => [{ t }];
+  const T2D: Record<string, TokenMap[]> = {
+    "General/background-card-popover-primaryF": [
+      { t: "background" },
+      { t: "card" },
+      { t: "popover" },
+      { t: "primary-foreground", modes: ["control"], note: "(Control만)" },
+    ],
+    "General/on-color": [
+      { t: "primary-foreground", modes: ["light", "dark"], note: "(Light·Dark)" },
+      { t: "destructive-foreground" },
+      { t: "info-foreground" },
+    ],
+    "General/foreground-card-popover": [{ t: "foreground" }, { t: "card-foreground" }, { t: "popover-foreground" }],
+    "General/primary": one("primary"),
+    "General/primary-accent": one("primary-accent"),
+    "General/secondary": one("secondary"),
+    "General/secondary-foreground": one("secondary-foreground"),
+    "General/muted": one("muted"),
+    "General/muted-foreground": one("muted-foreground"),
+    "General/accent": one("accent"),
+    "General/accent-foreground": one("accent-foreground"),
+    "General/destructive": one("destructive"),
+    "General/border": one("border"),
+    "General/input": one("input"),
+    "General/ring": one("ring"),
+    "Sidebar/background": one("sidebar"),
+    "Sidebar/foreground": one("sidebar-foreground"),
+    "Sidebar/primary": one("sidebar-primary"),
+    "Sidebar/accent": one("sidebar-accent"),
+    "Sidebar/accent-foreground": one("sidebar-accent-foreground"),
+    "Sidebar/border": one("sidebar-border"),
+    "Sidebar/ring": one("sidebar-ring"),
+    "Chart/background": one("chart-background"),
+    "Chart/primary": one("chart-primary"),
+    "Chart/gray": one("chart-gray"),
+    "Chart/yellow": one("chart-yellow"),
+    "Chart/red": one("chart-red"),
+    "Chart/green": one("chart-green"),
   };
   const errs: string[] = [];
   for (const entry of snap.theme) {
-    const tokens = T2D[entry.name];
-    if (!tokens) continue; // Product 2종 — 참조로만 사용
-    for (const mode of THEME_MODES) {
-      const want = String(entry[mode].hex).toUpperCase();
-      for (const tok of tokens) {
-        const got = (resolveToken(tok, semantic[tok], mode) || "").toUpperCase();
-        if (got !== want) errs.push(`${tok}(${mode}): snapshot ${want} ≠ semantic ${got}`);
+    const maps = T2D[entry.name];
+    if (!maps) continue; // Product 2종 — 참조로만 사용
+    for (const m of maps) {
+      for (const mode of THEME_MODES) {
+        if (m.modes && !m.modes.includes(mode)) continue;
+        const want = String(entry[mode].hex).toUpperCase();
+        const got = (resolveToken(m.t, semantic[m.t], mode) || "").toUpperCase();
+        if (got !== want) errs.push(`${m.t}(${mode}): snapshot ${want} ≠ semantic ${got}`);
       }
     }
   }
@@ -250,6 +264,57 @@ if (existsSync(snapPath)) {
     throw new Error(`피그마 스냅샷 대조 실패 ${errs.length}건:\n  ` + errs.slice(0, 20).join("\n  "));
   }
 
+  // ── 가독성 게이트 — contrast-pairs.json의 글자×면 조합을 3모드 전수 WCAG 검사 ──
+  const cpPath = join(ROOT, "dstk/contrast-pairs.json");
+  if (existsSync(cpPath)) {
+    const cp: any = readJson("dstk/contrast-pairs.json");
+    const hexToRgba = (h: string): number[] => {
+      const s = h.replace("#", "");
+      return [0, 2, 4, 6].map((i) => (i < s.length ? parseInt(s.slice(i, i + 2), 16) : 255));
+    };
+    const over = (fg: number[], bg: number[]): number[] => {
+      const a = fg[3] / 255;
+      return [0, 1, 2].map((i) => Math.round(fg[i] * a + bg[i] * (1 - a)));
+    };
+    const lum = (rgb: number[]): number => {
+      const f = (c: number) => {
+        const s = c / 255;
+        return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+      };
+      return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
+    };
+    const ratio = (a: number[], b: number[]): number => {
+      const l1 = lum(a) + 0.05;
+      const l2 = lum(b) + 0.05;
+      return l1 > l2 ? l1 / l2 : l2 / l1;
+    };
+    const gateErrs: string[] = [];
+    const gateWarns: string[] = [];
+    for (const pair of cp.pairs) {
+      const need = cp.$levels[pair.level];
+      for (const mode of THEME_MODES) {
+        if (pair.modes && !pair.modes.includes(mode)) continue;
+        const bgHex = resolveToken(pair.bg, semantic[pair.bg], mode);
+        const txHex = resolveToken(pair.text, semantic[pair.text], mode);
+        if (!bgHex || !txHex) continue;
+        // 알파 합성: 면은 그 모드의 background 위에, 글자는 면 위에
+        const base = resolveToken("background", semantic.background, mode) || "#FFFFFF";
+        const bg = over(hexToRgba(bgHex), over(hexToRgba(base), [255, 255, 255, 255]));
+        const tx = over(hexToRgba(txHex), bg);
+        const r = ratio(tx, bg);
+        if (r < need) {
+          const line = `${pair.text} × ${pair.bg} (${mode}): ${r.toFixed(2)}:1 < ${need}:1`;
+          if (pair.waived) gateWarns.push(line + ` — 보류: ${pair.waived}`);
+          else gateErrs.push(line);
+        }
+      }
+    }
+    if (gateWarns.length) console.warn(`⚠ 대비 게이트 보류 ${gateWarns.length}건:\n  ` + gateWarns.join("\n  "));
+    if (gateErrs.length) {
+      throw new Error(`대비 게이트 실패 ${gateErrs.length}건 (자동 치환 금지 — 팔레트에서 통과 토큰을 골라 교체):\n  ` + gateErrs.join("\n  "));
+    }
+  }
+
   const md: string[] = [
     "# Theme × dstk 대조표",
     "",
@@ -260,12 +325,14 @@ if (existsSync(snapPath)) {
     "| Theme 변수 | Light (Cloud) | Dark (SVM·NAS) | Control | dstk 토큰 |",
     "|---|---|---|---|---|",
   ];
+  const disp = (name: string) => (T2D[name] ?? []).map((m) => m.t + (m.note ? " " + m.note : ""));
   for (const entry of snap.theme) {
     const cell = (m: ThemeMode) => `${entry[m].alias ?? "(고유값)"} ${entry[m].hex}`;
-    md.push(`| ${entry.name} | ${cell("light")} | ${cell("dark")} | ${cell("control")} | ${(T2D[entry.name] ?? ["(참조 전용)"]).join(" · ")} |`);
+    const tokens = disp(entry.name);
+    md.push(`| ${entry.name} | ${cell("light")} | ${cell("dark")} | ${cell("control")} | ${tokens.length ? tokens.join(" · ") : "(참조 전용)"} |`);
   }
   md.push("", "## Theme 외 dstk 토큰 (상태 축·램프·비색상)", "", "| 토큰 | 참조 | 비고 |", "|---|---|---|");
-  const covered = new Set(Object.values(T2D).flat());
+  const covered = new Set(Object.values(T2D).flat().map((m) => m.t));
   for (const [name, tok] of Object.entries<any>(semantic)) {
     if (name.startsWith("$") || covered.has(name)) continue;
     const v = typeof tok.$value === "string" ? tok.$value : JSON.stringify(tok.$value);
@@ -275,13 +342,16 @@ if (existsSync(snapPath)) {
 
   // 허브 게시용 대조 데이터(JSON) — 공통 DS > Theme × dstk 대조표가 렌더
   if (existsSync(join(ROOT, "playground", "public"))) {
-    const mapRows = snap.theme.map((entry: any) => ({
-      theme: entry.name,
-      light: entry.light,
-      dark: entry.dark,
-      control: entry.control,
-      tokens: T2D[entry.name] ?? null,
-    }));
+    const mapRows = snap.theme.map((entry: any) => {
+      const tokens = disp(entry.name);
+      return {
+        theme: entry.name,
+        light: entry.light,
+        dark: entry.dark,
+        control: entry.control,
+        tokens: tokens.length ? tokens : null,
+      };
+    });
     const extras = Object.entries<any>(semantic)
       .filter(([name]) => !name.startsWith("$") && !covered.has(name))
       .map(([name, tok]) => ({

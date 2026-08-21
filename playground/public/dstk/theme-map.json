@@ -19,7 +19,7 @@
         "background",
         "card",
         "popover",
-        "primary-foreground"
+        "primary-foreground (Control만)"
       ]
     },
     {
@@ -76,6 +76,26 @@
       },
       "tokens": [
         "primary-accent"
+      ]
+    },
+    {
+      "theme": "General/on-color",
+      "light": {
+        "alias": "Basic Foreground/White/100",
+        "hex": "#FFFFFF"
+      },
+      "dark": {
+        "alias": "Basic Foreground/White/100",
+        "hex": "#FFFFFF"
+      },
+      "control": {
+        "alias": "Basic Foreground/White/100",
+        "hex": "#FFFFFF"
+      },
+      "tokens": [
+        "primary-foreground (Light·Dark)",
+        "destructive-foreground",
+        "info-foreground"
       ]
     },
     {
@@ -527,11 +547,6 @@
   ],
   "extras": [
     {
-      "name": "destructive-foreground",
-      "ref": "{\"light\":\"{palette.basic.white.100}\",\"dark\":\"{palette.basic.white.100}\",\"control\":\"{palette.basic.white.100}\"}",
-      "note": ""
-    },
-    {
       "name": "success",
       "ref": "{palette.green.anchor}",
       "note": "Theme 외 — 상태 축(모드별 조명 매핑으로 해석)"
@@ -540,11 +555,6 @@
       "name": "info",
       "ref": "{palette.blue.anchor}",
       "note": "Theme 외 — 상태 축"
-    },
-    {
-      "name": "info-foreground",
-      "ref": "{palette.basic.white.100}",
-      "note": ""
     },
     {
       "name": "warning",

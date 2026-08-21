@@ -6,10 +6,11 @@
 
 | Theme 변수 | Light (Cloud) | Dark (SVM·NAS) | Control | dstk 토큰 |
 |---|---|---|---|---|
-| General/background-card-popover-primaryF | Basic Foreground/White/100 #FFFFFF | Dusk mode/Gray/200 #1B1C21 | Dusk mode/Gray/100 #15161A | background · card · popover · primary-foreground |
+| General/background-card-popover-primaryF | Basic Foreground/White/100 #FFFFFF | Dusk mode/Gray/200 #1B1C21 | Dusk mode/Gray/100 #15161A | background · card · popover · primary-foreground (Control만) |
 | General/foreground-card-popover | Day mode/Gray/700 #3C3E47 | Day mode/Gray/50 #F2F4F8 | Day mode/Gray/50 #F2F4F8 | foreground · card-foreground · popover-foreground |
 | General/primary | Product/HiNAS Brand #4477F9 | Product/HiNAS Brand #348FF4 | Product/HiNAS Brand #348FF4 | primary |
 | General/primary-accent | Dusk mode/SemanticBlue/400 #1379F3 | Dusk mode/SemanticBlue/400 #1379F3 | Dusk mode/SemanticBlue/400 #1379F3 | primary-accent |
+| General/on-color | Basic Foreground/White/100 #FFFFFF | Basic Foreground/White/100 #FFFFFF | Basic Foreground/White/100 #FFFFFF | primary-foreground (Light·Dark) · destructive-foreground · info-foreground |
 | General/secondary | Day mode/Gray/20 #F9FAFB | Dusk mode/Gray/300 #23252B | Dusk mode/Gray/400 #3C3E47 | secondary |
 | General/secondary-foreground | Day mode/Gray/600 #5D6275 | Dusk mode/Gray/800 #D0D2D9 | Dusk mode/Gray/800 #D0D2D9 | secondary-foreground |
 | General/muted | Day mode/Gray/50 #F2F4F8 | Dusk mode/Gray/350 #2F323B | Dusk mode/Gray/350 #2F323B | muted |
@@ -40,10 +41,8 @@
 
 | 토큰 | 참조 | 비고 |
 |---|---|---|
-| destructive-foreground | `{"light":"{palette.basic.white.100}","dark":"{palette.basic.white.100}","control":"{palette.basic.white.100}"}` |  |
 | success | `{palette.green.anchor}` | Theme 외 — 상태 축(모드별 조명 매핑으로 해석) |
 | info | `{palette.blue.anchor}` | Theme 외 — 상태 축 |
-| info-foreground | `{palette.basic.white.100}` |  |
 | warning | `{palette.orange.anchor}` | Theme 외 — 상태 축. yellow는 차트·면 틴트용 유보 |
 | chart-1 | `{palette.blue.800}` |  |
 | chart-2 | `{palette.blue.700}` |  |

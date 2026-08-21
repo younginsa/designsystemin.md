@@ -1,0 +1,22 @@
+{
+  "$description": "가독성 게이트 — 글자 토큰 × 면 토큰 허용 조합 선언. ds:build가 3모드 전수로 WCAG 대비율 검사(body 4.5:1 · aux 3:1) — 미달+비보류 = 빌드 실패. waived는 사유 필수(경고만 — 해소 시 줄 삭제). modes로 조합을 모드 한정 가능(토큰 역할이 모드마다 다를 때 — 예: Control의 destructive는 글자가 아니라 면). 자동 치환 금지 — 차단·알림·가장 가까운 통과 토큰 제안까지만.",
+  "$levels": { "body": 4.5, "aux": 3.0 },
+  "pairs": [
+    { "text": "foreground", "bg": "background", "level": "body" },
+    { "text": "foreground", "bg": "card", "level": "body" },
+    { "text": "foreground", "bg": "muted", "level": "body" },
+    { "text": "card-foreground", "bg": "card", "level": "body" },
+    { "text": "secondary-foreground", "bg": "secondary", "level": "body" },
+    { "text": "accent-foreground", "bg": "accent", "level": "body" },
+    { "text": "muted-foreground", "bg": "background", "level": "body", "waived": "클론 검수 보류 — muted-foreground Black/20 워시아웃 427곳 이슈(Light ≈ 1.6:1)" },
+    { "text": "primary-foreground", "bg": "primary", "level": "aux" },
+    { "text": "destructive-foreground", "bg": "destructive", "level": "aux" },
+    { "text": "info-foreground", "bg": "info", "level": "aux" },
+    { "text": "sidebar-foreground", "bg": "sidebar", "level": "body" },
+    { "text": "sidebar-accent-foreground", "bg": "sidebar-accent", "level": "body" },
+    { "text": "destructive", "bg": "background", "level": "aux", "modes": ["light", "dark"] },
+    { "text": "success", "bg": "background", "level": "aux" },
+    { "text": "warning", "bg": "background", "level": "aux" },
+    { "text": "info", "bg": "background", "level": "aux" }
+  ]
+}

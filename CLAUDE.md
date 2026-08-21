@@ -88,6 +88,9 @@ AI 친화 디자인 시스템 저장소다.
    `grep -nE '#[0-9a-fA-F]{3,6}|-\[' playground/app/generated/<이름>/page.tsx` → 결과 없어야 함.
    제품 규정 파일에 self-check 게이트가 있으면 함께 적용한다 — 예: Control 화면은
    `regulations/control.md`의 시거리 타이포 게이트(지정 시거리 스케일 세트 미만 크기 차단).
+   **가독성 게이트**: 생성물의 글자×면 조합(text-*/bg-*)은 `dstk/contrast-pairs.json`
+   허용 목록 안이어야 한다 — 미달·미선언 조합은 **자동 치환 금지**, 차단 + 알림 +
+   가장 가까운 통과 토큰 제안까지만 한다.
    **전체 빌드·타입체크 금지** — `pnpm build`·`tsc` 같은 무거운 검증을 돌리지 않는다.
    self-check와 dev 서버 렌더 확인이면 충분하다.
    **예외(관리자 저장소): `components/src`를 고친 커밋 전에는

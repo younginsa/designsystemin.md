@@ -4,7 +4,7 @@
     "method": "재구성 — 클론 변수 API 추출본(2026-08-20, 원본 파일 소실)을 대조표 노드 2806:24 파싱 + dstk/palette.json으로 등가 재구성(2026-08-21)",
     "note": "Theme = 시맨틱 원천(29종 × 제품 3모드 Light(Cloud)/Dark(SVM·NAS)/Control). Colors = 팔레트 원천(단일 모드 변수 — 화면설명 주석 2종 제외).",
     "updated": "2026-08-21",
-    "verification": "2026-08-21 독립 검증 — 대조표 93건·빌드 해석값·팔레트 전수 일치 상태에서 재구성",
+    "verification": "2026-08-21 독립 검증 — 대조표 93건·빌드 해석값·팔레트 전수 일치 상태에서 재구성 · 2026-08-21 General/on-color 신설 반영(클론 회신 — 색 면 위 글자 정책)",
     "themeModes": [
       "Light (Cloud)",
       "Dark (SVM/NAS)",
@@ -70,6 +70,21 @@
       "control": {
         "alias": "Dusk mode/SemanticBlue/400",
         "hex": "#1379F3"
+      }
+    },
+    {
+      "name": "General/on-color",
+      "light": {
+        "alias": "Basic Foreground/White/100",
+        "hex": "#FFFFFF"
+      },
+      "dark": {
+        "alias": "Basic Foreground/White/100",
+        "hex": "#FFFFFF"
+      },
+      "control": {
+        "alias": "Basic Foreground/White/100",
+        "hex": "#FFFFFF"
       }
     },
     {
