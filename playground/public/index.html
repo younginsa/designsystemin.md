@@ -372,6 +372,7 @@
   #visual-dsnav .dn-item:hover { background: var(--surface); color: var(--ink); }
   #visual-dsnav .dn-item.on { color: var(--ink); font-weight: 600; }
   #visual-dsnav .dn-item[disabled] { opacity: .45; cursor: default; background: none; }
+  #visual-dsnav .dn-item.sub { padding-left: 26px; font-size: 12px; }
   .dsnav-sec > h3:first-child { margin-top: 8px; }
   /* 허브 — 팔레트·시맨틱·타이포 뷰어 */
   .mode-pills { display: flex; gap: 6px; margin: 14px 0 18px; }
@@ -721,8 +722,8 @@
           </div>
         </div>
         <h3>Theme × dstk 대조표 <span class="mono" id="theme-map-updated" style="font-size:12px;color:var(--muted)"></span></h3>
-        <p class="lead">피그마 「Theme × dstk 대조표」(노드 2806:24)와 같은 데이터 — 원천 <span class="mono">dstk/figma-theme-snapshot.json</span>(ds:build가 대조·게시). 모드별 해석은 「시맨틱」 메뉴 표와 동일하다.</p>
-        <div id="sem-table-common"></div>
+        <p class="lead">피그마 「Theme × dstk 대조표」와 같은 데이터 — <strong>Theme 변수 ↔ dstk 토큰 매핑</strong>. 원천 <span class="mono">dstk/figma-theme-snapshot.json</span>, ds:build가 대조 검증 후 게시한다.</p>
+        <div id="theme-map-table"></div>
         </div><!-- /dsnav-sec common -->
 
         <div class="dsnav-sec" data-sec="d365" style="display:none">
@@ -1148,9 +1149,9 @@
     <div id="visual-dsnav" style="display:none">
       <button type="button" class="dn-item on" data-sec="pipeline">파이프라인</button>
       <button type="button" class="dn-item" data-sec="common">공통 DS</button>
-      <button type="button" class="dn-item" data-sec="palette">팔레트</button>
-      <button type="button" class="dn-item" data-sec="semantic">시맨틱</button>
-      <button type="button" class="dn-item" data-sec="typo">타이포</button>
+      <button type="button" class="dn-item sub" data-sec="palette">팔레트</button>
+      <button type="button" class="dn-item sub" data-sec="semantic">시맨틱</button>
+      <button type="button" class="dn-item sub" data-sec="typo">타이포</button>
       <button type="button" class="dn-item" data-sec="d365">365</button>
       <button type="button" class="dn-item" data-sec="cloud">Cloud</button>
       <button type="button" class="dn-item" data-sec="control">Control</button>
@@ -1573,11 +1574,25 @@
         }).join('');
         return '<tr><td class="mono">' + name + '</td><td class="mono" style="color:var(--muted)">' + refText + '</td>' + cells + '</tr>';
       }).join('');
-      const html =
-        '<table class="sem-t"><thead><tr><th>이름</th><th>참조(Theme)</th><th>Light (Cloud)</th><th>Dark (SVM·NAS)</th><th>Control</th></tr></thead><tbody>' + rows + '</tbody></table>';
-      document.getElementById('sem-table').innerHTML = html;
-      const common = document.getElementById('sem-table-common');
-      if (common) common.innerHTML = html;
+      document.getElementById('sem-table').innerHTML =
+        '<table class="sem-t"><thead><tr><th>이름</th><th>참조(팔레트)</th><th>Light (Cloud)</th><th>Dark (SVM·NAS)</th><th>Control</th></tr></thead><tbody>' + rows + '</tbody></table>';
+    }
+
+    // 공통 DS — Theme 변수 ↔ dstk 토큰 대조표 (원천: theme-map.json, ds:build 생성)
+    function renderMap(map) {
+      const box = document.getElementById('theme-map-table');
+      if (!box || !map) return;
+      const short = (a) => a ? a.replace(' mode/', ' ').replace('Semantic', '').replace('Basic Foreground/', '') : '(고유값)';
+      const cell = (v) => '<td><span class="sem-sw" style="background:' + v.hex + '"></span><span class="mono">' + short(v.alias) + ' · ' + v.hex + '</span></td>';
+      const rows = map.rows.map(r =>
+        '<tr><td class="mono">' + r.theme + '</td>' + cell(r.light) + cell(r.dark) + cell(r.control) +
+        '<td class="mono">' + (r.tokens ? r.tokens.join(' · ') : '참조 전용') + '</td></tr>').join('');
+      const extras = map.extras.map(e =>
+        '<tr><td class="mono">' + e.name + '</td><td class="mono" style="color:var(--muted)">' + e.ref + '</td><td style="color:var(--muted)">' + e.note + '</td></tr>').join('');
+      box.innerHTML =
+        '<table class="sem-t"><thead><tr><th>Theme 변수</th><th>Light (Cloud)</th><th>Dark (SVM·NAS)</th><th>Control</th><th>dstk 토큰</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+        '<h3 style="margin-top:28px">Theme 외 dstk 토큰 (상태 축·램프·비색상)</h3>' +
+        '<table class="sem-t"><thead><tr><th>토큰</th><th>참조</th><th>비고</th></tr></thead><tbody>' + extras + '</tbody></table>';
     }
 
     function renderTypo() {
@@ -1622,12 +1637,12 @@
       fetch('dstk/semantic.json').then(r => r.json()),
       fetch('dstk/typography.json').then(r => r.json()),
       fetch('dstk/products/control.json').then(r => r.json()),
-      fetch('dstk/figma-theme-snapshot.json').then(r => r.ok ? r.json() : null).catch(() => null),
-    ]).then(([p, s, t, c, snap]) => {
+      fetch('dstk/theme-map.json').then(r => r.ok ? r.json() : null).catch(() => null),
+    ]).then(([p, s, t, c, map]) => {
       pal = p; sem = s; typo = t; ctl = c;
-      renderPal(); renderSem(); renderTypo(); renderCtl();
+      renderPal(); renderSem(); renderTypo(); renderCtl(); renderMap(map);
       const up = document.getElementById('theme-map-updated');
-      if (up && snap && snap.$meta && snap.$meta.updated) up.textContent = '· 마지막 업데이트 ' + snap.$meta.updated;
+      if (up && map && map.updated) up.textContent = '· 마지막 업데이트 ' + map.updated;
     }).catch(() => {
       palGrid.innerHTML = '<span class="mono" style="color:var(--muted)">dstk/*.json 로드 실패 — ds:build 실행 여부 확인</span>';
     });

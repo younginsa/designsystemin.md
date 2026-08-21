@@ -1,0 +1,590 @@
+{
+  "updated": "2026-08-21",
+  "rows": [
+    {
+      "theme": "General/background-card-popover-primaryF",
+      "light": {
+        "alias": "Basic Foreground/White/100",
+        "hex": "#FFFFFF"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/200",
+        "hex": "#1B1C21"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/100",
+        "hex": "#15161A"
+      },
+      "tokens": [
+        "background",
+        "card",
+        "popover",
+        "primary-foreground"
+      ]
+    },
+    {
+      "theme": "General/foreground-card-popover",
+      "light": {
+        "alias": "Day mode/Gray/700",
+        "hex": "#3C3E47"
+      },
+      "dark": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      },
+      "control": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      },
+      "tokens": [
+        "foreground",
+        "card-foreground",
+        "popover-foreground"
+      ]
+    },
+    {
+      "theme": "General/primary",
+      "light": {
+        "alias": "Product/HiNAS Brand",
+        "hex": "#4477F9"
+      },
+      "dark": {
+        "alias": "Product/HiNAS Brand",
+        "hex": "#348FF4"
+      },
+      "control": {
+        "alias": "Product/HiNAS Brand",
+        "hex": "#348FF4"
+      },
+      "tokens": [
+        "primary"
+      ]
+    },
+    {
+      "theme": "General/primary-accent",
+      "light": {
+        "alias": "Dusk mode/SemanticBlue/400",
+        "hex": "#1379F3"
+      },
+      "dark": {
+        "alias": "Dusk mode/SemanticBlue/400",
+        "hex": "#1379F3"
+      },
+      "control": {
+        "alias": "Dusk mode/SemanticBlue/400",
+        "hex": "#1379F3"
+      },
+      "tokens": [
+        "primary-accent"
+      ]
+    },
+    {
+      "theme": "General/secondary",
+      "light": {
+        "alias": "Day mode/Gray/20",
+        "hex": "#F9FAFB"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/300",
+        "hex": "#23252B"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/400",
+        "hex": "#3C3E47"
+      },
+      "tokens": [
+        "secondary"
+      ]
+    },
+    {
+      "theme": "General/secondary-foreground",
+      "light": {
+        "alias": "Day mode/Gray/600",
+        "hex": "#5D6275"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/800",
+        "hex": "#D0D2D9"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/800",
+        "hex": "#D0D2D9"
+      },
+      "tokens": [
+        "secondary-foreground"
+      ]
+    },
+    {
+      "theme": "General/muted",
+      "light": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/350",
+        "hex": "#2F323B"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/350",
+        "hex": "#2F323B"
+      },
+      "tokens": [
+        "muted"
+      ]
+    },
+    {
+      "theme": "General/muted-foreground",
+      "light": {
+        "alias": "Basic Foreground/Black/20",
+        "hex": "#00000033"
+      },
+      "dark": {
+        "alias": "Basic Foreground/White/20",
+        "hex": "#FFFFFF33"
+      },
+      "control": {
+        "alias": "Basic Foreground/White/20",
+        "hex": "#FFFFFF33"
+      },
+      "tokens": [
+        "muted-foreground"
+      ]
+    },
+    {
+      "theme": "General/accent",
+      "light": {
+        "alias": "Day mode/Gray/10",
+        "hex": "#FBFBFB"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/400",
+        "hex": "#3C3E47"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/300",
+        "hex": "#23252B"
+      },
+      "tokens": [
+        "accent"
+      ]
+    },
+    {
+      "theme": "General/accent-foreground",
+      "light": {
+        "alias": "Day mode/Gray/700",
+        "hex": "#3C3E47"
+      },
+      "dark": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      },
+      "control": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      },
+      "tokens": [
+        "accent-foreground"
+      ]
+    },
+    {
+      "theme": "General/destructive",
+      "light": {
+        "alias": "Dusk mode/SemanticRed/600",
+        "hex": "#FF5B5B"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticRed/500",
+        "hex": "#FA454E"
+      },
+      "control": {
+        "alias": "Dusk mode/SemanticRed/100",
+        "hex": "#A50000"
+      },
+      "tokens": [
+        "destructive"
+      ]
+    },
+    {
+      "theme": "General/border",
+      "light": {
+        "alias": "Day mode/Gray/100",
+        "hex": "#ECEDF0"
+      },
+      "dark": {
+        "alias": "Basic Foreground/White/8",
+        "hex": "#FFFFFF14"
+      },
+      "control": {
+        "alias": "Basic Foreground/White/8",
+        "hex": "#FFFFFF14"
+      },
+      "tokens": [
+        "border"
+      ]
+    },
+    {
+      "theme": "General/input",
+      "light": {
+        "alias": "Day mode/Gray/500",
+        "hex": "#858998"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/600",
+        "hex": "#858998"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/600",
+        "hex": "#858998"
+      },
+      "tokens": [
+        "input"
+      ]
+    },
+    {
+      "theme": "General/ring",
+      "light": {
+        "alias": "Day mode/Gray/200",
+        "hex": "#DBDEE8"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/400",
+        "hex": "#3C3E47"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/400",
+        "hex": "#3C3E47"
+      },
+      "tokens": [
+        "ring"
+      ]
+    },
+    {
+      "theme": "Sidebar/background",
+      "light": {
+        "alias": "Day mode/Gray/10",
+        "hex": "#FBFBFB"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/100",
+        "hex": "#15161A"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/100",
+        "hex": "#15161A"
+      },
+      "tokens": [
+        "sidebar"
+      ]
+    },
+    {
+      "theme": "Sidebar/foreground",
+      "light": {
+        "alias": "Day mode/Gray/600",
+        "hex": "#5D6275"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/800",
+        "hex": "#D0D2D9"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/800",
+        "hex": "#D0D2D9"
+      },
+      "tokens": [
+        "sidebar-foreground"
+      ]
+    },
+    {
+      "theme": "Sidebar/primary",
+      "light": {
+        "alias": "Product/Cyber security",
+        "hex": "#0367E0"
+      },
+      "dark": {
+        "alias": "Product/Cyber security",
+        "hex": "#0367E0"
+      },
+      "control": {
+        "alias": "Product/Cyber security",
+        "hex": "#0367E0"
+      },
+      "tokens": [
+        "sidebar-primary"
+      ]
+    },
+    {
+      "theme": "Sidebar/accent",
+      "light": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/350",
+        "hex": "#2F323B"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/350",
+        "hex": "#2F323B"
+      },
+      "tokens": [
+        "sidebar-accent"
+      ]
+    },
+    {
+      "theme": "Sidebar/accent-foreground",
+      "light": {
+        "alias": "Day mode/Gray/700",
+        "hex": "#3C3E47"
+      },
+      "dark": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      },
+      "control": {
+        "alias": "Day mode/Gray/50",
+        "hex": "#F2F4F8"
+      },
+      "tokens": [
+        "sidebar-accent-foreground"
+      ]
+    },
+    {
+      "theme": "Sidebar/border",
+      "light": {
+        "alias": "Dusk mode/Gray/700",
+        "hex": "#B0B3BF"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/500",
+        "hex": "#535661"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/500",
+        "hex": "#535661"
+      },
+      "tokens": [
+        "sidebar-border"
+      ]
+    },
+    {
+      "theme": "Sidebar/ring",
+      "light": {
+        "alias": "Day mode/Gray/200",
+        "hex": "#DBDEE8"
+      },
+      "dark": {
+        "alias": "Dusk mode/Gray/400",
+        "hex": "#3C3E47"
+      },
+      "control": {
+        "alias": "Dusk mode/Gray/400",
+        "hex": "#3C3E47"
+      },
+      "tokens": [
+        "sidebar-ring"
+      ]
+    },
+    {
+      "theme": "Chart/background",
+      "light": {
+        "alias": "Day mode/SemanticBlue/100",
+        "hex": "#EDF5FF"
+      },
+      "dark": {
+        "alias": "Basic Foreground/White/6",
+        "hex": "#FFFFFF0F"
+      },
+      "control": {
+        "alias": "Basic Foreground/White/6",
+        "hex": "#FFFFFF0F"
+      },
+      "tokens": [
+        "chart-background"
+      ]
+    },
+    {
+      "theme": "Chart/primary",
+      "light": {
+        "alias": "Product/Cyber security",
+        "hex": "#0367E0"
+      },
+      "dark": {
+        "alias": "Product/Cyber security",
+        "hex": "#0367E0"
+      },
+      "control": {
+        "alias": "Product/Cyber security",
+        "hex": "#0367E0"
+      },
+      "tokens": [
+        "chart-primary"
+      ]
+    },
+    {
+      "theme": "Chart/gray",
+      "light": {
+        "alias": "Day mode/Gray/600",
+        "hex": "#5D6275"
+      },
+      "dark": {
+        "alias": "Day mode/Gray/600",
+        "hex": "#5D6275"
+      },
+      "control": {
+        "alias": "Day mode/Gray/600",
+        "hex": "#5D6275"
+      },
+      "tokens": [
+        "chart-gray"
+      ]
+    },
+    {
+      "theme": "Chart/yellow",
+      "light": {
+        "alias": "Day mode/SemanticOrange/300",
+        "hex": "#FF9639"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticOrange/300",
+        "hex": "#FF9639"
+      },
+      "control": {
+        "alias": "Day mode/SemanticOrange/300",
+        "hex": "#FF9639"
+      },
+      "tokens": [
+        "chart-yellow"
+      ]
+    },
+    {
+      "theme": "Chart/red",
+      "light": {
+        "alias": "Day mode/SemanticRed/600",
+        "hex": "#DA1E28"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticRed/600",
+        "hex": "#DA1E28"
+      },
+      "control": {
+        "alias": "Day mode/SemanticRed/600",
+        "hex": "#DA1E28"
+      },
+      "tokens": [
+        "chart-red"
+      ]
+    },
+    {
+      "theme": "Chart/green",
+      "light": {
+        "alias": "Day mode/SemanticGreen/500",
+        "hex": "#24A148"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticGreen/500",
+        "hex": "#24A148"
+      },
+      "control": {
+        "alias": "Day mode/SemanticGreen/500",
+        "hex": "#24A148"
+      },
+      "tokens": [
+        "chart-green"
+      ]
+    },
+    {
+      "theme": "Product/HiNAS Brand",
+      "light": {
+        "alias": null,
+        "hex": "#4477F9"
+      },
+      "dark": {
+        "alias": "Dusk mode/SemanticBlue/500",
+        "hex": "#348FF4"
+      },
+      "control": {
+        "alias": "Dusk mode/SemanticBlue/500",
+        "hex": "#348FF4"
+      },
+      "tokens": null
+    },
+    {
+      "theme": "Product/Cyber security",
+      "light": {
+        "alias": "Dusk mode/SemanticBlue/300",
+        "hex": "#0367E0"
+      },
+      "dark": {
+        "alias": "Dusk mode/SemanticBlue/300",
+        "hex": "#0367E0"
+      },
+      "control": {
+        "alias": "Dusk mode/SemanticBlue/300",
+        "hex": "#0367E0"
+      },
+      "tokens": null
+    }
+  ],
+  "extras": [
+    {
+      "name": "destructive-foreground",
+      "ref": "{\"light\":\"{palette.basic.white.100}\",\"dark\":\"{palette.basic.white.100}\",\"control\":\"{palette.basic.white.100}\"}",
+      "note": ""
+    },
+    {
+      "name": "success",
+      "ref": "{palette.green.anchor}",
+      "note": "Theme 외 — 상태 축(모드별 조명 매핑으로 해석)"
+    },
+    {
+      "name": "info",
+      "ref": "{palette.blue.anchor}",
+      "note": "Theme 외 — 상태 축"
+    },
+    {
+      "name": "info-foreground",
+      "ref": "{palette.basic.white.100}",
+      "note": ""
+    },
+    {
+      "name": "warning",
+      "ref": "{palette.orange.anchor}",
+      "note": "Theme 외 — 상태 축. yellow는 차트·면 틴트용 유보"
+    },
+    {
+      "name": "chart-1",
+      "ref": "{palette.blue.800}",
+      "note": ""
+    },
+    {
+      "name": "chart-2",
+      "ref": "{palette.blue.700}",
+      "note": ""
+    },
+    {
+      "name": "chart-3",
+      "ref": "{palette.blue.600}",
+      "note": ""
+    },
+    {
+      "name": "chart-4",
+      "ref": "{palette.blue.400}",
+      "note": ""
+    },
+    {
+      "name": "chart-5",
+      "ref": "{palette.blue.200}",
+      "note": ""
+    },
+    {
+      "name": "radius",
+      "ref": "{radius.base}",
+      "note": ""
+    },
+    {
+      "name": "shadow-card",
+      "ref": "0 0 12px 0 color-mix(in srgb, var(--border) 55%, transparent)",
+      "note": "D 대시보드 카드 그림자 — border 55% 농도, 모드 자동"
+    }
+  ]
+}

@@ -272,6 +272,29 @@ if (existsSync(snapPath)) {
     md.push(`| ${name} | \`${v}\` | ${tok.$note ?? ""} |`);
   }
   writeFileSync(join(ROOT, "dstk/THEME-MAP.md"), md.join("\n") + "\n");
+
+  // 허브 게시용 대조 데이터(JSON) — 공통 DS > Theme × dstk 대조표가 렌더
+  if (existsSync(join(ROOT, "playground", "public"))) {
+    const mapRows = snap.theme.map((entry: any) => ({
+      theme: entry.name,
+      light: entry.light,
+      dark: entry.dark,
+      control: entry.control,
+      tokens: T2D[entry.name] ?? null,
+    }));
+    const extras = Object.entries<any>(semantic)
+      .filter(([name]) => !name.startsWith("$") && !covered.has(name))
+      .map(([name, tok]) => ({
+        name,
+        ref: typeof tok.$value === "string" ? tok.$value : JSON.stringify(tok.$value),
+        note: tok.$note ?? "",
+      }));
+    mkdirSync(join(ROOT, "playground", "public", "dstk"), { recursive: true });
+    writeFileSync(
+      join(ROOT, "playground", "public", "dstk", "theme-map.json"),
+      JSON.stringify({ updated: snap.$meta?.updated ?? null, rows: mapRows, extras }, null, 2)
+    );
+  }
 }
 
 const pgCss = join(ROOT, "playground", "app", "dstk.css");
