@@ -65,7 +65,7 @@ function TimelineMeta({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <p
       data-slot="timeline-meta"
-      className={cn("mt-1.5 text-xs text-muted-foreground", className)}
+      className={cn("mt-1.5 text-xs text-secondary-foreground", className)}
       {...props}
     />
   );

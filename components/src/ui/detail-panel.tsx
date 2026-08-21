@@ -3,7 +3,7 @@
 // 우측 상세 시트 프리셋 — shadcn Sheet 조합(새 엔진 아님).
 // 리스트 행 클릭 → 우측 요약/상세 패널은 전부 이걸로. 폭 프리셋: md(요약)·4xl(상세).
 // 스크림 기본 = 팔레트 basic black-20, 모션은 Sheet 기본(열림 500ms/닫힘 300ms) 유지.
-// 본문 섹션 규칙: 타이틀(text-sm font-medium text-muted-foreground) + 표준 Table
+// 본문 섹션 규칙: 타이틀(text-sm font-medium text-secondary-foreground) + 표준 Table
 // (외곽선+헤더 배경) — 섹션 박스로 표를 감싸지 않는다(이중 테두리 금지).
 
 import * as React from "react"
@@ -64,7 +64,7 @@ function DetailPanel({
             {titleLink}
           </div>
           {meta ? (
-            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-secondary-foreground">
               {meta}
             </div>
           ) : null}

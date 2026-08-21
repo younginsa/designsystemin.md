@@ -202,11 +202,10 @@ if (existsSync(snapPath)) {
     "General/on-color": [
       { t: "primary-foreground", modes: ["light", "dark"], note: "(Light·Dark)" },
       { t: "destructive-foreground" },
-      { t: "info-foreground" },
     ],
     "General/foreground-card-popover": [{ t: "foreground" }, { t: "card-foreground" }, { t: "popover-foreground" }],
     "General/primary": one("primary"),
-    "General/primary-accent": one("primary-accent"),
+    "General/success": one("success"),
     "General/secondary": one("secondary"),
     "General/secondary-foreground": one("secondary-foreground"),
     "General/muted": one("muted"),
@@ -217,19 +216,11 @@ if (existsSync(snapPath)) {
     "General/border": one("border"),
     "General/input": one("input"),
     "General/ring": one("ring"),
-    "Sidebar/background": one("sidebar"),
-    "Sidebar/foreground": one("sidebar-foreground"),
-    "Sidebar/primary": one("sidebar-primary"),
-    "Sidebar/accent": one("sidebar-accent"),
-    "Sidebar/accent-foreground": one("sidebar-accent-foreground"),
-    "Sidebar/border": one("sidebar-border"),
-    "Sidebar/ring": one("sidebar-ring"),
-    "Chart/background": one("chart-background"),
-    "Chart/primary": one("chart-primary"),
-    "Chart/gray": one("chart-gray"),
-    "Chart/yellow": one("chart-yellow"),
-    "Chart/red": one("chart-red"),
-    "Chart/green": one("chart-green"),
+    "Chart/chart-1": one("chart-1"),
+    "Chart/chart-2": one("chart-2"),
+    "Chart/chart-3": one("chart-3"),
+    "Chart/chart-4": one("chart-4"),
+    "Chart/chart-5": one("chart-5"),
   };
   const errs: string[] = [];
   for (const entry of snap.theme) {
@@ -329,7 +320,8 @@ if (existsSync(snapPath)) {
   for (const entry of snap.theme) {
     const cell = (m: ThemeMode) => `${entry[m].alias ?? "(고유값)"} ${entry[m].hex}`;
     const tokens = disp(entry.name);
-    md.push(`| ${entry.name} | ${cell("light")} | ${cell("dark")} | ${cell("control")} | ${tokens.length ? tokens.join(" · ") : "(참조 전용)"} |`);
+    const note = entry.note ? ` — ${entry.note}` : "";
+    md.push(`| ${entry.name}${note} | ${cell("light")} | ${cell("dark")} | ${cell("control")} | ${tokens.length ? tokens.join(" · ") : "(참조 전용)"} |`);
   }
   md.push("", "## Theme 외 dstk 토큰 (상태 축·램프·비색상)", "", "| 토큰 | 참조 | 비고 |", "|---|---|---|");
   const covered = new Set(Object.values(T2D).flat().map((m) => m.t));
@@ -350,6 +342,7 @@ if (existsSync(snapPath)) {
         dark: entry.dark,
         control: entry.control,
         tokens: tokens.length ? tokens : null,
+        note: entry.note ?? null,
       };
     });
     const extras = Object.entries<any>(semantic)

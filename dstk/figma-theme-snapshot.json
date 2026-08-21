@@ -4,7 +4,7 @@
     "method": "재구성 — 클론 변수 API 추출본(2026-08-20, 원본 파일 소실)을 대조표 노드 2806:24 파싱 + dstk/palette.json으로 등가 재구성(2026-08-21)",
     "note": "Theme = 시맨틱 원천(29종 × 제품 3모드 Light(Cloud)/Dark(SVM·NAS)/Control). Colors = 팔레트 원천(단일 모드 변수 — 화면설명 주석 2종 제외).",
     "updated": "2026-08-21",
-    "verification": "2026-08-21 독립 검증 — 대조표 93건·빌드 해석값·팔레트 전수 일치 상태에서 재구성 · 2026-08-21 General/on-color 신설 반영(클론 회신 — 색 면 위 글자 정책)",
+    "verification": "2026-08-21 독립 검증 — 대조표 93건·빌드 해석값·팔레트 전수 일치 상태에서 재구성 · 2026-08-21 General/on-color 신설 반영(클론 회신 — 색 면 위 글자 정책) · 2026-08-21 상태색 통합: primary-accent·Sidebar 7종 삭제, success·chart-1~5 신설, on-color에서 info-foreground 제거",
     "themeModes": [
       "Light (Cloud)",
       "Dark (SVM/NAS)",
@@ -12,6 +12,21 @@
     ]
   },
   "theme": [
+    {
+      "name": "General/primary",
+      "light": {
+        "alias": "Product/HiNAS Brand",
+        "hex": "#4477F9"
+      },
+      "dark": {
+        "alias": "Product/HiNAS Brand",
+        "hex": "#348FF4"
+      },
+      "control": {
+        "alias": "Product/HiNAS Brand",
+        "hex": "#348FF4"
+      }
+    },
     {
       "name": "General/background-card-popover-primaryF",
       "light": {
@@ -40,36 +55,6 @@
       "control": {
         "alias": "Day mode/Gray/50",
         "hex": "#F2F4F8"
-      }
-    },
-    {
-      "name": "General/primary",
-      "light": {
-        "alias": "Product/HiNAS Brand",
-        "hex": "#4477F9"
-      },
-      "dark": {
-        "alias": "Product/HiNAS Brand",
-        "hex": "#348FF4"
-      },
-      "control": {
-        "alias": "Product/HiNAS Brand",
-        "hex": "#348FF4"
-      }
-    },
-    {
-      "name": "General/primary-accent",
-      "light": {
-        "alias": "Dusk mode/SemanticBlue/400",
-        "hex": "#1379F3"
-      },
-      "dark": {
-        "alias": "Dusk mode/SemanticBlue/400",
-        "hex": "#1379F3"
-      },
-      "control": {
-        "alias": "Dusk mode/SemanticBlue/400",
-        "hex": "#1379F3"
       }
     },
     {
@@ -145,7 +130,8 @@
       "control": {
         "alias": "Basic Foreground/White/20",
         "hex": "#FFFFFF33"
-      }
+      },
+      "note": "흐림 톤 전용 — 오적용 427곳 교정 완료(가독 보조 텍스트는 secondary-foreground)"
     },
     {
       "name": "General/accent",
@@ -220,7 +206,8 @@
       "control": {
         "alias": "Dusk mode/Gray/600",
         "hex": "#858998"
-      }
+      },
+      "note": "placeholder 텍스트용 확정(검색·입력 placeholder 글자색) — 폼 테두리는 border"
     },
     {
       "name": "General/ring",
@@ -235,201 +222,6 @@
       "control": {
         "alias": "Dusk mode/Gray/400",
         "hex": "#3C3E47"
-      }
-    },
-    {
-      "name": "Sidebar/background",
-      "light": {
-        "alias": "Day mode/Gray/10",
-        "hex": "#FBFBFB"
-      },
-      "dark": {
-        "alias": "Dusk mode/Gray/100",
-        "hex": "#15161A"
-      },
-      "control": {
-        "alias": "Dusk mode/Gray/100",
-        "hex": "#15161A"
-      }
-    },
-    {
-      "name": "Sidebar/foreground",
-      "light": {
-        "alias": "Day mode/Gray/600",
-        "hex": "#5D6275"
-      },
-      "dark": {
-        "alias": "Dusk mode/Gray/800",
-        "hex": "#D0D2D9"
-      },
-      "control": {
-        "alias": "Dusk mode/Gray/800",
-        "hex": "#D0D2D9"
-      }
-    },
-    {
-      "name": "Sidebar/primary",
-      "light": {
-        "alias": "Product/Cyber security",
-        "hex": "#0367E0"
-      },
-      "dark": {
-        "alias": "Product/Cyber security",
-        "hex": "#0367E0"
-      },
-      "control": {
-        "alias": "Product/Cyber security",
-        "hex": "#0367E0"
-      }
-    },
-    {
-      "name": "Sidebar/accent",
-      "light": {
-        "alias": "Day mode/Gray/50",
-        "hex": "#F2F4F8"
-      },
-      "dark": {
-        "alias": "Dusk mode/Gray/350",
-        "hex": "#2F323B"
-      },
-      "control": {
-        "alias": "Dusk mode/Gray/350",
-        "hex": "#2F323B"
-      }
-    },
-    {
-      "name": "Sidebar/accent-foreground",
-      "light": {
-        "alias": "Day mode/Gray/700",
-        "hex": "#3C3E47"
-      },
-      "dark": {
-        "alias": "Day mode/Gray/50",
-        "hex": "#F2F4F8"
-      },
-      "control": {
-        "alias": "Day mode/Gray/50",
-        "hex": "#F2F4F8"
-      }
-    },
-    {
-      "name": "Sidebar/border",
-      "light": {
-        "alias": "Dusk mode/Gray/700",
-        "hex": "#B0B3BF"
-      },
-      "dark": {
-        "alias": "Dusk mode/Gray/500",
-        "hex": "#535661"
-      },
-      "control": {
-        "alias": "Dusk mode/Gray/500",
-        "hex": "#535661"
-      }
-    },
-    {
-      "name": "Sidebar/ring",
-      "light": {
-        "alias": "Day mode/Gray/200",
-        "hex": "#DBDEE8"
-      },
-      "dark": {
-        "alias": "Dusk mode/Gray/400",
-        "hex": "#3C3E47"
-      },
-      "control": {
-        "alias": "Dusk mode/Gray/400",
-        "hex": "#3C3E47"
-      }
-    },
-    {
-      "name": "Chart/background",
-      "light": {
-        "alias": "Day mode/SemanticBlue/100",
-        "hex": "#EDF5FF"
-      },
-      "dark": {
-        "alias": "Basic Foreground/White/6",
-        "hex": "#FFFFFF0F"
-      },
-      "control": {
-        "alias": "Basic Foreground/White/6",
-        "hex": "#FFFFFF0F"
-      }
-    },
-    {
-      "name": "Chart/primary",
-      "light": {
-        "alias": "Product/Cyber security",
-        "hex": "#0367E0"
-      },
-      "dark": {
-        "alias": "Product/Cyber security",
-        "hex": "#0367E0"
-      },
-      "control": {
-        "alias": "Product/Cyber security",
-        "hex": "#0367E0"
-      }
-    },
-    {
-      "name": "Chart/gray",
-      "light": {
-        "alias": "Day mode/Gray/600",
-        "hex": "#5D6275"
-      },
-      "dark": {
-        "alias": "Day mode/Gray/600",
-        "hex": "#5D6275"
-      },
-      "control": {
-        "alias": "Day mode/Gray/600",
-        "hex": "#5D6275"
-      }
-    },
-    {
-      "name": "Chart/yellow",
-      "light": {
-        "alias": "Day mode/SemanticOrange/300",
-        "hex": "#FF9639"
-      },
-      "dark": {
-        "alias": "Day mode/SemanticOrange/300",
-        "hex": "#FF9639"
-      },
-      "control": {
-        "alias": "Day mode/SemanticOrange/300",
-        "hex": "#FF9639"
-      }
-    },
-    {
-      "name": "Chart/red",
-      "light": {
-        "alias": "Day mode/SemanticRed/600",
-        "hex": "#DA1E28"
-      },
-      "dark": {
-        "alias": "Day mode/SemanticRed/600",
-        "hex": "#DA1E28"
-      },
-      "control": {
-        "alias": "Day mode/SemanticRed/600",
-        "hex": "#DA1E28"
-      }
-    },
-    {
-      "name": "Chart/green",
-      "light": {
-        "alias": "Day mode/SemanticGreen/500",
-        "hex": "#24A148"
-      },
-      "dark": {
-        "alias": "Day mode/SemanticGreen/500",
-        "hex": "#24A148"
-      },
-      "control": {
-        "alias": "Day mode/SemanticGreen/500",
-        "hex": "#24A148"
       }
     },
     {
@@ -460,6 +252,96 @@
       "control": {
         "alias": "Dusk mode/SemanticBlue/300",
         "hex": "#0367E0"
+      }
+    },
+    {
+      "name": "General/success",
+      "light": {
+        "alias": "Day mode/SemanticGreen/500",
+        "hex": "#24A148"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticGreen/500",
+        "hex": "#24A148"
+      },
+      "control": {
+        "alias": "Day mode/SemanticGreen/500",
+        "hex": "#24A148"
+      }
+    },
+    {
+      "name": "Chart/chart-1",
+      "light": {
+        "alias": "Day mode/SemanticBlue/800",
+        "hex": "#002D9C"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticBlue/800",
+        "hex": "#002D9C"
+      },
+      "control": {
+        "alias": "Day mode/SemanticBlue/800",
+        "hex": "#002D9C"
+      }
+    },
+    {
+      "name": "Chart/chart-2",
+      "light": {
+        "alias": "Day mode/SemanticBlue/700",
+        "hex": "#0043CE"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticBlue/700",
+        "hex": "#0043CE"
+      },
+      "control": {
+        "alias": "Day mode/SemanticBlue/700",
+        "hex": "#0043CE"
+      }
+    },
+    {
+      "name": "Chart/chart-3",
+      "light": {
+        "alias": "Day mode/SemanticBlue/600",
+        "hex": "#0F62FE"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticBlue/600",
+        "hex": "#0F62FE"
+      },
+      "control": {
+        "alias": "Day mode/SemanticBlue/600",
+        "hex": "#0F62FE"
+      }
+    },
+    {
+      "name": "Chart/chart-4",
+      "light": {
+        "alias": "Day mode/SemanticBlue/400",
+        "hex": "#78A9FF"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticBlue/400",
+        "hex": "#78A9FF"
+      },
+      "control": {
+        "alias": "Day mode/SemanticBlue/400",
+        "hex": "#78A9FF"
+      }
+    },
+    {
+      "name": "Chart/chart-5",
+      "light": {
+        "alias": "Day mode/SemanticBlue/200",
+        "hex": "#D0E2FF"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticBlue/200",
+        "hex": "#D0E2FF"
+      },
+      "control": {
+        "alias": "Day mode/SemanticBlue/200",
+        "hex": "#D0E2FF"
       }
     }
   ],

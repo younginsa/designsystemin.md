@@ -18,7 +18,7 @@ function InputGroup({
       data-slot="input-group"
       role="group"
       className={cn(
-        "group/input-group relative flex w-full items-center rounded-md border border-input transition-[color,box-shadow] outline-none dark:bg-input/30",
+        "group/input-group relative flex w-full items-center rounded-md border border-border transition-[color,box-shadow] outline-none dark:bg-input/30",
         // filled = 회색 캔버스(bg-background) 위 시인성용 흰 배경 변형
         variant === "filled" && "bg-card",
         "h-9 min-w-0 has-[>textarea]:h-auto",
@@ -43,7 +43,7 @@ function InputGroup({
 }
 
 const inputGroupAddonVariants = cva(
-  "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
+  "flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-secondary-foreground select-none group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
   {
     variants: {
       align: {
@@ -126,7 +126,7 @@ function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
   return (
     <span
       className={cn(
-        "flex items-center gap-2 text-sm text-muted-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+        "flex items-center gap-2 text-sm text-secondary-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}

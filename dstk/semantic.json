@@ -65,15 +65,6 @@
     },
     "$note": "on-color 대응(Light·Dark = 항상 White — 실물 버튼 교정 2026-08-21). Control은 background 번들 유지(규정 보류)"
   },
-  "primary-accent": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.blue.400@dusk}",
-      "dark": "{palette.blue.400@dusk}",
-      "control": "{palette.blue.400@dusk}"
-    },
-    "$note": "Theme 신설 — 전 모드 dusk blue-400 고정"
-  },
   "secondary": {
     "$type": "color",
     "$value": {
@@ -141,90 +132,33 @@
   },
   "success": {
     "$type": "color",
-    "$value": "{palette.green.anchor}",
-    "$note": "Theme 외 — 상태 축(모드별 조명 매핑으로 해석)"
-  },
-  "info": {
-    "$type": "color",
-    "$value": "{palette.blue.anchor}",
-    "$note": "Theme 외 — 상태 축"
-  },
-  "info-foreground": {
-    "$type": "color",
-    "$value": "{palette.basic.white.100}"
-  },
-  "warning": {
-    "$type": "color",
-    "$value": "{palette.orange.anchor}",
-    "$note": "Theme 외 — 상태 축. yellow는 차트·면 틴트용 유보"
+    "$value": "{palette.green.500@day}",
+    "$note": "Theme General/success — 전 모드 동일(Day green-500 #24A148)"
   },
   "chart-1": {
     "$type": "color",
-    "$value": "{palette.blue.800}"
+    "$value": "{palette.blue.800@day}",
+    "$note": "Theme Chart/chart-1 — 전 모드 동일(Day 값 고정)"
   },
   "chart-2": {
     "$type": "color",
-    "$value": "{palette.blue.700}"
+    "$value": "{palette.blue.700@day}",
+    "$note": "Theme Chart/chart-2 — 전 모드 동일(Day 값 고정)"
   },
   "chart-3": {
     "$type": "color",
-    "$value": "{palette.blue.600}"
+    "$value": "{palette.blue.600@day}",
+    "$note": "Theme Chart/chart-3 — 전 모드 동일(Day 값 고정)"
   },
   "chart-4": {
     "$type": "color",
-    "$value": "{palette.blue.400}"
+    "$value": "{palette.blue.400@day}",
+    "$note": "Theme Chart/chart-4 — 전 모드 동일(Day 값 고정)"
   },
   "chart-5": {
     "$type": "color",
-    "$value": "{palette.blue.200}"
-  },
-  "chart-background": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.blue.100@day}",
-      "dark": "{palette.basic.white.6}",
-      "control": "{palette.basic.white.6}"
-    }
-  },
-  "chart-primary": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.product.cyber-security}",
-      "dark": "{palette.product.cyber-security}",
-      "control": "{palette.product.cyber-security}"
-    }
-  },
-  "chart-gray": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.gray.600@day}",
-      "dark": "{palette.gray.600@day}",
-      "control": "{palette.gray.600@day}"
-    }
-  },
-  "chart-yellow": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.orange.300@day}",
-      "dark": "{palette.orange.300@day}",
-      "control": "{palette.orange.300@day}"
-    }
-  },
-  "chart-red": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.red.600@day}",
-      "dark": "{palette.red.600@day}",
-      "control": "{palette.red.600@day}"
-    }
-  },
-  "chart-green": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.green.500@day}",
-      "dark": "{palette.green.500@day}",
-      "control": "{palette.green.500@day}"
-    }
+    "$value": "{palette.blue.200@day}",
+    "$note": "Theme Chart/chart-5 — 전 모드 동일(Day 값 고정)"
   },
   "border": {
     "$type": "color",
@@ -243,62 +177,6 @@
     }
   },
   "ring": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.gray.200@day}",
-      "dark": "{palette.gray.400@dusk}",
-      "control": "{palette.gray.400@dusk}"
-    }
-  },
-  "sidebar": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.gray.10@day}",
-      "dark": "{palette.gray.100@dusk}",
-      "control": "{palette.gray.100@dusk}"
-    }
-  },
-  "sidebar-foreground": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.gray.600@day}",
-      "dark": "{palette.gray.800@dusk}",
-      "control": "{palette.gray.800@dusk}"
-    }
-  },
-  "sidebar-primary": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.product.cyber-security}",
-      "dark": "{palette.product.cyber-security}",
-      "control": "{palette.product.cyber-security}"
-    }
-  },
-  "sidebar-accent": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.gray.50@day}",
-      "dark": "{palette.gray.350@dusk}",
-      "control": "{palette.gray.350@dusk}"
-    }
-  },
-  "sidebar-accent-foreground": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.gray.700@day}",
-      "dark": "{palette.gray.50@day}",
-      "control": "{palette.gray.50@day}"
-    }
-  },
-  "sidebar-border": {
-    "$type": "color",
-    "$value": {
-      "light": "{palette.gray.700@dusk}",
-      "dark": "{palette.gray.500@dusk}",
-      "control": "{palette.gray.500@dusk}"
-    }
-  },
-  "sidebar-ring": {
     "$type": "color",
     "$value": {
       "light": "{palette.gray.200@day}",

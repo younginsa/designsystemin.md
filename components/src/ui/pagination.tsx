@@ -56,7 +56,7 @@ function PaginationLink({
       className={cn(
         buttonVariants({ variant: "ghost", size }),
         // 확정 스펙 — 선택: 테두리·배경 없이 텍스트 강조 / 비선택·Previous·Next: 흐린 텍스트
-        isActive ? "font-extrabold" : "text-muted-foreground",
+        isActive ? "font-extrabold" : "text-secondary-foreground",
         className
       )}
       {...props}

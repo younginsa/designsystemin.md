@@ -1,6 +1,6 @@
 /* 자동 생성 — 손으로 편집 금지. 원천: dstk/palette.json + semantic.json (Theme 정렬) */
 
-/* commit 2f6dcf6 · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
+/* commit ef292ff · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
 
 :root {
   --gray-10: #FBFBFB;
@@ -116,7 +116,6 @@
   --popover-foreground: #3C3E47;
   --primary: #4477F9;
   --primary-foreground: #FFFFFF;
-  --primary-accent: #1379F3;
   --secondary: #F9FAFB;
   --secondary-foreground: #5D6275;
   --muted: #F2F4F8;
@@ -125,31 +124,15 @@
   --accent-foreground: #3C3E47;
   --destructive: #FF5B5B;
   --destructive-foreground: #FFFFFF;
-  --success: #198038;
-  --info: #0F62FE;
-  --info-foreground: #FFFFFF;
-  --warning: #DF5D00;
+  --success: #24A148;
   --chart-1: #002D9C;
   --chart-2: #0043CE;
   --chart-3: #0F62FE;
   --chart-4: #78A9FF;
   --chart-5: #D0E2FF;
-  --chart-background: #EDF5FF;
-  --chart-primary: #0367E0;
-  --chart-gray: #5D6275;
-  --chart-yellow: #FF9639;
-  --chart-red: #DA1E28;
-  --chart-green: #24A148;
   --border: #ECEDF0;
   --input: #858998;
   --ring: #DBDEE8;
-  --sidebar: #FBFBFB;
-  --sidebar-foreground: #5D6275;
-  --sidebar-primary: #0367E0;
-  --sidebar-accent: #F2F4F8;
-  --sidebar-accent-foreground: #3C3E47;
-  --sidebar-border: #B0B3BF;
-  --sidebar-ring: #DBDEE8;
   --radius: 0.625rem;
   --shadow-card: 0 0 12px 0 color-mix(in srgb, var(--border) 55%, transparent);
   --type-2m-caption-size: 31px;
@@ -276,7 +259,6 @@
   --popover-foreground: #F2F4F8;
   --primary: #348FF4;
   --primary-foreground: #FFFFFF;
-  --primary-accent: #1379F3;
   --secondary: #23252B;
   --secondary-foreground: #D0D2D9;
   --muted: #2F323B;
@@ -285,31 +267,15 @@
   --accent-foreground: #F2F4F8;
   --destructive: #FA454E;
   --destructive-foreground: #FFFFFF;
-  --success: #12A25A;
-  --info: #348FF4;
-  --info-foreground: #FFFFFF;
-  --warning: #E16D00;
-  --chart-1: #8FCAFC;
-  --chart-2: #72B7F9;
-  --chart-3: #54A3F6;
-  --chart-4: #1379F3;
-  --chart-5: #0059C2;
-  --chart-background: #FFFFFF0F;
-  --chart-primary: #0367E0;
-  --chart-gray: #5D6275;
-  --chart-yellow: #FF9639;
-  --chart-red: #DA1E28;
-  --chart-green: #24A148;
+  --success: #24A148;
+  --chart-1: #002D9C;
+  --chart-2: #0043CE;
+  --chart-3: #0F62FE;
+  --chart-4: #78A9FF;
+  --chart-5: #D0E2FF;
   --border: #FFFFFF14;
   --input: #858998;
   --ring: #3C3E47;
-  --sidebar: #15161A;
-  --sidebar-foreground: #D0D2D9;
-  --sidebar-primary: #0367E0;
-  --sidebar-accent: #2F323B;
-  --sidebar-accent-foreground: #F2F4F8;
-  --sidebar-border: #535661;
-  --sidebar-ring: #3C3E47;
   --radius: 0.625rem;
   --shadow-card: 0 0 12px 0 color-mix(in srgb, var(--border) 55%, transparent);
 }
@@ -430,7 +396,6 @@
   --popover-foreground: #F2F4F8;
   --primary: #348FF4;
   --primary-foreground: #15161A;
-  --primary-accent: #1379F3;
   --secondary: #3C3E47;
   --secondary-foreground: #D0D2D9;
   --muted: #2F323B;
@@ -439,31 +404,15 @@
   --accent-foreground: #F2F4F8;
   --destructive: #A50000;
   --destructive-foreground: #FFFFFF;
-  --success: #12A25A;
-  --info: #348FF4;
-  --info-foreground: #FFFFFF;
-  --warning: #E16D00;
-  --chart-1: #8FCAFC;
-  --chart-2: #72B7F9;
-  --chart-3: #54A3F6;
-  --chart-4: #1379F3;
-  --chart-5: #0059C2;
-  --chart-background: #FFFFFF0F;
-  --chart-primary: #0367E0;
-  --chart-gray: #5D6275;
-  --chart-yellow: #FF9639;
-  --chart-red: #DA1E28;
-  --chart-green: #24A148;
+  --success: #24A148;
+  --chart-1: #002D9C;
+  --chart-2: #0043CE;
+  --chart-3: #0F62FE;
+  --chart-4: #78A9FF;
+  --chart-5: #D0E2FF;
   --border: #FFFFFF14;
   --input: #858998;
   --ring: #3C3E47;
-  --sidebar: #15161A;
-  --sidebar-foreground: #D0D2D9;
-  --sidebar-primary: #0367E0;
-  --sidebar-accent: #2F323B;
-  --sidebar-accent-foreground: #F2F4F8;
-  --sidebar-border: #535661;
-  --sidebar-ring: #3C3E47;
   --radius: 0.625rem;
   --shadow-card: 0 0 12px 0 color-mix(in srgb, var(--border) 55%, transparent);
 }

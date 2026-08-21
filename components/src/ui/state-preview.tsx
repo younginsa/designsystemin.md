@@ -33,7 +33,7 @@ function StatePreview({ value, onChange, states = DEFAULT_STATES, className }: S
         className
       )}
     >
-      <span className="px-2 text-[10px] font-medium tracking-wide text-muted-foreground">상태 미리보기</span>
+      <span className="px-2 text-[10px] font-medium tracking-wide text-secondary-foreground">상태 미리보기</span>
       {states.map((s) => (
         <button
           key={s.value}
@@ -43,7 +43,7 @@ function StatePreview({ value, onChange, states = DEFAULT_STATES, className }: S
             "h-7 rounded-full px-3 text-xs transition-colors",
             s.value === value
               ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+              : "text-secondary-foreground hover:bg-accent hover:text-accent-foreground"
           )}
         >
           {s.label}

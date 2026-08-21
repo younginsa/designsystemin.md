@@ -74,7 +74,7 @@ function Calendar({
           defaultClassNames.dropdowns
         ),
         dropdown_root: cn(
-          "relative rounded-md border border-input shadow-xs has-focus:border-ring has-focus:ring-[3px] has-focus:ring-ring/50",
+          "relative rounded-md border border-border shadow-xs has-focus:border-ring has-focus:ring-[3px] has-focus:ring-ring/50",
           defaultClassNames.dropdown_root
         ),
         dropdown: cn(
@@ -85,13 +85,13 @@ function Calendar({
           "font-medium select-none",
           captionLayout === "label"
             ? "text-sm"
-            : "flex h-8 items-center gap-1 rounded-md pr-1 pl-2 text-sm [&>svg]:size-3.5 [&>svg]:text-muted-foreground",
+            : "flex h-8 items-center gap-1 rounded-md pr-1 pl-2 text-sm [&>svg]:size-3.5 [&>svg]:text-secondary-foreground",
           defaultClassNames.caption_label
         ),
         month_grid: cn("w-full border-collapse", defaultClassNames.month_grid),
         weekdays: cn("flex", defaultClassNames.weekdays),
         weekday: cn(
-          "flex-1 rounded-md text-[0.8rem] font-normal text-muted-foreground select-none",
+          "flex-1 rounded-md text-[0.8rem] font-normal text-secondary-foreground select-none",
           defaultClassNames.weekday
         ),
         week: cn("mt-2 flex w-full", defaultClassNames.week),
@@ -100,7 +100,7 @@ function Calendar({
           defaultClassNames.week_number_header
         ),
         week_number: cn(
-          "text-[0.8rem] text-muted-foreground select-none",
+          "text-[0.8rem] text-secondary-foreground select-none",
           defaultClassNames.week_number
         ),
         day: cn(
@@ -121,11 +121,11 @@ function Calendar({
           defaultClassNames.today
         ),
         outside: cn(
-          "text-muted-foreground aria-selected:text-muted-foreground",
+          "text-secondary-foreground aria-selected:text-secondary-foreground",
           defaultClassNames.outside
         ),
         disabled: cn(
-          "text-muted-foreground opacity-50",
+          "text-secondary-foreground opacity-50",
           defaultClassNames.disabled
         ),
         hidden: cn("invisible", defaultClassNames.hidden),

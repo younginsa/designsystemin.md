@@ -43,7 +43,7 @@ function ErrorState({
       <CircleAlert className="fill-destructive stroke-card [&_circle]:stroke-destructive" />
       <AlertTitle className="font-semibold text-foreground">{title}</AlertTitle>
       {description ? (
-        <AlertDescription className="text-sm text-muted-foreground">
+        <AlertDescription className="text-sm text-secondary-foreground">
           {description}
         </AlertDescription>
       ) : null}

@@ -2,6 +2,25 @@
   "updated": "2026-08-21",
   "rows": [
     {
+      "theme": "General/primary",
+      "light": {
+        "alias": "Product/HiNAS Brand",
+        "hex": "#4477F9"
+      },
+      "dark": {
+        "alias": "Product/HiNAS Brand",
+        "hex": "#348FF4"
+      },
+      "control": {
+        "alias": "Product/HiNAS Brand",
+        "hex": "#348FF4"
+      },
+      "tokens": [
+        "primary"
+      ],
+      "note": null
+    },
+    {
       "theme": "General/background-card-popover-primaryF",
       "light": {
         "alias": "Basic Foreground/White/100",
@@ -20,7 +39,8 @@
         "card",
         "popover",
         "primary-foreground (Control만)"
-      ]
+      ],
+      "note": null
     },
     {
       "theme": "General/foreground-card-popover",
@@ -40,43 +60,8 @@
         "foreground",
         "card-foreground",
         "popover-foreground"
-      ]
-    },
-    {
-      "theme": "General/primary",
-      "light": {
-        "alias": "Product/HiNAS Brand",
-        "hex": "#4477F9"
-      },
-      "dark": {
-        "alias": "Product/HiNAS Brand",
-        "hex": "#348FF4"
-      },
-      "control": {
-        "alias": "Product/HiNAS Brand",
-        "hex": "#348FF4"
-      },
-      "tokens": [
-        "primary"
-      ]
-    },
-    {
-      "theme": "General/primary-accent",
-      "light": {
-        "alias": "Dusk mode/SemanticBlue/400",
-        "hex": "#1379F3"
-      },
-      "dark": {
-        "alias": "Dusk mode/SemanticBlue/400",
-        "hex": "#1379F3"
-      },
-      "control": {
-        "alias": "Dusk mode/SemanticBlue/400",
-        "hex": "#1379F3"
-      },
-      "tokens": [
-        "primary-accent"
-      ]
+      ],
+      "note": null
     },
     {
       "theme": "General/on-color",
@@ -94,9 +79,9 @@
       },
       "tokens": [
         "primary-foreground (Light·Dark)",
-        "destructive-foreground",
-        "info-foreground"
-      ]
+        "destructive-foreground"
+      ],
+      "note": null
     },
     {
       "theme": "General/secondary",
@@ -114,7 +99,8 @@
       },
       "tokens": [
         "secondary"
-      ]
+      ],
+      "note": null
     },
     {
       "theme": "General/secondary-foreground",
@@ -132,7 +118,8 @@
       },
       "tokens": [
         "secondary-foreground"
-      ]
+      ],
+      "note": null
     },
     {
       "theme": "General/muted",
@@ -150,7 +137,8 @@
       },
       "tokens": [
         "muted"
-      ]
+      ],
+      "note": null
     },
     {
       "theme": "General/muted-foreground",
@@ -168,7 +156,8 @@
       },
       "tokens": [
         "muted-foreground"
-      ]
+      ],
+      "note": "흐림 톤 전용 — 오적용 427곳 교정 완료(가독 보조 텍스트는 secondary-foreground)"
     },
     {
       "theme": "General/accent",
@@ -186,7 +175,8 @@
       },
       "tokens": [
         "accent"
-      ]
+      ],
+      "note": null
     },
     {
       "theme": "General/accent-foreground",
@@ -204,7 +194,8 @@
       },
       "tokens": [
         "accent-foreground"
-      ]
+      ],
+      "note": null
     },
     {
       "theme": "General/destructive",
@@ -222,7 +213,8 @@
       },
       "tokens": [
         "destructive"
-      ]
+      ],
+      "note": null
     },
     {
       "theme": "General/border",
@@ -240,7 +232,8 @@
       },
       "tokens": [
         "border"
-      ]
+      ],
+      "note": null
     },
     {
       "theme": "General/input",
@@ -258,7 +251,8 @@
       },
       "tokens": [
         "input"
-      ]
+      ],
+      "note": "placeholder 텍스트용 확정(검색·입력 placeholder 글자색) — 폼 테두리는 border"
     },
     {
       "theme": "General/ring",
@@ -276,241 +270,8 @@
       },
       "tokens": [
         "ring"
-      ]
-    },
-    {
-      "theme": "Sidebar/background",
-      "light": {
-        "alias": "Day mode/Gray/10",
-        "hex": "#FBFBFB"
-      },
-      "dark": {
-        "alias": "Dusk mode/Gray/100",
-        "hex": "#15161A"
-      },
-      "control": {
-        "alias": "Dusk mode/Gray/100",
-        "hex": "#15161A"
-      },
-      "tokens": [
-        "sidebar"
-      ]
-    },
-    {
-      "theme": "Sidebar/foreground",
-      "light": {
-        "alias": "Day mode/Gray/600",
-        "hex": "#5D6275"
-      },
-      "dark": {
-        "alias": "Dusk mode/Gray/800",
-        "hex": "#D0D2D9"
-      },
-      "control": {
-        "alias": "Dusk mode/Gray/800",
-        "hex": "#D0D2D9"
-      },
-      "tokens": [
-        "sidebar-foreground"
-      ]
-    },
-    {
-      "theme": "Sidebar/primary",
-      "light": {
-        "alias": "Product/Cyber security",
-        "hex": "#0367E0"
-      },
-      "dark": {
-        "alias": "Product/Cyber security",
-        "hex": "#0367E0"
-      },
-      "control": {
-        "alias": "Product/Cyber security",
-        "hex": "#0367E0"
-      },
-      "tokens": [
-        "sidebar-primary"
-      ]
-    },
-    {
-      "theme": "Sidebar/accent",
-      "light": {
-        "alias": "Day mode/Gray/50",
-        "hex": "#F2F4F8"
-      },
-      "dark": {
-        "alias": "Dusk mode/Gray/350",
-        "hex": "#2F323B"
-      },
-      "control": {
-        "alias": "Dusk mode/Gray/350",
-        "hex": "#2F323B"
-      },
-      "tokens": [
-        "sidebar-accent"
-      ]
-    },
-    {
-      "theme": "Sidebar/accent-foreground",
-      "light": {
-        "alias": "Day mode/Gray/700",
-        "hex": "#3C3E47"
-      },
-      "dark": {
-        "alias": "Day mode/Gray/50",
-        "hex": "#F2F4F8"
-      },
-      "control": {
-        "alias": "Day mode/Gray/50",
-        "hex": "#F2F4F8"
-      },
-      "tokens": [
-        "sidebar-accent-foreground"
-      ]
-    },
-    {
-      "theme": "Sidebar/border",
-      "light": {
-        "alias": "Dusk mode/Gray/700",
-        "hex": "#B0B3BF"
-      },
-      "dark": {
-        "alias": "Dusk mode/Gray/500",
-        "hex": "#535661"
-      },
-      "control": {
-        "alias": "Dusk mode/Gray/500",
-        "hex": "#535661"
-      },
-      "tokens": [
-        "sidebar-border"
-      ]
-    },
-    {
-      "theme": "Sidebar/ring",
-      "light": {
-        "alias": "Day mode/Gray/200",
-        "hex": "#DBDEE8"
-      },
-      "dark": {
-        "alias": "Dusk mode/Gray/400",
-        "hex": "#3C3E47"
-      },
-      "control": {
-        "alias": "Dusk mode/Gray/400",
-        "hex": "#3C3E47"
-      },
-      "tokens": [
-        "sidebar-ring"
-      ]
-    },
-    {
-      "theme": "Chart/background",
-      "light": {
-        "alias": "Day mode/SemanticBlue/100",
-        "hex": "#EDF5FF"
-      },
-      "dark": {
-        "alias": "Basic Foreground/White/6",
-        "hex": "#FFFFFF0F"
-      },
-      "control": {
-        "alias": "Basic Foreground/White/6",
-        "hex": "#FFFFFF0F"
-      },
-      "tokens": [
-        "chart-background"
-      ]
-    },
-    {
-      "theme": "Chart/primary",
-      "light": {
-        "alias": "Product/Cyber security",
-        "hex": "#0367E0"
-      },
-      "dark": {
-        "alias": "Product/Cyber security",
-        "hex": "#0367E0"
-      },
-      "control": {
-        "alias": "Product/Cyber security",
-        "hex": "#0367E0"
-      },
-      "tokens": [
-        "chart-primary"
-      ]
-    },
-    {
-      "theme": "Chart/gray",
-      "light": {
-        "alias": "Day mode/Gray/600",
-        "hex": "#5D6275"
-      },
-      "dark": {
-        "alias": "Day mode/Gray/600",
-        "hex": "#5D6275"
-      },
-      "control": {
-        "alias": "Day mode/Gray/600",
-        "hex": "#5D6275"
-      },
-      "tokens": [
-        "chart-gray"
-      ]
-    },
-    {
-      "theme": "Chart/yellow",
-      "light": {
-        "alias": "Day mode/SemanticOrange/300",
-        "hex": "#FF9639"
-      },
-      "dark": {
-        "alias": "Day mode/SemanticOrange/300",
-        "hex": "#FF9639"
-      },
-      "control": {
-        "alias": "Day mode/SemanticOrange/300",
-        "hex": "#FF9639"
-      },
-      "tokens": [
-        "chart-yellow"
-      ]
-    },
-    {
-      "theme": "Chart/red",
-      "light": {
-        "alias": "Day mode/SemanticRed/600",
-        "hex": "#DA1E28"
-      },
-      "dark": {
-        "alias": "Day mode/SemanticRed/600",
-        "hex": "#DA1E28"
-      },
-      "control": {
-        "alias": "Day mode/SemanticRed/600",
-        "hex": "#DA1E28"
-      },
-      "tokens": [
-        "chart-red"
-      ]
-    },
-    {
-      "theme": "Chart/green",
-      "light": {
-        "alias": "Day mode/SemanticGreen/500",
-        "hex": "#24A148"
-      },
-      "dark": {
-        "alias": "Day mode/SemanticGreen/500",
-        "hex": "#24A148"
-      },
-      "control": {
-        "alias": "Day mode/SemanticGreen/500",
-        "hex": "#24A148"
-      },
-      "tokens": [
-        "chart-green"
-      ]
+      ],
+      "note": null
     },
     {
       "theme": "Product/HiNAS Brand",
@@ -526,7 +287,8 @@
         "alias": "Dusk mode/SemanticBlue/500",
         "hex": "#348FF4"
       },
-      "tokens": null
+      "tokens": null,
+      "note": null
     },
     {
       "theme": "Product/Cyber security",
@@ -542,50 +304,125 @@
         "alias": "Dusk mode/SemanticBlue/300",
         "hex": "#0367E0"
       },
-      "tokens": null
+      "tokens": null,
+      "note": null
+    },
+    {
+      "theme": "General/success",
+      "light": {
+        "alias": "Day mode/SemanticGreen/500",
+        "hex": "#24A148"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticGreen/500",
+        "hex": "#24A148"
+      },
+      "control": {
+        "alias": "Day mode/SemanticGreen/500",
+        "hex": "#24A148"
+      },
+      "tokens": [
+        "success"
+      ],
+      "note": null
+    },
+    {
+      "theme": "Chart/chart-1",
+      "light": {
+        "alias": "Day mode/SemanticBlue/800",
+        "hex": "#002D9C"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticBlue/800",
+        "hex": "#002D9C"
+      },
+      "control": {
+        "alias": "Day mode/SemanticBlue/800",
+        "hex": "#002D9C"
+      },
+      "tokens": [
+        "chart-1"
+      ],
+      "note": null
+    },
+    {
+      "theme": "Chart/chart-2",
+      "light": {
+        "alias": "Day mode/SemanticBlue/700",
+        "hex": "#0043CE"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticBlue/700",
+        "hex": "#0043CE"
+      },
+      "control": {
+        "alias": "Day mode/SemanticBlue/700",
+        "hex": "#0043CE"
+      },
+      "tokens": [
+        "chart-2"
+      ],
+      "note": null
+    },
+    {
+      "theme": "Chart/chart-3",
+      "light": {
+        "alias": "Day mode/SemanticBlue/600",
+        "hex": "#0F62FE"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticBlue/600",
+        "hex": "#0F62FE"
+      },
+      "control": {
+        "alias": "Day mode/SemanticBlue/600",
+        "hex": "#0F62FE"
+      },
+      "tokens": [
+        "chart-3"
+      ],
+      "note": null
+    },
+    {
+      "theme": "Chart/chart-4",
+      "light": {
+        "alias": "Day mode/SemanticBlue/400",
+        "hex": "#78A9FF"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticBlue/400",
+        "hex": "#78A9FF"
+      },
+      "control": {
+        "alias": "Day mode/SemanticBlue/400",
+        "hex": "#78A9FF"
+      },
+      "tokens": [
+        "chart-4"
+      ],
+      "note": null
+    },
+    {
+      "theme": "Chart/chart-5",
+      "light": {
+        "alias": "Day mode/SemanticBlue/200",
+        "hex": "#D0E2FF"
+      },
+      "dark": {
+        "alias": "Day mode/SemanticBlue/200",
+        "hex": "#D0E2FF"
+      },
+      "control": {
+        "alias": "Day mode/SemanticBlue/200",
+        "hex": "#D0E2FF"
+      },
+      "tokens": [
+        "chart-5"
+      ],
+      "note": null
     }
   ],
   "extras": [
-    {
-      "name": "success",
-      "ref": "{palette.green.anchor}",
-      "note": "Theme 외 — 상태 축(모드별 조명 매핑으로 해석)"
-    },
-    {
-      "name": "info",
-      "ref": "{palette.blue.anchor}",
-      "note": "Theme 외 — 상태 축"
-    },
-    {
-      "name": "warning",
-      "ref": "{palette.orange.anchor}",
-      "note": "Theme 외 — 상태 축. yellow는 차트·면 틴트용 유보"
-    },
-    {
-      "name": "chart-1",
-      "ref": "{palette.blue.800}",
-      "note": ""
-    },
-    {
-      "name": "chart-2",
-      "ref": "{palette.blue.700}",
-      "note": ""
-    },
-    {
-      "name": "chart-3",
-      "ref": "{palette.blue.600}",
-      "note": ""
-    },
-    {
-      "name": "chart-4",
-      "ref": "{palette.blue.400}",
-      "note": ""
-    },
-    {
-      "name": "chart-5",
-      "ref": "{palette.blue.200}",
-      "note": ""
-    },
     {
       "name": "radius",
       "ref": "{radius.base}",

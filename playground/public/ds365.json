@@ -6,7 +6,7 @@
     "radius": "0px",
     "_note": "4차(Theme 컬렉션 정렬) — primary = Product/HiNAS Brand #4477F9(공통 시맨틱이 담당, blue-500 스냅 번복). 365 전용 오버라이드는 radius 0만 잔존(dstk/products/365.json). 시맨틱 원천 = 라이브러리 Theme 29종 × 제품 3모드(Light=Cloud·Dark=SVM·NAS·Control), destructive는 Light가 dusk red-600 #FF5B5B 차용(의도된 설계)"
   },
-  "status-mapping": "상태 이름과 토큰 이름은 다른 층위 — 제품 상태 표기를 시맨틱 토큰으로 매핑한다: WARNING(심각)=destructive · CAUTION(주의)=warning · UNREAD(미확인)=info · NORMAL(정상)=success. 위계: 빨강 > 주황 > 파랑 > 초록. WARNING이라는 상태명이라고 warning 토큰을 쓰지 않는다(심각 상태는 destructive).",
+  "status-mapping": "상태색 통합(2026-08-21 개정) — 상태 축 = 빨강 단일(destructive) + 정상(success, 전 모드 green-500 #24A148). 주의 = 빨강 도트 + 기본 글자, 에러 = 빨강 도트 + 빨강 글자. warning·info 토큰은 폐기(구판 CAUTION=warning·UNREAD=info 매핑 무효). muted-foreground는 흐림 톤 전용 — 가독 보조 텍스트는 secondary-foreground.",
   "on-color": "색 칠한 면 위 글자 = on-color(항상 White) — primary·destructive·info 등 채색 면의 글자·아이콘은 흰색(primary-foreground·destructive-foreground·info-foreground가 이 축). 예외 하나: Control 전용 버튼은 규정상 파란 면에 어두운 글자(General/background 번들 사용 — Control 제품은 버튼 컴포넌트 별도).",
   "motion": "오버레이(시트·다이얼로그·팝오버·드롭다운)는 슬라이드/페이드 인아웃 필수 — 애니메이션 없는 팝업 등장 금지. 시트 = 슬라이드 열림 500ms·닫힘 300ms(shadcn 기본), 다이얼로그·팝오버·드롭다운 = 페이드·줌 기본 속도(150~200ms). ease-in-out.",
   "components": {

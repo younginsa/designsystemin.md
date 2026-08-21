@@ -54,20 +54,20 @@ function IconSelect({
       <DropdownMenuTrigger asChild>
         {/* 트리거: 아웃라인 · 높이 36px(h-9, CTA·인풋과 동일 스케일) · 아이콘 간격 8px · 라벨+시간 가로 한 줄 + 우측 4px */}
         <Button variant="outline" className={cn("h-9 gap-2 px-3 font-normal shadow-none", className)}>
-          {Icon ? <Icon className="size-4 shrink-0 text-muted-foreground" /> : null}
+          {Icon ? <Icon className="size-4 shrink-0 text-secondary-foreground" /> : null}
           <span className="flex min-w-0 items-baseline gap-1.5 pr-1">
             <span className="truncate text-sm">{current?.label ?? "선택"}</span>
             {sub ? (
-              <span className="truncate text-xs text-muted-foreground">{sub}</span>
+              <span className="truncate text-xs text-secondary-foreground">{sub}</span>
             ) : null}
           </span>
-          <ChevronDown className="size-3.5 shrink-0 text-muted-foreground" />
+          <ChevronDown className="size-3.5 shrink-0 text-secondary-foreground" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align} className="min-w-44">
         {heading ? (
           <>
-            <DropdownMenuLabel className="text-xs text-muted-foreground">{heading}</DropdownMenuLabel>
+            <DropdownMenuLabel className="text-xs text-secondary-foreground">{heading}</DropdownMenuLabel>
             <DropdownMenuSeparator />
           </>
         ) : null}
@@ -80,7 +80,7 @@ function IconSelect({
             <Check className={cn("size-4", item.value === value ? "opacity-100" : "opacity-0")} />
             <span className="flex-1">{item.label}</span>
             {item.hint ? (
-              <span className="text-xs tabular-nums text-muted-foreground">{item.hint}</span>
+              <span className="text-xs tabular-nums text-secondary-foreground">{item.hint}</span>
             ) : null}
           </DropdownMenuItem>
         ))}

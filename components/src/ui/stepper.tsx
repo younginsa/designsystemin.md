@@ -41,7 +41,7 @@ function StepperItem({
           "flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-semibold",
           state === "completed" && "border-primary bg-primary text-primary-foreground",
           state === "current" && "border-primary bg-background text-primary",
-          state === "upcoming" && "border-border bg-background text-muted-foreground"
+          state === "upcoming" && "border-border bg-background text-secondary-foreground"
         )}
       >
         {state === "completed" ? <Check className="size-4" /> : step}
@@ -51,7 +51,7 @@ function StepperItem({
           "whitespace-nowrap text-sm",
           state === "current"
             ? "font-semibold text-foreground"
-            : "text-muted-foreground"
+            : "text-secondary-foreground"
         )}
       >
         {children}
