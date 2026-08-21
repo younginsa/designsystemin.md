@@ -90,6 +90,9 @@ AI 친화 디자인 시스템 저장소다.
    `regulations/control.md`의 시거리 타이포 게이트(지정 시거리 스케일 세트 미만 크기 차단).
    **전체 빌드·타입체크 금지** — `pnpm build`·`tsc` 같은 무거운 검증을 돌리지 않는다.
    self-check와 dev 서버 렌더 확인이면 충분하다.
+   **예외(관리자 저장소): `components/src`를 고친 커밋 전에는
+   `pnpm --filter playground exec tsc --noEmit` 1회를 실행한다** — dev 서버가 눈감는
+   타입 에러가 Vercel 배포를 끊는 것 방지(2026-08-21 ErrorState title 충돌 사건).
 6. **미리보기** — `pnpm dev` 후 URL 안내. 마무리에 "HTML 파일로도 뽑아드릴까요?"를
    한 번 제안한다.
 7. **결과물 취급** — 생성 페이지는 요청자 로컬 보관이 기본(커밋하지 않는다).

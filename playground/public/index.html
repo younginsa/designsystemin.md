@@ -380,12 +380,13 @@
   .mode-pills .chip.on { color: var(--ink); border-color: var(--ink); }
   .pal-fam { margin: 0 0 18px; }
   .pal-fam .pf-name { font-family: var(--mono); font-size: 12px; color: var(--muted); margin: 0 0 6px; }
-  .pal-row { display: flex; gap: 4px; margin-bottom: 4px; }
+  .pal-row { display: flex; gap: 12px; margin-bottom: 10px; }
   .pal-chip { flex: 1; min-width: 0; }
-  .pal-chip .swatch { height: 42px; border: 1px solid var(--line); position: relative; }
+  .pal-chip .swatch { aspect-ratio: 1 / 1; border: 1px solid var(--line); position: relative; }
   .pal-chip .swatch.todo { background: repeating-linear-gradient(45deg, var(--bg), var(--bg) 4px, var(--surface) 4px, var(--surface) 8px); }
   .pal-chip .swatch .anch { position: absolute; top: 3px; right: 4px; font-size: 10px; color: #fff; text-shadow: 0 0 3px rgba(0,0,0,.9); }
-  .pal-chip .cap { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 3px; display: flex; justify-content: space-between; gap: 4px; overflow: hidden; white-space: nowrap; }
+  .pal-chip .cap { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 4px; display: flex; justify-content: flex-start; gap: 5px; overflow: hidden; white-space: nowrap; }
+  .pal-chip .cap span:first-child { color: var(--ink); }
   .sem-t, .typo-t { width: 100%; border-collapse: collapse; }
   .sem-t td, .sem-t th, .typo-t td, .typo-t th { border-bottom: 1px solid var(--line); padding: 10px 12px 10px 0; text-align: left; font-size: 13px; vertical-align: middle; }
   .sem-t th, .typo-t th { font-family: var(--mono); font-size: 11px; color: var(--muted); font-weight: 500; }
@@ -689,38 +690,6 @@
         <div class="dsnav-sec" data-sec="common" style="display:none">
         <h3>레퍼런스 구현 스택</h3>
         <p>레퍼런스 구현 스택: <strong>React + Tailwind + shadcn/ui 계열</strong>. 화면 이해(시각 스펙)용이며, 토큰 JSON은 중립이므로 다른 스택 제품도 토큰을 가져다 쓸 수 있다.</p>
-        <h3>design.md 구성 — AI 규칙서</h3>
-        <div class="card">
-          <div class="card-body kv">
-            <div class="k">전제</div>
-            <div class="v">사람용 가이드라인이 아니라 AI에게 내리는 명령문 형태로 작성한다.</div>
-            <div class="k">강제 규칙</div>
-            <div class="v">색·간격·라운드·그림자는 시맨틱 토큰만 사용. 임의 값 금지 (<code>#3B82F6</code>, <code>p-[13px]</code> 등).</div>
-            <div class="k">컴포넌트 카탈로그</div>
-            <div class="v">컴포넌트마다 {언제 쓴다 / 언제 안 쓴다 / props / 예시 코드} 블록.</div>
-            <div class="k">레이아웃 프레임 인덱스</div>
-            <div class="v">"어느 프레임의 본문인가, 단독 화면인가" — layout/ 목록 순서가 곧 번호.</div>
-            <div class="k">레이아웃 규칙</div>
-            <div class="v">사이드바/헤더 셸, 그리드, 반응형 브레이크포인트.</div>
-            <div class="k">금지 목록</div>
-            <div class="v">그라데이션 남발, 카드 안의 카드, 임의 그림자 등 안티패턴.</div>
-            <div class="k">레시피 형식 예</div>
-            <div class="v">admin-console — 영역(메뉴·상단바·본문) 정의 + 본문 관례 노트(리스트·상세·다단계 입력) + "언제 안 쓴다" 필수. 본문 내용은 요청자의 스크린샷이 결정.</div>
-          </div>
-        </div>
-              <h3>범위 제외 (v1)</h3>
-        <div class="card">
-          <div class="card-body kv">
-            <div class="k">피그마 기록</div>
-            <div class="v">승인 화면의 피그마 정식 기록은 v1 범위 제외 — 기록은 365 탭 히스토리·갤러리가 담당한다. 필요해지면 재검토.</div>
-            <div class="k">생성 백엔드</div>
-            <div class="v">인페이지 생성 API·전용 웹 툴은 만들지 않는다. 생성은 각자의 Claude Code 세션(구독 좌석)에서.</div>
-            <div class="k">npm 배포</div>
-            <div class="v">프로덕션 패키지 배포는 하지 않는다. 화면 이해용 레퍼런스 구현까지만.</div>
-            <div class="k">타 스택 구현</div>
-            <div class="v">React 외 스택용 컴포넌트는 만들지 않는다. 토큰만 중립 제공.</div>
-          </div>
-        </div>
         <h3>Theme × dstk 대조표 <span class="mono" id="theme-map-updated" style="font-size:12px;color:var(--muted)"></span></h3>
         <p class="lead">피그마 「Theme × dstk 대조표」와 같은 데이터 — <strong>Theme 변수 ↔ dstk 토큰 매핑</strong>. 원천 <span class="mono">dstk/figma-theme-snapshot.json</span>, ds:build가 대조 검증 후 게시한다.</p>
         <div id="theme-map-table"></div>
@@ -1148,7 +1117,7 @@
     <div id="visual-adopt" class="adopt-rail" style="display:none"></div>
     <div id="visual-dsnav" style="display:none">
       <button type="button" class="dn-item on" data-sec="pipeline">파이프라인</button>
-      <button type="button" class="dn-item" data-sec="common">공통 DS</button>
+      <button type="button" class="dn-item" data-sec="common">Design system</button>
       <button type="button" class="dn-item sub" data-sec="palette">팔레트</button>
       <button type="button" class="dn-item sub" data-sec="semantic">시맨틱</button>
       <button type="button" class="dn-item sub" data-sec="typo">타이포</button>
@@ -1547,6 +1516,7 @@
           steps.map(s => {
             const v0 = pal[fam][s].$value;
             const v = typeof v0 === 'string' ? v0 : v0[mode];
+            if (v === undefined) return '';  // 해당 조명 모드에 없는 스텝(예: gray-350은 dusk 전용)
             const todo = v === 'TODO';
             const isA = fam !== 'gray' && s === anchor;
             return '<div class="pal-chip"><div class="swatch' + (todo ? ' todo' : '') + '"' + (todo ? '' : ' style="background:' + v + '"') + '>' +
