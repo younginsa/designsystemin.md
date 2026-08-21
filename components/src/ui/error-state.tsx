@@ -15,7 +15,8 @@ import { Alert, AlertDescription, AlertTitle } from "./alert"
 import { Button } from "./button"
 import { cn } from "../lib/utils"
 
-interface ErrorStateProps extends React.ComponentProps<"div"> {
+// HTML title 속성(string)과 충돌하므로 Omit — 프로덕션 타입체크(next build)가 이걸로 깨졌었다
+interface ErrorStateProps extends Omit<React.ComponentProps<"div">, "title"> {
   title: React.ReactNode
   description?: React.ReactNode
   onRetry?: () => void
