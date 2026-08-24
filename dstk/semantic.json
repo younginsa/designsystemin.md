@@ -100,7 +100,7 @@
   "accent": {
     "$type": "color",
     "$value": {
-      "light": "{palette.gray.10@day}",
+      "light": "{palette.gray.100@day}",
       "dark": "{palette.gray.400@dusk}",
       "control": "{palette.gray.300@dusk}"
     }

@@ -136,8 +136,8 @@
     {
       "name": "General/accent",
       "light": {
-        "alias": "Day mode/Gray/10",
-        "hex": "#FBFBFB"
+        "alias": "Day mode/Gray/100",
+        "hex": "#ECEDF0"
       },
       "dark": {
         "alias": "Dusk mode/Gray/400",

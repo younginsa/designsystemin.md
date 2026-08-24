@@ -14,7 +14,7 @@
 | General/secondary-foreground | Day mode/Gray/600 #5D6275 | Dusk mode/Gray/800 #D0D2D9 | Dusk mode/Gray/800 #D0D2D9 | secondary-foreground |
 | General/muted | Day mode/Gray/50 #F2F4F8 | Dusk mode/Gray/350 #2F323B | Dusk mode/Gray/350 #2F323B | muted |
 | General/muted-foreground — 흐림 톤 전용 — 오적용 427곳 교정 완료(가독 보조 텍스트는 secondary-foreground) | Basic Foreground/Black/20 #00000033 | Basic Foreground/White/20 #FFFFFF33 | Basic Foreground/White/20 #FFFFFF33 | muted-foreground |
-| General/accent | Day mode/Gray/10 #FBFBFB | Dusk mode/Gray/400 #3C3E47 | Dusk mode/Gray/300 #23252B | accent |
+| General/accent | Day mode/Gray/100 #ECEDF0 | Dusk mode/Gray/400 #3C3E47 | Dusk mode/Gray/300 #23252B | accent |
 | General/accent-foreground | Day mode/Gray/700 #3C3E47 | Day mode/Gray/50 #F2F4F8 | Day mode/Gray/50 #F2F4F8 | accent-foreground |
 | General/destructive | Dusk mode/SemanticRed/600 #FF5B5B | Day mode/SemanticRed/500 #FA454E | Dusk mode/SemanticRed/100 #A50000 | destructive |
 | General/border | Day mode/Gray/100 #ECEDF0 | Basic Foreground/White/8 #FFFFFF14 | Basic Foreground/White/8 #FFFFFF14 | border |
