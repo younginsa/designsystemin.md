@@ -34,7 +34,7 @@ function ErrorState({
   return (
     <Alert
       className={cn(
-        "rounded-lg border-0 bg-destructive/5 px-5 py-4 [&>svg]:size-[18px] [&>svg]:translate-y-0",
+        "rounded-lg border-0 bg-destructive/10 px-5 py-4 [&>svg]:size-[18px] [&>svg]:translate-y-0",
         className
       )}
       {...props}

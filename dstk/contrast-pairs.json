@@ -60,5 +60,15 @@
       "level": "aux"
     }
   ],
-  "$status-rule": "상태색 통합(2026-08-21) — 빨강 단일: 주의 = 빨강 도트 + 기본 글자 / 에러 = 빨강 도트 + 빨강 글자 (warning 토큰 폐기, destructive가 단일 빨강). muted-foreground는 흐림 톤 전용이라 게이트 비대상(가독 텍스트 금지 — 보조 텍스트는 secondary-foreground)."
+  "$status-rule": "상태색 통합(2026-08-21) — 빨강 단일: 주의 = 빨강 도트 + 기본 글자 / 에러 = 빨강 도트 + 빨강 글자 (warning 토큰 폐기, destructive가 단일 빨강). muted-foreground는 흐림 톤 전용이라 게이트 비대상(가독 텍스트 금지 — 보조 텍스트는 secondary-foreground).",
+  "tints": {
+    "$note": "허용 틴트 목록 — 생성물의 /N 투명도 변형은 이 목록 안만 허용(클론 self-check 게이트). 목록 밖 = 차단 + 알림 + 통과 틴트 제안. ※ /generated/update-image-download는 레거시 유물로 감사 제외(자체 문법 7곳 — hinas365 업데이트 진행 상세 재제작 시 은퇴).",
+    "allowed": [
+      { "class": "destructive/10", "use": "배너 표면(에러·취소·주의 배너 표준)" },
+      { "class": "destructive/12", "use": "진단 칩(상태 필 에러 배경)" },
+      { "class": "success/12", "use": "진단 칩(상태 필 정상 배경)" },
+      { "class": "primary/5", "use": "선택 강조 칩" },
+      { "class": "primary-foreground/10", "use": "bg-primary 면 위 아이콘 박스" }
+    ]
+  }
 }

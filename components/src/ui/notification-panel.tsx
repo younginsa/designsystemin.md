@@ -44,7 +44,8 @@ function NotificationPanel({
   className,
   defaultOpen,
 }: NotificationPanelProps) {
-  const hasUnread = items.some((i) => i.unread)
+  const unreadCount = items.filter((i) => i.unread).length
+  const hasUnread = unreadCount > 0
   return (
     <DropdownMenu defaultOpen={defaultOpen}>
       <DropdownMenuTrigger asChild>
@@ -64,8 +65,9 @@ function NotificationPanel({
             size="sm"
             className="-mr-2 h-6 text-xs text-secondary-foreground"
             onClick={onReadAll}
+            disabled={!hasUnread}
           >
-            모두 읽음
+            모두 읽음{hasUnread ? ` (${unreadCount}건)` : ""}
           </Button>
         </div>
         <DropdownMenuSeparator />
