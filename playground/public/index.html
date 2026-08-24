@@ -375,13 +375,16 @@
   #visual-dsnav .dn-item.sub { padding-left: 26px; font-size: 12px; }
   .dsnav-sec > h3:first-child { margin-top: 8px; }
   /* 허브 — 팔레트·시맨틱·타이포 뷰어 */
-  .mode-pills { display: flex; gap: 6px; margin: 14px 0 18px; }
-  .mode-pills .chip { cursor: pointer; }
+  .mode-pills { display: flex; gap: 6px; margin: 0 0 12px; position: sticky; top: 0; z-index: 5;
+    background: var(--bg); padding: 12px 0 10px; border-bottom: 1px solid var(--line); }
+  .mode-pills .chip { cursor: pointer; background: var(--bg); }
   .mode-pills .chip.on { color: var(--ink); border-color: var(--ink); }
-  .pal-fam { margin: 0 0 18px; }
+  .pal-fam { margin: 0 0 14px; }
   .pal-fam .pf-name { font-family: var(--mono); font-size: 12px; color: var(--muted); margin: 0 0 6px; }
-  .pal-row { display: flex; gap: 12px; margin-bottom: 10px; }
-  .pal-chip { flex: 1; min-width: 0; }
+  .pal-row { display: flex; gap: 10px; margin-bottom: 8px; }
+  .pal-chip { flex: 0 0 72px; min-width: 0; }
+  .pal-fam[data-fam="product"] .pal-chip { flex-basis: 150px; }
+  .pal-fam[data-fam="product"] .swatch { aspect-ratio: auto; height: 72px; }
   .pal-chip .swatch { aspect-ratio: 1 / 1; border: 1px solid var(--line); position: relative; }
   .pal-chip .swatch.todo { background: repeating-linear-gradient(45deg, var(--bg), var(--bg) 4px, var(--surface) 4px, var(--surface) 8px); }
   .pal-chip .swatch .anch { position: absolute; top: 3px; right: 4px; font-size: 10px; color: #fff; text-shadow: 0 0 3px rgba(0,0,0,.9); }
@@ -1524,7 +1527,7 @@
               '<div class="pal-chip"><div class="swatch" style="background:' + pal.basic[t][s].$value + '"></div><div class="cap"><span>' + t + '-' + s + '</span></div></div>').join('') + '</div>').join('') + '</div>';
         }
         const steps = Object.keys(pal[fam]).filter(k => !k.startsWith('$'));
-        return '<div class="pal-fam"><div class="pf-name">' + fam + '</div><div class="pal-row">' +
+        return '<div class="pal-fam" data-fam="' + fam + '"><div class="pf-name">' + fam + '</div><div class="pal-row">' +
           steps.map(s => {
             const v0 = pal[fam][s].$value;
             const v = typeof v0 === 'string' ? v0 : v0[mode];
