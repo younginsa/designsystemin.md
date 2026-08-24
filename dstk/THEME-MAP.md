@@ -1,7 +1,7 @@
 # Theme × dstk 대조표
 
 자동 생성 — `pnpm ds:build`가 `dstk/figma-theme-snapshot.json`에서 만든다. 손 편집 금지.
-피그마 원본: 「Theme × dstk 대조표」 노드 2806:24 (fileKey i5IhnacRAjg6NJdmtctfn2).
+피그마 원본: 「Theme × dstk 대조표」 노드 2807:24 (fileKey i5IhnacRAjg6NJdmtctfn2).
 마지막 업데이트: 2026-08-21
 
 | Theme 변수 | Light (Cloud) | Dark (SVM·NAS) | Control | dstk 토큰 |

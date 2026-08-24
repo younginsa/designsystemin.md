@@ -167,7 +167,7 @@ AI 친화 디자인 시스템 저장소다.
   "피그마 마지막 확인 상태"는 `dstk/figma-theme-snapshot.json`(스냅샷)이다.
   `dstk/THEME-MAP.md`는 ds:build가 스냅샷에서 자동 생성하는 대조표다.
 - **검사 시점**: ① 세션 시작 ② 태스크 시작 ③ 세션 중 1시간 경과(훅이 리마인더 출력).
-  검사 방법 = Figma MCP로 **대조표 노드 2806:24**(fileKey i5IhnacRAjg6NJdmtctfn2)를
+  검사 방법 = Figma MCP로 **대조표 노드 2807:24**(fileKey i5IhnacRAjg6NJdmtctfn2)를
   get_design_context로 읽어 텍스트 표를 파싱 → 스냅샷과 diff. (Variables REST API는
   Enterprise 전용 — 훅에서 직접 호출 불가, 검사는 Figma MCP가 연결된 세션이 수행.)
 - **변경 발견 시**: 보고 → 승인 후 semantic/palette 반영 + 스냅샷 갱신을 **같은 커밋**으로.
