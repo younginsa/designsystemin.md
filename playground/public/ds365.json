@@ -12,7 +12,15 @@
   "components": {
     "icon-select": {
       "build": "done",
-      "note": "조합 제작 — @ds/ui/ui/icon-select. shadcn DropdownMenu 프리셋. 타입 2종: 아이콘형(icon 지정)·텍스트형(icon 생략). h-9(36px)·아이콘 간격 8px·그림자 없음(플랫) — 손 구현 금지"
+      "note": "조합 제작 — @ds/ui/ui/icon-select. shadcn DropdownMenu 프리셋. 타입 3종: 아이콘형(icon 지정)·텍스트형(icon 생략)·다중형(multiple — 왼쪽 Checkbox 상시, 토글해도 안 닫힘, 값은 items 순서 \", \" 병합). h-9(36px)·아이콘 간격 8px·그림자 없음(플랫) — 손 구현 금지"
+    },
+    "header-filter": {
+      "build": "done",
+      "note": "조합 제작 — @ds/ui/ui/filter-bar (FilterBar·FilterChip·DateRangePanel·resolveDateRange·DATE_PRESETS). 피그마 209-17188 구조 · 날짜 패널 209-36201. 행 = 검색(InputGroup filled 상시 좌측) → 필터 칩(최대 2줄) → [+ 필터 추가] │ 우측 액션 슬롯. 칩 문법 2종: 기본(base)=✕ 없이 꺾쇠만 / 추가=✕만(꺾쇠 없음). 칩 면은 전 상태 bg-muted, 비활성 border-transparent·text-foreground / 활성 border-primary·text-primary. 칩 hover는 비활성만 accent(활성 hover는 primary×accent 미선언이라 보류). 값 해제는 드롭다운 우하단 [초기화] — \"전체\" 항목 금지. 정렬은 이 바에 없다(테이블 컬럼 헤더 전담). 손 조합 금지",
+      "render": "pending"
+    },
+    "select-grammar": {
+      "note": "선택 문법(시스템 기준) — 단일 선택 = 왼쪽 ✓ 상시 슬롯(선택 행만 불투명), 다중 선택 = 왼쪽 Checkbox 상시 노출. 구분 신호는 ✓ vs ☐ 글리프이고 자리는 어느 쪽이든 안 흔들린다. 다중은 토글해도 패널이 닫히지 않는다. 드롭다운 상단 타이틀 금지 — 트리거가 이미 이름을 말한다. 값 해제 = [초기화](\"전체\" 항목 금지). 단일 선택 헤더 필터는 적용 값을 표기하고(\"SUBSCRIPTION · Pending\") 건수 배지는 다중 전용. 모달 닫기 CTA = secondary"
     },
     "error-state": {
       "build": "done",

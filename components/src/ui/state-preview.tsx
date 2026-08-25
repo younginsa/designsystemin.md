@@ -18,6 +18,17 @@ const DEFAULT_STATES: StatePreviewState[] = [
   { value: "error", label: "에러" },
 ]
 
+// 로딩 표준이 스켈레톤으로 바뀌면서(ds365: skeleton) 기존 프로그레스 바는 폐기가 아니라
+// 별도 상태로 보존한다 — 실제 진행률 표시가 필요한 화면(업데이트 파이프라인 등)의 비교용.
+// 4상태 계약은 그대로이고, 이 배열은 프로그레스 바를 쓰는 화면에서만 states로 넘긴다.
+const LOADING_STATES: StatePreviewState[] = [
+  { value: "default", label: "기본" },
+  { value: "empty", label: "빈" },
+  { value: "loading", label: "로딩" },
+  { value: "progress", label: "프로그레스 바" },
+  { value: "error", label: "에러" },
+]
+
 export interface StatePreviewProps {
   value: string
   onChange: (value: string) => void
@@ -53,4 +64,4 @@ function StatePreview({ value, onChange, states = DEFAULT_STATES, className }: S
   )
 }
 
-export { StatePreview }
+export { StatePreview, DEFAULT_STATES, LOADING_STATES }

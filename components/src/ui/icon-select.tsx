@@ -3,6 +3,11 @@
 // 아이콘 셀렉터 — shadcn DropdownMenu 조합 프리셋 (새 엔진 아님).
 // 좌측 아이콘 + 라벨(+보조 텍스트) 트리거, 패널은 목록 + 현재값 체크.
 // 타임존·호선 전환·제품 선택 등 "아이콘 + 목록" 셀렉터 전부 이걸로 — 인스턴스는 props만 다르다.
+//
+// 타입 3종: 아이콘형(icon 지정) · 텍스트형(icon 생략) · 다중형(multiple).
+// 선택 문법은 시스템 기준이다 — 단일 = 왼쪽 ✓ 상시 슬롯(선택 행만 불투명),
+// 다중 = 왼쪽 Checkbox 상시 노출. 구분 신호는 ✓ vs ☐ 글리프이고, 다중형은 토글해도
+// 패널이 닫히지 않는다(연속 선택). 값 표기는 items 순서대로 ", " 병합.
 
 import * as React from "react"
 import { Check, ChevronDown, type LucideIcon } from "lucide-react"
@@ -16,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "./dropdown-menu"
 import { Button } from "./button"
+import { Checkbox } from "./checkbox"
 import { cn } from "../lib/utils"
 
 export interface IconSelectItem {
@@ -30,6 +36,11 @@ export interface IconSelectProps {
   value?: string
   items: IconSelectItem[]
   onValueChange?: (value: string) => void
+  /** 다중형 — 항목이 Checkbox가 되고 토글해도 패널이 닫히지 않는다 */
+  multiple?: boolean
+  /** 다중형 선택값. items 순서로 정규화되어 전달된다 */
+  values?: string[]
+  onValuesChange?: (values: string[]) => void
   heading?: string
   sub?: string
   className?: string
@@ -42,6 +53,9 @@ function IconSelect({
   value,
   items,
   onValueChange,
+  multiple,
+  values,
+  onValuesChange,
   heading,
   sub,
   className,
@@ -49,6 +63,18 @@ function IconSelect({
   defaultOpen,
 }: IconSelectProps) {
   const current = items.find((i) => i.value === value)
+  const selected = values ?? []
+  // 값 표기는 items 순서로 고정 — 고른 순서대로 흐르면 같은 조합이 매번 다르게 보인다
+  const selectedLabel = items
+    .filter((i) => selected.includes(i.value))
+    .map((i) => i.label)
+    .join(", ")
+  const toggle = (v: string) =>
+    onValuesChange?.(
+      selected.includes(v)
+        ? selected.filter((x) => x !== v)
+        : items.filter((i) => selected.includes(i.value) || i.value === v).map((i) => i.value)
+    )
   return (
     <DropdownMenu defaultOpen={defaultOpen}>
       <DropdownMenuTrigger asChild>
@@ -56,7 +82,9 @@ function IconSelect({
         <Button variant="outline" className={cn("h-9 gap-2 px-3 font-normal shadow-none", className)}>
           {Icon ? <Icon className="size-4 shrink-0 text-secondary-foreground" /> : null}
           <span className="flex min-w-0 items-baseline gap-1.5 pr-1">
-            <span className="truncate text-sm">{current?.label ?? "선택"}</span>
+            <span className="truncate text-sm">
+              {multiple ? selectedLabel || "선택" : current?.label ?? "선택"}
+            </span>
             {sub ? (
               <span className="truncate text-xs text-secondary-foreground">{sub}</span>
             ) : null}
@@ -74,10 +102,22 @@ function IconSelect({
         {items.map((item) => (
           <DropdownMenuItem
             key={item.value}
-            onSelect={() => onValueChange?.(item.value)}
+            onSelect={(e) => {
+              if (multiple) {
+                // 다중형은 토글해도 닫지 않는다 — 연속 선택
+                e.preventDefault()
+                toggle(item.value)
+              } else {
+                onValueChange?.(item.value)
+              }
+            }}
             className="gap-2"
           >
-            <Check className={cn("size-4", item.value === value ? "opacity-100" : "opacity-0")} />
+            {multiple ? (
+              <Checkbox checked={selected.includes(item.value)} className="pointer-events-none" />
+            ) : (
+              <Check className={cn("size-4", item.value === value ? "opacity-100" : "opacity-0")} />
+            )}
             <span className="flex-1">{item.label}</span>
             {item.hint ? (
               <span className="text-xs tabular-nums text-secondary-foreground">{item.hint}</span>
