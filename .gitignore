@@ -4,3 +4,6 @@ node_modules/
 .DS_Store
 .env*
 .gstack/
+
+# 관리자 저장소 표식 — 절대 커밋 금지(커밋되면 모든 클론이 관리자로 승격됨)
+.ds-admin
