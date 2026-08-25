@@ -4,7 +4,7 @@
     "method": "재구성 — 클론 변수 API 추출본(2026-08-20, 원본 파일 소실)을 대조표 노드 2807:24 파싱 + dstk/palette.json으로 등가 재구성(2026-08-21)",
     "note": "Theme = 시맨틱 원천(29종 × 제품 3모드 Light(Cloud)/Dark(SVM·NAS)/Control). Colors = 팔레트 원천(단일 모드 변수 — 화면설명 주석 2종 제외).",
     "updated": "2026-08-25",
-    "verification": "2026-08-21 독립 검증 — 대조표 93건·빌드 해석값·팔레트 전수 일치 상태에서 재구성 · 2026-08-21 General/on-color 신설 반영(클론 회신 — 색 면 위 글자 정책) · 2026-08-21 상태색 통합: primary-accent·Sidebar 7종 삭제, success·chart-1~5 신설, on-color에서 info-foreground 제거 · 2026-08-25 accent 오버레이 전환(Black/8 · White/12) 후 대조표 2807:24 재대조 — 21행 × 3모드 63값 전수 일치, 불일치 0건. 미커버 1건: General/accent-foreground는 피그마에 변수로 존재하나 대조표에 행이 없어 자동 대조 대상에서 빠진다(값은 양쪽 동일)",
+    "verification": "2026-08-21 독립 검증 — 대조표 93건·빌드 해석값·팔레트 전수 일치 상태에서 재구성 · 2026-08-21 General/on-color 신설 반영(클론 회신 — 색 면 위 글자 정책) · 2026-08-21 상태색 통합: primary-accent·Sidebar 7종 삭제, success·chart-1~5 신설, on-color에서 info-foreground 제거 · 2026-08-25 accent 오버레이 전환 후 **라이브 변수 직접 감사**(Theme 컬렉션 21종 전수 열람) — 종전 대조표 텍스트 파싱만으로는 이름 변경·변수 삭제를 못 잡았다. 교정 3건: ① accent light Black/8 → Black/6(피그마 기준, dark·control은 White/12 유지) ② 구명 2건 개명 — background-card-popover-primaryF → General/background, foreground-card-popover → General/foreground(2026-08-21 개명) ③ 유령 항목 General/accent-foreground 삭제 — 2026-08-21 통합으로 피그마 변수가 없어졌고 코드 토큰 accent-foreground는 General/foreground 번들(4종 동일값)로 편입해 게이트 커버리지 유지. ⚠ search_design_system은 '게시된' 라이브러리를 반환하므로 파일 현재 상태와 다를 수 있다 — 감사에는 라이브 변수 열람을 쓸 것",
     "themeModes": [
       "Light (Cloud)",
       "Dark (SVM/NAS)",
@@ -28,7 +28,7 @@
       }
     },
     {
-      "name": "General/background-card-popover-primaryF",
+      "name": "General/background",
       "light": {
         "alias": "Basic Foreground/White/100",
         "hex": "#FFFFFF"
@@ -43,7 +43,7 @@
       }
     },
     {
-      "name": "General/foreground-card-popover",
+      "name": "General/foreground",
       "light": {
         "alias": "Day mode/Gray/700",
         "hex": "#3C3E47"
@@ -136,8 +136,8 @@
     {
       "name": "General/accent",
       "light": {
-        "alias": "Basic Foreground/Black/8",
-        "hex": "#00000014"
+        "alias": "Basic Foreground/Black/6",
+        "hex": "#0000000F"
       },
       "dark": {
         "alias": "Basic Foreground/White/12",
@@ -148,21 +148,6 @@
         "hex": "#FFFFFF1F"
       },
       "note": "반투명 오버레이 — 면 위에 합성되므로 어느 표면에서도 분리도가 균일하다(불투명 Gray/100은 muted 위에서 1.063으로 사실상 소실됐다)"
-    },
-    {
-      "name": "General/accent-foreground",
-      "light": {
-        "alias": "Day mode/Gray/700",
-        "hex": "#3C3E47"
-      },
-      "dark": {
-        "alias": "Day mode/Gray/50",
-        "hex": "#F2F4F8"
-      },
-      "control": {
-        "alias": "Day mode/Gray/50",
-        "hex": "#F2F4F8"
-      }
     },
     {
       "name": "General/destructive",

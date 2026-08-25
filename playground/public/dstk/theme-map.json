@@ -21,7 +21,7 @@
       "note": null
     },
     {
-      "theme": "General/background-card-popover-primaryF",
+      "theme": "General/background",
       "light": {
         "alias": "Basic Foreground/White/100",
         "hex": "#FFFFFF"
@@ -43,7 +43,7 @@
       "note": null
     },
     {
-      "theme": "General/foreground-card-popover",
+      "theme": "General/foreground",
       "light": {
         "alias": "Day mode/Gray/700",
         "hex": "#3C3E47"
@@ -59,7 +59,8 @@
       "tokens": [
         "foreground",
         "card-foreground",
-        "popover-foreground"
+        "popover-foreground",
+        "accent-foreground"
       ],
       "note": null
     },
@@ -162,8 +163,8 @@
     {
       "theme": "General/accent",
       "light": {
-        "alias": "Basic Foreground/Black/8",
-        "hex": "#00000014"
+        "alias": "Basic Foreground/Black/6",
+        "hex": "#0000000F"
       },
       "dark": {
         "alias": "Basic Foreground/White/12",
@@ -177,25 +178,6 @@
         "accent"
       ],
       "note": "반투명 오버레이 — 면 위에 합성되므로 어느 표면에서도 분리도가 균일하다(불투명 Gray/100은 muted 위에서 1.063으로 사실상 소실됐다)"
-    },
-    {
-      "theme": "General/accent-foreground",
-      "light": {
-        "alias": "Day mode/Gray/700",
-        "hex": "#3C3E47"
-      },
-      "dark": {
-        "alias": "Day mode/Gray/50",
-        "hex": "#F2F4F8"
-      },
-      "control": {
-        "alias": "Day mode/Gray/50",
-        "hex": "#F2F4F8"
-      },
-      "tokens": [
-        "accent-foreground"
-      ],
-      "note": null
     },
     {
       "theme": "General/destructive",

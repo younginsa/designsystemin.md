@@ -193,7 +193,7 @@ if (existsSync(snapPath)) {
   type TokenMap = { t: string; modes?: ThemeMode[]; note?: string };
   const one = (t: string): TokenMap[] => [{ t }];
   const T2D: Record<string, TokenMap[]> = {
-    "General/background-card-popover-primaryF": [
+    "General/background": [
       { t: "background" },
       { t: "card" },
       { t: "popover" },
@@ -203,7 +203,14 @@ if (existsSync(snapPath)) {
       { t: "primary-foreground", modes: ["light", "dark"], note: "(Light·Dark)" },
       { t: "destructive-foreground" },
     ],
-    "General/foreground-card-popover": [{ t: "foreground" }, { t: "card-foreground" }, { t: "popover-foreground" }],
+    // 기본 글자 번들 — 2026-08-21 통합으로 General/accent-foreground 변수가 삭제되고
+    // 이 변수 하나가 코드 토큰 4종을 덮는다(3모드 값 동일). sidebar-accent-foreground는 예정.
+    "General/foreground": [
+      { t: "foreground" },
+      { t: "card-foreground" },
+      { t: "popover-foreground" },
+      { t: "accent-foreground" },
+    ],
     "General/primary": one("primary"),
     "General/success": one("success"),
     "General/secondary": one("secondary"),
@@ -211,7 +218,6 @@ if (existsSync(snapPath)) {
     "General/muted": one("muted"),
     "General/muted-foreground": one("muted-foreground"),
     "General/accent": one("accent"),
-    "General/accent-foreground": one("accent-foreground"),
     "General/destructive": one("destructive"),
     "General/border": one("border"),
     "General/input": one("input"),
