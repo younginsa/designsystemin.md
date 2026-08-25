@@ -1,7 +1,7 @@
 {
   "statusLine": {
     "type": "command",
-    "command": "d=$(git log -1 --format=%cd --date=format:%y.%m.%d 2>/dev/null); b=$(git rev-list --count HEAD..origin/main 2>/dev/null); if [ -z \"$b\" ]; then echo \"365 DS${d:+ · $d판}\"; elif [ \"$b\" = \"0\" ]; then echo \"365 DS 최신 ✓ · ${d}판\"; else echo \"365 DS ${d}판 · ${b}커밋 뒤처짐 — 새 세션이 자동 최신화\"; fi"
+    "command": "p=\"\"; [ -f .git/ds-pull-last ] && p=\" - $(cat .git/ds-pull-last)\"; d=$(git log -1 --format=%cd --date=format:%y.%m.%d 2>/dev/null); b=$(git rev-list --count HEAD..origin/main 2>/dev/null); if [ -z \"$b\" ]; then echo \"365 DS${d:+ · $d판}$p\"; elif [ \"$b\" = \"0\" ]; then echo \"365 DS 최신 ✓ · ${d}판$p\"; else echo \"365 DS ${d}판 · ${b}커밋 뒤처짐 — 새 세션이 자동 최신화$p\"; fi"
   },
   "hooks": {
     "UserPromptSubmit": [
@@ -9,7 +9,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=.git/FETCH_HEAD; now=$(date +%s); last=$(stat -f %m \"$f\" 2>/dev/null || echo 0); if [ $((now - last)) -gt 3600 ]; then before=$(git rev-parse HEAD 2>/dev/null); if GIT_TERMINAL_PROMPT=0 git pull --ff-only --quiet >/dev/null 2>&1; then after=$(git rev-parse HEAD 2>/dev/null); if [ \"$before\" != \"$after\" ]; then echo \"[365 DS] 1시간 경과 자동 최신화 ✓ — 받은 변경:\"; git diff --stat \"$before\" \"$after\" | tail -n 30; fi; else touch \"$f\" 2>/dev/null; fi; fi; fs=.git/FIGMA_SYNC_STAMP; fl=$(stat -f %m \"$fs\" 2>/dev/null || echo 0); if [ $((now - fl)) -gt 3600 ]; then touch \"$fs\"; echo \"[피그마 동기화] 마지막 검사 1시간 경과 — CLAUDE.md 동기화 절차로 라이브 변수 이름·값 diff 검사 권장(대조표 파싱 아님)\"; fi",
+            "command": "f=.git/FETCH_HEAD; now=$(date +%s); last=$(stat -f %m \"$f\" 2>/dev/null || echo 0); if [ $((now - last)) -gt 3600 ]; then before=$(git rev-parse HEAD 2>/dev/null); if GIT_TERMINAL_PROMPT=0 git pull --ff-only --quiet >/dev/null 2>&1; then printf 'hourly check(%s)' \"$(date +%-I:%M%p)\" > .git/ds-pull-last 2>/dev/null; after=$(git rev-parse HEAD 2>/dev/null); if [ \"$before\" != \"$after\" ]; then echo \"[365 DS] 1시간 경과 자동 최신화 ✓ — 받은 변경:\"; git diff --stat \"$before\" \"$after\" | tail -n 30; fi; else touch \"$f\" 2>/dev/null; fi; fi; fs=.git/FIGMA_SYNC_STAMP; fl=$(stat -f %m \"$fs\" 2>/dev/null || echo 0); if [ $((now - fl)) -gt 3600 ]; then touch \"$fs\"; echo \"[피그마 동기화] 마지막 검사 1시간 경과 — CLAUDE.md 동기화 절차로 라이브 변수 이름·값 diff 검사 권장(대조표 파싱 아님)\"; fi",
             "timeout": 30
           }
         ]
@@ -21,7 +21,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "before=$(git rev-parse HEAD 2>/dev/null); if GIT_TERMINAL_PROMPT=0 git pull --ff-only --quiet >/dev/null 2>&1; then after=$(git rev-parse HEAD 2>/dev/null); if [ \"$before\" = \"$after\" ]; then echo \"[365 DS] 이미 최신 상태 ✓\"; else echo \"[365 DS] 자동 최신화 완료 ✓ — 받은 변경:\"; git diff --stat \"$before\" \"$after\" | tail -n 30; fi; else echo \"[365 DS] 원격 동기화 불가(오프라인·충돌 등) — 현재 상태로 진행. 필요시 git pull 수동 실행\"; fi; echo '라이브러리 참조: https://designsystemin-md.vercel.app/'; echo 'DS 요청·문의: 세션에 「DS 요청」이라고 말하면 Jira DES 티켓 경로 안내'",
+            "command": "before=$(git rev-parse HEAD 2>/dev/null); if GIT_TERMINAL_PROMPT=0 git pull --ff-only --quiet >/dev/null 2>&1; then printf 'session start check(%s)' \"$(date +%-I:%M%p)\" > .git/ds-pull-last 2>/dev/null; after=$(git rev-parse HEAD 2>/dev/null); if [ \"$before\" = \"$after\" ]; then echo \"[365 DS] 이미 최신 상태 ✓\"; else echo \"[365 DS] 자동 최신화 완료 ✓ — 받은 변경:\"; git diff --stat \"$before\" \"$after\" | tail -n 30; fi; else echo \"[365 DS] 원격 동기화 불가(오프라인·충돌 등) — 현재 상태로 진행. 필요시 git pull 수동 실행\"; fi; echo '라이브러리 참조: https://designsystemin-md.vercel.app/'; echo 'DS 요청·문의: 세션에 「DS 요청」이라고 말하면 Jira DES 티켓 경로 안내'",
             "timeout": 30
           }
         ]
