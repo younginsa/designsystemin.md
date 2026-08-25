@@ -48,6 +48,7 @@
     "ov-dialog",
     "ov-menus",
     "ov-notif",
+    "ov-popover",
     "ov-sheet",
     "ov-toast",
     "ov-tooltip",
