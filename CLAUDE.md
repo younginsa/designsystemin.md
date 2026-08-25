@@ -186,13 +186,24 @@ AI 친화 디자인 시스템 저장소다.
 
 ## 피그마 토큰 동기화 (Avikus Design library)
 
-- 원천: 라이브러리 변수 **Theme(29종 × 제품 3모드)** · **Colors(244종)**. 저장소의
+- 원천: 라이브러리 변수 **Theme(21종 × 제품 3모드)** · **Colors(244종)**.
+  (Theme는 2026-08-21 상태색 통합으로 29종 → 21종. primary-accent·Sidebar 7종 삭제,
+  accent-foreground는 General/foreground 번들로 편입.) 저장소의
   "피그마 마지막 확인 상태"는 `dstk/figma-theme-snapshot.json`(스냅샷)이다.
   `dstk/THEME-MAP.md`는 ds:build가 스냅샷에서 자동 생성하는 대조표다.
 - **검사 시점**: ① 세션 시작 ② 태스크 시작 ③ 세션 중 1시간 경과(훅이 리마인더 출력).
-  검사 방법 = Figma MCP로 **대조표 노드 2807:24**(fileKey i5IhnacRAjg6NJdmtctfn2)를
-  get_design_context로 읽어 텍스트 표를 파싱 → 스냅샷과 diff. (Variables REST API는
-  Enterprise 전용 — 훅에서 직접 호출 불가, 검사는 Figma MCP가 연결된 세션이 수행.)
+  검사 방법 = Figma MCP `use_figma`로 **Theme 컬렉션의 라이브 변수를 직접 열람**해
+  (`figma.variables.getLocalVariableCollectionsAsync` → `getLocalVariablesAsync('COLOR')`,
+  모드별 값 해석) 스냅샷과 **이름·값 양쪽** 전수 diff. fileKey i5IhnacRAjg6NJdmtctfn2.
+  **값만 비교하지 않는다** — 이름 변경·변수 삭제는 값 비교로는 잡히지 않는다
+  (2026-08-25 사고: 대조표 텍스트 파싱으로 "63값 전수 일치"가 나왔지만 실제로는
+  구명 2건·유령 항목 1건이 남아 있었다).
+  대조표 노드 2807:24는 **사람이 읽는 문서**로 유지 — 손으로 쓰는 표라 자동 검사의
+  원천으로 삼지 않는다(행 누락·구명 잔존이 그대로 통과한다).
+  ⚠ `search_design_system`은 **게시된(published) 라이브러리**를 반환한다 — 파일에서
+  이미 삭제된 변수가 계속 조회되므로 감사에 쓰지 말 것.
+  (Variables REST API는 Enterprise 전용이라 훅에서 직접 호출 불가 — 위 Plugin API
+  경로는 제한 없음. 검사는 Figma MCP가 연결된 세션이 수행.)
 - **변경 발견 시**: 보고 → 승인 후 semantic/palette 반영 + 스냅샷 갱신을 **같은 커밋**으로.
   **무단 반영 금지** — 값 해석·매핑 판단이 필요한 변경은 질문이 먼저다.
 - **빌드 게이트**: ds:build가 스냅샷 ↔ semantic·palette 해석값을 전수 대조한다 —
