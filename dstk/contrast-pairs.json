@@ -68,6 +68,11 @@
       "text": "primary",
       "bg": "secondary",
       "level": "aux"
+    },
+    {
+      "text": "primary",
+      "bg": "muted",
+      "level": "aux"
     }
   ],
   "$status-rule": "상태색 통합(2026-08-21) — 빨강 단일: 주의 = 빨강 도트 + 기본 글자 / 에러 = 빨강 도트 + 빨강 글자 (warning 토큰 폐기, destructive가 단일 빨강). muted-foreground는 흐림 톤 전용이라 게이트 비대상(가독 텍스트 금지 — 보조 텍스트는 secondary-foreground).",
