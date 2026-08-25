@@ -1,6 +1,6 @@
 /* 자동 생성 — 손으로 편집 금지. 원천: dstk/palette.json + semantic.json (Theme 정렬) */
 
-/* commit a6b0d8c · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
+/* commit ac2e8b2 · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
 
 :root {
   --gray-10: #FBFBFB;
@@ -120,7 +120,7 @@
   --secondary-foreground: #5D6275;
   --muted: #F2F4F8;
   --muted-foreground: #00000033;
-  --accent: #ECEDF0;
+  --accent: #00000014;
   --accent-foreground: #3C3E47;
   --destructive: #FF5B5B;
   --destructive-foreground: #FFFFFF;
@@ -263,7 +263,7 @@
   --secondary-foreground: #D0D2D9;
   --muted: #2F323B;
   --muted-foreground: #FFFFFF33;
-  --accent: #3C3E47;
+  --accent: #FFFFFF1F;
   --accent-foreground: #F2F4F8;
   --destructive: #FA454E;
   --destructive-foreground: #FFFFFF;
@@ -400,7 +400,7 @@
   --secondary-foreground: #D0D2D9;
   --muted: #2F323B;
   --muted-foreground: #FFFFFF33;
-  --accent: #23252B;
+  --accent: #FFFFFF1F;
   --accent-foreground: #F2F4F8;
   --destructive: #A50000;
   --destructive-foreground: #FFFFFF;

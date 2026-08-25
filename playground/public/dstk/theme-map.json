@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-21",
+  "updated": "2026-08-25",
   "rows": [
     {
       "theme": "General/primary",
@@ -162,21 +162,21 @@
     {
       "theme": "General/accent",
       "light": {
-        "alias": "Day mode/Gray/100",
-        "hex": "#ECEDF0"
+        "alias": "Basic Foreground/Black/8",
+        "hex": "#00000014"
       },
       "dark": {
-        "alias": "Dusk mode/Gray/400",
-        "hex": "#3C3E47"
+        "alias": "Basic Foreground/White/12",
+        "hex": "#FFFFFF1F"
       },
       "control": {
-        "alias": "Dusk mode/Gray/300",
-        "hex": "#23252B"
+        "alias": "Basic Foreground/White/12",
+        "hex": "#FFFFFF1F"
       },
       "tokens": [
         "accent"
       ],
-      "note": null
+      "note": "반투명 오버레이 — 면 위에 합성되므로 어느 표면에서도 분리도가 균일하다(불투명 Gray/100은 muted 위에서 1.063으로 사실상 소실됐다)"
     },
     {
       "theme": "General/accent-foreground",

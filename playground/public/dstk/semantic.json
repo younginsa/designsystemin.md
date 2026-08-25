@@ -100,9 +100,9 @@
   "accent": {
     "$type": "color",
     "$value": {
-      "light": "{palette.gray.100@day}",
-      "dark": "{palette.gray.400@dusk}",
-      "control": "{palette.gray.300@dusk}"
+      "light": "{palette.basic.black.8}",
+      "dark": "{palette.basic.white.12}",
+      "control": "{palette.basic.white.12}"
     }
   },
   "accent-foreground": {

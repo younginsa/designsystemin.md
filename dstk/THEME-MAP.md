@@ -2,7 +2,7 @@
 
 자동 생성 — `pnpm ds:build`가 `dstk/figma-theme-snapshot.json`에서 만든다. 손 편집 금지.
 피그마 원본: 「Theme × dstk 대조표」 노드 2807:24 (fileKey i5IhnacRAjg6NJdmtctfn2).
-마지막 업데이트: 2026-08-21
+마지막 업데이트: 2026-08-25
 
 | Theme 변수 | Light (Cloud) | Dark (SVM·NAS) | Control | dstk 토큰 |
 |---|---|---|---|---|
@@ -14,7 +14,7 @@
 | General/secondary-foreground | Day mode/Gray/600 #5D6275 | Dusk mode/Gray/800 #D0D2D9 | Dusk mode/Gray/800 #D0D2D9 | secondary-foreground |
 | General/muted | Day mode/Gray/50 #F2F4F8 | Dusk mode/Gray/350 #2F323B | Dusk mode/Gray/350 #2F323B | muted |
 | General/muted-foreground — 흐림 톤 전용 — 오적용 427곳 교정 완료(가독 보조 텍스트는 secondary-foreground) | Basic Foreground/Black/20 #00000033 | Basic Foreground/White/20 #FFFFFF33 | Basic Foreground/White/20 #FFFFFF33 | muted-foreground |
-| General/accent | Day mode/Gray/100 #ECEDF0 | Dusk mode/Gray/400 #3C3E47 | Dusk mode/Gray/300 #23252B | accent |
+| General/accent — 반투명 오버레이 — 면 위에 합성되므로 어느 표면에서도 분리도가 균일하다(불투명 Gray/100은 muted 위에서 1.063으로 사실상 소실됐다) | Basic Foreground/Black/8 #00000014 | Basic Foreground/White/12 #FFFFFF1F | Basic Foreground/White/12 #FFFFFF1F | accent |
 | General/accent-foreground | Day mode/Gray/700 #3C3E47 | Day mode/Gray/50 #F2F4F8 | Day mode/Gray/50 #F2F4F8 | accent-foreground |
 | General/destructive | Dusk mode/SemanticRed/600 #FF5B5B | Day mode/SemanticRed/500 #FA454E | Dusk mode/SemanticRed/100 #A50000 | destructive |
 | General/border | Day mode/Gray/100 #ECEDF0 | Basic Foreground/White/8 #FFFFFF14 | Basic Foreground/White/8 #FFFFFF14 | border |
