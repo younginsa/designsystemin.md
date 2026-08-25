@@ -84,6 +84,9 @@
     "stepper": {
       "build": "done",
       "note": "원본 재현 완료 — @ds/ui/ui/stepper. 완료 체크·현재 강조·미래 muted"
+    },
+    "skeleton": {
+      "note": "shadcn 기성품 그대로 — @ds/ui/ui/skeleton(animate-pulse · rounded-md · bg-accent). 조정·재현 없음(등재만). 로딩 상태 표준 = 스켈레톤이고, 프로그레스 바(data-progress)는 실제 진행률 표시 전용(업데이트 파이프라인 등) — 로딩 자리표시에 프로그레스 바를 쓰지 않는다. accent light 교정(9701b17 · #FBFBFB→#ECEDF0) 이전에는 흰 카드 위 대비가 1.035:1이라 사실상 비가시였고, 교정 후 1.171:1을 확보해 로딩 표준으로 쓸 수 있게 됐다"
     }
   }
 }
