@@ -61,12 +61,15 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
   )
 }
 
+// hover 잉크 = "클릭 가능" 신호다. 기본값으로 두면 헤더 행(TableHeader도 TableRow를 쓴다)과
+// 클릭 불가능한 본문 행까지 클릭 가능한 척하게 된다 — 그래서 base에는 hover가 없다.
+// 클릭 가능한 행에만 사용처에서 명시: className="cursor-pointer hover:bg-accent"
 function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
   return (
     <tr
       data-slot="table-row"
       className={cn(
-        "border-b transition-colors hover:bg-accent has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted",
+        "border-b transition-colors has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted",
         className
       )}
       {...props}
