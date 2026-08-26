@@ -93,6 +93,10 @@
       "build": "done",
       "note": "원본 재현 완료 — @ds/ui/ui/stepper. 완료 체크·현재 강조·미래 muted"
     },
+    "fb-empty": {
+      "overrides": { "title-size": "text-base" },
+      "note": "빈 상태 타이틀 강등 — shadcn 순정 text-lg(18px)는 페이지 타이틀·모달 타이틀과 동급이라 빈 상태 메시지가 헤딩을 넘봤다. text-base(16px)로 내려 카드 타이틀(14) < 빈 타이틀(16) < 페이지·모달(18) 위계 정렬. 설명은 text-sm 유지"
+    },
     "table-row-click": {
       "note": "행 클릭·hover 문법 — hover 잉크는 '클릭 가능' 신호다. TableRow base에 hover 없음(헤더 행도 TableRow를 쓰므로 base에 넣으면 헤더까지 클릭 가능한 척한다). 클릭 가능한 행에만 사용처에서 className=\"cursor-pointer hover:bg-accent\" 명시. 행 클릭 = 단일 주 목적지(보통 상세 열기)이고, 행 안의 링크·버튼은 자기 영역에서 우선한다(stopPropagation). 주 목적지가 없는 표는 행 hover를 두지 않는다"
     },
