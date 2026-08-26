@@ -112,6 +112,19 @@ function FilterBar({
               value={keyword}
               onChange={(e) => onKeyword(e.target.value)}
             />
+            {keyword && (
+              <InputGroupAddon align="inline-end">
+                {/* 값 있을 때만 ✕ — mousedown 차단으로 입력창 포커스 유지(2026-08-26) */}
+                <button
+                  type="button"
+                  aria-label="검색어 지우기"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => onKeyword("")}
+                >
+                  <X className="size-3.5 text-secondary-foreground" />
+                </button>
+              </InputGroupAddon>
+            )}
           </InputGroup>
         )}
 

@@ -39,6 +39,7 @@ function SearchBox({
 }) {
   const [open, setOpen] = React.useState(false)
   const [recent, setRecent] = React.useState(recentInitial.slice(0, 3))
+  const anchorRef = React.useRef<HTMLDivElement>(null)
 
   const q = value.trim().toLowerCase()
   const matches = q
@@ -67,7 +68,7 @@ function SearchBox({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverAnchor asChild>
-        <InputGroup variant="filled" className="w-64">
+        <InputGroup ref={anchorRef} variant="filled" className="w-64" data-searchbox-anchor>
           <InputGroupAddon>
             <Search />
           </InputGroupAddon>
@@ -81,13 +82,35 @@ function SearchBox({
             }}
             onFocus={() => setOpen(true)}
           />
+          {value && (
+            <InputGroupAddon align="inline-end">
+              {/* 지우고 입력창 재포커스 + 패널 유지. Radix dismiss가 클릭 파이프라인 뒤에
+                  한 번 더 닫으므로(실측) 재오픈은 rAF로 그 뒤에 예약한다 */}
+              <button
+                type="button"
+                aria-label="검색어 지우기"
+                onClick={() => {
+                  onChange("")
+                  requestAnimationFrame(() => {
+                    anchorRef.current?.querySelector("input")?.focus()
+                    setOpen(true)
+                  })
+                }}
+              >
+                <X className="size-3.5 text-secondary-foreground" />
+              </button>
+            </InputGroupAddon>
+          )}
         </InputGroup>
       </PopoverAnchor>
-      {/* 입력창 포커스를 뺏지 않는다 — 콤보박스 관례 */}
+      {/* 입력창 포커스를 뺏지 않고, 앵커(입력창·✕) 클릭은 dismiss로 치지 않는다 — 콤보박스 관례 */}
       <PopoverContent
         align="start"
         className="w-64 px-2 pt-3 pb-4"
         onOpenAutoFocus={(e) => e.preventDefault()}
+        onInteractOutside={(e) => {
+          if ((e.target as HTMLElement).closest("[data-searchbox-anchor]")) e.preventDefault()
+        }}
       >
         {matches.length > 0 ? (
           // ── 자동완성 (최대 5) ──
