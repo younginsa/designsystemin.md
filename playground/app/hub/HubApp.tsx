@@ -17,9 +17,11 @@ type DocKey = "hinas" | "d365";
 
 type HistEntry = { date: string; summary: string; html: string };
 
+// 365 탭 스탬프는 최신 히스토리 항목에서 파생한다(아래 stampOf) — 하드코딩 날짜가
+// '마지막 업데이트'처럼 읽히던 문제(2026-08-26). HINAS DS 탭은 실제 문서 승인일이라 고정.
 const META: Record<DocKey, { label: string; stamp: string }> = {
   hinas: { label: "Contents", stamp: "2026-07-29 · 승인됨" },
-  d365: { label: "365", stamp: "2026-07-29 · 화면 55장 분석" },
+  d365: { label: "365", stamp: "" },
 };
 
 const DEEP_LINKS: Record<string, [DocKey, string]> = {
@@ -153,7 +155,11 @@ export default function HubApp({ fragments, hist, shotNames }: {
         <span className="item off">CLOUD</span>
         <span className="item off">CONTROL</span>
         <span className="sp"></span>
-        <span className="stamp">{META[doc].stamp}</span>
+        <span className="stamp">
+          {doc === "d365" && hist[0]
+            ? `${hist[0].date} · ${hist[0].summary.split(" — ")[0]}`
+            : META[doc].stamp}
+        </span>
       </div>
 
       <div className={shellClass}>

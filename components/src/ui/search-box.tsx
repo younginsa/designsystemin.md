@@ -4,7 +4,8 @@
 // 피그마 237-51963 focused2 문법 · 원본: 클론 _search/search-box.tsx (그대로 기준, 재해석 없음).
 // 확정 결정(2026-08-26 디자이너):
 // - 입력창 = 현행 InputGroup(filled·w-64) 그대로 — 포커스 링은 DS 기본(focused 병합형 기각)
-// - 패널 = 분리 플로팅(ov-popover·PopoverAnchor) · 폭 = 입력창과 동일 토큰(w-64) · px-2 py-3
+// - 패널 = 분리 플로팅(ov-popover·PopoverAnchor) · 폭 = 입력창과 동일 토큰(w-64) · px-2 pt-3 pb-4
+//   (하단만 +4px — 빠른검색 칩은 면이 있어 12px면 붙어 보임, 2026-08-26 확정)
 // - 타이핑: 자동완성 최대 5 (돋보기 · 매칭 구간 볼드 + 보조줄) — 매칭 중엔 최근·빠른검색 숨김
 // - 비어 있을 때: 최근 검색 3(시계 · hover ✕ 개별 삭제) + 빠른검색 칩 최대 5(최다 검색)
 // - 항목 선택 = 즉시 적용·닫힘·최근 검색 편입(최대 3 유지)
@@ -85,7 +86,7 @@ function SearchBox({
       {/* 입력창 포커스를 뺏지 않는다 — 콤보박스 관례 */}
       <PopoverContent
         align="start"
-        className="w-64 px-2 py-3"
+        className="w-64 px-2 pt-3 pb-4"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         {matches.length > 0 ? (
@@ -142,12 +143,13 @@ function SearchBox({
             {quick.length > 0 && (
               <div className="space-y-1.5">
                 <p className="px-2 text-xs text-secondary-foreground">빠른검색</p>
+                {/* 칩 hover = border 면 — muted 바탕 위 accent(6%)는 동톤이라 감지 불가(1.035:1), 2026-08-26 확정 */}
                 <div className="flex flex-wrap gap-1.5 px-2">
                   {quick.slice(0, 5).map((t) => (
                     <button
                       key={t}
                       type="button"
-                      className="rounded-sm bg-muted px-1.5 py-0.5 text-xs hover:bg-accent hover:text-accent-foreground"
+                      className="rounded-sm bg-muted px-1.5 py-0.5 text-xs hover:bg-border"
                       onClick={() => commit(t)}
                     >
                       {t}

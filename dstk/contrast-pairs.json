@@ -79,6 +79,12 @@
       "bg": "popover",
       "level": "aux",
       "note": "장식 아이콘 전용(search-box 패널 돋보기·시계 등) — 본문 텍스트 허용 아님. input은 placeholder 글자용 토큰이라 가독 텍스트로 쓰지 않는다"
+    },
+    {
+      "text": "foreground",
+      "bg": "border",
+      "level": "body",
+      "note": "hover 순간 상태 한정(빠른검색 칩 hover:bg-border 등) — 상시 표면으로 쓰지 않는다"
     }
   ],
   "$status-rule": "상태색 통합(2026-08-21) — 빨강 단일: 주의 = 빨강 도트 + 기본 글자 / 에러 = 빨강 도트 + 빨강 글자 (warning 토큰 폐기, destructive가 단일 빨강). muted-foreground는 흐림 톤 전용이라 게이트 비대상(가독 텍스트 금지 — 보조 텍스트는 secondary-foreground).",
