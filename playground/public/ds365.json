@@ -12,7 +12,7 @@
   "components": {
     "icon-select": {
       "build": "done",
-      "note": "조합 제작 — @ds/ui/ui/icon-select. shadcn DropdownMenu 프리셋. 타입 3종: 아이콘형(icon 지정)·텍스트형(icon 생략)·다중형(multiple — 왼쪽 Checkbox 상시, 토글해도 안 닫힘, 값은 items 순서 \", \" 병합). h-9(36px)·아이콘 간격 8px·그림자 없음(플랫) — 손 구현 금지"
+      "note": "조합 제작 — @ds/ui/ui/icon-select. shadcn DropdownMenu 프리셋. 타입 3종: 아이콘형(icon 지정)·텍스트형(icon 생략)·다중형(multiple — 왼쪽 Checkbox 상시, 토글해도 안 닫힘, 값은 items 순서 \", \" 병합). 단일 ✓는 오른쪽 ml-auto(2026-08-26 select-grammar 개정). h-9(36px)·아이콘 간격 8px·그림자 없음(플랫) — 손 구현 금지"
     },
     "header-filter": {
       "build": "done",
@@ -20,7 +20,11 @@
       "render": "pending"
     },
     "select-grammar": {
-      "note": "선택 문법(시스템 기준) — 단일 선택 = 왼쪽 ✓ 상시 슬롯(선택 행만 불투명), 다중 선택 = 왼쪽 Checkbox 상시 노출. 구분 신호는 ✓ vs ☐ 글리프이고 자리는 어느 쪽이든 안 흔들린다. 다중은 토글해도 패널이 닫히지 않는다. 드롭다운 상단 타이틀 금지 — 트리거가 이미 이름을 말한다. 값 해제 = [초기화](\"전체\" 항목 금지). 단일 선택 헤더 필터는 적용 값을 표기하고(\"SUBSCRIPTION · Pending\") 건수 배지는 다중 전용. 모달 닫기 CTA = secondary"
+      "note": "선택 문법(시스템 기준, 2026-08-26 개정) — 단일 선택 = ✓ 오른쪽 ml-auto(shadcn Select 문법 통일 — 구 '왼쪽 ✓ 상시 슬롯' 폐기. filter-bar 단일 항목·날짜 프리셋 레일·icon-select·rows-per-page 일괄 적용), 다중 선택 = 왼쪽 Checkbox 상시 노출. 다중은 토글해도 패널이 닫히지 않는다. 드롭다운 상단 타이틀 금지 — 트리거가 이미 이름을 말한다. 값 해제 = [초기화](\"전체\" 항목 금지). 단일 선택 헤더 필터는 적용 값을 표기하고(\"제품 · Control\") 건수 배지는 다중 전용. 모달 닫기 CTA = secondary. [+ 필터 추가] 선택 = 칩 추가 + 값 패널 즉시 자동 오픈(클릭 뎁스 4→3) — 패널 열림은 FilterBar 단일 소유(항상 하나만)"
+    },
+    "rows-per-page": {
+      "build": "done",
+      "note": "조합 제작 — @ds/ui/ui/rows-per-page. 목록 푸터 문법: 좌측 '페이지당: [15 ˅] │ 전체 N척' · 우측 페이지네이션. 라벨 연한 톤 + 숫자만 든 고스트 트리거 + 세로 구분선 + 전체 건수. 기본 15행 · 옵션 10/15/30/50 · 드롭업(side=top) · ✓ 오른쪽. 'Page x of y'·'표시' 라벨 기각. summary는 ReactNode(경고 도트 병기 가능 — '전체 247척 · ● 미입력 식별자 38척'). 행 수 변경 시 소비자는 1페이지 리셋. 건수는 푸터가 소유 — 제목 부제 총 N건 표기 폐기(design.md §4)"
     },
     "error-state": {
       "build": "done",
@@ -102,7 +106,7 @@
     },
     "version-filter-chip": {
       "build": "done",
-      "note": "조합 제작 — @ds/ui/ui/version-filter-chip. 계층 캐스케이드 필터 칩(구 필터 모달 폐기 → 칩 아래 패널): 제품 선택 → 공통버전 등장 → 제품버전 등장 순차 노출. 다중 조건 [+ 추가] — 제품 간 AND · 같은 제품 OR(구 모달 규칙 승계). 칩 = FilterChip 기본형 문법(h-9 · muted 면 · 꺾쇠 · 활성 = 파란 테두리+글자 · 요약 'PRODUCT · Control'). 패널 = 드래프트 편집 → [적용] 확정 · [취소] 폐기 · [초기화] 좌하단 · 풀블리드 구분선. 내부는 채택분 조합(ov-popover·form-select·btn-basic) — 손 구현 금지"
+      "note": "조합 제작 — @ds/ui/ui/version-filter-chip. 계층 캐스케이드 필터 칩(구 필터 모달 폐기 → 칩 아래 패널): 제품 선택 → 공통버전 등장 → 제품버전 등장 순차 노출. 다중 조건 [+ 추가] — 제품 간 AND · 같은 제품 OR(구 모달 규칙 승계). 칩 = FilterChip 기본형 문법(h-9 · muted 면 · 꺾쇠 · 활성 = 파란 테두리+글자). 라벨 기본 '제품'(한국어 헤더 규칙) · 적용 요약 = 버전 포함 '제품 · navigation · 1.2.0 · 1.5.2', 2건 이상은 '첫 조건 외 N건'(2026-08-26 개정). 패널 = 드래프트 편집 → [적용] 확정 · [취소] 폐기 · [초기화] 좌하단 · 풀블리드 구분선. 내부는 채택분 조합(ov-popover·form-select·btn-basic) — 손 구현 금지"
     },
     "search-box": {
       "build": "done",

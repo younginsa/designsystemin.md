@@ -10,9 +10,11 @@
 //   · 추가 필터([+ 필터 추가]로 꺼낸 것) = ✕만(꺾쇠 없음). 칩 본문 클릭이 드롭다운을 연다
 // - 값 드롭다운 문법(sales365 공통):
 //   · 상단 타이틀 없음 — 칩이 바로 위에서 이름을 말하므로 중복이다
-//   · 단일 = 왼쪽 ✓ 상시 슬롯(IconSelect 문법) · 다중 = 왼쪽 Checkbox 상시 노출
+//   · 단일 = ✓ 오른쪽 ml-auto(shadcn Select 문법 통일, 2026-08-26) · 다중 = 왼쪽 Checkbox 상시 노출
 //   · 구분선 없음. 하단 우측 [초기화]가 값 해제를 맡는다(옛 "전체" 항목 대체)
 //   · 단일은 고르면 즉시 적용·닫힘 · 다중은 토글해도 닫히지 않는다
+// - [+ 필터 추가] 선택 = 칩 추가 + 값 패널 즉시 오픈(클릭 뎁스 4→3, Statsig 관용구 —
+//   complex의 즉시 오픈을 전 kind로 확장, 2026-08-26). 값 없이 닫아도 칩은 남는다(✕ 제거)
 // - 칩은 최대 2줄까지 자동 줄바꿈
 // - 정렬은 이 바에 없다 — 테이블 컬럼 헤더가 전담
 //
@@ -86,6 +88,11 @@ function FilterBar({
   const addable = filters.filter((f) => !f.base && !extraShown.includes(f.name))
   const hasCondition = keyword.trim() !== "" || shown.some((f) => values[f.name])
 
+  // 열린 패널의 단일 소유자 — 칩별 내부 state로 두면 필터추가 메뉴(모달)가
+  // 바깥 클릭 감지를 눌러버려 이전 패널이 안 닫히고 겹친다(2026-08-26 버그).
+  // FilterBar가 하나만 쥔다: 새 칩 자동 오픈 = 이전 패널 자동 닫힘.
+  const [openName, setOpenName] = React.useState<string | null>(null)
+
   const removeFilter = (f: FilterDef) => {
     onChange(f.name, undefined)
     onExtraShownChange?.(extraShown.filter((n) => n !== f.name))
@@ -136,24 +143,36 @@ function FilterBar({
             onSelect={(v) => onChange(f.name, v)}
             onRemove={() => removeFilter(f)}
             onComplexOpen={() => onComplexOpen?.(f.name)}
+            open={openName === f.name}
+            onOpenChange={(o) => setOpenName(o ? f.name : null)}
           />
         ))}
 
         {addable.length > 0 && onExtraShownChange && (
-          <DropdownMenu>
+          // 필터추가 메뉴가 열리면 떠 있던 값 패널을 닫는다 — 단일 오픈 보장
+          <DropdownMenu onOpenChange={(o) => o && setOpenName(null)}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="text-secondary-foreground">
                 <Plus className="size-4" /> 필터 추가
               </Button>
             </DropdownMenuTrigger>
-            {/* 타이틀 없음 — 트리거가 "필터 추가"라고 말하고 있다 */}
-            <DropdownMenuContent align="start" className="w-52">
+            {/* 타이틀 없음 — 트리거가 "필터 추가"라고 말하고 있다.
+                onCloseAutoFocus: 닫힐 때 트리거로 포커스를 되돌리지 않는다 — 되돌리면 방금
+                자동으로 연 값 패널이 포커스 이탈로 즉시 닫힌다(날짜 Popover에서 재현된 경합) */}
+            <DropdownMenuContent
+              align="start"
+              className="w-52"
+              onCloseAutoFocus={(e) => e.preventDefault()}
+            >
               {addable.map((f) => (
                 <DropdownMenuItem
                   key={f.name}
                   onSelect={() => {
                     onExtraShownChange([...extraShown, f.name])
+                    // complex의 즉시 오픈 관용구를 전 kind로 확장 — 클릭 뎁스 4→3.
+                    // 다음 틱 오픈 — 닫히는 메뉴의 애니메이션 프레임과 겹치지 않게
                     if (f.kind === "complex") onComplexOpen?.(f.name)
+                    else setTimeout(() => setOpenName(f.name), 0)
                   }}
                 >
                   <ListFilter className="size-4" /> {f.label}
@@ -189,12 +208,17 @@ function FilterChip({
   onSelect,
   onRemove,
   onComplexOpen,
+  open,
+  onOpenChange,
 }: {
   def: FilterDef
   value?: string
   onSelect: (v: string | undefined) => void
   onRemove: () => void
   onComplexOpen: () => void
+  /** 패널 열림은 FilterBar가 단일 소유 — 자동 오픈·단일 오픈 보장용 (2026-08-26) */
+  open: boolean
+  onOpenChange: (o: boolean) => void
 }) {
   const active = Boolean(value)
   const options = def.presets ?? def.options ?? []
@@ -202,8 +226,7 @@ function FilterChip({
   const selectedList = def.multi && value ? value.split(", ") : []
   // 제거 가능 = 추가 필터. 기본 필터는 화면에서 뺄 수 없다.
   const removable = !def.base
-  // [초기화]는 메뉴 항목이 아니라 버튼이라 눌러도 자동으로 닫히지 않는다 — 열림을 직접 쥔다
-  const [open, setOpen] = React.useState(false)
+  const setOpen = onOpenChange
 
   const label = (
     <>
@@ -236,7 +259,17 @@ function FilterChip({
               {label}
             </button>
           </PopoverTrigger>
-          <PopoverContent align="start" className="w-auto p-0">
+          <PopoverContent
+            align="start"
+            className="w-auto p-0"
+            // 자동 오픈 경합의 진짜 원인: 필터추가 메뉴가 닫힐 때 애니메이션(~150ms) 동안
+            // 모달 포커스 트랩이 유지된 채 포커스를 도로 빼앗는다. 알림형 칩(자기도 모달
+            // 트랩)은 버티지만 Popover(비모달)는 "포커스 이탈"로 판단해 즉시 닫힌다.
+            // → 포커스를 뺏지도(open), 이탈로 닫지도(focusOutside) 않는다.
+            // 닫기 경로는 그대로: 바깥 클릭 · Esc · 적용/취소.
+            onOpenAutoFocus={(e) => e.preventDefault()}
+            onFocusOutside={(e) => e.preventDefault()}
+          >
             <DateRangePanel
               value={value}
               presets={options}
@@ -263,7 +296,7 @@ function FilterChip({
               {label}
             </button>
           </DropdownMenuTrigger>
-          {/* 상단 타이틀 없음 · 단일 = 왼쪽 ✓ 상시 슬롯 · 다중 = 왼쪽 Checkbox 상시 노출 */}
+          {/* 상단 타이틀 없음 · 단일 = ✓ 오른쪽(shadcn Select 문법) · 다중 = 왼쪽 Checkbox 상시 노출 */}
           <DropdownMenuContent align="start" className="w-44">
             {options.map((o) =>
               def.multi ? (
@@ -282,9 +315,10 @@ function FilterChip({
                   {o}
                 </DropdownMenuItem>
               ) : (
+                // 단일 선택 ✓는 오른쪽 — shadcn Select 문법으로 통일(2026-08-26 확정)
                 <DropdownMenuItem key={o} onSelect={() => onSelect(o)}>
-                  <Check className={"size-4 " + (value === o ? "opacity-100" : "opacity-0")} />
                   {o}
+                  <Check className={"ml-auto size-4 " + (value === o ? "opacity-100" : "opacity-0")} />
                 </DropdownMenuItem>
               )
             )}
@@ -355,7 +389,7 @@ function resolveDateRange(value: string): { from: Date; to: Date } | null {
   }
 }
 
-// 날짜 패널 — 좌 프리셋 레일(단일 문법: 왼쪽 체크 상시 슬롯) + 우 From/to + 두 달 range 캘린더.
+// 날짜 패널 — 좌 프리셋 레일(단일 문법: ✓ 오른쪽) + 우 From/to + 두 달 range 캘린더.
 // 프리셋 클릭 = 캘린더 미리보기 → [적용]으로 확정·닫힘. [취소]/[초기화] 좌하단.
 function DateRangePanel({
   value,
@@ -398,8 +432,8 @@ function DateRangePanel({
               }
             }}
           >
-            <Check className={"size-4 " + (railChecked(p) ? "opacity-100" : "opacity-0")} />
             {p}
+            <Check className={"ml-auto size-4 " + (railChecked(p) ? "opacity-100" : "opacity-0")} />
           </button>
         ))}
       </div>

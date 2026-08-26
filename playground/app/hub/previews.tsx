@@ -96,6 +96,7 @@ import { Input } from "@ds/ui/ui/input";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@ds/ui/ui/input-group";
 import { Label } from "@ds/ui/ui/label";
 import { RadioGroup, RadioGroupItem } from "@ds/ui/ui/radio-group";
+import { RowsPerPage } from "@ds/ui/ui/rows-per-page";
 import {
   Select,
   SelectContent,
@@ -122,7 +123,6 @@ import {
   Database,
   Download,
   FileText,
-  Filter,
   Globe,
   Inbox,
   Info,
@@ -226,6 +226,17 @@ const DEMO_FILTERS: FilterDef[] = [
   { name: "product", label: "제품", options: ["Cloud", "Security", "NAS"], multi: true, base: true },
   { name: "updated", label: "상태 갱신일", kind: "date", presets: DATE_PRESETS, base: true },
 ];
+function RowsPerPageDemo() {
+  const [v, setV] = React.useState(15);
+  return (
+    <RowsPerPage
+      value={v}
+      onChange={setV}
+      summary={<>전체 247척 · <span className="text-destructive">●</span> 미입력 식별자 38척</>}
+    />
+  );
+}
+
 function FilterBarDemo() {
   const [keyword, setKeyword] = React.useState("");
   const [values, setValues] = React.useState<FilterValues>({ status: "Pending", product: "Cloud, NAS" });
@@ -748,14 +759,15 @@ export const PREVIEWS: Record<string, Pv> = {
     className: BOX + " p-6",
     style: { width: 560 },
     node: (
+      // 컬럼 헤더 필터(▾) 폐기(design.md §4, 2026-08-26) — 헤더는 정렬만, 필터는 FilterBar 전담
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>
-              <Button variant="ghost" size="sm" className="-ml-2">STATUS <ArrowUpDown /></Button>
+              <Button variant="ghost" size="sm" className="-ml-2">상태 <ArrowUpDown /></Button>
             </TableHead>
             <TableHead>
-              <Button variant="ghost" size="sm" className="-ml-2">PRODUCT <Filter /></Button>
+              <Button variant="ghost" size="sm" className="-ml-2">상태 갱신일 <ArrowUpDown /></Button>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -960,6 +972,12 @@ export const PREVIEWS: Record<string, Pv> = {
         </PaginationContent>
       </Pagination>
     ),
+  },
+  "rows-per-page": {
+    className: "flex items-center justify-center " + BOX,
+    style: { width: 560, height: 110 },
+    hubOnly: true,
+    node: <RowsPerPageDemo />,
   },
   "data-progress": {
     className: "flex items-center gap-4 " + BOX + " px-10",

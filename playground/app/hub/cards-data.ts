@@ -271,7 +271,7 @@ export const CARD_GROUPS: HubGroup[] = [
       },
       {
         "slug": "data-colhead",
-        "name": "정렬 · 컬럼 필터 헤더",
+        "name": "정렬 헤더 (컬럼 필터 폐기 — 필터는 FilterBar 전담)",
         "shadcn": "DataTable 패턴",
         "shot": "ships-colfilter",
         "crop": "1225,190,190,240"
@@ -383,6 +383,11 @@ export const CARD_GROUPS: HubGroup[] = [
         "shadcn": "Pagination",
         "shot": "sysdiag-detail",
         "crop": "1635,920,255,50"
+      },
+      {
+        "slug": "rows-per-page",
+        "name": "페이지당 행 수 (목록 푸터 문법)",
+        "shadcn": "조합(DropdownMenu·Button)"
       },
       {
         "slug": "heatmap",

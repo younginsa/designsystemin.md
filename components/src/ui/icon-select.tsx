@@ -5,9 +5,9 @@
 // 타임존·호선 전환·제품 선택 등 "아이콘 + 목록" 셀렉터 전부 이걸로 — 인스턴스는 props만 다르다.
 //
 // 타입 3종: 아이콘형(icon 지정) · 텍스트형(icon 생략) · 다중형(multiple).
-// 선택 문법은 시스템 기준이다 — 단일 = 왼쪽 ✓ 상시 슬롯(선택 행만 불투명),
-// 다중 = 왼쪽 Checkbox 상시 노출. 구분 신호는 ✓ vs ☐ 글리프이고, 다중형은 토글해도
-// 패널이 닫히지 않는다(연속 선택). 값 표기는 items 순서대로 ", " 병합.
+// 선택 문법은 시스템 기준이다 — 단일 = ✓ 오른쪽 ml-auto(shadcn Select 문법 통일,
+// 2026-08-26 확정 — 구 왼쪽 상시 슬롯 문법 폐기), 다중 = 왼쪽 Checkbox 상시 노출.
+// 다중형은 토글해도 패널이 닫히지 않는다(연속 선택). 값 표기는 items 순서대로 ", " 병합.
 
 import * as React from "react"
 import { Check, ChevronDown, type LucideIcon } from "lucide-react"
@@ -115,12 +115,14 @@ function IconSelect({
           >
             {multiple ? (
               <Checkbox checked={selected.includes(item.value)} className="pointer-events-none" />
-            ) : (
-              <Check className={cn("size-4", item.value === value ? "opacity-100" : "opacity-0")} />
-            )}
+            ) : null}
             <span className="flex-1">{item.label}</span>
             {item.hint ? (
               <span className="text-xs tabular-nums text-secondary-foreground">{item.hint}</span>
+            ) : null}
+            {!multiple ? (
+              // 단일 선택 ✓는 오른쪽 — shadcn Select 문법으로 통일(2026-08-26)
+              <Check className={cn("ml-auto size-4", item.value === value ? "opacity-100" : "opacity-0")} />
             ) : null}
           </DropdownMenuItem>
         ))}

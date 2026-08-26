@@ -28,7 +28,8 @@ export type VersionRow = {
 };
 
 export function VersionFilterChip({
-  label = "PRODUCT",
+  // 한국어 헤더 규칙 정합(2026-08-26) — 식별자·제품명만 영문 유지
+  label = "제품",
   products,
   commonVersions,
   productVersions,
@@ -48,7 +49,13 @@ export function VersionFilterChip({
   const [nextId, setNextId] = React.useState(1000);
 
   const active = value.length > 0;
-  const summary = value.map((r) => r.product).join(", ");
+  // 적용 요약 = 제품 + 버전까지(2026-08-26 확정, 구분자 ·). 2건 이상은 첫 조건 외 N건.
+  const condLabel = (r: VersionRow) =>
+    [r.product, r.commonVersion, r.productVersion].filter(Boolean).join(" · ");
+  const summary =
+    value.length <= 1
+      ? value.map(condLabel).join(", ")
+      : `${condLabel(value[0])} 외 ${value.length - 1}건`;
 
   const openPanel = (o: boolean) => {
     if (o)
