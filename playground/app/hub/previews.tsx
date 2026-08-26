@@ -1056,11 +1056,11 @@ export const PREVIEWS: Record<string, Pv> = {
 
   /* ── 오버레이 — 실물 렌더는 격리가 필요해 프리뷰 라우트를 iframe으로 담는다
         (포털·z-index가 카드 그리드를 침범하지 않게) ── */
-  "ov-dialog": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/overlay?c=dialog" /> },
-  "ov-sheet": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/overlay?c=sheet" /> },
-  "detail-panel": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/detail-panel" /> },
-  "ov-menus": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/overlay?c=menus" /> },
-  "ov-notif": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/notification-panel" /> },
+  "ov-dialog": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/overlay/?c=dialog" /> },
+  "ov-sheet": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/overlay/?c=sheet" /> },
+  "detail-panel": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/detail-panel/" /> },
+  "ov-menus": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/overlay/?c=menus" /> },
+  "ov-notif": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/notification-panel/" /> },
   "ov-popover": {
     className: "flex items-start justify-center gap-2 " + BOX + " p-6",
     style: { width: 400 },
