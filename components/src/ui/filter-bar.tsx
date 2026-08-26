@@ -64,6 +64,7 @@ function FilterBar({
   onExtraShownChange,
   onComplexOpen,
   actions,
+  searchSlot,
 }: {
   searchPlaceholder: string
   keyword: string
@@ -76,6 +77,9 @@ function FilterBar({
   onExtraShownChange?: (names: string[]) => void
   onComplexOpen?: (name: string) => void
   actions?: React.ReactNode
+  /** 검색 슬롯 — 지정 시 내장 InputGroup 대신 렌더(SearchBox 옵트인용, 2026-08-26).
+      미지정 = 현행 그대로. 페이지별 옵트인이며 기본 검색 문법은 불변이다. */
+  searchSlot?: React.ReactNode
 }) {
   // 화면에 보일 필터 = 기본 필터 + 사용자가 추가한 것
   const shown = filters.filter((f) => f.base || extraShown.includes(f.name))
@@ -97,17 +101,19 @@ function FilterBar({
     <div className="flex flex-wrap items-start justify-between gap-2">
       {/* 좌: 검색 + 필터 칩 + 필터 추가 (최대 2줄 흐름) */}
       <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
-        <InputGroup variant="filled" className="w-64">
-          <InputGroupAddon>
-            <Search />
-          </InputGroupAddon>
-          <InputGroupInput
-            placeholder={searchPlaceholder}
-            aria-label={searchPlaceholder}
-            value={keyword}
-            onChange={(e) => onKeyword(e.target.value)}
-          />
-        </InputGroup>
+        {searchSlot ?? (
+          <InputGroup variant="filled" className="w-64">
+            <InputGroupAddon>
+              <Search />
+            </InputGroupAddon>
+            <InputGroupInput
+              placeholder={searchPlaceholder}
+              aria-label={searchPlaceholder}
+              value={keyword}
+              onChange={(e) => onKeyword(e.target.value)}
+            />
+          </InputGroup>
+        )}
 
         {shown.map((f) => (
           <FilterChip

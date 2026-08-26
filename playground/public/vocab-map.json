@@ -56,6 +56,7 @@
     "ov-sheet": { "name": "슬라이드오버 패널", "files": ["sheet"] },
     "ov-toast": { "name": "토스트", "files": ["sonner"] },
     "ov-tooltip": { "name": "툴팁", "files": ["tooltip"] },
+    "search-box": { "name": "검색 제안", "files": ["search-box", "input-group", "popover"] },
     "sidebar-nav": { "name": "사이드바 내비", "files": ["sidebar"] },
     "skeleton": { "name": "스켈레톤 (로딩)", "files": ["skeleton"] },
     "timeline": { "name": "타임라인", "files": ["timeline"] },

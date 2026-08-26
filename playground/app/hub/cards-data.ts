@@ -166,6 +166,12 @@ export const CARD_GROUPS: HubGroup[] = [
         "crop": "233,115,325,60"
       },
       {
+        "slug": "search-box",
+        "name": "검색 제안 (자동완성·최근·빠른검색)",
+        "prio": "P1",
+        "shadcn": "조합(InputGroup·Popover)"
+      },
+      {
         "slug": "form-textarea",
         "name": "텍스트에어리어 · 글자수",
         "shadcn": "Textarea 조합",

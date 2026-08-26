@@ -1061,6 +1061,11 @@ export const PREVIEWS: Record<string, Pv> = {
   "detail-panel": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/detail-panel/" /> },
   "ov-menus": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/overlay/?c=menus" /> },
   "ov-notif": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/notification-panel/" /> },
+  "search-box": {
+    className: "",
+    hubOnly: true,
+    node: <RouteFrame src="/shadcn-preview/search-box/" w={560} h={420} />,
+  },
   "ov-popover": {
     className: "flex items-start justify-center gap-2 " + BOX + " p-6",
     style: { width: 400 },
