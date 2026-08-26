@@ -1358,10 +1358,14 @@
   });
   lb.addEventListener('click', () => lb.classList.remove('on'));
 
-  // ── 컴포넌트 채택 (파이프라인 4단계) — localStorage + approved.json + 우측 현황 레일 ──
+  // ── 컴포넌트 채택 (파이프라인 4단계) — approved.json + 우측 현황 레일 ──
+  // GitHub(approved.json)가 유일한 진실이다. 토글은 내보내기를 만들기 위한 세션 스크래치라
+  // 세션 메모리에만 둔다 — localStorage에 저장하면 그 스냅샷이 파일을 통째로 대체해서
+  // 이후 커밋되는 채택이 그 브라우저에서 영영 안 보인다(2026-08-26 사고).
   // 어휘 = approved.json 채택분뿐. 재현 컴포넌트도 제작 완료(build:done) 후 같은 토글로 채택한다.
   (function(){
-    const KEY = 'ds365-approved';
+    // 옛 저장본이 남아 있으면 지운다 — 더 이상 읽지 않지만 브라우저를 깨끗이 자가치유시킨다
+    try { localStorage.removeItem('ds365-approved'); } catch (e) {}
     const cards = [...document.querySelectorAll('#doc-365 [data-comp]')];
     if (!cards.length) return;
     let fileList = [], local = null, rebuilt = [];   // rebuilt = ds365.json에서 build:done인 슬러그
@@ -1409,7 +1413,6 @@
         const s = current(); const id = c.dataset.comp;
         if (s.has(id)) s.delete(id); else s.add(id);
         local = [...s];
-        localStorage.setItem(KEY, JSON.stringify(local));
         render();
       });
     });
@@ -1469,8 +1472,6 @@
       fileList = (aj && aj.approved) || [];
       const comps = (dj && dj.components) || {};
       rebuilt = Object.keys(comps).filter(k => comps[k].build === 'done');
-      try { const saved = JSON.parse(localStorage.getItem(KEY)); if (Array.isArray(saved)) local = saved; } catch (e) {}
-      if (local && eq(new Set(local), new Set(fileList))) { local = null; localStorage.removeItem(KEY); }
       render();
     });
   })();
@@ -1688,7 +1689,8 @@
   (function(){
     const adoptedBox = document.getElementById('ds365-adopted');
     if (!adoptedBox) return;
-    const LKEY = 'ds365-local';
+    // 채택 토글과 같은 이유로 세션 메모리만 쓴다 — ds365.json이 진실이다
+    try { localStorage.removeItem('ds365-local'); } catch (e) {}
     let fileComponents = {}, fileTokens = {}, local = null, approvedSet = new Set();
 
     // 03 카드에서 카탈로그 원자료를 읽는다 (이름·미리보기·원본 컷·매핑)
@@ -1711,7 +1713,6 @@
 
     function saveLocal(next){
       local = next;
-      localStorage.setItem(LKEY, JSON.stringify(local));
       render();
     }
 
@@ -1851,8 +1852,6 @@
     fetch('ds365.json').then(r => r.ok ? r.json() : null).catch(() => null).then((j) => {
       fileComponents = (j && j.components) || {};
       fileTokens = (j && j.tokens) || {};
-      try { const saved = JSON.parse(localStorage.getItem(LKEY)); if (saved && typeof saved === 'object') local = saved; } catch (e) {}
-      if (local && JSON.stringify(local) === JSON.stringify(fileComponents)) { local = null; localStorage.removeItem(LKEY); }
       render();
     });
   })();
