@@ -98,7 +98,8 @@ function SearchBox({
                 className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
                 onClick={() => commit(c.label)}
               >
-                <Search className="size-4 shrink-0 text-secondary-foreground" />
+                {/* 장식 아이콘 — size-3.5(✕와 동일)·text-input(한 단계 연하게), 2026-08-26 확정 */}
+                <Search className="size-3.5 shrink-0 text-input" />
                 <span className="min-w-0 flex-1 truncate text-left">{highlight(c.label)}</span>
                 {c.sub && <span className="shrink-0 text-xs text-secondary-foreground">{c.sub}</span>}
               </button>
@@ -114,7 +115,7 @@ function SearchBox({
                     key={r}
                     className="group flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
                   >
-                    <Clock className="size-4 shrink-0 text-secondary-foreground" />
+                    <Clock className="size-3.5 shrink-0 text-input" />
                     <button
                       type="button"
                       className="min-w-0 flex-1 truncate text-left"

@@ -102,7 +102,7 @@
     },
     "search-box": {
       "build": "done",
-      "note": "조합 제작 — @ds/ui/ui/search-box. 검색 제안 프리셋(피그마 237-51963 focused2): 입력창은 현행 InputGroup(filled·w-64) 그대로(포커스 링 DS 기본), 패널은 분리 플로팅(ov-popover·PopoverAnchor)·폭 w-64·px-2 py-3. 타이핑 = 자동완성 최대 5(돋보기·매칭 볼드·보조줄), 비어 있음 = 최근 검색 3(시계·hover ✕ 삭제) + 빠른검색 칩 최대 5. 선택 = 즉시 적용·닫힘·최근 편입. 적용은 페이지 옵트인(FilterBar searchSlot) — 기본 검색 불변. 빠른검색(최다 검색)·최근검색은 시안 목데이터 — 실제 집계·저장은 제품 백엔드 몫"
+      "note": "조합 제작 — @ds/ui/ui/search-box. 검색 제안 프리셋(피그마 237-51963 focused2): 입력창은 현행 InputGroup(filled·w-64) 그대로(포커스 링 DS 기본), 패널은 분리 플로팅(ov-popover·PopoverAnchor)·폭 w-64·px-2 py-3. 타이핑 = 자동완성 최대 5(돋보기·매칭 볼드·보조줄), 비어 있음 = 최근 검색 3(시계·hover ✕ 삭제) + 빠른검색 칩 최대 5. 패널 줄 아이콘(돋보기·시계)은 size-3.5·text-input — 장식 아이콘은 한 단계 연하게(본문 텍스트 아님, contrast-pairs input×popover 장식 전용 선언). 선택 = 즉시 적용·닫힘·최근 편입. 적용은 페이지 옵트인(FilterBar searchSlot) — 기본 검색 불변. 빠른검색(최다 검색)·최근검색은 시안 목데이터 — 실제 집계·저장은 제품 백엔드 몫"
     },
     "form-daterange": {
       "note": "shadcn Calendar(range) 조합 — @ds/ui/ui/calendar. 기간 선택 표준 = 프리셋 레일 + range 캘린더 두 달(피그마 209-36201). 어휘 키는 허브 카드와 맞춘 form-daterange다(calendar 아님 — approved.json 키 = 허브 data-comp)"

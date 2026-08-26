@@ -201,7 +201,8 @@ function FilterChip({
     </>
   )
   const triggerCls =
-    "inline-flex h-8 items-center gap-1 px-2.5 text-sm " +
+    // 칩 높이는 래퍼(h-9, 보더 포함 36px = 검색창 InputGroup과 동일)가 쥔다 — 2026-08-26 확정
+    "inline-flex h-full items-center gap-1 px-2.5 text-sm " +
     (removable ? "rounded-l-md " : "rounded-md ") +
     (active ? "text-primary" : "text-foreground group-hover:text-accent-foreground")
 
@@ -211,7 +212,7 @@ function FilterChip({
     // hover = 표준 hover 잉크(accent), 비활성만 — 활성은 primary×accent 미선언이라 보류.
     <span
       className={
-        "group inline-flex items-center rounded-md border bg-muted " +
+        "group inline-flex h-9 items-center rounded-md border bg-muted " +
         (active ? "border-primary" : "border-transparent hover:bg-accent")
       }
     >
@@ -297,7 +298,7 @@ function FilterChip({
           type="button"
           aria-label={`${def.label} 필터 제거`}
           className={
-            "flex h-8 items-center rounded-r-md pr-2 " +
+            "flex h-full items-center rounded-r-md pr-2 " +
             (active ? "text-primary" : "text-secondary-foreground")
           }
           onClick={onRemove}
