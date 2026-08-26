@@ -1,11 +1,14 @@
-// 허브 문서 사이트 — 서버 컴포넌트: 추출 프래그먼트를 읽어 클라이언트 셸에 넘긴다.
-// output: "export"라 이 읽기는 빌드 시 1회 실행된다(런타임 서버 없음).
+// 허브 문서 사이트(루트) — 서버 컴포넌트: 추출 프래그먼트를 읽어 클라이언트 셸에 넘긴다.
+// output: "export"라 이 읽기는 빌드 시 1회 실행되고, 정적 export가 out/index.html을
+// 만들므로 구 주소(/index.html#templates)도 프로덕션에서 계속 동작한다.
+// 구 정적 허브(public/index.html)는 2026-08-26 실렌더 전환으로 은퇴 — 산문 원본은
+// app/hub/fragments/*.html이 승계한다.
 
 import fs from "node:fs";
 import path from "node:path";
 
-import HubApp from "./HubApp";
-import "./hub.css";
+import HubApp from "./hub/HubApp";
+import "./hub/hub.css";
 
 export const metadata = { title: "HiNAS Design System document for AI" };
 
