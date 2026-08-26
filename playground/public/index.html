@@ -1040,6 +1040,23 @@
       </section>
       <!-- 04 히스토리 — 기획 입력의 기록 (관리자 등재) -->
       <section class="panel" data-full="1" data-visual="1" data-title="히스토리">
+        <div class="hist-entry" data-date="26.08.26" data-summary="구조 수정 — 어휘 조회 경로 신설 · 허브 단일 진실화">
+          <h3>결정 개요</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">계기</div>
+            <div class="v">어휘 카드 이름이 한국어 패턴명이라 <strong>특정 컴포넌트가 어휘에 있는지 이름만으로 알 수 없었다</strong> — Popover가 「드롭다운 메뉴 · 팝오버」 카드 안에 묻혀 있어 중복 어휘(ov-popover)가 신설되는 사고 발생(2026-08-26). 같은 날, 허브 토글의 localStorage 스냅샷이 파일을 통째로 대체해 <strong>이후 커밋된 채택이 브라우저에서 안 보이는</strong> 문제 확인.</div>
+            <div class="k">어휘 조회 경로</div>
+            <div class="v"><span class="mono">playground/public/vocab-map.json</span> 신설 — 어휘 슬러그 → 컴포넌트 파일 매핑 57건. 가용성 확인은 <strong>이 파일 조회로만</strong> 한다(키 이름 추측 금지 — CLAUDE.md 절차 2 명문화). ov-menus는 DropdownMenu 전담으로 정정, Popover는 ov-popover가 전담.</div>
+            <div class="k">허브 단일 진실화</div>
+            <div class="v">채택·조정 토글의 localStorage 저장 제거 — <strong>GitHub(approved.json · ds365.json)가 유일한 진실</strong>이고 토글은 내보내기용 세션 스크래치다. 새로고침하면 항상 파일 기준으로 복귀. 남은 옛 저장본은 로드 시 자동 정리.</div>
+            <div class="k">카드 그림 정책</div>
+            <div class="v">두 층을 분리 — 기본 그림(shadcn 렌더)은 <strong>사진에서 실물 렌더로 전환</strong>(56장 중 47장이 7월 30일자로 낡아 있었고, 재캡처 경로는 7장분만 존재). hover의 제품 화면 컷은 <strong>2026-07-29 분석 시점 스냅샷 기록</strong>으로 유지 — 동기화 대상이 아니라 출처 증빙이다.</div>
+            <div class="k">병합 기각</div>
+            <div class="v">중복으로 보인 카드들(안내 노트 vs 배너·결과 카드 등 Alert 3종·Badge 4종·Button 5종)은 <strong>병합하지 않는다</strong> — 문제는 카드 수가 아니라 조회 불가였고, 각 카드는 제품 화면 출처(hover 컷)를 보존한다. 카드 = 용례 문서(레시피), 게이트 = vocab-map + approved.json.</div>
+          </div>
+        </div>
+        </div>
         <div class="hist-entry" data-date="26.07.29" data-summary="최초 분석 — 스크린샷 55장 · 컴포넌트 57종 추출">
           <h3>분석 개요</h3>
         <div class="card">
