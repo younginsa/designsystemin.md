@@ -1,7 +1,7 @@
 // 자동 생성 — hub_extract.py 가 playground/public/index.html 의 채택 카드에서 추출
-// slug=null 카드는 「예시」(원본 화면 썸네일 스트립)
+// slug=null 카드는 「예시」(원본 화면 썸네일 스트립). pv(사진) 필드는 실렌더 전환으로 은퇴(2026-08-26)
 export type HubCard = { slug: string | null; name: string; prio?: string; shadcn?: string;
-  pv?: string; shot?: string; crop?: string; ph?: [string, string]; shots?: string[] }
+  shot?: string; crop?: string; ph?: [string, string]; shots?: string[] }
 export type HubGroup = { title: string; cards: HubCard[] }
 export const CARD_GROUPS: HubGroup[] = [
   {
@@ -19,7 +19,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "app-shell",
         "name": "앱 셸",
         "shadcn": "Sidebar",
-        "pv": "/shadcn/app-shell.png",
         "shot": "ships-list",
         "crop": "0,0,1920,1080"
       },
@@ -27,7 +26,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "sidebar-nav",
         "name": "사이드바 내비",
         "shadcn": "SidebarMenu",
-        "pv": "/shadcn/sidebar-nav.png",
         "shot": "ships-list",
         "crop": "0,55,215,720"
       },
@@ -35,7 +33,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "page-header",
         "name": "페이지 헤더",
         "shadcn": "조합",
-        "pv": "/shadcn/page-header.png",
         "shot": "ship-detail",
         "crop": "233,75,1450,60"
       },
@@ -44,16 +41,14 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "브레드크럼",
         "prio": "P1",
         "shadcn": "Breadcrumb",
-        "pv": "/shadcn/breadcrumb.png",
         "shot": "update-wizard",
         "crop": "225,10,570,35"
       },
       {
         "slug": "icon-select",
-        "name": "아이콘 셀렉터 (타임존·호선 전환 등)",
+        "name": "아이콘 셀렉터 — 타입 3종: 아이콘형·텍스트형·다중형(체크박스)",
         "prio": "P1",
         "shadcn": "DropdownMenu 조합",
-        "pv": "/shadcn/icon-select.png",
         "shot": "timezone",
         "crop": "1630,50,190,360"
       }
@@ -74,7 +69,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "btn-basic",
         "name": "기본 버튼 (채움·아웃라인·텍스트)",
         "shadcn": "Button",
-        "pv": "/shadcn/btn-basic.png",
         "shot": "ship-detail",
         "crop": "1255,75,640,60"
       },
@@ -82,7 +76,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "btn-destructive",
         "name": "파괴 버튼",
         "shadcn": "Button(destructive)",
-        "pv": "/shadcn/btn-destructive.png",
         "shot": "product-delete",
         "crop": "1070,640,150,60"
       },
@@ -90,7 +83,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "btn-states",
         "name": "비활성 · 로딩 변형",
         "shadcn": "Button+Spinner",
-        "pv": "/shadcn/btn-states.png",
         "shot": "install-modal",
         "crop": "1120,630,225,140"
       },
@@ -98,7 +90,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "btn-split",
         "name": "스플릿 드롭다운",
         "shadcn": "ButtonGroup",
-        "pv": "/shadcn/btn-split.png",
         "shot": "ships-list",
         "crop": "1760,115,150,55"
       },
@@ -106,7 +97,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "btn-icon",
         "name": "아이콘 버튼",
         "shadcn": "Button(icon)",
-        "pv": "/shadcn/btn-icon.png",
         "shot": "sysdiag-detail",
         "crop": "1555,30,340,50"
       },
@@ -114,7 +104,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "btn-dashed",
         "name": "점선 추가 버튼",
         "shadcn": "Button 변형",
-        "pv": "/shadcn/btn-dashed.png",
         "shot": "topo-3",
         "crop": "730,630,455,60"
       },
@@ -123,7 +112,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "원형 FAB",
         "prio": "P3",
         "shadcn": "Button 변형",
-        "pv": "/shadcn/btn-fab.png",
         "shot": "diagnosis",
         "crop": "1595,1000,300,65"
       }
@@ -145,7 +133,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "form-text",
         "name": "텍스트 인풋 (필수·placeholder)",
         "shadcn": "Field+Input",
-        "pv": "/shadcn/form-text.png",
         "shot": "update-wizard",
         "crop": "575,875,630,160"
       },
@@ -153,7 +140,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "form-number",
         "name": "숫자 인풋",
         "shadcn": "Input(number)",
-        "pv": "/shadcn/form-number.png",
         "shot": "ship-create",
         "crop": "980,440,205,80"
       },
@@ -161,7 +147,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "form-search",
         "name": "검색 인풋",
         "shadcn": "InputGroup",
-        "pv": "/shadcn/form-search.png",
         "shot": "ships-list",
         "crop": "233,115,325,60"
       },
@@ -175,7 +160,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "form-textarea",
         "name": "텍스트에어리어 · 글자수",
         "shadcn": "Textarea 조합",
-        "pv": "/shadcn/form-textarea.png",
         "shot": "compat-add-2",
         "crop": "725,635,470,100"
       },
@@ -184,7 +168,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "셀렉트 계열",
         "prio": "P1",
         "shadcn": "Select·Combobox",
-        "pv": "/shadcn/form-select.png",
         "shot": "version-options",
         "crop": "795,260,620,95"
       },
@@ -193,7 +176,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "체크박스 · 라디오 · 토글",
         "prio": "P1",
         "shadcn": "Checkbox·Radio·Switch",
-        "pv": "/shadcn/form-controls.png",
         "shot": "version-options",
         "crop": "1115,425,330,440"
       },
@@ -201,7 +183,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "form-choicecard",
         "name": "라디오 · 체크 카드",
         "shadcn": "RadioGroup 조합",
-        "pv": "/shadcn/form-choicecard.png",
         "shot": "ship-create",
         "crop": "735,330,480,190"
       },
@@ -209,7 +190,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "form-segment",
         "name": "3상태 세그먼트",
         "shadcn": "ToggleGroup",
-        "pv": "/shadcn/form-segment.png",
         "shot": "filter-modal",
         "crop": "745,590,430,120"
       },
@@ -218,7 +198,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "태그 인풋",
         "prio": "P2",
         "shadcn": "Badge+Input 조합",
-        "pv": "/shadcn/form-tags.png",
         "shot": "ship-detail",
         "crop": "233,150,1200,80"
       },
@@ -227,7 +206,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "날짜 범위 피커",
         "prio": "P2",
         "shadcn": "Calendar(range)",
-        "pv": "/shadcn/form-daterange.png",
         "shot": "datepicker",
         "crop": "1120,220,395,250"
       },
@@ -247,7 +225,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "form-file",
         "name": "파일 첨부",
         "shadcn": "Input(file)",
-        "pv": "/shadcn/form-file.png",
         "shot": "release-editor",
         "crop": "650,780,625,90"
       },
@@ -256,7 +233,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "칩 멀티셀렉트 그리드",
         "prio": "P3",
         "shadcn": "ToggleGroup(multiple)",
-        "pv": "/shadcn/form-chipgrid.png",
         "shot": "compat-chips",
         "crop": "700,340,520,400"
       }
@@ -278,7 +254,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "data-table",
         "name": "테이블",
         "shadcn": "Table",
-        "pv": "/shadcn/data-table.png",
         "shot": "ships-list",
         "crop": "233,185,1660,280"
       },
@@ -286,7 +261,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "data-kv",
         "name": "kv 정의 목록",
         "shadcn": "Item 조합",
-        "pv": "/shadcn/data-kv.png",
         "shot": "ship-detail",
         "crop": "250,270,600,330"
       },
@@ -294,7 +268,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "data-colhead",
         "name": "정렬 · 컬럼 필터 헤더",
         "shadcn": "DataTable 패턴",
-        "pv": "/shadcn/data-colhead.png",
         "shot": "ships-colfilter",
         "crop": "1225,190,190,240"
       },
@@ -302,7 +275,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "data-cells",
         "name": "테이블 셀 변형 (링크·2줄·행 액션·중첩 헤더)",
         "shadcn": "Table 조합",
-        "pv": "/shadcn/data-cells.png",
         "shot": "ships-list",
         "crop": "233,250,1660,150"
       },
@@ -311,7 +283,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "상태 필 · 도트",
         "prio": "P1",
         "shadcn": "Badge",
-        "pv": "/shadcn/data-status.png",
         "shot": "sysdiag",
         "crop": "1000,325,545,55"
       },
@@ -319,7 +290,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "data-badge",
         "name": "칩 · 뱃지",
         "shadcn": "Badge",
-        "pv": "/shadcn/data-badge.png",
         "shot": "ships-list",
         "crop": "905,960,290,100"
       },
@@ -327,7 +297,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "data-verchip",
         "name": "버전 칩 (before→after)",
         "shadcn": "Badge(mono)",
-        "pv": "/shadcn/data-verchip.png",
         "shot": "update-wizard",
         "crop": "245,240,260,90"
       },
@@ -336,7 +305,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "역할 태그 칩",
         "prio": "P2",
         "shadcn": "Badge 조합",
-        "pv": "/shadcn/data-roletag.png",
         "shot": "accounts",
         "crop": "945,235,390,330"
       },
@@ -357,7 +325,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "매트릭스 편집 표",
         "prio": "P2",
         "shadcn": "Table 조합",
-        "pv": "/shadcn/data-matrix.png",
         "shot": "compat-edit",
         "crop": "233,355,1010,310"
       },
@@ -365,7 +332,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "data-perm",
         "name": "권한 매트릭스",
         "shadcn": "Table+Checkbox",
-        "pv": "/shadcn/data-perm.png",
         "shot": "permissions",
         "crop": "233,150,1600,280"
       },
@@ -374,7 +340,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "스탯 · 퍼널 · 랭킹",
         "prio": "P2",
         "shadcn": "Card 조합",
-        "pv": "/shadcn/data-stat.png",
         "shot": "dashboard",
         "crop": "1005,130,890,170"
       },
@@ -395,7 +360,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "아코디언",
         "prio": "P1",
         "shadcn": "Accordion",
-        "pv": "/shadcn/data-accordion.png",
         "shot": "diagnosis",
         "crop": "240,300,270,580"
       },
@@ -404,7 +368,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "탭 3종",
         "prio": "P1",
         "shadcn": "Tabs·ToggleGroup",
-        "pv": "/shadcn/data-tabs.png",
         "shot": "release-notes",
         "crop": "233,130,420,55"
       },
@@ -413,7 +376,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "페이지네이션",
         "prio": "P1",
         "shadcn": "Pagination",
-        "pv": "/shadcn/data-pagination.png",
         "shot": "sysdiag-detail",
         "crop": "1635,920,255,50"
       },
@@ -434,7 +396,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "진행률 바",
         "prio": "P2",
         "shadcn": "Progress",
-        "pv": "/shadcn/data-progress.png",
         "shot": "progress",
         "crop": "545,450,1335,95"
       },
@@ -442,7 +403,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "data-tree",
         "name": "트리 목록",
         "shadcn": "Collapsible 조합",
-        "pv": "/shadcn/data-tree.png",
         "shot": "compat-tree",
         "crop": "233,240,300,430"
       },
@@ -450,7 +410,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "data-listrow",
         "name": "리스트 행 (아이콘·라벨·카운트·셰브론)",
         "shadcn": "Item",
-        "pv": "/shadcn/data-listrow.png",
         "shot": "diagnosis-heatmap",
         "crop": "245,945,260,130"
       }
@@ -472,7 +431,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "ov-dialog",
         "name": "모달",
         "shadcn": "Dialog·AlertDialog",
-        "pv": "/shadcn/ov-dialog.png",
         "shot": "ship-create",
         "crop": "450,130,1020,830"
       },
@@ -481,7 +439,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "슬라이드오버 패널",
         "prio": "P1",
         "shadcn": "Sheet",
-        "pv": "/shadcn/ov-sheet.png",
         "shot": "sysdiag-detail",
         "crop": "1005,5,910,520"
       },
@@ -490,7 +447,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "상세 패널 (우측 시트 프리셋)",
         "prio": "P1",
         "shadcn": "Sheet 프리셋",
-        "pv": "/shadcn/detail-panel.png",
         "shot": "diag-quickview",
         "crop": "0,0,1920,1080"
       },
@@ -499,7 +455,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "드롭다운 메뉴",
         "prio": "P1",
         "shadcn": "DropdownMenu",
-        "pv": "/shadcn/ov-menus.png",
         "shot": "timezone",
         "crop": "1630,50,190,360"
       },
@@ -507,7 +462,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "ov-notif",
         "name": "알림 패널",
         "shadcn": "DropdownMenu 프리셋",
-        "pv": "/shadcn/ov-notif.png",
         "shot": "notif",
         "crop": "1420,55,435,570"
       },
@@ -515,15 +469,13 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "ov-popover",
         "name": "팝오버",
         "prio": "P1",
-        "shadcn": "Popover",
-        "pv": "/shadcn/ov-popover.png"
+        "shadcn": "Popover"
       },
       {
         "slug": "fb-banner",
         "name": "배너 · 결과 카드",
         "prio": "P1",
         "shadcn": "Alert",
-        "pv": "/shadcn/fb-banner.png",
         "shot": "update-download",
         "crop": "595,350,1290,95"
       },
@@ -532,7 +484,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "빈 상태",
         "prio": "P1",
         "shadcn": "Empty",
-        "pv": "/shadcn/fb-empty.png",
         "shot": "bundle-compare",
         "crop": "870,770,390,180"
       },
@@ -540,15 +491,13 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "error-state",
         "name": "에러 상태 배너",
         "prio": "P1",
-        "shadcn": "Alert 프리셋",
-        "pv": "/shadcn/error-state.png"
+        "shadcn": "Alert 프리셋"
       },
       {
         "slug": "fb-console",
         "name": "에러 콘솔",
         "prio": "P2",
         "shadcn": "조합(mono 로그)",
-        "pv": "/shadcn/fb-console.png",
         "shot": "timeline-detail",
         "crop": "525,585,1360,280"
       },
@@ -557,7 +506,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "툴팁 (ⓘ)",
         "prio": "P1",
         "shadcn": "Tooltip",
-        "pv": "/shadcn/ov-tooltip.png",
         "shot": "update-wizard",
         "crop": "1230,355,340,130"
       },
@@ -565,15 +513,13 @@ export const CARD_GROUPS: HubGroup[] = [
         "slug": "fb-note",
         "name": "안내 노트",
         "shadcn": "Alert",
-        "pv": "/shadcn/fb-note.png",
         "shot": "release-notes",
         "crop": "638,258,684,72"
       },
       {
         "slug": "ov-toast",
         "name": "토스트",
-        "shadcn": "Sonner",
-        "pv": "/shadcn/ov-toast.png"
+        "shadcn": "Sonner"
       },
       {
         "slug": "skeleton",
@@ -613,7 +559,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "라인 차트",
         "prio": "P2",
         "shadcn": "Chart(Line)",
-        "pv": "/shadcn/viz-line.png",
         "shot": "diagnosis",
         "crop": "555,165,1340,370"
       },
@@ -622,7 +567,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "name": "도넛 차트",
         "prio": "P2",
         "shadcn": "Chart(Pie)",
-        "pv": "/shadcn/viz-donut.png",
         "shot": "version-donut",
         "crop": "1240,210,660,470"
       },

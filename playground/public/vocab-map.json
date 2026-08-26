@@ -63,6 +63,8 @@
     "viz-donut": { "name": "도넛 차트", "files": ["chart"] },
     "viz-line": { "name": "라인 차트", "files": ["chart"] }
   },
-  "$infrastructure": "어휘가 직접 가리키지 않지만 위 컴포넌트들이 내부에서 쓰거나 조합 부품으로 쓰는 파일 — avatar, label, scroll-area, separator, toggle(toggle-group 내부), state-preview(리뷰 도구). 어휘 밖이라고 임포트 금지는 아니다.",
-  "$unadopted": "실물은 있으나 채택 어휘가 없는 것 — stepper. 쓰려면 채택 절차를 밟아야 한다."
+  "$infrastructure": "어휘가 직접 가리키지 않지만 컴포넌트들이 내부에서 쓰거나 조합 부품으로 쓰는 파일. 어휘 밖이라고 임포트 금지는 아니다. ds:build 게이트가 이 배열을 읽는다 — components/src/ui의 모든 파일은 vocab files ∪ infrastructure ∪ unadopted 중 하나에 속해야 한다.",
+  "infrastructure": ["avatar", "label", "scroll-area", "separator", "toggle", "state-preview"],
+  "$unadopted": "실물은 있으나 채택 어휘가 없는 것 — 쓰려면 채택 절차를 밟아야 한다.",
+  "unadopted": ["stepper"]
 }

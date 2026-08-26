@@ -12,7 +12,8 @@ const ITEMS = [
 
 export default function Page() {
   return (
-    <div className="flex h-screen items-start justify-end bg-white pt-6 pr-[420px]">
+    // 우측 여백 최소화 — 허브 카드 iframe(420×500)이 이 영역을 그대로 담는다
+    <div className="flex h-screen items-start justify-end bg-white pt-6 pr-6">
       <style>{`nextjs-portal { display: none; }`}</style>
       <NotificationPanel items={ITEMS} onReadAll={() => {}} defaultOpen />
     </div>

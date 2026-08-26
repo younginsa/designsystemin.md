@@ -129,8 +129,6 @@ export function CatalogPanel({ approvals, ds365, urls }: {
               <div className="comp-vis">
                 {pv ? (
                   <div className="livehole"><FitScale pv={pv} /></div>
-                ) : s.pv ? (
-                  <img className="pv" src={s.pv} alt="shadcn 기본형" />
                 ) : s.shot && s.crop ? (
                   <div className="cutwrap"><HoverCut shot={s.shot} crop={s.crop} urls={urls} /></div>
                 ) : (

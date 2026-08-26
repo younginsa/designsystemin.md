@@ -73,8 +73,6 @@ function CardVisual({ card, urls }: { card: HubCard; urls: Record<string, string
         <div className="livehole">
           <FitScale pv={pv} />
         </div>
-      ) : card.pv ? (
-        <img className="pv" src={card.pv} alt="shadcn 기본형" />
       ) : card.ph ? (
         <div className="ph"><span className="lb">{card.ph[0]}</span><span className="cap">{card.ph[1]}</span></div>
       ) : null}

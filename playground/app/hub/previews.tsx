@@ -1060,7 +1060,7 @@ export const PREVIEWS: Record<string, Pv> = {
   "ov-sheet": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/overlay/?c=sheet" /> },
   "detail-panel": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/detail-panel/" /> },
   "ov-menus": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/overlay/?c=menus" /> },
-  "ov-notif": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/notification-panel/" /> },
+  "ov-notif": { className: "", hubOnly: true, node: <RouteFrame src="/shadcn-preview/notification-panel/" w={420} h={500} /> },
   "search-box": {
     className: "",
     hubOnly: true,

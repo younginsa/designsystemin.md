@@ -312,6 +312,41 @@ if (existsSync(snapPath)) {
     }
   }
 
+  // ── 어휘 게이트 — approved ↔ vocab-map ↔ components/src/ui 전수 대조 ──
+  // 새 컴포넌트가 매핑 없이 추가되면 조회 경로(vocab-map)가 조용히 구멍 난다
+  // (2026-08-26 search-box 승격 때 수작업 기억에 의존했던 것의 기계화).
+  {
+    const vmPath = join(ROOT, "playground/public/vocab-map.json");
+    const apPath = join(ROOT, "playground/public/approved.json");
+    if (existsSync(vmPath) && existsSync(apPath)) {
+      const vm: any = JSON.parse(readFileSync(vmPath, "utf8"));
+      const approved: string[] = JSON.parse(readFileSync(apPath, "utf8")).approved ?? [];
+      const vocab: Record<string, { files: string[] }> = vm.vocab ?? {};
+      const uiDir = join(ROOT, "components/src/ui");
+      const files = new Set(readdirSync(uiDir).filter((f) => f.endsWith(".tsx")).map((f) => f.slice(0, -4)));
+      const vocabErrs: string[] = [];
+
+      const apSet = new Set(approved);
+      const vkSet = new Set(Object.keys(vocab));
+      for (const s of approved) if (!vkSet.has(s)) vocabErrs.push(`approved에만 있음(매핑 누락): ${s}`);
+      for (const s of vkSet) if (!apSet.has(s)) vocabErrs.push(`vocab-map에만 있음(미채택 잔재): ${s}`);
+
+      const referenced = new Set<string>([...(vm.infrastructure ?? []), ...(vm.unadopted ?? [])]);
+      for (const [slug, e] of Object.entries(vocab)) {
+        for (const f of e.files ?? []) {
+          if (!files.has(f)) vocabErrs.push(`없는 파일 참조: ${slug} → ${f}`);
+          referenced.add(f);
+        }
+      }
+      for (const f of files) {
+        if (!referenced.has(f)) vocabErrs.push(`components/src/ui/${f}.tsx 미등재 — vocab files 또는 infrastructure/unadopted에 넣을 것`);
+      }
+      if (vocabErrs.length) {
+        throw new Error(`어휘 게이트 실패 ${vocabErrs.length}건 (vocab-map.json ↔ approved.json ↔ components/src/ui):\n  ` + vocabErrs.join("\n  "));
+      }
+    }
+  }
+
   const md: string[] = [
     "# Theme × dstk 대조표",
     "",
