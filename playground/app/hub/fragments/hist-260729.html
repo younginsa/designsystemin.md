@@ -1,0 +1,79 @@
+
+          <h3>분석 개요</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">대상 제품</div>
+            <div class="v">HiNAS 365 — 함대(선단) 관리·업데이트 콘솔. <span class="mono">hinas365-dev.avikus.ai</span> (DEV) · <span class="mono">localhost:5173</span> (LOCAL, v1.3.0)</div>
+            <div class="k">입력</div>
+            <div class="v">스크린샷 55장, 1920×1080 · <span class="mono">screens/</span> — 앞으로는 스크린샷·HTML 파일 업로드로 확장</div>
+            <div class="k">분석일</div>
+            <div class="v">2026-07-29 · 파이프라인 개편 2026-07-31</div>
+            <div class="k">결과 요약</div>
+            <div class="v">화면 그룹 13종 · 컴포넌트 카드 57장 — shadcn 매핑 52 · 커스텀 제작 대상 5(마크다운 에디터·스테퍼·타임라인·히트맵·토폴로지)</div>
+          </div>
+        </div>
+
+          <h3>화면 인벤토리</h3>
+        <table>
+          <tr><th>화면 그룹</th><th style="width:56px">장수</th><th class="shot-cell">화면</th><th>주요 내용</th></tr>
+          <tr class="rowlink" data-shots="dashboard,timezone,notif,avatar-menu,version-donut"><td class="nowrap">대시보드</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="dashboard"></span></td><td>운영 현황 스탯 카드, 진단 결과 색상 타일, 업데이트 단계 퍼널, 제품별 버전 랭킹, 타임존·알림·프로필 팝오버</td></tr>
+          <tr class="rowlink" data-shots="ships-list,ships-scroll,ships-colfilter,filter-modal"><td class="nowrap">호선 리스트 (납품·테스트)</td><td class="num-r">4</td><td class="shot-cell"><span class="shot" data-shot="ships-list"></span></td><td>검색+필터 툴바, 데이터 테이블(정렬·컬럼 필터), 제품 칩, 구독 상태 도트, 호선 필터 모달, 내보내기 스플릿 버튼</td></tr>
+          <tr class="rowlink" data-shots="ship-create,ship-review"><td class="nowrap">호선 생성 위저드</td><td class="num-r">2</td><td class="shot-cell"><span class="shot" data-shot="ship-create"></span></td><td>3단 스테퍼 모달, 폼 섹션 박스, 라디오/체크박스 카드, 검토 요약(히어로 밴드 + 수정 링크)</td></tr>
+          <tr class="rowlink" data-shots="ship-detail,ship-detail-2,spec-history,product-delete,install-modal"><td class="nowrap">호선 상세</td><td class="num-r">6</td><td class="shot-cell"><span class="shot" data-shot="ship-detail"></span></td><td>액션바(드롭다운 2종), 태그 인풋, 정보 카드 kv, 메모 사이드패널, 제원 아코디언, 언더라인 탭 + 필 서브탭, Spec 이력·제품 삭제·설치파일 모달</td></tr>
+          <tr class="rowlink" data-shots="product-select,version-options"><td class="nowrap">제품/버전 선택 모달</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="product-select"></span></td><td>2단 스테퍼, 제품 체크리스트(택1 제약), 서버 선택 카드, 버전 페어 셀렉트, FEATURE TOGGLE 체크리스트</td></tr>
+          <tr class="rowlink" data-shots="update-overview,update-wizard,version-select,cloud-toggle,progress,update-download,update-result,update-step5,update-loading,update-rollback,datepicker,timeline-detail"><td class="nowrap">업데이트 개요·위저드</td><td class="num-r">12</td><td class="shot-cell"><span class="shot" data-shot="update-wizard"></span></td><td>5단 스테퍼, 좌측 요약 패널(버전 before→after, 복사 버튼), 상태 히스토리 타임라인, 진행률 바, IMAGE/BINARY 상태 표, 에러 콘솔, 결과 카드(완료·취소·실패), Cloud 토글 모달, 날짜 범위 피커</td></tr>
+          <tr class="rowlink" data-shots="diagnosis,diagnosis-heatmap,diag-json,diag-quickview,diag-charts"><td class="nowrap">자가 진단</td><td class="num-r">6</td><td class="shot-cell"><span class="shot" data-shot="diagnosis"></span></td><td>진단 아코디언(상태 필), 라인 차트(크로스헤어·툴팁), 히트맵 타임라인, JSON 상세 모달(세그먼트), Quick View 슬라이드오버, 플로팅 기간·제품 컨트롤</td></tr>
+          <tr class="rowlink" data-shots="sysdiag,sysdiag-detail"><td class="nowrap">시스템 진단 호선</td><td class="num-r">2</td><td class="shot-cell"><span class="shot" data-shot="sysdiag"></span></td><td>호선별 진단 칩 그리드, 필터 드롭다운 4종, 슬라이드오버 상세(히스토리 표 2종)</td></tr>
+          <tr class="rowlink" data-shots="compat,compat-edit,compat-chips,compat-tree,compat-add,compat-add-2"><td class="nowrap">버전 호환성</td><td class="num-r">6</td><td class="shot-cell"><span class="shot" data-shot="compat"></span></td><td>호환성 매트릭스(버전 칩+권장 별), 실시간 편집 모드(경고 배너·행 삭제), 칩 멀티셀렉트 모달, 업데이트 호환성 트리+표</td></tr>
+          <tr class="rowlink" data-shots="release-notes,release-dev,release-editor"><td class="nowrap">릴리즈 노트</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="release-notes"></span></td><td>버전 트리 내비, 마크다운 렌더·에디터(작성/미리보기), 메타 패널, 사용자용/개발자용 세그먼트, Helm/Binary 표</td></tr>
+          <tr class="rowlink" data-shots="topology,topo-2,topo-3"><td class="nowrap">네트워크 토폴로지</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="topology"></span></td><td>노드-링크 그래프(상태 범례), 노드 상세 패널, Add Node 모달</td></tr>
+          <tr class="rowlink" data-shots="security-scan,devqa-select,bundle-compare"><td class="nowrap">Developer / QA</td><td class="num-r">3</td><td class="shot-cell"><span class="shot" data-shot="security-scan"></span></td><td>보안 취약점 스캔(심각도 타일 6종 + 표), 번들 버전 비교(FROM→TO), 의존형 셀렉트</td></tr>
+          <tr class="rowlink" data-shots="permissions,accounts"><td class="nowrap">계정 · 권한</td><td class="num-r">2</td><td class="shot-cell"><span class="shot" data-shot="permissions"></span></td><td>권한 매트릭스(카테고리×역할 체크박스), 역할 태그 칩 편집(검색형 드롭다운)</td></tr>
+        </table>
+          <h3>우선 제작 목록</h3>
+        <p class="lead">기준: 등장 화면 수. P1 없이는 어떤 화면도 리디자인할 수 없다.</p>
+
+        <h3>P1 — 전 화면 공통 (13)</h3>
+        <table>
+          <tr><th>컴포넌트</th><th>근거</th><th style="width:300px">줌 컷</th></tr>
+          <tr class="rowlink" data-shots="version-options"><td>셀렉트 계열</td><td>거의 모든 폼·필터·모달에 등장</td><td><span class="cut" data-shot="version-options" data-crop="795,260,620,95"></span></td></tr>
+          <tr class="rowlink" data-shots="version-options"><td>체크박스 · 라디오 · 토글</td><td>폼, 권한 매트릭스, FEATURE TOGGLE, 필터</td><td><span class="cut" data-shot="version-options" data-crop="1115,425,330,440"></span></td></tr>
+          <tr class="rowlink" data-shots="sysdiag"><td>상태 필 + 상태 도트 (의미 색 체계)</td><td>전 화면 — 색 도입 범위 결정이 선행 조건</td><td><span class="cut" data-shot="sysdiag" data-crop="1000,325,545,55"></span></td></tr>
+          <tr class="rowlink" data-shots="release-notes"><td>탭 3종 (언더라인·필·세그먼트)</td><td>상세·릴리즈 노트·JSON 모달·호환성</td><td><span class="cut" data-shot="release-notes" data-crop="233,130,420,55"></span></td></tr>
+          <tr class="rowlink" data-shots="timezone"><td>드롭다운 메뉴 · 팝오버</td><td>상단바, 컬럼 필터, 액션바</td><td><span class="cut" data-shot="timezone" data-crop="1630,50,190,360"></span></td></tr>
+          <tr><td>브레드크럼</td><td>상세·위저드 전체</td></tr>
+          <tr class="rowlink" data-shots="sysdiag-detail"><td>페이지네이션(확장)</td><td>모든 리스트·표</td><td><span class="cut" data-shot="sysdiag-detail" data-crop="1635,920,255,50"></span></td></tr>
+          <tr class="rowlink" data-shots="update-wizard"><td>스테퍼</td><td>생성·업데이트 위저드</td><td><span class="cut" data-shot="update-wizard" data-crop="600,150,1200,75"></span></td></tr>
+          <tr class="rowlink" data-shots="sysdiag-detail"><td>슬라이드오버 패널</td><td>Quick View, 진단 상세</td><td><span class="cut" data-shot="sysdiag-detail" data-crop="1005,5,910,520"></span></td></tr>
+          <tr class="rowlink" data-shots="update-download"><td>배너 · 결과 카드 · 빈 상태</td><td>위저드 결과, 표 빈 상태 전반</td><td><span class="cut" data-shot="update-download" data-crop="595,350,1290,95"></span></td></tr>
+          <tr class="rowlink" data-shots="timeline-detail"><td>타임라인</td><td>STATUS HISTORY — 업데이트·진단 전체</td><td><span class="cut" data-shot="timeline-detail" data-crop="228,350,300,555"></span></td></tr>
+          <tr class="rowlink" data-shots="diagnosis"><td>아코디언</td><td>진단, 제원, Spec 이력</td><td><span class="cut" data-shot="diagnosis" data-crop="240,300,270,580"></span></td></tr>
+          <tr class="rowlink" data-shots="update-wizard"><td>툴팁(ⓘ)</td><td>폼 라벨 전반</td><td><span class="cut" data-shot="update-wizard" data-crop="1230,355,340,130"></span></td></tr>
+        </table>
+
+        <h3>P2 — 특정 화면군 (9)</h3>
+        <table>
+          <tr><th>컴포넌트</th><th>근거</th><th style="width:300px">줌 컷</th></tr>
+          <tr class="rowlink" data-shots="diagnosis"><td>라인 · 도넛 차트</td><td>자가 진단, 대시보드</td><td><span class="cut" data-shot="diagnosis" data-crop="555,165,1340,370"></span></td></tr>
+          <tr class="rowlink" data-shots="diagnosis-heatmap"><td>히트맵 상태 그리드</td><td>자가 진단</td><td><span class="cut" data-shot="diagnosis-heatmap" data-crop="555,290,1340,420"></span></td></tr>
+          <tr class="rowlink" data-shots="dashboard"><td>스탯 · 퍼널 타일, 랭킹 리스트</td><td>대시보드</td><td><span class="cut" data-shot="dashboard" data-crop="1005,130,890,170"></span></td></tr>
+          <tr class="rowlink" data-shots="compat-edit"><td>매트릭스 편집 표 + 권장 별</td><td>버전 호환성</td><td><span class="cut" data-shot="compat-edit" data-crop="233,355,1010,310"></span></td></tr>
+          <tr class="rowlink" data-shots="timeline-detail"><td>에러 콘솔(다크 로그)</td><td>업데이트 위저드</td><td><span class="cut" data-shot="timeline-detail" data-crop="525,585,1360,280"></span></td></tr>
+          <tr class="rowlink" data-shots="datepicker"><td>날짜 범위 피커</td><td>업데이트 리스트</td><td><span class="cut" data-shot="datepicker" data-crop="1120,220,395,250"></span></td></tr>
+          <tr class="rowlink" data-shots="accounts"><td>태그 인풋 · 역할 태그 칩</td><td>호선 상세, 계정 관리</td><td><span class="cut" data-shot="accounts" data-crop="945,235,390,330"></span></td></tr>
+          <tr class="rowlink" data-shots="release-editor"><td>마크다운 에디터·렌더러</td><td>릴리즈 노트</td><td><span class="cut" data-shot="release-editor" data-crop="650,235,625,510"></span></td></tr>
+          <tr class="rowlink" data-shots="progress"><td>진행률 바</td><td>이미지 다운로드</td><td><span class="cut" data-shot="progress" data-crop="545,450,1335,95"></span></td></tr>
+        </table>
+
+        <h3>P3 — 단일 화면 (3)</h3>
+        <table>
+          <tr><th>컴포넌트</th><th>근거</th><th style="width:300px">줌 컷</th></tr>
+          <tr class="rowlink" data-shots="topology"><td>노드-링크 토폴로지</td><td>네트워크 토폴로지 1개 화면</td><td><span class="cut" data-shot="topology" data-crop="245,195,970,660"></span></td></tr>
+          <tr class="rowlink" data-shots="diagnosis"><td>원형 FAB · 플로팅 컨트롤</td><td>자가 진단 — 플로팅 패턴 재검토(대체 UI) 권장</td><td><span class="cut" data-shot="diagnosis" data-crop="1595,1000,300,65"></span></td></tr>
+          <tr class="rowlink" data-shots="compat-chips"><td>칩 멀티셀렉트 그리드</td><td>호환성 버전 선택 모달</td><td><span class="cut" data-shot="compat-chips" data-crop="700,340,520,400"></span></td></tr>
+        </table>
+
+        <div class="note">
+          다음 단계 제안 — ① 상태 색 도입 범위 결정(P1 선행 조건) ② P1 13종을 design.md 컴포넌트 카탈로그 형식(언제 쓴다/안 쓴다)으로 정의 ③ 대시보드·호선 리스트 2개 화면을 파일럿으로 365 DS 재해석 목업 제작.
+        </div>
+        

@@ -1,0 +1,93 @@
+
+        <div class="dsnav-sec" data-sec="pipeline">
+        <h3>파이프라인 — 스크린샷에서 DS, DS에서 페이지까지</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">1 업로드</div>
+            <div class="v">제품 스크린샷 또는 HTML 파일을 입력으로 올린다.</div>
+            <div class="k">2 컴포넌트 추출</div>
+            <div class="v">화면을 판독해 UI 컴포넌트를 추출하고 그룹으로 분류한다 → 365 탭 <strong>「컴포넌트 채택」</strong>에 카드로 등재.</div>
+            <div class="k">3 shadcn 매핑</div>
+            <div class="v">추출된 각 컴포넌트를 shadcn 기본형과 매핑한다. 카드의 기본 상태가 shadcn 렌더, hover가 원본 컷, 칩이 매핑 결과다. 직접 대응이 없으면 <span class="mono">shadcn: 없음</span>으로 표기하고 커스텀 제작 대상으로 남긴다.</div>
+            <div class="k">4 채택 판정</div>
+            <div class="v">카드에서 컴포넌트별 채택 여부를 토글로 결정한다 — <strong>채택된 것만이 DS 어휘다(유일한 게이트)</strong>. shadcn 매핑분은 기본형 위에 값 조정·토큰을 얹고, 매핑 없는 것은 <strong>원본 재현으로 제작 완료된 뒤</strong> 같은 채택 절차를 밟는다. 결과는 <span class="mono">approved.json</span>으로 커밋되어 팀과 공유된다.</div>
+            <div class="k">5 페이지 생성</div>
+            <div class="v">저장소를 클론한 폴더에서 <strong>Claude Code 세션에 바로 채팅</strong>하면 된다 — CLAUDE.md 계약이 자동 적용되어, 켤 때마다 최신 DS를 받고 <strong>채택 컴포넌트·365 토큰만으로</strong> 뼈대 페이지를 만들어 대화로 다듬는다(기본·빈·로딩·에러 4개 상태 포함). 절차는 「사용방법」의 빠른 시작 참고.</div>
+            <div class="k">6 365 브랜딩 <span class="chip">적용 예정</span></div>
+            <div class="v">생성된 페이지를 미리보기 패널에서 확인하고 <strong>[365 DS 적용]</strong>으로 타이포·컬러·라운드 등 365 토큰을 입힌다. [shadcn]/[DS 적용] 탭으로 전환 비교. 선행 조건: 365 토큰 값 정의(상태 색 도입 범위 포함).</div>
+          </div>
+        </div>
+
+      <h3>토큰 파이프라인</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">원천</div>
+            <div class="v"><code>dstk/*.json</code> — W3C DTCG 표준, core → semantic 참조 구조.</div>
+            <div class="k">산출</div>
+            <div class="v"><code>pnpm ds:build</code> → CSS 변수(<code>dist/dstk.css</code>) + Tailwind 프리셋 → playground·생성 페이지가 사용. 빌드·커밋은 관리자만.</div>
+            <div class="k">365 토큰</div>
+            <div class="v"><code>ds365.json</code> — 채택 카탈로그의 365 토큰·값 조정 기록(현재 1차: 네이비·각짐). 값이 확정되면 dstk로 편입한다.</div>
+          </div>
+        </div>
+        </div><!-- /dsnav-sec pipeline -->
+
+        <div class="dsnav-sec" data-sec="common" style="display:none">
+        <h3>레퍼런스 구현 스택</h3>
+        <p>레퍼런스 구현 스택: <strong>React + Tailwind + shadcn/ui 계열</strong>. 화면 이해(시각 스펙)용이며, 토큰 JSON은 중립이므로 다른 스택 제품도 토큰을 가져다 쓸 수 있다.</p>
+        <h3>Theme × dstk 대조표 <span class="mono" id="theme-map-updated" style="font-size:12px;color:var(--doc-muted)"></span></h3>
+        <p class="lead">피그마 「Theme × dstk 대조표」와 같은 데이터 — <strong>Theme 변수 ↔ dstk 토큰 매핑</strong>. 원천 <span class="mono">dstk/figma-theme-snapshot.json</span>, ds:build가 대조 검증 후 게시한다.</p>
+        <div id="theme-map-table"></div>
+        </div><!-- /dsnav-sec common -->
+
+        <div class="dsnav-sec" data-sec="d365" style="display:none">
+        <p style="margin:8px 0 28px"><a class="chip" id="dsnav-open-365" href="#adopt">365 탭 열기 →</a></p>
+        <h3>HiNAS 365 DS — 공통 DS 위의 제품 층</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">무엇</div>
+            <div class="v">공통 DS 위에 <strong>채택 어휘</strong>(<span class="mono">approved.json</span>)와 <strong>365 토큰</strong>(<span class="mono">ds365.json</span>)을 얹은 HiNAS 365 전용 층. 채택된 것만이 어휘다.</div>
+            <div class="k">관리 위치</div>
+            <div class="v">채택 토글·현황은 「컴포넌트 채택」, 토큰·값 조정은 「365 DS」, 레이아웃 프레임은 「페이지 템플릿」, 기획 입력 기록은 「히스토리」 — 모두 365 탭.</div>
+            <div class="k">현재 상태</div>
+            <div class="v">365 토큰 1차(네이비·각짐) 정의됨 — 상태 색·타이포·간격 정의가 다음 단계(6단계 브랜딩의 선행 조건).</div>
+          </div>
+        </div>
+        </div><!-- /dsnav-sec d365 -->
+
+        <div class="dsnav-sec" data-sec="palette" style="display:none">
+        <h3>팔레트 — 유일한 색 원천 <span class="mono" style="font-size:12px;color:var(--doc-muted)">dstk/palette.json · 피그마 fill 실측</span></h3>
+        <p class="lead">번호는 밝기가 아니라 <strong>역할</strong>(50=배경 · 100=면 · 900=최대 대비) — 시맨틱이 번호만 참조하면 조명 모드 전환이 자동이다. ★ = 대비 인증 앵커(Day=600 · Dusk·Night=500).</p>
+        <div class="mode-pills" id="pal-modes"></div>
+        <div id="pal-grid"></div>
+        </div><!-- /dsnav-sec palette -->
+
+        <div class="dsnav-sec" data-sec="semantic" style="display:none">
+        <h3>공통 시맨틱 — 이름표 (동결)</h3>
+        <p class="lead">값 직접 기입 금지 — 전부 팔레트 참조(빌드 게이트가 강제). 모드별 해석값을 나란히 보인다.
+        <br><strong>상태-토큰 매핑</strong>(상태 이름 ≠ 토큰 이름): WARNING(심각)=<span class="mono">destructive</span> · CAUTION(주의)=<span class="mono">warning</span> · UNREAD(미확인)=<span class="mono">info</span> · NORMAL(정상)=<span class="mono">success</span> — 위계 빨강 &gt; 주황 &gt; 파랑 &gt; 초록.</p>
+        <div id="sem-table"></div>
+        </div><!-- /dsnav-sec semantic -->
+
+        <div class="dsnav-sec" data-sec="typo" style="display:none">
+        <h3>타이포 스케일 — 시거리 기반(1M/2M)</h3>
+        <p class="lead">피그마 HiNAS Control DNV TA 실측(4K 캔버스 px). 근거: <strong>ISO 8468 6.3.4.1</strong> — 글자 높이(mm) ≥ 3.5 × 시거리(m), 폭 = 0.7 × 높이. 원문·생성 게이트: <span class="mono">regulations/control.md</span></p>
+        <div id="typo-table"></div>
+        </div><!-- /dsnav-sec typo -->
+
+        <div class="dsnav-sec" data-sec="cloud" style="display:none">
+        <h3>HiNAS Cloud — 제품 층</h3>
+        <div class="card"><div class="card-body kv">
+          <div class="k">상태</div><div class="v">제품 토큰 미정의 — <span class="mono">dstk/products/cloud.json</span> 스켈레톤만 등재. 오버라이드가 생기면 이 섹션에 표가 생긴다.</div>
+        </div></div>
+        </div><!-- /dsnav-sec cloud -->
+
+        <div class="dsnav-sec" data-sec="control" style="display:none">
+        <h3>HiNAS Control — 제품 층</h3>
+        <div class="card"><div class="card-body kv">
+          <div class="k">조명 모드</div><div class="v">기본 축 = <strong>Dusk / Night</strong> — 아래 스와치도 Dusk 값을 대표로 보인다.</div>
+          <div class="k">destructive 페어</div><div class="v" id="ctl-tokens">…</div>
+          <div class="k">폰트 규정</div><div class="v"><strong>ISO 8468 6.3.4.1</strong> — 글자 높이(mm) ≥ 3.5 × 시거리(m), 폭 = 0.7 × 높이. 예: 시거리 2m → 높이 7mm · 폭 5mm. Control 화면 생성 시 지정 시거리 스케일 세트(1M/2M) 미만 크기는 <strong>self-check가 차단</strong>. mm→px 환산표는 대상 디스플레이 스펙 확정 후 — <span class="mono">추후 확정</span>.</div>
+          <div class="k">타이포 세트</div><div class="v" id="ctl-typo">…</div>
+          <div class="k">원문</div><div class="v"><span class="mono">regulations/control.md</span> · <span class="mono">dstk/products/control.json</span></div>
+        </div></div>
+        </div><!-- /dsnav-sec control -->

@@ -1,0 +1,127 @@
+
+
+        <div class="block">
+          <div class="two-col">
+            <div>
+              <div class="col-head">아키텍처 — 저장소 구조</div>
+              <div class="diagram">
+<pre>designsystemin.md/
+├── design.md               # AI 규칙서 — 시스템의 헌법
+├── CLAUDE.md               # 세션 생성 계약 (자동 최신화·어휘 게이트·질문 형식·DS 요청)
+├── dstk/
+│   ├── core.json           # 원시 값: 팔레트, 타입 스케일, 간격 스케일 (W3C DTCG)
+│   └── semantic.json       # 의미 토큰: background, foreground, primary…
+├── components/src/ui/      # @ds/ui — shadcn 기본형 ~50종 + 원본 재현 (timeline, stepper…)
+├── layout/                 # 레이아웃 프레임 (admin-console — HiNAS 365 메인 레이아웃)
+├── regulations/            # 제품별 우선 규정 — 생성 전 필수 검토
+├── playground/
+│   ├── public/index.html   # 이 문서 사이트 (HINAS DS · 365 탭)
+│   ├── public/approved.json  # 채택 어휘 — 유일한 게이트 (관리자 커밋)
+│   ├── public/ds365.json     # 365 토큰·값 조정·재현 제작 상태
+│   └── app/generated/      # 세션이 만든 페이지 (각자 로컬 보관)
+├── dist/dstk.css           # 토큰 빌드 산출물 (직접 편집·클론에서 재생성 금지)
+└── scripts/
+    ├── ds-jira.mjs         # DS 요청 → Jira DES 보드 티켓
+    └── encrypt-screens.mjs # 원본 스크린샷 암호화</pre>
+              </div>
+            </div>
+            <div>
+              <table>
+                <tr><th>항목</th><th>결정</th></tr>
+                <tr><td>git</td><td>source of truth — 커밋된 것만 진실</td></tr>
+                <tr><td>approved.json</td><td>채택 어휘 = 유일한 게이트. 확장은 관리자 커밋으로만</td></tr>
+                <tr><td>design.md</td><td>업데이트는 대형선 디자인파트 승인 후 커밋</td></tr>
+                <tr><td>결과물</td><td>요청자 로컬 보관 — 저장소에 커밋하지 않음</td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>처음부터 따라하기 — 빠른 시작</h3>
+          <div class="card">
+            <div class="card-body kv">
+              <div class="k">1 최초 세팅</div>
+              <div class="v">터미널에서 <span class="mono">git clone https://github.com/younginsa/designsystemin.md</span> → 폴더에서 <span class="mono">claude</span> 실행 → "프로젝트 훅 신뢰" 물음에 승인. 이후로는 켤 때마다 최신 DS가 자동 적용된다.</div>
+              <div class="k">2 페이지 만들기</div>
+              <div class="v">Claude Code에게 요구사항을 채팅으로 전달한다. 스크린샷·와이어프레임 드래그, <strong>"메인 레이아웃 본문에 넣어줘"</strong> 같은 요청 모두 가능. 세션이 질문하면 맨 아래 한 줄 양식으로 답한다 (예: <span class="mono">1 a go</span>).</div>
+              <div class="k">3 미리보기</div>
+              <div class="v">세션이 주는 로컬 URL에서 확인한다 (기본·빈·로딩·에러 토글). 파일이 필요하면 <strong>"HTML로 줘"</strong> — 설치 없이 열리는 정적 파일로 추출된다.</div>
+              <div class="k">4 결과물</div>
+              <div class="v">본인 로컬 <span class="mono">playground/app/generated/</span>에 생성된다.</div>
+              <div class="k">5 디자이너에게 요청</div>
+              <div class="v"><strong>새로운 구성요소가 나오면</strong> 세션이 먼저 <strong>"Jira에 DS 요청으로 올릴까요?"</strong>를 묻는다. 직접 올리려면 <strong>"DS 요청: ○○ 추가 필요"</strong> — DES 보드에 요청자=본인으로 접수된다. (최초 1회: <span class="mono">id.atlassian.com</span>에서 API 토큰 발급 → <span class="mono">~/.zshrc</span>에 <span class="mono">JIRA_EMAIL</span>·<span class="mono">JIRA_API_TOKEN</span> 등록 → 터미널 재시작)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>사용하기</h3>
+          <p class="lead" style="margin-bottom:20px">자연어 한 문단을 입력하면 —</p>
+          <div class="three-col">
+            <div class="step">
+              <div class="shot"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+              <div class="step-cap">
+                <span class="n">1</span>
+                <p>디자인 시스템을 준수하는 <strong>동작하는 목업 페이지</strong>(코드)가 생성되고,</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="shot"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+              <div class="step-cap">
+                <span class="n">2</span>
+                <p>사람이 보고 <strong>채팅으로 그 자리에서 수정</strong>하면 (재생성 없음),</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="shot"><span class="lb">PLACEHOLDER</span><span class="cap">gif · mp4 · image</span></div>
+              <div class="step-cap">
+                <span class="n">3</span>
+                <p>완성 화면을 <strong>HTML 파일로 추출해 누구에게나 전달</strong>한다 (설치 불필요).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>생성 워크플로우</h3>
+
+          <div class="card">
+            <div class="card-head"><span>원천과 배포 — 버전 관리</span></div>
+            <div class="card-body kv">
+              <div class="k">원천</div>
+              <div class="v">design.md를 포함한 모든 규칙의 원천은 사내 git 원격 저장소 하나다. 개인이 파일을 복사해 각자 첨부하는 방식은 금지한다. 버전 분기가 생기는 즉시 시스템이 무너진다.</div>
+              <div class="k">자동 최신화</div>
+              <div class="v">세션을 켤 때마다 훅이 <span class="mono">git pull</span>을 실행한다 — 클론은 항상 최신이고, 사용자가 할 일은 없다.</div>
+              <div class="k">버전 표시</div>
+              <div class="v">세션 하단 배지 <span class="mono">365 DS 최신 ✓ · 날짜판</span>과 첫 응답 첫 줄의 <span class="mono">[365 DS]</span> 상태 인용으로, 어느 버전 DS로 작업 중인지 항상 보인다.</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><span>세션이 따르는 절차 — CLAUDE.md 계약</span></div>
+            <div class="card-body kv">
+              <div class="k">생성 전</div>
+              <div class="v">해당 제품 <code>regulations/</code> 검토 (충돌 발견 시 생성 전에 알림) → design.md + 채택 어휘(<span class="mono">approved.json</span>) + 365 토큰 로드 → 레이아웃 프레임 대조("어느 프레임의 본문인가, 단독인가" — 애매하면 생성 전에 질문).</div>
+              <div class="k">생성</div>
+              <div class="v">뼈대 우선, 단일 파일 진화 — 수정은 재생성 없이 해당 부분만. 채택 어휘 밖 요소는 만들지 않고 자리표시 + DS 요청 제안.</div>
+              <div class="k">생성 후</div>
+              <div class="v">self-check(임의 값 grep) → dev 서버 렌더 확인 → 미리보기 URL 안내. 무거운 빌드 검증은 하지 않는다 — "HTML로 줘" 요청 시에만 빌드.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="block">
+          <h3>품질 검증</h3>
+          <div class="card">
+            <div class="card-head"><span>3단 게이트</span></div>
+            <div class="card-body kv">
+              <div class="k">기계 검증</div>
+              <div class="v">self-check — 임의 색·임의 값 grep 검사 (<span class="mono">#hex</span>, <span class="mono">-[..]</span> 금지). 생성 직후 자동 실행.</div>
+              <div class="k">시각 검증</div>
+              <div class="v">세션이 dev 서버 렌더를 직접 확인한 뒤 전달한다.</div>
+              <div class="k">사람 확인</div>
+              <div class="v">최종 게이트. 요청자가 미리보기로 보고, 고칠 부분은 채팅으로 그 자리에서 수정.</div>
+            </div>
+          </div>
+        </div>
