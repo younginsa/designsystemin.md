@@ -60,6 +60,7 @@
     "sidebar-nav": { "name": "사이드바 내비", "files": ["sidebar"] },
     "skeleton": { "name": "스켈레톤 (로딩)", "files": ["skeleton"] },
     "timeline": { "name": "타임라인", "files": ["timeline"] },
+    "version-filter-chip": { "name": "버전 조건 필터 칩", "files": ["version-filter-chip", "popover", "select", "button"] },
     "viz-donut": { "name": "도넛 차트", "files": ["chart"] },
     "viz-line": { "name": "라인 차트", "files": ["chart"] }
   },

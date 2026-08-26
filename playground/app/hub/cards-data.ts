@@ -157,6 +157,11 @@ export const CARD_GROUPS: HubGroup[] = [
         "shadcn": "조합(InputGroup·Popover)"
       },
       {
+        "slug": "version-filter-chip",
+        "name": "버전 조건 필터 칩 (계층 캐스케이드)",
+        "shadcn": "조합(Popover·Select·Button)"
+      },
+      {
         "slug": "form-textarea",
         "name": "텍스트에어리어 · 글자수",
         "shadcn": "Textarea 조합",

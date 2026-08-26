@@ -1066,6 +1066,11 @@ export const PREVIEWS: Record<string, Pv> = {
     hubOnly: true,
     node: <RouteFrame src="/shadcn-preview/search-box/" w={560} h={420} />,
   },
+  "version-filter-chip": {
+    className: "",
+    hubOnly: true,
+    node: <RouteFrame src="/shadcn-preview/version-filter-chip/" w={480} h={520} />,
+  },
   "ov-popover": {
     className: "flex items-start justify-center gap-2 " + BOX + " p-6",
     style: { width: 400 },
