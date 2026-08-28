@@ -232,7 +232,7 @@ function RowsPerPageDemo() {
     <RowsPerPage
       value={v}
       onChange={setV}
-      summary={<>전체 247척 · <span className="text-destructive">●</span> 미입력 식별자 38척</>}
+      summary={<>전체 247척 (<span className="text-destructive">●</span> 미입력 38척)</>}
     />
   );
 }
