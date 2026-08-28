@@ -16,7 +16,8 @@ function Table({
         // plain = 카드 내부용 경량 표(D 대시보드 패턴) — 외곽선·헤더 배경 없음
         variant === "plain"
           ? "relative w-full overflow-x-auto [&_thead]:bg-transparent"
-          : "relative w-full overflow-x-auto rounded-md border"
+          : // overflow-y-hidden — thead·행 배경이 둥근 모서리를 뚫는 클리핑 버그 방지(x축 스크롤 유지)
+            "relative w-full overflow-x-auto overflow-y-hidden rounded-md border"
       }
     >
       <table

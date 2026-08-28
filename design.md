@@ -84,6 +84,22 @@ import 경로는 `@ds/ui/ui/<컴포넌트>` 형식이다. 예: `import { Button 
   제목 행에 두지 않는다.
 - **테이블 헤더는 한국어 기본** — 식별자(IMO·Hull 등)와 제품명(Control 등)만 영문 유지.
 
+### CTA 문법 (2026-08-28 확정 — 전 제품 공통)
+
+- **사이즈 통일**: 같이 쓰이는 CTA 페어/그룹(가로·세로)은 동일 사이즈만 조합한다 —
+  텍스트 크기 혼용 금지(예: sm 옆에 xs 금지).
+- **간격**: CTA 페어 간격 = `gap-1`(4px) — 한 덩어리로 읽히게.
+- **모서리**: 모든 CTA는 `rounded-md` 통일 — rounded-full 등 개별 라운드 금지.
+- **파괴 위계**: 파괴 보조 액션(항목·행 레벨) = `destructive-ghost`(텍스트/아이콘 동형) ·
+  페이지 레벨 파괴 액션 = `destructive-outline` 유지.
+  **Control 제외** — Control의 destructive는 면 색이라 글자 대비가 안 나온다
+  (가독성 게이트 destructive×background light·dark 한정). Control의 파괴 보조는
+  `destructive-outline`(면+글자)을 쓴다.
+- **카드 내부 보조 CTA** = outline sm · 텍스트 온리(아이콘 없음).
+  수정 토글 = ghost [수정]↔[완료], 편집성 액션(액션 컬럼 등)은 수정 모드에서만 노출.
+- **듀얼 CTA 표기**: [주 텍스트 버튼 + 보조 아이콘 버튼] 구성도 같은 변형 계열을 쓴다
+  (예: destructive-ghost 텍스트 + destructive-ghost 아이콘).
+
 ## 5. 금지 목록 (안티패턴)
 
 - 그라데이션 배경, 임의 그림자, 유리효과(backdrop-blur)

@@ -183,13 +183,8 @@ function FilterBar({
         )}
 
         {hasCondition && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-destructive hover:text-destructive"
-            onClick={clearAll}
-          >
-            {/* 파괴적 액션 = destructive 톤 — 아이콘은 같은 빨강의 60% */}
+          <Button variant="destructive-ghost" size="sm" onClick={clearAll}>
+            {/* 파괴 보조 액션 프리셋(CTA ④) — 아이콘은 같은 빨강의 60% */}
             <RotateCcw className="size-4 opacity-60" /> 필터초기화
           </Button>
         )}
