@@ -75,6 +75,12 @@
       "level": "aux"
     },
     {
+      "text": "primary",
+      "bg": "popover",
+      "level": "aux",
+      "note": "팝오버 위 파랑 CTA 텍스트(NotificationPanel '새 알림 (N)' 라벨 등)"
+    },
+    {
       "text": "input",
       "bg": "popover",
       "level": "aux",
@@ -91,7 +97,7 @@
   "tints": {
     "$note": "허용 틴트 목록 — 생성물의 /N 투명도 변형은 이 목록 안만 허용(클론 self-check 게이트). 목록 밖 = 차단 + 알림 + 통과 틴트 제안. ※ /generated/update-image-download는 레거시 유물로 감사 제외(자체 문법 7곳 — hinas365 업데이트 진행 상세 재제작 시 은퇴).",
     "allowed": [
-      { "class": "destructive/10", "use": "배너 표면(에러·취소·주의 배너 표준)" },
+      { "class": "destructive/10", "use": "배너 표면(에러·취소·주의 배너 표준) · destructive-ghost hover 잉크" },
       { "class": "destructive/12", "use": "진단 칩(상태 필 에러 배경)" },
       { "class": "success/12", "use": "진단 칩(상태 필 정상 배경)" },
       { "class": "primary/5", "use": "선택 강조 칩" },
