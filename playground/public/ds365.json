@@ -33,7 +33,7 @@
     },
     "ov-notif": {
       "build": "done",
-      "note": "조합 제작 — @ds/ui/ui/notification-panel(어휘 ov-notif의 실물). Bell ghost 트리거 + unread 도트 배지(destructive), 패널 w-80, 헤더 알림·모두 읽음 양끝 대칭(py-0.5), 아이템 도트 슬롯 상시 렌더(unread=primary·read=투명 — 제목 좌정렬 유지) + 시간 pl-3.5. '모두 보기' 푸터는 onViewAll 예약(NotificationCenter 2단계). 손 조합 금지",
+      "note": "조합 제작 — @ds/ui/ui/notification-panel(어휘 ov-notif의 실물). Bell ghost 트리거 + unread 도트 배지(destructive), 패널 w-80, 헤더 알림·모두 읽음 양끝 대칭(py-0.5), 아이템 도트 슬롯 상시 렌더(unread=primary·read=투명 — 제목 좌정렬 유지) + 시간 pl-3.5. 헤더 우측 버튼(=모두 읽음 액션) 라벨은 상태 전이(2026-08-28 확정): unread 있음 '새 알림 (N)' → 클릭(전체 읽음)·없음 '모두 읽음' 비활성. '모두 보기' 푸터는 onViewAll 예약(NotificationCenter 2단계). 손 조합 금지",
       "render": "done"
     },
     "detail-panel": {

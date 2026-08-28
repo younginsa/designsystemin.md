@@ -3,7 +3,9 @@
 // 알림 패널 프리셋 — shadcn DropdownMenu 조합(새 엔진 아님). ov-notif 어휘의 실물.
 // 트리거: Bell ghost 아이콘 버튼 + unread 존재 시 우상단 destructive 도트 배지.
 // 아이템: 도트 슬롯 상시 렌더(unread=primary · read=투명 — 제목 좌정렬 유지) + 제목 + 시간(pl-3.5 제목 좌정렬).
-// '모두 읽음' → 전체 unread 해제(도트·벨 배지 소멸). '모두 보기' 푸터는 onViewAll 전달 시에만
+// 헤더 우측 버튼 = 모두 읽음 액션. 라벨은 상태 전이(2026-08-28 확정):
+//   새 알림 있음 → '새 알림 (N)' · 클릭(전체 unread 해제, 도트·벨 배지 소멸) 후·없음 → '모두 읽음' 비활성.
+// '모두 보기' 푸터는 onViewAll 전달 시에만
 // 렌더 — NotificationCenter(2단계 신설 예정) 진입용 예약 슬롯. 손 조합 금지.
 
 import * as React from "react"
@@ -67,7 +69,7 @@ function NotificationPanel({
             onClick={onReadAll}
             disabled={!hasUnread}
           >
-            모두 읽음{hasUnread ? ` (${unreadCount}건)` : ""}
+            {hasUnread ? `새 알림 (${unreadCount})` : "모두 읽음"}
           </Button>
         </div>
         <DropdownMenuSeparator />
