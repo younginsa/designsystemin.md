@@ -1,90 +1,90 @@
-/* 자동 생성 — 손 편집 금지 · commit 2015814 · 2026-09-02 · 원천: dstk/*.json (git이 source of truth) */
+/* 자동 생성 — 손 편집 금지 · commit 7a45ec2 · 2026-09-02 · 원천: dstk/*.json (git이 source of truth) */
 
-/* semantic-token — 팔레트→시맨틱 매칭(모드별 해석값 · 주석=팔레트 참조). card·popover는 background와 별도 토큰 */
+/* semantic-token — 팔레트→시맨틱 매칭. 값은 primitives 참조(var 사슬 — dstk 갱신이 자동 전파), 주석=해석 hex. card·popover는 background와 별도 토큰 */
 
 :root {
-  --general-background: #FFFFFF; /* {palette.basic.white.100} */
-  --general-foreground: #3C3E47; /* {palette.gray.700@day} */
-  --general-card: #FFFFFF; /* {palette.basic.white.100} */
-  --general-card-foreground: #3C3E47; /* {palette.gray.700@day} */
-  --general-popover: #FFFFFF; /* {palette.basic.white.100} */
-  --general-popover-foreground: #3C3E47; /* {palette.gray.700@day} */
-  --general-primary: #4477F9; /* {palette.product.hinas-brand} */
-  --general-primary-foreground: #FFFFFF; /* {palette.basic.white.100} */
-  --general-secondary: #F9FAFB; /* {palette.gray.20@day} */
-  --general-secondary-foreground: #5D6275; /* {palette.gray.600@day} */
-  --general-muted: #F2F4F8; /* {palette.gray.50@day} */
-  --general-muted-foreground: #00000033; /* {palette.basic.black.20} */
-  --general-accent: #0000000F; /* {palette.basic.black.6} */
-  --general-accent-foreground: #3C3E47; /* {palette.gray.700@day} */
-  --general-destructive: #FF5B5B; /* {palette.red.600@dusk} */
-  --general-destructive-foreground: #FFFFFF; /* {palette.basic.white.100} */
-  --general-success: #24A148; /* {palette.green.500@day} */
-  --chart-1: #002D9C; /* {palette.blue.800@day} */
-  --chart-2: #0043CE; /* {palette.blue.700@day} */
-  --chart-3: #0F62FE; /* {palette.blue.600@day} */
-  --chart-4: #78A9FF; /* {palette.blue.400@day} */
-  --chart-5: #D0E2FF; /* {palette.blue.200@day} */
-  --general-border: #ECEDF0; /* {palette.gray.100@day} */
-  --general-input: #858998; /* {palette.gray.500@day} */
-  --general-ring: #DBDEE8; /* {palette.gray.200@day} */
-  --general-on-color: #FFFFFF; /* {palette.basic.white.100} — 피그마 General/on-color, 전 모드 동일 */
+  --general-background: var(--white-100); /* #FFFFFF */
+  --general-foreground: var(--gray-700); /* #3C3E47 */
+  --general-card: var(--white-100); /* #FFFFFF */
+  --general-card-foreground: var(--gray-700); /* #3C3E47 */
+  --general-popover: var(--white-100); /* #FFFFFF */
+  --general-popover-foreground: var(--gray-700); /* #3C3E47 */
+  --general-primary: var(--product-hinas-brand); /* #4477F9 */
+  --general-primary-foreground: var(--white-100); /* #FFFFFF */
+  --general-secondary: var(--gray-20); /* #F9FAFB */
+  --general-secondary-foreground: var(--gray-600); /* #5D6275 */
+  --general-muted: var(--gray-50); /* #F2F4F8 */
+  --general-muted-foreground: var(--black-20); /* #00000033 */
+  --general-accent: var(--black-6); /* #0000000F */
+  --general-accent-foreground: var(--gray-700); /* #3C3E47 */
+  --general-destructive: var(--dusk-red-600); /* #FF5B5B */
+  --general-destructive-foreground: var(--white-100); /* #FFFFFF */
+  --general-success: var(--green-500); /* #24A148 */
+  --chart-1: var(--blue-800); /* #002D9C */
+  --chart-2: var(--blue-700); /* #0043CE */
+  --chart-3: var(--blue-600); /* #0F62FE */
+  --chart-4: var(--blue-400); /* #78A9FF */
+  --chart-5: var(--blue-200); /* #D0E2FF */
+  --general-border: var(--gray-100); /* #ECEDF0 */
+  --general-input: var(--gray-500); /* #858998 */
+  --general-ring: var(--gray-200); /* #DBDEE8 */
+  --general-on-color: var(--white-100); /* #FFFFFF — 피그마 General/on-color, 전 모드 동일 */
 }
 
 .dark {
-  --general-background: #1B1C21; /* {palette.gray.200@dusk} */
-  --general-foreground: #F2F4F8; /* {palette.gray.50@day} */
-  --general-card: #1B1C21; /* {palette.gray.200@dusk} */
-  --general-card-foreground: #F2F4F8; /* {palette.gray.50@day} */
-  --general-popover: #1B1C21; /* {palette.gray.200@dusk} */
-  --general-popover-foreground: #F2F4F8; /* {palette.gray.50@day} */
-  --general-primary: #348FF4; /* {palette.product.hinas-brand-dark} */
-  --general-primary-foreground: #FFFFFF; /* {palette.basic.white.100} */
-  --general-secondary: #23252B; /* {palette.gray.300@dusk} */
-  --general-secondary-foreground: #D0D2D9; /* {palette.gray.800@dusk} */
-  --general-muted: #2F323B; /* {palette.gray.350@dusk} */
-  --general-muted-foreground: #FFFFFF33; /* {palette.basic.white.20} */
-  --general-accent: #FFFFFF1F; /* {palette.basic.white.12} */
-  --general-accent-foreground: #F2F4F8; /* {palette.gray.50@day} */
-  --general-destructive: #FA454E; /* {palette.red.500@day} */
-  --general-destructive-foreground: #FFFFFF; /* {palette.basic.white.100} */
-  --general-success: #24A148; /* {palette.green.500@day} */
-  --chart-1: #002D9C; /* {palette.blue.800@day} */
-  --chart-2: #0043CE; /* {palette.blue.700@day} */
-  --chart-3: #0F62FE; /* {palette.blue.600@day} */
-  --chart-4: #78A9FF; /* {palette.blue.400@day} */
-  --chart-5: #D0E2FF; /* {palette.blue.200@day} */
-  --general-border: #FFFFFF14; /* {palette.basic.white.8} */
-  --general-input: #858998; /* {palette.gray.600@dusk} */
-  --general-ring: #3C3E47; /* {palette.gray.400@dusk} */
-  --general-on-color: #FFFFFF; /* {palette.basic.white.100} — 피그마 General/on-color, 전 모드 동일 */
+  --general-background: var(--gray-200); /* #1B1C21 */
+  --general-foreground: var(--day-gray-50); /* #F2F4F8 */
+  --general-card: var(--gray-200); /* #1B1C21 */
+  --general-card-foreground: var(--day-gray-50); /* #F2F4F8 */
+  --general-popover: var(--gray-200); /* #1B1C21 */
+  --general-popover-foreground: var(--day-gray-50); /* #F2F4F8 */
+  --general-primary: var(--product-hinas-brand-dark); /* #348FF4 */
+  --general-primary-foreground: var(--white-100); /* #FFFFFF */
+  --general-secondary: var(--gray-300); /* #23252B */
+  --general-secondary-foreground: var(--gray-800); /* #D0D2D9 */
+  --general-muted: var(--gray-350); /* #2F323B */
+  --general-muted-foreground: var(--white-20); /* #FFFFFF33 */
+  --general-accent: var(--white-12); /* #FFFFFF1F */
+  --general-accent-foreground: var(--day-gray-50); /* #F2F4F8 */
+  --general-destructive: var(--day-red-500); /* #FA454E */
+  --general-destructive-foreground: var(--white-100); /* #FFFFFF */
+  --general-success: var(--day-green-500); /* #24A148 */
+  --chart-1: var(--day-blue-800); /* #002D9C */
+  --chart-2: var(--day-blue-700); /* #0043CE */
+  --chart-3: var(--day-blue-600); /* #0F62FE */
+  --chart-4: var(--day-blue-400); /* #78A9FF */
+  --chart-5: var(--day-blue-200); /* #D0E2FF */
+  --general-border: var(--white-8); /* #FFFFFF14 */
+  --general-input: var(--gray-600); /* #858998 */
+  --general-ring: var(--gray-400); /* #3C3E47 */
+  --general-on-color: var(--white-100); /* #FFFFFF — 피그마 General/on-color, 전 모드 동일 */
 }
 
 .theme-control {
-  --general-background: #15161A; /* {palette.gray.100@dusk} */
-  --general-foreground: #F2F4F8; /* {palette.gray.50@day} */
-  --general-card: #15161A; /* {palette.gray.100@dusk} */
-  --general-card-foreground: #F2F4F8; /* {palette.gray.50@day} */
-  --general-popover: #15161A; /* {palette.gray.100@dusk} */
-  --general-popover-foreground: #F2F4F8; /* {palette.gray.50@day} */
-  --general-primary: #348FF4; /* {palette.product.hinas-brand-dark} */
-  --general-primary-foreground: #15161A; /* {palette.gray.100@dusk} */
-  --general-secondary: #3C3E47; /* {palette.gray.400@dusk} */
-  --general-secondary-foreground: #D0D2D9; /* {palette.gray.800@dusk} */
-  --general-muted: #2F323B; /* {palette.gray.350@dusk} */
-  --general-muted-foreground: #FFFFFF33; /* {palette.basic.white.20} */
-  --general-accent: #FFFFFF1F; /* {palette.basic.white.12} */
-  --general-accent-foreground: #F2F4F8; /* {palette.gray.50@day} */
-  --general-destructive: #A50000; /* {palette.red.100@dusk} */
-  --general-destructive-foreground: #FFFFFF; /* {palette.basic.white.100} */
-  --general-success: #24A148; /* {palette.green.500@day} */
-  --chart-1: #002D9C; /* {palette.blue.800@day} */
-  --chart-2: #0043CE; /* {palette.blue.700@day} */
-  --chart-3: #0F62FE; /* {palette.blue.600@day} */
-  --chart-4: #78A9FF; /* {palette.blue.400@day} */
-  --chart-5: #D0E2FF; /* {palette.blue.200@day} */
-  --general-border: #FFFFFF14; /* {palette.basic.white.8} */
-  --general-input: #858998; /* {palette.gray.600@dusk} */
-  --general-ring: #3C3E47; /* {palette.gray.400@dusk} */
-  --general-on-color: #FFFFFF; /* {palette.basic.white.100} — 피그마 General/on-color, 전 모드 동일 */
+  --general-background: var(--dusk-gray-100); /* #15161A */
+  --general-foreground: var(--day-gray-50); /* #F2F4F8 */
+  --general-card: var(--dusk-gray-100); /* #15161A */
+  --general-card-foreground: var(--day-gray-50); /* #F2F4F8 */
+  --general-popover: var(--dusk-gray-100); /* #15161A */
+  --general-popover-foreground: var(--day-gray-50); /* #F2F4F8 */
+  --general-primary: var(--product-hinas-brand-dark); /* #348FF4 */
+  --general-primary-foreground: var(--dusk-gray-100); /* #15161A */
+  --general-secondary: var(--dusk-gray-400); /* #3C3E47 */
+  --general-secondary-foreground: var(--dusk-gray-800); /* #D0D2D9 */
+  --general-muted: var(--dusk-gray-350); /* #2F323B */
+  --general-muted-foreground: var(--white-20); /* #FFFFFF33 */
+  --general-accent: var(--white-12); /* #FFFFFF1F */
+  --general-accent-foreground: var(--day-gray-50); /* #F2F4F8 */
+  --general-destructive: var(--dusk-red-100); /* #A50000 */
+  --general-destructive-foreground: var(--white-100); /* #FFFFFF */
+  --general-success: var(--day-green-500); /* #24A148 */
+  --chart-1: var(--day-blue-800); /* #002D9C */
+  --chart-2: var(--day-blue-700); /* #0043CE */
+  --chart-3: var(--day-blue-600); /* #0F62FE */
+  --chart-4: var(--day-blue-400); /* #78A9FF */
+  --chart-5: var(--day-blue-200); /* #D0E2FF */
+  --general-border: var(--white-8); /* #FFFFFF14 */
+  --general-input: var(--dusk-gray-600); /* #858998 */
+  --general-ring: var(--dusk-gray-400); /* #3C3E47 */
+  --general-on-color: var(--white-100); /* #FFFFFF — 피그마 General/on-color, 전 모드 동일 */
 }

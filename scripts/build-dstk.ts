@@ -426,14 +426,49 @@ if (existsSync(join(ROOT, "playground", "public"))) {
   const hoDir = join(ROOT, "dist/handoff");
   mkdirSync(hoDir, { recursive: true });
 
-  // 1) primitives.css — 팔레트 3모드 평탄화(dstk.css와 동일 변수명)
+  // 1) primitives.css — 값의 단독 소유층. 모드 전환 세트(:root=Day·.dark=Dusk·.night=Night)
+  //    + 조명 프리픽스 전수 세트(--day-*/--dusk-*/--night-*, :root 고정) — 시맨틱의
+  //    교차 조명 핀(예: destructive light=dusk red-600)이 모드와 무관하게 정확한 값을
+  //    집을 수 있는 정본 라벨이다.
+  const prefixedLines: string[] = [];
+  for (const fam of FAMS) {
+    if (fam === "basic" || fam === "product") continue;
+    for (const step of Object.keys(palette[fam]).filter((k) => !k.startsWith("$"))) {
+      for (const L of LIGHTINGS) {
+        const v = paletteValue([fam, step], L);
+        if (v !== null) prefixedLines.push(`  --${L}-${fam}-${step}: ${v};`);
+      }
+    }
+  }
+  // 프론트 명명 관례 정렬 — basic은 짧은 이름(--black-20·--white-100, 프론트 파일 구조와 동일)
+  const hoPaletteVars = (L: Lighting) => paletteVars(L).map((l) => l.replace(/--basic-/g, "--"));
   const primitivesCss = [
     stamp,
-    "/* primitives — 컬러 팔레트 원천. :root=Day(Light 제품) · .dark=Dusk · .night=Night */",
-    block(":root", paletteVars("day")),
-    block(".dark", paletteVars("dusk")),
-    block(".night", paletteVars("night")),
+    "/* primitives — 컬러 팔레트 원천(값은 이 파일만 소유). 모드 전환 세트: :root=Day(Light 제품) · .dark=Dusk · .night=Night.\n   조명 프리픽스 세트(--day-*/--dusk-*/--night-*)는 모드 무관 고정 라벨 — semantic-token.css의 교차 조명 핀 참조용(--dusk-red-600 패턴) */",
+    block(":root", [...hoPaletteVars("day"), "", "  /* 조명 프리픽스 전수 세트 — 핀 참조용(모드 무관) */", ...prefixedLines]),
+    block(".dark", hoPaletteVars("dusk")),
+    block(".night", hoPaletteVars("night")),
   ].join("\n\n") + "\n";
+
+  // 핸드오프 자기검사 준비 — primitives가 실제 방출하는 변수명 전수
+  const primitiveNames = new Set<string>();
+  for (const l of [...hoPaletteVars("day"), ...hoPaletteVars("dusk"), ...hoPaletteVars("night"), ...prefixedLines]) {
+    const nm = l.match(/^\s*(--[a-zA-Z0-9-]+):/);
+    if (nm) primitiveNames.add(nm[1]);
+  }
+  /** 시맨틱 참조 → primitives 변수명. 블록의 기본 조명과 같으면 무프리픽스(프론트 관례),
+   *  교차 조명 핀·Control(캐스케이드 보장 없음)은 프리픽스 고정 라벨. */
+  const refVarName = (refStr: string, mode: ThemeMode): string => {
+    const m = refStr.match(/^\{palette\.([^}@]+)(?:@(day|dusk|night))?\}$/);
+    if (!m) throw new Error(`핸드오프 — 해석 불가 참조: ${refStr}`);
+    const L = (m[2] as Lighting) ?? LIGHT_OF[mode];
+    const p = m[1].split(".");
+    if (p[0] === "basic") return `--${p[1]}-${p[2]}`;
+    if (p[0] === "product") return `--product-${p[1]}`;
+    const step = p[1] === "anchor" ? ANCHOR[L] : p[1];
+    const sameAsBlock = (mode === "light" && L === "day") || (mode === "dark" && L === "dusk");
+    return sameAsBlock ? `--${p[0]}-${step}` : `--${L}-${p[0]}-${step}`;
+  };
 
   // 2) semantic-token.css — --general-*(프론트 명명 호환) 모드별 해석값 + 팔레트 참조 주석
   const semLines = (mode: ThemeMode): string[] => {
@@ -444,14 +479,18 @@ if (existsSync(join(ROOT, "playground", "public"))) {
       if (v === null) continue;
       const refStr = typeof token.$value === "string" ? token.$value : token.$value[mode];
       const cssName = name.startsWith("chart-") ? `--${name}` : `--general-${name}`;
-      lines.push(`  ${cssName}: ${v}; /* ${refStr} */`);
+      const vn = refVarName(refStr, mode);
+      if (!primitiveNames.has(vn)) {
+        throw new Error(`핸드오프 자기검사 실패 — ${name}(${mode}): ${vn}이 primitives에 없음 (${refStr})`);
+      }
+      lines.push(`  ${cssName}: var(${vn}); /* ${v} */`);
     }
-    lines.push(`  --general-on-color: #FFFFFF; /* {palette.basic.white.100} — 피그마 General/on-color, 전 모드 동일 */`);
+    lines.push(`  --general-on-color: var(--white-100); /* #FFFFFF — 피그마 General/on-color, 전 모드 동일 */`);
     return lines;
   };
   const semanticCss = [
     stamp,
-    "/* semantic-token — 팔레트→시맨틱 매칭(모드별 해석값 · 주석=팔레트 참조). card·popover는 background와 별도 토큰 */",
+    "/* semantic-token — 팔레트→시맨틱 매칭. 값은 primitives 참조(var 사슬 — dstk 갱신이 자동 전파), 주석=해석 hex. card·popover는 background와 별도 토큰 */",
     block(":root", semLines("light")),
     block(".dark", semLines("dark")),
     block(".theme-control", semLines("control")),
@@ -497,14 +536,17 @@ if (existsSync(join(ROOT, "playground", "public"))) {
     ["sidebar-border", "general-border"], ["sidebar-ring", "general-ring"],
   ];
   const mapShadcn = SHADCN.map(([slot, src]) => `  --color-${slot}: var(--${src});`);
-  // shadcn text-* 축 — sm=body(13/20)이 핵심(shadcn 컴포넌트 기본 글자가 DS body로 정렬).
+  // shadcn text-* 축 — 수치는 typography.css의 DS 변수가 단독 소유, 여기는 축↔역할 매핑만
+  // (sm=body가 핵심 — shadcn 컴포넌트 기본 글자가 DS body로 정렬).
   // caption-s(11px)는 축에 안 태움 — .text-caption-s 시맨틱 클래스로만 제공.
-  const TEXT_AXIS: Array<[string, string, string]> = [
-    ["2xs", "10px", "16px"], ["xs", "12px", "16px"], ["sm", "13px", "20px"],
-    ["base", "14px", "20px"], ["lg", "16px", "24px"], ["xl", "18px", "24px"],
-    ["2xl", "20px", "24px"], ["3xl", "24px", "28px"], ["4xl", "28px", "32px"],
+  const TEXT_AXIS: Array<[string, string]> = [
+    ["2xs", "caption-xs"], ["xs", "caption-m"], ["sm", "body"], ["base", "title-xs"],
+    ["lg", "title-s"], ["xl", "title-m"], ["2xl", "title-l"], ["3xl", "title-xl"], ["4xl", "display-xs"],
   ];
-  const mapText = TEXT_AXIS.flatMap(([k, s, lh]) => [`  --text-${k}: ${s};`, `  --text-${k}--line-height: ${lh};`]);
+  const mapText = TEXT_AXIS.flatMap(([k, role]) => [
+    `  --text-${k}: var(--text-${role}-size);`,
+    `  --text-${k}--line-height: var(--text-${role}-line-height);`,
+  ]);
   const semClasses = desktopEntries.map(([name, tok]) => {
     const short = name.slice("desktop-".length);
     return `.text-${short} {\n  font-size: var(--text-${short}-size);\n  line-height: var(--text-${short}-line-height);\n  font-weight: var(--font-weight-${wname[tok.$value.weight ?? "400"]});\n}`;

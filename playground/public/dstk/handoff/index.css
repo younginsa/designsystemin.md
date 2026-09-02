@@ -1,4 +1,4 @@
-/* 자동 생성 — 손 편집 금지 · commit 2015814 · 2026-09-02 · 원천: dstk/*.json (git이 source of truth) */
+/* 자동 생성 — 손 편집 금지 · commit 7a45ec2 · 2026-09-02 · 원천: dstk/*.json (git이 source of truth) */
 
 /* index — DS 배선. 앱 index.css에서 tailwindcss import 뒤에 이 파일을 @import 하면 끝.
    앱 전용(point 컬러·keyframes·@custom-variant dark)은 앱 파일에 유지. 다크 전환 = 래퍼에 .dark */
@@ -27,24 +27,24 @@ body {
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --text-2xs: 10px;
-  --text-2xs--line-height: 16px;
-  --text-xs: 12px;
-  --text-xs--line-height: 16px;
-  --text-sm: 13px;
-  --text-sm--line-height: 20px;
-  --text-base: 14px;
-  --text-base--line-height: 20px;
-  --text-lg: 16px;
-  --text-lg--line-height: 24px;
-  --text-xl: 18px;
-  --text-xl--line-height: 24px;
-  --text-2xl: 20px;
-  --text-2xl--line-height: 24px;
-  --text-3xl: 24px;
-  --text-3xl--line-height: 28px;
-  --text-4xl: 28px;
-  --text-4xl--line-height: 32px;
+  --text-2xs: var(--text-caption-xs-size);
+  --text-2xs--line-height: var(--text-caption-xs-line-height);
+  --text-xs: var(--text-caption-m-size);
+  --text-xs--line-height: var(--text-caption-m-line-height);
+  --text-sm: var(--text-body-size);
+  --text-sm--line-height: var(--text-body-line-height);
+  --text-base: var(--text-title-xs-size);
+  --text-base--line-height: var(--text-title-xs-line-height);
+  --text-lg: var(--text-title-s-size);
+  --text-lg--line-height: var(--text-title-s-line-height);
+  --text-xl: var(--text-title-m-size);
+  --text-xl--line-height: var(--text-title-m-line-height);
+  --text-2xl: var(--text-title-l-size);
+  --text-2xl--line-height: var(--text-title-l-line-height);
+  --text-3xl: var(--text-title-xl-size);
+  --text-3xl--line-height: var(--text-title-xl-line-height);
+  --text-4xl: var(--text-display-xs-size);
+  --text-4xl--line-height: var(--text-display-xs-line-height);
   --color-general-background: var(--general-background);
   --color-general-foreground: var(--general-foreground);
   --color-general-card: var(--general-card);
