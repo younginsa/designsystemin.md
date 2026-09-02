@@ -459,7 +459,7 @@
   .tpl .tw-zone { font-family: var(--mono); font-size: 8px; color: var(--doc-muted);
     border: 1px dashed var(--line); background: var(--bg); padding: 2px 5px; white-space: nowrap; }
   .tpl .tpl-desc { padding: 12px 16px 16px; font-size: 13px; color: var(--doc-muted); }
-  /* 본문 패턴 카드 미니 와이어 (A 리스트 · B 상세 · C 위저드) */
+  /* 본문 패턴 카드 미니 와이어 (A~E) */
   .tpl .bp-wire { position: relative; aspect-ratio: 16/10; margin: 16px 16px 0;
     border: 1px solid var(--line); background: var(--bg); overflow: hidden; }
   .tpl .bp-toolbar { position: absolute; top: 6%; left: 6%; width: 44%; height: 9%;
@@ -489,6 +489,11 @@
   .tpl .bp-dstat:nth-of-type(3) { left: 66.7%; }
   .tpl .bp-dcard { position: absolute; left: 6%; right: 6%; top: 38%; bottom: 10%;
     background: var(--surface); border: 1px solid var(--line); }
+  /* E 프로그레시브 폼 — 실선 = 열린 섹션, 점선 = 조건 대기 섹션 */
+  .tpl .bp-pf1 { position: absolute; top: 8%; left: 14%; right: 14%; height: 30%;
+    background: var(--surface); border: 1px solid var(--line); }
+  .tpl .bp-pf2 { position: absolute; top: 44%; left: 14%; right: 14%; height: 24%;
+    background: var(--bg); border: 1px dashed var(--line); }
   .ds-editor { border-top: 1px solid var(--line); padding: 12px 16px 16px; display: grid; gap: 8px; }
   .ds-editor[hidden] { display: none; }
   /* 채택 카드 hover — 기본: 365 렌더, hover: shadcn 원형 (03과 동일한 상호작용) */
