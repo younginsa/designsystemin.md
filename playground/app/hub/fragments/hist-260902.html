@@ -1,0 +1,18 @@
+
+          <h3>결정 개요</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">계기</div>
+            <div class="v">프론트가 스톡 shadcn 위에 DS를 <strong>수작업 CSS 4파일</strong>(primitives · semantic-token · typography · index)로 이식 중임을 확인(Slack). 검토에서 값 오타 3건(gray-200 · olive-900 · cyber-security 참조 오류), 폰트 불일치(코드 Noto Sans ↔ 피그마 <strong>Inter</strong>), 라이트 단일 모드 한계 발견 — 수작업 동기화를 끝낼 정본이 필요했다.</div>
+            <div class="k">CSS 핸드오프 개통</div>
+            <div class="v"><span class="mono">ds:build</span>가 프론트 파일 구조 그대로의 <strong>정본 4파일 + zip</strong>을 자동 생성, 배포 URL(<span class="mono">/dstk/handoff/</span>)로 push마다 상시 최신. <strong>참조 사슬 구조</strong> — 값은 primitives 단독 소유 → 시맨틱은 <span class="mono">var()</span> 참조(교차 조명 핀은 <span class="mono">--dusk-red-600</span> 패턴 프리픽스, Control 블록은 전량 프리픽스) → shadcn 매핑. 시맨틱이 부르는 변수의 실재를 <strong>빌드 자기검사</strong>로 전수 대조(실패 = 빌드 중단). 다운로드 버튼은 04 사용법.</div>
+            <div class="k">Desktop 타이포 첫 코드화</div>
+            <div class="v">피그마 Desktop 텍스트 스타일 10종(Inter) 실측을 <span class="mono">dstk/typography.json</span>에 편입 — 종전 dstk는 시거리(2m/3m) 스케일만 보유했다. shadcn <span class="mono">text-*</span> 축 확정: <strong>sm=13/20(body)</strong> · base=14/20(title-xs) — 수치는 타이포 변수가 단독 소유, 축은 매핑만.</div>
+            <div class="k">5면 값 일치 완성</div>
+            <div class="v">blue.500 day <span class="mono">#4589FF → #4477F9</span>(Carbon 잔재 — 5면 감사 유일 불일치) 교정으로 <strong>피그마 변수 · 팔레트 보드 칩 · 칩 라벨 · 대조표 · repo 245값 전수 일치</strong>. 스냅샷 동시 갱신 규정 이행(모드명 실측 · HiNAS Brand alias 실측 기록 포함).</div>
+            <div class="k">피그마 정리 배치</div>
+            <div class="v">대조표(2807:24) F/D 라벨 <strong>81건</strong> Light/Dark → Day/Dusk 통일 · 팔레트 보드 칩 <strong>242개</strong> Colors 변수 바인딩 · 변수 그룹명 <strong>222건</strong> Day/Dusk/Night 원복(\b 제거) · Theme 모드명 실측 개명. 세일즈포스 365 전환 UI 캡처 아트보드의 텍스트 <strong>2,425장</strong>을 Desktop 스타일에 일괄 링크(정확 매칭만 — Menlo 모노 숫자 등 의도 폰트는 보존, 캡처 확장의 타이포 변수 바인딩 잔재 제거).</div>
+            <div class="k">문서 · 표면</div>
+            <div class="v"><strong>04 사용법</strong> 페이지 신설 — 03 하단 사용법 카드 이동 + 프론트 구현 연결 가이드(전달물 · 의존성 · 배선 · 모드). 웹 시맨틱 표 모드 셀에 <strong>팔레트 참조 병기</strong>(대조표식 2줄 — "외(모드별)" 뭉개기 제거). 파괴 배너 표면 <span class="mono">destructive/10 → /5</span> 완화(재시도 버튼 /10 유지 = 위계).</div>
+          </div>
+        </div>
