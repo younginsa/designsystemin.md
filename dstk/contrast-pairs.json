@@ -87,6 +87,12 @@
       "note": "장식 아이콘 전용(search-box 패널 돋보기·시계 등) — 본문 텍스트 허용 아님. input은 placeholder 글자용 토큰이라 가독 텍스트로 쓰지 않는다"
     },
     {
+      "text": "input",
+      "bg": "card",
+      "level": "aux",
+      "note": "버전 스탬프류 장식 표기 한정(셸 사이드바 브랜드 존 caption_xs — 2026-09-02) — 본문 텍스트 아님"
+    },
+    {
       "text": "foreground",
       "bg": "border",
       "level": "body",
