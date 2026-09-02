@@ -1,0 +1,33 @@
+
+        <h3>사용법 — 세션에서 바로 생성</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">1 클론 (최초 1회)</div>
+            <div class="v"><span class="mono">git clone github.com/younginsa/designsystemin.md</span> — 저장소 읽기 권한과 <strong>본인 계정으로 로그인한 Claude Code</strong>만 있으면 된다. 토큰은 각자 좌석에서 쓴다.</div>
+            <div class="k">2 폴더에서 실행</div>
+            <div class="v">클론한 폴더에서 <span class="mono">claude</span> 실행. 규칙(<span class="mono">CLAUDE.md</span>)·채택 어휘(<span class="mono">approved.json</span>)·365 토큰(<span class="mono">ds365.json</span>)이 자동 적용되고, 세션이 시작할 때 <span class="mono">git pull</span>로 항상 최신 DS를 받는다.</div>
+            <div class="k">3 채팅</div>
+            <div class="v">화면 스크린샷·와이어프레임을 드래그하고 <strong>"메인 레이아웃 본문에 넣어줘"</strong>처럼 말한다 (영역 이름: 메뉴·상단바·본문). <strong>뼈대가 먼저 나오고</strong>, 채팅으로 그 자리에서 다듬는다(재생성 없음). 모든 화면은 <strong>기본·빈·로딩·에러</strong> 4개 상태를 포함한다.</div>
+            <div class="k">결과물</div>
+            <div class="v">본인 로컬 <span class="mono">playground/app/generated/&lt;이름&gt;/</span>에 남는다 — 커밋하지 않고 각자 팀에서 활용한다. 화면만 볼 사람에겐 <strong>"HTML로 줘"</strong>로 뽑은 정적 파일만 전달하면 된다(설치 불필요). 채택 목록 밖 컴포넌트가 필요하면 세션이 만들지 않고 자리표시 후 보고한다.</div>
+            <div class="k">DS 요청</div>
+            <div class="v">쓰다가 필요한 게 생기면 세션에 <strong>"DS 요청: ○○ 추가 필요"</strong>라고 말한다 — Jira <span class="mono">DES</span> 보드로 티켓이 올라가고(본인 계정, 최초 1회 API 토큰 설정 필요), 디자이너가 반영해 커밋하면 모두에게 자동 배포된다. 자리표시가 발생하면 세션이 먼저 올릴지 물어본다.</div>
+          </div>
+        </div>
+
+        <h3>프론트 구현 연결 — shadcn 기반 확인·전달물</h3>
+        <p class="lead">생성 화면은 공통 DS <strong>시맨틱 토큰만</strong> 쓴다(임의 hex·<span class="mono">dark:</span> 0건 — self-check 게이트로 강제). 렌더 기본은 <span class="mono">:root</span>=Light 값 — 화면 코드가 Light를 하드코딩하는 게 아니라 토큰을 참조하므로, <span class="mono">.dark</span> 클래스 하나로 코드 수정 없이 재스킨된다. 컴포넌트는 <strong>shadcn 구조</strong>(Radix + Tailwind v4 + cva, 변수명도 shadcn 규약)라 shadcn을 아는 프론트라면 그대로 읽고 쓸 수 있다 — 단 <strong>스톡 shadcn 설치(<span class="mono">npx shadcn add</span>)로는 재현이 안 된다</strong>. 아래 전달물을 복사해 쓴다.</p>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">스톡 설치가 안 되는 이유</div>
+            <div class="v">① 스톡 컴포넌트의 문법 수정분 — Button 추가 variant(<span class="mono">destructive-outline·destructive-ghost·xs</span>), Table 내장 라운드 래퍼·행 hover 제거, ✓ 우측 셀렉트 문법 등 ② shadcn에 없는 <strong>자체 프리셋 12종가량</strong> — FilterBar·SearchBox·NotificationPanel·ErrorState·StatePreview·DetailPanel·IconSelect·RowsPerPage 등 ③ 토큰 <strong>값</strong>이 dstk 빌드(변수 이름만 shadcn과 동일).</div>
+            <div class="k">전달물 4개</div>
+            <div class="v"><span class="mono">components/src</span>(@ds/ui 소스 — 레지스트리 대신 이걸 복사) · <span class="mono">dist/dstk.css</span>(제품별이면 <span class="mono">dist/products/*.css</span>) · 화면 코드(<span class="mono">playground/app/generated/*</span>) · 규칙 문서(<span class="mono">design.md</span>·<span class="mono">ds365.json</span>)</div>
+            <div class="k">의존성</div>
+            <div class="v"><span class="mono">tailwindcss@4</span> · <span class="mono">radix-ui</span> · <span class="mono">class-variance-authority</span> · <span class="mono">lucide-react</span> · <span class="mono">tailwind-merge</span>+<span class="mono">clsx</span>(cn 유틸)</div>
+            <div class="k">배선</div>
+            <div class="v">전역 CSS에 <span class="mono">dstk.css</span> import(그거면 토큰 끝 — <span class="mono">:root</span>=Light라 기본 라이트) → <span class="mono">@ds/ui</span> 경로 alias(tsconfig paths) → 컴포넌트는 우리 소스 그대로, 임의 수정 금지.</div>
+            <div class="k">모드</div>
+            <div class="v">다크/컨트롤 필요 시 래퍼에 <span class="mono">.dark</span> / <span class="mono">.theme-control</span> 클래스만 — 화면 코드는 불변.</div>
+          </div>
+        </div>

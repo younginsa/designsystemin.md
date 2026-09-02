@@ -21,6 +21,7 @@ export default function Page() {
     pipeline: frag("pipeline.html"),
     resources: frag("resources.html"),
     templates: frag("templates.html"),
+    usage365: frag("usage365.html"),
   };
   const histMeta: Array<{ date: string; summary: string; file: string }> = JSON.parse(frag("hist-meta.json"));
   const hist = histMeta.map((h) => ({ date: h.date, summary: h.summary, html: frag(h.file) }));
