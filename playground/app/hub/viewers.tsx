@@ -74,25 +74,26 @@ export function useDsViewers() {
 
     function renderSem() {
       const SMODES = ["light", "dark", "control"];
+      // 모드 셀 = 대조표식 2줄(참조 위·hex 아래, cellblock 재사용) — 종전 참조 컬럼의
+      // "외(모드별)" 뭉개기 제거(2026-09-02). 비색상 행 colspan은 모드 3칸.
       const clean = (r: string) => (r || "").replace("{palette.", "").replace("}", "");
       const rows = Object.entries(sem).filter(([k]) => !k.startsWith("$")).map(([name, tok]: [string, any]) => {
         const val = tok.$value;
         if (tok.$type !== "color") {
           const raw = typeof val === "string" ? val : JSON.stringify(val);
-          return '<tr><td class="mono">' + name + '</td><td class="mono" colspan="4">' + raw + "</td></tr>";
+          return '<tr><td class="mono">' + name + '</td><td class="mono" colspan="3">' + raw + "</td></tr>";
         }
-        const refText = typeof val === "string" ? clean(val) : clean(val.light) + " 외(모드별)";
         const cells = SMODES.map((m) => {
           const refStr = typeof val === "string" ? val : val[m];
           const v = refStr ? resolveRef(refStr, m) : null;
           return "<td>" + (v && v !== "TODO"
-            ? '<span class="sem-sw" style="background:' + v + '"></span><span class="mono">' + v + "</span>"
+            ? '<span class="sem-sw" style="background:' + v + '"></span><span class="mono cellblock"><span class="al">' + clean(refStr) + '</span><br><span class="hx">' + v + "</span></span>"
             : '<span class="mono" style="color:var(--doc-muted)">—</span>') + "</td>";
         }).join("");
-        return '<tr><td class="mono">' + name + '</td><td class="mono" style="color:var(--doc-muted)">' + refText + "</td>" + cells + "</tr>";
+        return '<tr><td class="mono">' + name + "</td>" + cells + "</tr>";
       }).join("");
       document.getElementById("sem-table")!.innerHTML =
-        '<table class="sem-t"><thead><tr><th>이름</th><th>참조(팔레트)</th><th>Light (Cloud)</th><th>Dark (SVM·NAS)</th><th>Control</th></tr></thead><tbody>' + rows + "</tbody></table>";
+        '<table class="sem-t"><thead><tr><th>이름</th><th>Light (Cloud)</th><th>Dark (SVM·NAS)</th><th>Control</th></tr></thead><tbody>' + rows + "</tbody></table>";
     }
 
     function renderMap(map: any) {

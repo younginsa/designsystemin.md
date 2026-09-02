@@ -400,9 +400,10 @@
   .map-main th:nth-child(2), .map-main th:nth-child(3), .map-main th:nth-child(4) { width: 22%; }
   .map-main th:nth-child(5) { width: 14%; }
   .map-sw { display: inline-block; width: 12px; height: 12px; border: 1px solid var(--line); vertical-align: top; margin-top: 2px; margin-right: 6px; }
-  .map-t .cellblock { display: inline-block; vertical-align: top; }
-  .map-t .al { color: var(--ink); }
-  .map-t .hx { color: var(--doc-muted); font-weight: 400; }
+  .map-t .cellblock, .sem-t .cellblock { display: inline-block; vertical-align: top; }
+  .map-t .al, .sem-t .al { color: var(--ink); }
+  .map-t .hx, .sem-t .hx { color: var(--doc-muted); font-weight: 400; }
+  .sem-t .sem-sw { vertical-align: top; margin-top: 4px; }
   /* 히스토리 — 타이틀 자리 드롭다운 (커스텀 셰브런 — 우측 여백 확보) */
   #hist-select { -webkit-appearance: none; appearance: none;
     font-family: var(--mono); font-size: 13px; color: var(--ink);
