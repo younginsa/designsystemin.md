@@ -2,7 +2,7 @@
 
 자동 생성 — `pnpm ds:build`가 `dstk/figma-theme-snapshot.json`에서 만든다. 손 편집 금지.
 피그마 원본: 「Theme × dstk 대조표」 노드 2807:24 (fileKey i5IhnacRAjg6NJdmtctfn2).
-마지막 업데이트: 2026-08-25
+마지막 업데이트: 2026-09-02
 
 | Theme 변수 | Light (Cloud) | Dark (SVM·NAS) | Control | dstk 토큰 |
 |---|---|---|---|---|
@@ -19,7 +19,7 @@
 | General/border | Day mode/Gray/100 #ECEDF0 | Basic Foreground/White/8 #FFFFFF14 | Basic Foreground/White/8 #FFFFFF14 | border |
 | General/input — placeholder 텍스트용 확정(검색·입력 placeholder 글자색) — 폼 테두리는 border | Day mode/Gray/500 #858998 | Dusk mode/Gray/600 #858998 | Dusk mode/Gray/600 #858998 | input |
 | General/ring | Day mode/Gray/200 #DBDEE8 | Dusk mode/Gray/400 #3C3E47 | Dusk mode/Gray/400 #3C3E47 | ring |
-| Product/HiNAS Brand | (고유값) #4477F9 | Dusk mode/SemanticBlue/500 #348FF4 | Dusk mode/SemanticBlue/500 #348FF4 | (참조 전용) |
+| Product/HiNAS Brand | Day mode/SemanticBlue/500 #4477F9 | Dusk mode/SemanticBlue/500 #348FF4 | Dusk mode/SemanticBlue/500 #348FF4 | (참조 전용) |
 | Product/Cyber security | Dusk mode/SemanticBlue/300 #0367E0 | Dusk mode/SemanticBlue/300 #0367E0 | Dusk mode/SemanticBlue/300 #0367E0 | (참조 전용) |
 | General/success | Day mode/SemanticGreen/500 #24A148 | Day mode/SemanticGreen/500 #24A148 | Day mode/SemanticGreen/500 #24A148 | success |
 | Chart/chart-1 | Day mode/SemanticBlue/800 #002D9C | Day mode/SemanticBlue/800 #002D9C | Day mode/SemanticBlue/800 #002D9C | chart-1 |
