@@ -3,11 +3,11 @@
     "source": "Avikus Design library (fileKey i5IhnacRAjg6NJdmtctfn2)",
     "method": "재구성 — 클론 변수 API 추출본(2026-08-20, 원본 파일 소실)을 대조표 노드 2807:24 파싱 + dstk/palette.json으로 등가 재구성(2026-08-21)",
     "note": "Theme = 시맨틱 원천(29종 × 제품 3모드 Light(Cloud)/Dark(SVM·NAS)/Control). Colors = 팔레트 원천(단일 모드 변수 — 화면설명 주석 2종 제외).",
-    "updated": "2026-08-25",
-    "verification": "2026-08-21 독립 검증 — 대조표 93건·빌드 해석값·팔레트 전수 일치 상태에서 재구성 · 2026-08-21 General/on-color 신설 반영(클론 회신 — 색 면 위 글자 정책) · 2026-08-21 상태색 통합: primary-accent·Sidebar 7종 삭제, success·chart-1~5 신설, on-color에서 info-foreground 제거 · 2026-08-25 accent 오버레이 전환 후 **라이브 변수 직접 감사**(Theme 컬렉션 21종 전수 열람) — 종전 대조표 텍스트 파싱만으로는 이름 변경·변수 삭제를 못 잡았다. 교정 3건: ① accent light Black/8 → Black/6(피그마 기준, dark·control은 White/12 유지) ② 구명 2건 개명 — background-card-popover-primaryF → General/background, foreground-card-popover → General/foreground(2026-08-21 개명) ③ 유령 항목 General/accent-foreground 삭제 — 2026-08-21 통합으로 피그마 변수가 없어졌고 코드 토큰 accent-foreground는 General/foreground 번들(4종 동일값)로 편입해 게이트 커버리지 유지. ⚠ search_design_system은 '게시된' 라이브러리를 반환하므로 파일 현재 상태와 다를 수 있다 — 감사에는 라이브 변수 열람을 쓸 것",
+    "updated": "2026-09-02",
+    "verification": "2026-08-21 독립 검증 — 대조표 93건·빌드 해석값·팔레트 전수 일치 상태에서 재구성 · 2026-08-21 General/on-color 신설 반영(클론 회신 — 색 면 위 글자 정책) · 2026-08-21 상태색 통합: primary-accent·Sidebar 7종 삭제, success·chart-1~5 신설, on-color에서 info-foreground 제거 · 2026-08-25 accent 오버레이 전환 후 **라이브 변수 직접 감사**(Theme 컬렉션 21종 전수 열람) — 종전 대조표 텍스트 파싱만으로는 이름 변경·변수 삭제를 못 잡았다. 교정 3건: ① accent light Black/8 → Black/6(피그마 기준, dark·control은 White/12 유지) ② 구명 2건 개명 — background-card-popover-primaryF → General/background, foreground-card-popover → General/foreground(2026-08-21 개명) ③ 유령 항목 General/accent-foreground 삭제 — 2026-08-21 통합으로 피그마 변수가 없어졌고 코드 토큰 accent-foreground는 General/foreground 번들(4종 동일값)로 편입해 게이트 커버리지 유지. ⚠ search_design_system은 '게시된' 라이브러리를 반환하므로 파일 현재 상태와 다를 수 있다 — 감사에는 라이브 변수 열람을 쓸 것 · 2026-09-02 피그마 정리 배치 후 5면 감사 — 대조표 F/D 라벨 81건 Day/Dusk 통일 · 팔레트 칩 242개 변수 바인딩 · Colors 그룹명 222건 Day/Dusk/Night mode 원복(\\b 제거) · Theme 모드명 개명(Light — Cloud · 365 / Dark — SVM · NAS) 스냅샷 반영 · blue.500 day #4589FF→#4477F9 교정(Carbon 잔재, 유일한 값 불일치 — palette·스냅샷 같은 커밋) · HiNAS Brand light alias 실측 기록(Day mode/SemanticBlue/500) — 245값 전수 일치",
     "themeModes": [
-      "Light (Cloud)",
-      "Dark (SVM/NAS)",
+      "Light — Cloud · 365",
+      "Dark — SVM · NAS",
       "Control"
     ]
   },
@@ -213,7 +213,7 @@
     {
       "name": "Product/HiNAS Brand",
       "light": {
-        "alias": null,
+        "alias": "Day mode/SemanticBlue/500",
         "hex": "#4477F9"
       },
       "dark": {
@@ -505,7 +505,7 @@
     "Day mode/SemanticBlue/400": "#78A9FF",
     "Dusk mode/SemanticBlue/400": "#1379F3",
     "Night mode/SemanticBlue/400": "#022F2E",
-    "Day mode/SemanticBlue/500": "#4589FF",
+    "Day mode/SemanticBlue/500": "#4477F9",
     "Dusk mode/SemanticBlue/500": "#348FF4",
     "Night mode/SemanticBlue/500": "#003836",
     "Day mode/SemanticBlue/600": "#0F62FE",

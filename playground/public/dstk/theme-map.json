@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-25",
+  "updated": "2026-09-02",
   "rows": [
     {
       "theme": "General/primary",
@@ -258,7 +258,7 @@
     {
       "theme": "Product/HiNAS Brand",
       "light": {
-        "alias": null,
+        "alias": "Day mode/SemanticBlue/500",
         "hex": "#4477F9"
       },
       "dark": {

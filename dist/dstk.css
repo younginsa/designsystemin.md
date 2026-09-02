@@ -1,6 +1,6 @@
 /* 자동 생성 — 손으로 편집 금지. 원천: dstk/palette.json + semantic.json (Theme 정렬) */
 
-/* commit d29e242 · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
+/* commit 8307db0 · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
 
 :root {
   --gray-10: #FBFBFB;
@@ -59,7 +59,7 @@
   --blue-200: #D0E2FF;
   --blue-300: #A6C8FF;
   --blue-400: #78A9FF;
-  --blue-500: #4589FF;
+  --blue-500: #4477F9;
   --blue-600: #0F62FE;
   --blue-700: #0043CE;
   --blue-800: #002D9C;
