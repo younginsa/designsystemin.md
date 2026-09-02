@@ -141,6 +141,7 @@ function typographyVars(): string[] {
     const v = tok.$value;
     if (v === "TODO" || v == null) continue;
     if (v.size) lines.push(`  --type-${name}-size: ${v.size};`);
+    if (v.lineHeight) lines.push(`  --type-${name}-line-height: ${v.lineHeight};`);
     if (v.weight) lines.push(`  --type-${name}-weight: ${v.weight};`);
     if (v.family) lines.push(`  --type-${name}-family: ${v.family};`);
   }
@@ -415,4 +416,145 @@ if (existsSync(join(ROOT, "playground", "public"))) {
     copyFileSync(join(ROOT, "dstk/products", f), join(pubDstk, "products", f));
   }
 }
-console.log("built → dist/dstk.css + dist/products/*.css + public/dstk/*.json");
+// ── 프론트 핸드오프 세트 — dist/handoff/ 4파일 + zip (프론트 파일 구조 그대로의 정본) ──
+// 2026-09-02 확정: 폰트 Inter · 3모드 포함 · shadcn text-* 축(sm=13/20=body · base=14/20).
+// 앱 전용 규칙(point 컬러·keyframes·@custom-variant dark 등)은 프론트가 자기 index.css에
+// 유지한다 — 이 세트는 DS 층만. 배포 URL: /dstk/handoff/ (push마다 자동 최신).
+{
+  const today = new Date().toISOString().slice(0, 10);
+  const stamp = `/* 자동 생성 — 손 편집 금지 · commit ${commit} · ${today} · 원천: dstk/*.json (git이 source of truth) */`;
+  const hoDir = join(ROOT, "dist/handoff");
+  mkdirSync(hoDir, { recursive: true });
+
+  // 1) primitives.css — 팔레트 3모드 평탄화(dstk.css와 동일 변수명)
+  const primitivesCss = [
+    stamp,
+    "/* primitives — 컬러 팔레트 원천. :root=Day(Light 제품) · .dark=Dusk · .night=Night */",
+    block(":root", paletteVars("day")),
+    block(".dark", paletteVars("dusk")),
+    block(".night", paletteVars("night")),
+  ].join("\n\n") + "\n";
+
+  // 2) semantic-token.css — --general-*(프론트 명명 호환) 모드별 해석값 + 팔레트 참조 주석
+  const semLines = (mode: ThemeMode): string[] => {
+    const lines: string[] = [];
+    for (const [name, token] of Object.entries<any>(semantic)) {
+      if (name.startsWith("$") || token.$type !== "color") continue;
+      const v = resolveToken(name, token, mode);
+      if (v === null) continue;
+      const refStr = typeof token.$value === "string" ? token.$value : token.$value[mode];
+      const cssName = name.startsWith("chart-") ? `--${name}` : `--general-${name}`;
+      lines.push(`  ${cssName}: ${v}; /* ${refStr} */`);
+    }
+    lines.push(`  --general-on-color: #FFFFFF; /* {palette.basic.white.100} — 피그마 General/on-color, 전 모드 동일 */`);
+    return lines;
+  };
+  const semanticCss = [
+    stamp,
+    "/* semantic-token — 팔레트→시맨틱 매칭(모드별 해석값 · 주석=팔레트 참조). card·popover는 background와 별도 토큰 */",
+    block(":root", semLines("light")),
+    block(".dark", semLines("dark")),
+    block(".theme-control", semLines("control")),
+  ].join("\n\n") + "\n";
+
+  // 3) typography.css — Desktop 스케일(피그마 Desktop 텍스트 스타일 실측 · Inter)
+  const wname: Record<string, string> = { "400": "regular", "500": "medium", "600": "semibold", "700": "bold" };
+  const desktopEntries = Object.entries<any>(typography).filter(([n]) => n.startsWith("desktop-"));
+  const typoLines: string[] = [];
+  for (const [name, tok] of desktopEntries) {
+    const short = name.slice("desktop-".length);
+    typoLines.push(`  --text-${short}-size: ${tok.$value.size};`);
+    typoLines.push(`  --text-${short}-line-height: ${tok.$value.lineHeight};`);
+  }
+  typoLines.push("", "  --font-weight-regular: 400;", "  --font-weight-medium: 500;",
+    "  --font-weight-semibold: 600;", "  --font-weight-bold: 700;");
+  const typographyCss = [
+    stamp,
+    "/* typography — 피그마 Desktop 텍스트 스타일 실측. 무게는 역할별 대표값(피그마는 사이즈당 Regular~Bold 4종 제공) */",
+    block(":root", typoLines),
+  ].join("\n\n") + "\n";
+
+  // 4) index.css — DS 배선: @theme 매핑(shadcn 슬롯·sidebar 별칭·text-* 축) + 시맨틱 클래스
+  const colorNames = Object.entries<any>(semantic)
+    .filter(([n, t]) => !n.startsWith("$") && t.$type === "color").map(([n]) => n);
+  const mapGeneral = colorNames.filter((n) => !n.startsWith("chart-"))
+    .map((n) => `  --color-general-${n}: var(--general-${n});`);
+  const mapChart = colorNames.filter((n) => n.startsWith("chart-"))
+    .map((n) => `  --color-${n}: var(--${n});`);
+  const SHADCN: Array<[string, string]> = [
+    ["background", "general-background"], ["foreground", "general-foreground"],
+    ["card", "general-card"], ["card-foreground", "general-card-foreground"],
+    ["popover", "general-popover"], ["popover-foreground", "general-popover-foreground"],
+    ["primary", "general-primary"], ["primary-foreground", "general-primary-foreground"],
+    ["secondary", "general-secondary"], ["secondary-foreground", "general-secondary-foreground"],
+    ["muted", "general-muted"], ["muted-foreground", "general-muted-foreground"],
+    ["accent", "general-accent"], ["accent-foreground", "general-accent-foreground"],
+    ["destructive", "general-destructive"], ["destructive-foreground", "general-destructive-foreground"],
+    ["border", "general-border"], ["input", "general-input"], ["ring", "general-ring"],
+    ["sidebar", "general-secondary"], ["sidebar-foreground", "general-foreground"],
+    ["sidebar-primary", "general-primary"], ["sidebar-primary-foreground", "general-primary-foreground"],
+    ["sidebar-accent", "general-accent"], ["sidebar-accent-foreground", "general-accent-foreground"],
+    ["sidebar-border", "general-border"], ["sidebar-ring", "general-ring"],
+  ];
+  const mapShadcn = SHADCN.map(([slot, src]) => `  --color-${slot}: var(--${src});`);
+  // shadcn text-* 축 — sm=body(13/20)이 핵심(shadcn 컴포넌트 기본 글자가 DS body로 정렬).
+  // caption-s(11px)는 축에 안 태움 — .text-caption-s 시맨틱 클래스로만 제공.
+  const TEXT_AXIS: Array<[string, string, string]> = [
+    ["2xs", "10px", "16px"], ["xs", "12px", "16px"], ["sm", "13px", "20px"],
+    ["base", "14px", "20px"], ["lg", "16px", "24px"], ["xl", "18px", "24px"],
+    ["2xl", "20px", "24px"], ["3xl", "24px", "28px"], ["4xl", "28px", "32px"],
+  ];
+  const mapText = TEXT_AXIS.flatMap(([k, s, lh]) => [`  --text-${k}: ${s};`, `  --text-${k}--line-height: ${lh};`]);
+  const semClasses = desktopEntries.map(([name, tok]) => {
+    const short = name.slice("desktop-".length);
+    return `.text-${short} {\n  font-size: var(--text-${short}-size);\n  line-height: var(--text-${short}-line-height);\n  font-weight: var(--font-weight-${wname[tok.$value.weight ?? "400"]});\n}`;
+  });
+  const radiusVal = resolveToken("radius", semantic.radius, "light");
+  const shadowVal = semantic["shadow-card"] ? resolveToken("shadow-card", semantic["shadow-card"], "light") : null;
+  const indexCss = [
+    stamp,
+    `/* index — DS 배선. 앱 index.css에서 tailwindcss import 뒤에 이 파일을 @import 하면 끝.
+   앱 전용(point 컬러·keyframes·@custom-variant dark)은 앱 파일에 유지. 다크 전환 = 래퍼에 .dark */`,
+    `@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");`,
+    `@import "./primitives.css";\n@import "./typography.css";\n@import "./semantic-token.css";`,
+    block(":root", [
+      `  font-family: "Inter", system-ui, sans-serif; /* 피그마 정본 — 한글은 시스템 폴백 */`,
+      `  --radius: ${radiusVal};`,
+      // 핸드오프 변수명은 --general-* 프리픽스 — dstk.css용 var(--border) 참조를 치환
+      ...(shadowVal ? [`  --shadow-card: ${shadowVal.replace(/var\(--border\)/g, "var(--general-border)")};`] : []),
+    ]),
+    `body {\n  margin: 0;\n  background: var(--general-background);\n  color: var(--general-foreground);\n}`,
+    block("@theme inline", [
+      "  --font-sans: \"Inter\", system-ui, sans-serif;",
+      "  --radius-sm: calc(var(--radius) - 4px);",
+      "  --radius-md: calc(var(--radius) - 2px);",
+      "  --radius-lg: var(--radius);",
+      "  --radius-xl: calc(var(--radius) + 4px);",
+      ...mapText, ...mapGeneral, ...mapChart,
+      "  --color-product-hinas-brand: var(--product-hinas-brand);",
+      "  --color-product-cyber-security: var(--product-cyber-security);",
+      ...mapShadcn,
+    ]),
+    "/* 타이포 시맨틱 클래스 — 역할별 대표 무게 */",
+    semClasses.join("\n\n"),
+  ].join("\n\n") + "\n";
+
+  const HO_FILES: Array<[string, string]> = [
+    ["primitives.css", primitivesCss], ["semantic-token.css", semanticCss],
+    ["typography.css", typographyCss], ["index.css", indexCss],
+  ];
+  for (const [f, content] of HO_FILES) writeFileSync(join(hoDir, f), content);
+  try {
+    execSync("zip -q -X -o handoff.zip primitives.css semantic-token.css typography.css index.css", { cwd: hoDir });
+  } catch {
+    console.warn("⚠ handoff.zip 생성 실패 — zip CLI 확인");
+  }
+  if (existsSync(join(ROOT, "playground", "public"))) {
+    const pubHo = join(pubDstk, "handoff");
+    mkdirSync(pubHo, { recursive: true });
+    for (const [f] of HO_FILES) copyFileSync(join(hoDir, f), join(pubHo, f));
+    if (existsSync(join(hoDir, "handoff.zip"))) copyFileSync(join(hoDir, "handoff.zip"), join(pubHo, "handoff.zip"));
+  }
+}
+
+console.log("built → dist/dstk.css + dist/products/*.css + dist/handoff(4파일+zip) + public/dstk/*");

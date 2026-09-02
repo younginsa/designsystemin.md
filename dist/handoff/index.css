@@ -1,0 +1,164 @@
+/* 자동 생성 — 손 편집 금지 · commit 2015814 · 2026-09-02 · 원천: dstk/*.json (git이 source of truth) */
+
+/* index — DS 배선. 앱 index.css에서 tailwindcss import 뒤에 이 파일을 @import 하면 끝.
+   앱 전용(point 컬러·keyframes·@custom-variant dark)은 앱 파일에 유지. 다크 전환 = 래퍼에 .dark */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+@import "./primitives.css";
+@import "./typography.css";
+@import "./semantic-token.css";
+
+:root {
+  font-family: "Inter", system-ui, sans-serif; /* 피그마 정본 — 한글은 시스템 폴백 */
+  --radius: 0.625rem;
+  --shadow-card: 0 0 12px 0 color-mix(in srgb, var(--general-border) 55%, transparent);
+}
+
+body {
+  margin: 0;
+  background: var(--general-background);
+  color: var(--general-foreground);
+}
+
+@theme inline {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --text-2xs: 10px;
+  --text-2xs--line-height: 16px;
+  --text-xs: 12px;
+  --text-xs--line-height: 16px;
+  --text-sm: 13px;
+  --text-sm--line-height: 20px;
+  --text-base: 14px;
+  --text-base--line-height: 20px;
+  --text-lg: 16px;
+  --text-lg--line-height: 24px;
+  --text-xl: 18px;
+  --text-xl--line-height: 24px;
+  --text-2xl: 20px;
+  --text-2xl--line-height: 24px;
+  --text-3xl: 24px;
+  --text-3xl--line-height: 28px;
+  --text-4xl: 28px;
+  --text-4xl--line-height: 32px;
+  --color-general-background: var(--general-background);
+  --color-general-foreground: var(--general-foreground);
+  --color-general-card: var(--general-card);
+  --color-general-card-foreground: var(--general-card-foreground);
+  --color-general-popover: var(--general-popover);
+  --color-general-popover-foreground: var(--general-popover-foreground);
+  --color-general-primary: var(--general-primary);
+  --color-general-primary-foreground: var(--general-primary-foreground);
+  --color-general-secondary: var(--general-secondary);
+  --color-general-secondary-foreground: var(--general-secondary-foreground);
+  --color-general-muted: var(--general-muted);
+  --color-general-muted-foreground: var(--general-muted-foreground);
+  --color-general-accent: var(--general-accent);
+  --color-general-accent-foreground: var(--general-accent-foreground);
+  --color-general-destructive: var(--general-destructive);
+  --color-general-destructive-foreground: var(--general-destructive-foreground);
+  --color-general-success: var(--general-success);
+  --color-general-border: var(--general-border);
+  --color-general-input: var(--general-input);
+  --color-general-ring: var(--general-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-product-hinas-brand: var(--product-hinas-brand);
+  --color-product-cyber-security: var(--product-cyber-security);
+  --color-background: var(--general-background);
+  --color-foreground: var(--general-foreground);
+  --color-card: var(--general-card);
+  --color-card-foreground: var(--general-card-foreground);
+  --color-popover: var(--general-popover);
+  --color-popover-foreground: var(--general-popover-foreground);
+  --color-primary: var(--general-primary);
+  --color-primary-foreground: var(--general-primary-foreground);
+  --color-secondary: var(--general-secondary);
+  --color-secondary-foreground: var(--general-secondary-foreground);
+  --color-muted: var(--general-muted);
+  --color-muted-foreground: var(--general-muted-foreground);
+  --color-accent: var(--general-accent);
+  --color-accent-foreground: var(--general-accent-foreground);
+  --color-destructive: var(--general-destructive);
+  --color-destructive-foreground: var(--general-destructive-foreground);
+  --color-border: var(--general-border);
+  --color-input: var(--general-input);
+  --color-ring: var(--general-ring);
+  --color-sidebar: var(--general-secondary);
+  --color-sidebar-foreground: var(--general-foreground);
+  --color-sidebar-primary: var(--general-primary);
+  --color-sidebar-primary-foreground: var(--general-primary-foreground);
+  --color-sidebar-accent: var(--general-accent);
+  --color-sidebar-accent-foreground: var(--general-accent-foreground);
+  --color-sidebar-border: var(--general-border);
+  --color-sidebar-ring: var(--general-ring);
+}
+
+/* 타이포 시맨틱 클래스 — 역할별 대표 무게 */
+
+.text-caption-xs {
+  font-size: var(--text-caption-xs-size);
+  line-height: var(--text-caption-xs-line-height);
+  font-weight: var(--font-weight-regular);
+}
+
+.text-caption-s {
+  font-size: var(--text-caption-s-size);
+  line-height: var(--text-caption-s-line-height);
+  font-weight: var(--font-weight-regular);
+}
+
+.text-caption-m {
+  font-size: var(--text-caption-m-size);
+  line-height: var(--text-caption-m-line-height);
+  font-weight: var(--font-weight-regular);
+}
+
+.text-body {
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-line-height);
+  font-weight: var(--font-weight-regular);
+}
+
+.text-title-xs {
+  font-size: var(--text-title-xs-size);
+  line-height: var(--text-title-xs-line-height);
+  font-weight: var(--font-weight-medium);
+}
+
+.text-title-s {
+  font-size: var(--text-title-s-size);
+  line-height: var(--text-title-s-line-height);
+  font-weight: var(--font-weight-semibold);
+}
+
+.text-title-m {
+  font-size: var(--text-title-m-size);
+  line-height: var(--text-title-m-line-height);
+  font-weight: var(--font-weight-semibold);
+}
+
+.text-title-l {
+  font-size: var(--text-title-l-size);
+  line-height: var(--text-title-l-line-height);
+  font-weight: var(--font-weight-semibold);
+}
+
+.text-title-xl {
+  font-size: var(--text-title-xl-size);
+  line-height: var(--text-title-xl-line-height);
+  font-weight: var(--font-weight-bold);
+}
+
+.text-display-xs {
+  font-size: var(--text-display-xs-size);
+  line-height: var(--text-display-xs-line-height);
+  font-weight: var(--font-weight-bold);
+}

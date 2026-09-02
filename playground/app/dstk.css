@@ -1,6 +1,6 @@
 /* 자동 생성 — 손으로 편집 금지. 원천: dstk/palette.json + semantic.json (Theme 정렬) */
 
-/* commit 8307db0 · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
+/* commit 2015814 · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
 
 :root {
   --gray-10: #FBFBFB;
@@ -135,6 +135,36 @@
   --ring: #DBDEE8;
   --radius: 0.625rem;
   --shadow-card: 0 0 12px 0 color-mix(in srgb, var(--border) 55%, transparent);
+  --type-desktop-caption-xs-size: 10px;
+  --type-desktop-caption-xs-line-height: 16px;
+  --type-desktop-caption-xs-weight: 400;
+  --type-desktop-caption-s-size: 11px;
+  --type-desktop-caption-s-line-height: 16px;
+  --type-desktop-caption-s-weight: 400;
+  --type-desktop-caption-m-size: 12px;
+  --type-desktop-caption-m-line-height: 16px;
+  --type-desktop-caption-m-weight: 400;
+  --type-desktop-body-size: 13px;
+  --type-desktop-body-line-height: 20px;
+  --type-desktop-body-weight: 400;
+  --type-desktop-title-xs-size: 14px;
+  --type-desktop-title-xs-line-height: 20px;
+  --type-desktop-title-xs-weight: 500;
+  --type-desktop-title-s-size: 16px;
+  --type-desktop-title-s-line-height: 24px;
+  --type-desktop-title-s-weight: 600;
+  --type-desktop-title-m-size: 18px;
+  --type-desktop-title-m-line-height: 24px;
+  --type-desktop-title-m-weight: 600;
+  --type-desktop-title-l-size: 20px;
+  --type-desktop-title-l-line-height: 24px;
+  --type-desktop-title-l-weight: 600;
+  --type-desktop-title-xl-size: 24px;
+  --type-desktop-title-xl-line-height: 28px;
+  --type-desktop-title-xl-weight: 700;
+  --type-desktop-display-xs-size: 28px;
+  --type-desktop-display-xs-line-height: 32px;
+  --type-desktop-display-xs-weight: 700;
   --type-2m-caption-size: 31px;
   --type-2m-body1-size: 34px;
   --type-2m-body2-size: 38px;

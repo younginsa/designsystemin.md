@@ -1,6 +1,6 @@
-/* 자동 생성 — 손으로 편집 금지. 원천: dstk/palette.json + semantic.json (Theme 정렬) */
+/* 자동 생성 — 손 편집 금지 · commit 2015814 · 2026-09-02 · 원천: dstk/*.json (git이 source of truth) */
 
-/* commit 2015814 · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
+/* primitives — 컬러 팔레트 원천. :root=Day(Light 제품) · .dark=Dusk · .night=Night */
 
 :root {
   --gray-10: #FBFBFB;
@@ -108,71 +108,6 @@
   --product-hinas-brand: #4477F9;
   --product-hinas-brand-dark: #348FF4;
   --product-cyber-security: #0367E0;
-  --background: #FFFFFF;
-  --foreground: #3C3E47;
-  --card: #FFFFFF;
-  --card-foreground: #3C3E47;
-  --popover: #FFFFFF;
-  --popover-foreground: #3C3E47;
-  --primary: #4477F9;
-  --primary-foreground: #FFFFFF;
-  --secondary: #F9FAFB;
-  --secondary-foreground: #5D6275;
-  --muted: #F2F4F8;
-  --muted-foreground: #00000033;
-  --accent: #0000000F;
-  --accent-foreground: #3C3E47;
-  --destructive: #FF5B5B;
-  --destructive-foreground: #FFFFFF;
-  --success: #24A148;
-  --chart-1: #002D9C;
-  --chart-2: #0043CE;
-  --chart-3: #0F62FE;
-  --chart-4: #78A9FF;
-  --chart-5: #D0E2FF;
-  --border: #ECEDF0;
-  --input: #858998;
-  --ring: #DBDEE8;
-  --radius: 0.625rem;
-  --shadow-card: 0 0 12px 0 color-mix(in srgb, var(--border) 55%, transparent);
-  --type-desktop-caption-xs-size: 10px;
-  --type-desktop-caption-xs-line-height: 16px;
-  --type-desktop-caption-xs-weight: 400;
-  --type-desktop-caption-s-size: 11px;
-  --type-desktop-caption-s-line-height: 16px;
-  --type-desktop-caption-s-weight: 400;
-  --type-desktop-caption-m-size: 12px;
-  --type-desktop-caption-m-line-height: 16px;
-  --type-desktop-caption-m-weight: 400;
-  --type-desktop-body-size: 13px;
-  --type-desktop-body-line-height: 20px;
-  --type-desktop-body-weight: 400;
-  --type-desktop-title-xs-size: 14px;
-  --type-desktop-title-xs-line-height: 20px;
-  --type-desktop-title-xs-weight: 500;
-  --type-desktop-title-s-size: 16px;
-  --type-desktop-title-s-line-height: 24px;
-  --type-desktop-title-s-weight: 600;
-  --type-desktop-title-m-size: 18px;
-  --type-desktop-title-m-line-height: 24px;
-  --type-desktop-title-m-weight: 600;
-  --type-desktop-title-l-size: 20px;
-  --type-desktop-title-l-line-height: 24px;
-  --type-desktop-title-l-weight: 600;
-  --type-desktop-title-xl-size: 24px;
-  --type-desktop-title-xl-line-height: 28px;
-  --type-desktop-title-xl-weight: 700;
-  --type-desktop-display-xs-size: 28px;
-  --type-desktop-display-xs-line-height: 32px;
-  --type-desktop-display-xs-weight: 700;
-  --type-2m-caption-size: 31px;
-  --type-2m-body1-size: 34px;
-  --type-2m-body2-size: 38px;
-  --type-2m-body2-weight: 700;
-  --type-2m-body2-family: mono;
-  --type-2m-title1-size: 44px;
-  --type-2m-title1-weight: 700;
-  --type-1m-caption-size: 16px;
 }
 
 .dark {
@@ -281,33 +216,6 @@
   --product-hinas-brand: #4477F9;
   --product-hinas-brand-dark: #348FF4;
   --product-cyber-security: #0367E0;
-  --background: #1B1C21;
-  --foreground: #F2F4F8;
-  --card: #1B1C21;
-  --card-foreground: #F2F4F8;
-  --popover: #1B1C21;
-  --popover-foreground: #F2F4F8;
-  --primary: #348FF4;
-  --primary-foreground: #FFFFFF;
-  --secondary: #23252B;
-  --secondary-foreground: #D0D2D9;
-  --muted: #2F323B;
-  --muted-foreground: #FFFFFF33;
-  --accent: #FFFFFF1F;
-  --accent-foreground: #F2F4F8;
-  --destructive: #FA454E;
-  --destructive-foreground: #FFFFFF;
-  --success: #24A148;
-  --chart-1: #002D9C;
-  --chart-2: #0043CE;
-  --chart-3: #0F62FE;
-  --chart-4: #78A9FF;
-  --chart-5: #D0E2FF;
-  --border: #FFFFFF14;
-  --input: #858998;
-  --ring: #3C3E47;
-  --radius: 0.625rem;
-  --shadow-card: 0 0 12px 0 color-mix(in srgb, var(--border) 55%, transparent);
 }
 
 .night {
@@ -415,34 +323,4 @@
   --product-hinas-brand: #4477F9;
   --product-hinas-brand-dark: #348FF4;
   --product-cyber-security: #0367E0;
-}
-
-.theme-control {
-  --background: #15161A;
-  --foreground: #F2F4F8;
-  --card: #15161A;
-  --card-foreground: #F2F4F8;
-  --popover: #15161A;
-  --popover-foreground: #F2F4F8;
-  --primary: #348FF4;
-  --primary-foreground: #15161A;
-  --secondary: #3C3E47;
-  --secondary-foreground: #D0D2D9;
-  --muted: #2F323B;
-  --muted-foreground: #FFFFFF33;
-  --accent: #FFFFFF1F;
-  --accent-foreground: #F2F4F8;
-  --destructive: #A50000;
-  --destructive-foreground: #FFFFFF;
-  --success: #24A148;
-  --chart-1: #002D9C;
-  --chart-2: #0043CE;
-  --chart-3: #0F62FE;
-  --chart-4: #78A9FF;
-  --chart-5: #D0E2FF;
-  --border: #FFFFFF14;
-  --input: #858998;
-  --ring: #3C3E47;
-  --radius: 0.625rem;
-  --shadow-card: 0 0 12px 0 color-mix(in srgb, var(--border) 55%, transparent);
 }

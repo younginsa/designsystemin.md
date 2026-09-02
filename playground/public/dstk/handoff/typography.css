@@ -1,0 +1,31 @@
+/* 자동 생성 — 손 편집 금지 · commit 2015814 · 2026-09-02 · 원천: dstk/*.json (git이 source of truth) */
+
+/* typography — 피그마 Desktop 텍스트 스타일 실측. 무게는 역할별 대표값(피그마는 사이즈당 Regular~Bold 4종 제공) */
+
+:root {
+  --text-caption-xs-size: 10px;
+  --text-caption-xs-line-height: 16px;
+  --text-caption-s-size: 11px;
+  --text-caption-s-line-height: 16px;
+  --text-caption-m-size: 12px;
+  --text-caption-m-line-height: 16px;
+  --text-body-size: 13px;
+  --text-body-line-height: 20px;
+  --text-title-xs-size: 14px;
+  --text-title-xs-line-height: 20px;
+  --text-title-s-size: 16px;
+  --text-title-s-line-height: 24px;
+  --text-title-m-size: 18px;
+  --text-title-m-line-height: 24px;
+  --text-title-l-size: 20px;
+  --text-title-l-line-height: 24px;
+  --text-title-xl-size: 24px;
+  --text-title-xl-line-height: 28px;
+  --text-display-xs-size: 28px;
+  --text-display-xs-line-height: 32px;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}

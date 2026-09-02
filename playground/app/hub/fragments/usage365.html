@@ -21,6 +21,8 @@
           <div class="card-body kv">
             <div class="k">스톡 설치가 안 되는 이유</div>
             <div class="v">① 스톡 컴포넌트의 문법 수정분 — Button 추가 variant(<span class="mono">destructive-outline·destructive-ghost·xs</span>), Table 내장 라운드 래퍼·행 hover 제거, ✓ 우측 셀렉트 문법 등 ② shadcn에 없는 <strong>자체 프리셋 12종가량</strong> — FilterBar·SearchBox·NotificationPanel·ErrorState·StatePreview·DetailPanel·IconSelect·RowsPerPage 등 ③ 토큰 <strong>값</strong>이 dstk 빌드(변수 이름만 shadcn과 동일).</div>
+            <div class="k">CSS 핸드오프</div>
+            <div class="v"><a class="mono" href="/dstk/handoff/handoff.zip">handoff.zip</a> — 프론트 4파일 세트(primitives · semantic-token · typography · index). 개별 열람·복붙: <a class="mono" href="/dstk/handoff/index.css">index.css</a> · <a class="mono" href="/dstk/handoff/primitives.css">primitives.css</a> · <a class="mono" href="/dstk/handoff/semantic-token.css">semantic-token.css</a> · <a class="mono" href="/dstk/handoff/typography.css">typography.css</a>. push마다 자동 최신 — 버전은 각 파일 첫 줄 주석(커밋·날짜)으로 확인.</div>
             <div class="k">전달물 4개</div>
             <div class="v"><span class="mono">components/src</span>(@ds/ui 소스 — 레지스트리 대신 이걸 복사) · <span class="mono">dist/dstk.css</span>(제품별이면 <span class="mono">dist/products/*.css</span>) · 화면 코드(<span class="mono">playground/app/generated/*</span>) · 규칙 문서(<span class="mono">design.md</span>·<span class="mono">ds365.json</span>)</div>
             <div class="k">의존성</div>
