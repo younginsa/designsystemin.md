@@ -1,7 +1,8 @@
 "use client"
 
 // 에러 상태 배너 프리셋 — Alert 조합(새 엔진 아님). 4상태 계약의 '에러' 표준 시각.
-// 컨테이너: 라운드 유지·테두리 없음·bg-destructive/10 반투명 틴트(불투명 혼합 기각).
+// 컨테이너: 라운드 유지·테두리 없음·bg-destructive/5 반투명 틴트(불투명 혼합 기각.
+//   2026-09-02 /10→/5 완화 — 과하게 붉음. 재시도 버튼은 /10 유지 = 연해진 표면 위 위계).
 // 아이콘: filled CircleAlert 18px — 원의 면 destructive·획(느낌표) card(흰색).
 //   filled 아이콘 규칙: Lucide Circle 계열(CircleAlert·CircleCheck·CircleX·Info)만 허용
 //   — Lucide는 스트로크 세트라 삼각형 등은 fill 시 뭉개진다.
@@ -34,7 +35,7 @@ function ErrorState({
   return (
     <Alert
       className={cn(
-        "rounded-lg border-0 bg-destructive/10 px-5 py-4 [&>svg]:size-[18px] [&>svg]:translate-y-0",
+        "rounded-lg border-0 bg-destructive/5 px-5 py-4 [&>svg]:size-[18px] [&>svg]:translate-y-0",
         className
       )}
       {...props}
