@@ -96,6 +96,8 @@ export default function HubApp({ fragments, hist, shotNames }: {
 
   /* 딥링크 — 원본과 동일한 해시 */
   React.useEffect(() => {
+    // #code=<슬러그> — 코드 드로어 딥링크: 365 탭 · 02 패널로 전환(드로어는 CatalogPanel이 연다)
+    if (/^#code=[\w-]+$/.test(location.hash)) { setDoc("d365"); setSel(1); return; }
     const target = DEEP_LINKS[location.hash];
     if (!target) return;
     const idx = PANELS[target[0]].findIndex((p) => p.title === target[1]);

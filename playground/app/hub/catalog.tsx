@@ -90,14 +90,18 @@ function BoxDiagram({ box }: { box: BoxSpec }) {
 /* IDE식 인라인 폴딩(2026-09-03 재설계 — 구간 카드 방식 폐기): 코드는 한 덩어리로 흐르고,
    접기는 코드 자신의 들여쓰기 계층에서 일어난다. 여는 줄 = 원문 그대로, 거터 셰브런,
    접힘 시 줄 끝 "⋯ }" 표시. 3줄 미만 블록은 접기 생략(노이즈 방지). */
-const KWRE = /\b(import|export|from|const|let|var|function|return|type|interface|extends|default|if|else|for|of|new|async|await|null|undefined|true|false|as)\b/g;
-
-/* 줄 단위 하이라이트 — 블록 주석·백틱 문자열 상태를 줄 간에 이어받는다 */
+/* 줄 단위 하이라이트 — 블록 주석·백틱 문자열 상태를 줄 간에 이어받는다.
+   단일 패스 치환(자기 마크업 재매칭 방지): JSX 태그명 파랑 · 속성명 금색 · 키워드 · 숫자 */
 function highlightLines(src: string): string[] {
   const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const plain = (s: string) => esc(s)
-    .replace(KWRE, '<span class="tk-k">$1</span>')
-    .replace(/\b(\d+(?:\.\d+)?)\b(?![^<]*>)/g, '<span class="tk-n">$1</span>');
+  const plain = (s: string) => esc(s).replace(
+    /(&lt;\/?)([A-Za-z][\w.-]*)|([a-zA-Z][\w-]*)(?==(?:"|\{))|\b(import|export|from|const|let|var|function|return|type|interface|extends|default|if|else|for|of|new|async|await|null|undefined|true|false|as)\b|\b(\d+(?:\.\d+)?)\b/g,
+    (_m, tp, tn, at, kw2, num) => {
+      if (tn) return tp + '<span class="tk-t">' + tn + "</span>";
+      if (at) return '<span class="tk-a">' + at + "</span>";
+      if (kw2) return '<span class="tk-k">' + kw2 + "</span>";
+      return '<span class="tk-n">' + num + "</span>";
+    });
   let inC = false, inT = false;
   return src.split("\n").map((line) => {
     let out = "", i = 0;
@@ -135,7 +139,7 @@ function highlightLines(src: string): string[] {
   });
 }
 
-type FoldNode = { html: string } | { headHtml: string; tail: string; children: FoldNode[] };
+type FoldNode = { html: string } | { headRest: string; indent: number; tail: string; children: FoldNode[] };
 function countLines(nodes: FoldNode[]): number {
   return nodes.reduce((n, x) => n + ("children" in x ? 1 + countLines(x.children) : 1), 0);
 }
@@ -164,7 +168,8 @@ function buildFolds(src: string): FoldNode[] {
           children.push({ html: htmls[pos] });
           pos++;
         }
-        if (countLines(children) >= 3) nodes.push({ headHtml: htmls[headIdx], tail, children });
+        // 삼각형은 들여쓰기 위치의 내용 바로 앞 — 선행 공백과 본문 html을 분리 보관
+        if (countLines(children) >= 3) nodes.push({ headRest: htmls[headIdx].slice(ind), indent: ind, tail, children });
         else { nodes.push({ html: htmls[headIdx] }); nodes.push(...children); }
       } else {
         nodes.push({ html: htmls[pos] });
@@ -183,7 +188,9 @@ function FoldView({ nodes }: { nodes: FoldNode[] }) {
         "children" in n ? (
           <details key={i} className="fold" open>
             <summary>
-              <span dangerouslySetInnerHTML={{ __html: n.headHtml }} />
+              {" ".repeat(n.indent)}
+              <span className="tri" aria-hidden />
+              <span dangerouslySetInnerHTML={{ __html: n.headRest }} />
               <span className="ell"> ⋯ {n.tail || "}"}</span>
             </summary>
             <FoldView nodes={n.children} />
@@ -349,6 +356,11 @@ export function CatalogPanel({ approvals, ds365, urls }: {
   const [local, setLocal] = React.useState<Record<string, any> | null>(null);
   const [editing, setEditing] = React.useState<string | null>(null);
   const [codeSlug, setCodeSlug] = React.useState<string | null>(null); // 「코드」 드로어
+  // 딥링크 #code=<슬러그> — 코드 패널 직행(공유·캡처 검증용, 2026-09-03)
+  React.useEffect(() => {
+    const m = location.hash.match(/^#code=([\w-]+)$/);
+    if (m) setCodeSlug(m[1]);
+  }, []);
 
   const comps = local ?? fileComponents;
   const entry = (slug: string) => comps[slug] || {};

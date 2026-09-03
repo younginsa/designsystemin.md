@@ -384,16 +384,23 @@
   .codebox .codepre .cl, .codebox .codepre .fold > summary { white-space: pre;
     padding-left: 16px; position: relative; min-height: 1.6em; }
   .codebox .codepre .fold { margin: 0; }
-  /* 폴드 줄 = 민짜 코드 줄 + filled 삼각형만 — 박스·배경·플렉스 전면 금지(명시 가드) */
+  /* 폴드 줄 = 민짜 코드 줄 + filled 삼각형만 — 박스·배경·플렉스 전면 금지(명시 가드).
+     삼각형은 들여쓰기 위치의 내용 바로 앞(고정 거터 폐기, 2026-09-03) */
   .codebox .codepre .fold > summary { list-style: none; cursor: pointer; display: block;
     background: transparent; border: 0; font-size: inherit; gap: 0; align-items: normal; }
   .codebox .codepre .fold > summary::-webkit-details-marker { display: none; }
-  .codebox .codepre .fold > summary::before { content: "▶"; position: absolute; left: 1px;
-    top: .3em; color: var(--doc-muted); font-size: 8px; }
-  .codebox .codepre .fold[open] > summary::before { content: "▼"; }
-  .codebox .codepre .fold > summary:hover::before { color: var(--ink); }
+  .codebox .codepre .tri { display: inline-block; width: 12px; margin-left: -12px; }
+  .codebox .codepre .tri::before { content: "▶"; font-size: 8px; color: var(--doc-muted); }
+  .codebox .codepre .fold[open] > summary .tri::before { content: "▼"; }
+  .codebox .codepre .fold > summary:hover .tri::before { color: var(--ink); }
   .codebox .codepre .ell { color: var(--doc-muted); display: none; }
   .codebox .codepre .fold:not([open]) > summary .ell { display: inline; }
+  /* 줄 hover 틴트 — 현재 보는 줄 판독 */
+  .codebox .codepre .cl:hover, .codebox .codepre .fold > summary:hover {
+    background: rgba(15, 17, 21, .05); }
+  /* JSX 태그·속성 색 */
+  .codebox .tk-t { color: #1d6fd9; }
+  .codebox .tk-a { color: #a16207; }
   /* 하이라이트 4색 */
   .codebox .tk-k { color: #7b5bd6; }
   .codebox .tk-s { color: #1a7f4b; }
