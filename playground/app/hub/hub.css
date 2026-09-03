@@ -133,6 +133,10 @@
     color: var(--doc-muted); text-transform: uppercase; letter-spacing: 0.08em;
   }
   .hubdoc h3:not(.livehole *) { margin: 128px 0 12px; }   /* 섹션 간 호흡 ×2 (2026-07-31) */
+  /* 패널 첫 라벨 — 128px 호흡은 섹션 '사이' 전용, 최상단은 24px (2026-09-03).
+     히스토리는 비주얼 정렬 실측 보정(-12px)이 있어 제외 */
+  .hubdoc h3:first-child:not(.livehole *) { margin-top: 24px; }
+  .hubdoc > :first-child:not(.hist-entry) > h3:first-child:not(.livehole *) { margin-top: 24px; }
   .hubdoc h4:not(.livehole *) { font-size: 15px; font-weight: 600; margin: 24px 0 6px; }
   .hubdoc p:not(.livehole *) { margin: 10px 0; }
   .lead { color: var(--doc-muted); }
@@ -409,7 +413,8 @@
     font-family: var(--mono); font-size: 13px; color: var(--ink);
     border: 1px solid var(--line);
     background: var(--bg) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%23999' stroke-width='1.5'/></svg>") no-repeat right 12px center;
-    padding: 5px 34px 5px 12px; max-width: 460px; }
+    padding: 5px 34px 5px 12px; max-width: 640px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   /* 페이지 생성 (파이프라인 5단계) */
   .gen-row { display: flex; align-items: center; gap: 12px; padding: 10px 0;
     border-bottom: 1px solid var(--line); cursor: pointer; }

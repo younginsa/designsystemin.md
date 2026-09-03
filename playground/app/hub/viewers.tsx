@@ -116,7 +116,12 @@ export function useDsViewers() {
       const rows = Object.entries(typo).filter(([k]) => !k.startsWith("$")).map(([name, tok]: [string, any]) => {
         const v = tok.$value;
         if (v === "TODO") return '<tr><td class="mono">' + name + '</td><td class="mono" style="color:var(--doc-muted)" colspan="2">실측 대기</td></tr>';
-        const spec = v.size + (v.weight ? " · " + v.weight : "") + (v.family ? " · " + v.family : "") + (tok.$note ? " (" + tok.$note + ")" : "");
+        // desktop-*: 행간 병기 + 피그마 제공 4무게 전부 명기(미리보기 전개는 안 함 — 대표 무게로만 렌더)
+        const sz = v.size + (v.lineHeight ? "/" + v.lineHeight : "");
+        const wt = name.startsWith("desktop-")
+          ? "regular(400) · medium(500) · semi bold(600) · bold(700)"
+          : (v.weight ? v.weight : "");
+        const spec = sz + (wt ? " · " + wt : "") + (v.family ? " · " + v.family : "") + (tok.$note ? " (" + tok.$note + ")" : "");
         const fam = v.family === "mono" ? "var(--mono)" : "inherit";
         return '<tr><td class="mono">' + name + '</td><td class="mono">' + spec + "</td>" +
           '<td><span style="font-size:' + Math.min(parseInt(v.size, 10), 44) + "px;font-weight:" + (v.weight || 400) + ";font-family:" + fam + ';line-height:1.1">가나 Aa 09</span></td></tr>';
