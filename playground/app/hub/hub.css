@@ -353,6 +353,25 @@
   .livebox iframe { flex: 1; border: 0; width: 100%; }
   /* 타이포 표 — 무게 4종 그룹(작게·연회색·한 덩어리) */
   .typo-t .typo-w { font-size: 11px; color: var(--doc-muted); white-space: nowrap; }
+  /* 코드 패널 — 우측 드로어(피그마 Inspect 패턴): 상단 속성(자동 추출) + 코드 전문 */
+  .codebox { position: fixed; inset: 0; z-index: 70; background: rgba(15, 17, 21, .35); }
+  .codebox .codewrap { position: absolute; top: 0; right: 0; bottom: 0; width: min(620px, 92vw);
+    background: var(--bg); border-left: 1px solid var(--line); display: flex; flex-direction: column; }
+  .codebox .bar { display: flex; align-items: center; gap: 8px; padding: 10px 14px;
+    border-bottom: 1px solid var(--line); font-size: 13px; font-weight: 600; }
+  .codebox .bar .sp { margin-left: auto; display: flex; gap: 8px; }
+  .codebox .codescroll { flex: 1; overflow: auto; padding: 14px; }
+  .codebox .props { border: 1px solid var(--line); background: var(--surface);
+    padding: 10px 12px 8px; margin-bottom: 6px; font-size: 12px; }
+  .codebox .props .pk { color: var(--doc-muted); margin: 10px 0 5px; font-size: 11px;
+    text-transform: uppercase; letter-spacing: .04em; }
+  .codebox .props .pk:first-child { margin-top: 0; }
+  .codebox .props .tok { display: inline-block; margin: 0 5px 5px 0; padding: 1px 6px;
+    border: 1px solid var(--line); background: var(--bg); font-family: var(--mono); font-size: 11px; }
+  .codebox .fhead { display: flex; align-items: center; gap: 8px; margin: 14px 0 6px; font-size: 12px; }
+  .codebox pre { border: 1px solid var(--line); background: var(--surface); padding: 12px;
+    overflow: auto; font-family: var(--mono); font-size: 11.5px; line-height: 1.55;
+    white-space: pre; margin: 0; }
   .hovercut .cropwin { position: relative; overflow: hidden; flex: none;
     border: 1px solid var(--line); background: var(--bg); }
   .comp-chips { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 16px 16px; }

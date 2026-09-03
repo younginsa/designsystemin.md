@@ -17,34 +17,129 @@ const SOURCE: HubCard[] = CARD_GROUPS.flatMap((g) => g.cards).filter((c) => c.sl
 
 const isAdjusted = (e: any) => (e.overrides && Object.keys(e.overrides).length) || e.note;
 
-/* 「코드」 복사 — vocab-map files 조회 → /ui-src/<f>.tsx(ds:build 동기화) 클립보드 복사.
-   내용물은 CSS가 아니라 컴포넌트 소스(tsx·Tailwind) — 프론트 코드베이스에 드롭인되는 단위(2026-09-03 확정) */
+/* 「코드」 패널 — 우측 드로어(피그마 Inspect 패턴, 2026-09-03 개정: 즉시 복사 → 열람 패널).
+   원천 = /ui-src/<f>.tsx.txt(ds:build 동기화). 상단 속성 블록은 소스에서 자동 추출(cva 베이스·variants)
+   — 손 관리 스펙 없음. 복사는 패널 안 [전체 복사]·파일별 [복사]로. */
 let vocabCache: Promise<any> | null = null;
 const loadVocab = () => (vocabCache ??= fetch("/vocab-map.json").then((r) => r.json()));
 
-function CodeButton({ slug }: { slug: string }) {
-  const [state, setState] = React.useState<"idle" | "ok" | "err">("idle");
-  const copy = async () => {
-    try {
-      const vm = await loadVocab();
-      const files: string[] = vm.vocab?.[slug]?.files ?? [];
-      if (!files.length) throw new Error("no files");
-      const parts = await Promise.all(files.map(async (f) => {
-        const r = await fetch("/ui-src/" + f + ".tsx.txt");
-        if (!r.ok) throw new Error(f);
-        return "/* ── components/src/ui/" + f + ".tsx ── */\n" + (await r.text());
-      }));
-      await navigator.clipboard.writeText(parts.join("\n\n"));
-      setState("ok");
-    } catch {
-      setState("err");
-    }
-    setTimeout(() => setState("idle"), 1500);
-  };
+type CodeFile = { name: string; src: string };
+
+/* cva 베이스 클래스·variant/size 이름 자동 추출 — 실패하면 해당 블록만 생략(표시용, 게이트 아님) */
+function extractProps(src: string): { base: string[]; variants: string[]; sizes: string[] } {
+  const out = { base: [] as string[], variants: [] as string[], sizes: [] as string[] };
+  try {
+    const b = src.match(/cva\(\s*["'`]([^"'`]+)["'`]/);
+    if (b) out.base = b[1].trim().split(/\s+/);
+    // 콜론 뒤가 문자열 리터럴 시작일 때만 = variant 키 (클래스 안 hover: 등 오탐 차단)
+    const keysOf = (block?: string) =>
+      block ? [...block.matchAll(/(?:^|\n)\s*"?([\w-]+)"?:\s*\n?\s*["'`]/g)].map((m) => m[1]) : [];
+    out.variants = keysOf(src.match(/variant:\s*{([\s\S]*?)\n\s*}/)?.[1]);
+    out.sizes = keysOf(src.match(/size:\s*{([\s\S]*?)\n\s*}/)?.[1]);
+  } catch { /* 추출 실패 = 생략 */ }
+  return out;
+}
+
+function CopyChip({ text, label = "복사" }: { text: string; label?: string }) {
+  const [ok, setOk] = React.useState(false);
   return (
-    <button type="button" className="chip" onClick={copy}>
-      {state === "ok" ? "copied ✓" : state === "err" ? "복사 실패" : "코드"}
+    <button type="button" className="chip" onClick={async () => {
+      try { await navigator.clipboard.writeText(text); setOk(true); setTimeout(() => setOk(false), 1500); } catch { /* noop */ }
+    }}>
+      {ok ? "copied ✓" : label}
     </button>
+  );
+}
+
+function CodePanel({ card, entry, onClose }: { card: HubCard; entry: any; onClose: () => void }) {
+  const [files, setFiles] = React.useState<CodeFile[] | null>(null);
+  const [err, setErr] = React.useState(false);
+  React.useEffect(() => {
+    let dead = false;
+    (async () => {
+      try {
+        const vm = await loadVocab();
+        const names: string[] = vm.vocab?.[card.slug!]?.files ?? [];
+        if (!names.length) throw new Error("no files");
+        const loaded = await Promise.all(names.map(async (f) => {
+          const r = await fetch("/ui-src/" + f + ".tsx.txt");
+          if (!r.ok) throw new Error(f);
+          return { name: f, src: await r.text() };
+        }));
+        if (!dead) setFiles(loaded);
+      } catch { if (!dead) setErr(true); }
+    })();
+    const onKey = (e: KeyboardEvent) => { if (e.code === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    return () => { dead = true; document.removeEventListener("keydown", onKey); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [card.slug]);
+
+  const overrides: Record<string, string> = entry?.overrides ?? {};
+  const all = files ? files.map((f) => "/* ── components/src/ui/" + f.name + ".tsx ── */\n" + f.src).join("\n\n") : "";
+  return (
+    <div className="codebox" onClick={onClose}>
+      <div className="codewrap" onClick={(e) => e.stopPropagation()}>
+        <div className="bar">
+          <span>{card.name}</span>
+          {card.shadcn ? <span className="chip">shadcn: {card.shadcn}</span> : null}
+          <span className="sp">
+            {files ? <CopyChip text={all} label="전체 복사" /> : null}
+            <button type="button" className="chip" onClick={onClose}>✕</button>
+          </span>
+        </div>
+        <div className="codescroll">
+          {err ? <div className="props">소스를 불러오지 못했다 — vocab-map · ui-src 동기화 확인</div> : null}
+          {files ? (
+            <>
+              <div className="props">
+                {Object.keys(overrides).length ? (
+                  <>
+                    <div className="pk">365 조정값</div>
+                    {Object.keys(overrides).map((k) => <span className="tok" key={k}>{k}: {overrides[k]}</span>)}
+                  </>
+                ) : null}
+                {files.map((f) => {
+                  const p = extractProps(f.src);
+                  if (!p.base.length && !p.variants.length && !p.sizes.length) return null;
+                  return (
+                    <React.Fragment key={f.name}>
+                      {p.base.length ? (
+                        <>
+                          <div className="pk">기본 클래스{files.length > 1 ? " — " + f.name : ""}</div>
+                          {p.base.map((t) => <span className="tok" key={t}>{t}</span>)}
+                        </>
+                      ) : null}
+                      {p.variants.length ? (
+                        <>
+                          <div className="pk">variants</div>
+                          {p.variants.map((t) => <span className="tok" key={t}>{t}</span>)}
+                        </>
+                      ) : null}
+                      {p.sizes.length ? (
+                        <>
+                          <div className="pk">sizes</div>
+                          {p.sizes.map((t) => <span className="tok" key={t}>{t}</span>)}
+                        </>
+                      ) : null}
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+              {files.map((f) => (
+                <React.Fragment key={f.name}>
+                  <div className="fhead">
+                    <span className="mono">components/src/ui/{f.name}.tsx</span>
+                    <span style={{ marginLeft: "auto" }}><CopyChip text={f.src} /></span>
+                  </div>
+                  <pre>{f.src}</pre>
+                </React.Fragment>
+              ))}
+            </>
+          ) : !err ? <div className="props">불러오는 중…</div> : null}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -87,6 +182,7 @@ export function CatalogPanel({ approvals, ds365, urls }: {
   const fileTokens = ds365?.tokens ?? {};
   const [local, setLocal] = React.useState<Record<string, any> | null>(null);
   const [editing, setEditing] = React.useState<string | null>(null);
+  const [codeSlug, setCodeSlug] = React.useState<string | null>(null); // 「코드」 드로어
 
   const comps = local ?? fileComponents;
   const entry = (slug: string) => comps[slug] || {};
@@ -156,7 +252,8 @@ export function CatalogPanel({ approvals, ds365, urls }: {
             : [];
           return (
             <div className="card comp ds-card" data-slug={s.slug!} key={s.slug!}>
-              <div className="card-head"><span>{s.name}</span><CodeButton slug={s.slug!} /></div>
+              <div className="card-head"><span>{s.name}</span>
+                <button type="button" className="chip" onClick={() => setCodeSlug(s.slug!)}>코드</button></div>
               <div className="comp-vis">
                 {pv ? (
                   <div className="livehole"><FitScale pv={pv} /></div>
@@ -192,6 +289,13 @@ export function CatalogPanel({ approvals, ds365, urls }: {
           );
         })}
       </div>
+      {codeSlug ? (
+        <CodePanel
+          card={SOURCE.find((c) => c.slug === codeSlug)!}
+          entry={entry(codeSlug)}
+          onClose={() => setCodeSlug(null)}
+        />
+      ) : null}
     </>
   );
 }
