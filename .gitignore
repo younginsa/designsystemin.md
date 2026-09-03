@@ -7,3 +7,8 @@ node_modules/
 
 # 관리자 저장소 표식 — 절대 커밋 금지(커밋되면 모든 클론이 관리자로 승격됨)
 .ds-admin
+
+# 세션 생성물 = 요청자 로컬 보관(CLAUDE.md 절차 7). 커밋하면 클론의 같은 경로와 충돌해
+# pull이 막힌다(2026-09-03 사고 — 갤러리 사본을 여기 커밋했다가 클론이 16커밋 뒤처짐).
+# 갤러리 전시분은 playground/app/gallery/ 로 분리 보관한다.
+playground/app/generated/

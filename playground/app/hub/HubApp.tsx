@@ -295,13 +295,13 @@ export default function HubApp({ fragments, hist, shotNames }: {
         {live ? (
           <div className="frame-wrap" onClick={(e) => e.stopPropagation()}>
             <div className="bar">
-              <span className="mono">/generated/{live}/</span>
+              <span className="mono">/gallery/{live}/</span>
               <span style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
-                <a className="chip" href={"/generated/" + live + "/"} target="_blank" rel="noopener">새 탭에서 열기</a>
+                <a className="chip" href={"/gallery/" + live + "/"} target="_blank" rel="noopener">새 탭에서 열기</a>
                 <button type="button" className="chip" onClick={() => setLive(null)}>닫기</button>
               </span>
             </div>
-            <iframe src={"/generated/" + live + "/"} title="실물 미리보기" />
+            <iframe src={"/gallery/" + live + "/"} title="실물 미리보기" />
           </div>
         ) : null}
       </div>
