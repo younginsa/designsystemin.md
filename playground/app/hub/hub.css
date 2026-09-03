@@ -369,31 +369,48 @@
   .codebox .specwrap { margin-bottom: 18px; }
   .codebox .fhead { display: flex; align-items: center; gap: 8px; margin: 4px 0 8px; font-size: 12px; }
   .codebox .specnote { font-size: 11px; color: var(--doc-muted); margin: 6px 0 10px; line-height: 1.6; }
-  /* 스펙 표 — 코드 레벨 산출물(2026-09-03 재설계): 값은 코드 원문 클래스 그대로.
-     연한 박스 · 전체 mono · 빈 값 공백 · 색 스와치 · 행 hover 복사 아이콘 */
-  .codebox .specbox { border: 1px solid rgba(15,17,21,.08); background: rgba(15,17,21,.02);
-    padding: 2px 8px 4px; margin-bottom: 10px; overflow-x: auto; }
+  /* 스펙 표 — 코드 레벨 3열(variant|state|classes, 2026-09-03 재설계).
+     라인 대신 면: variant 그룹 홀짝 2% 배경. .hubdoc 전역 표 규칙(td 밑줄·first-child
+     padding 0·11px 패딩)이 새어들어 정렬·라인이 깨졌으므로 고특이도로 전부 차단한다. */
+  .codebox .specbox { border: 1px solid rgba(15,17,21,.08); background: var(--bg);
+    margin-bottom: 10px; overflow-x: auto; }
   .codebox .spec-t { width: 100%; border-collapse: collapse;
     font-family: var(--mono); font-size: 10.5px; }
-  .codebox .spec-t th { text-align: left; font-weight: 500; color: var(--doc-muted); font-size: 9px;
-    text-transform: uppercase; letter-spacing: .05em; padding: 7px 8px 5px; }
-  .codebox .spec-t td { padding: 6px 8px; vertical-align: middle; white-space: nowrap; }
-  .codebox .spec-t tr.vstart > td { border-top: 1px solid rgba(15,17,21,.06); }
-  .codebox .spec-t td.vn { font-weight: 600; color: var(--ink); }
-  .codebox .spec-t td.st { color: var(--doc-muted); }
-  .codebox .spec-t td.sz { white-space: normal; word-break: normal; }
+  .hubdoc .codebox .spec-t tr th, .hubdoc .codebox .spec-t tr td {
+    border-bottom: 0; vertical-align: top; }
+  .hubdoc .codebox .spec-t tr th {
+    text-align: left; font-weight: 500; color: var(--doc-muted); font-size: 9px;
+    text-transform: uppercase; letter-spacing: .05em; padding: 8px 10px 5px; }
+  .hubdoc .codebox .spec-t tr td { padding: 7px 10px; }
+  .hubdoc .codebox .spec-t tr th:first-child, .hubdoc .codebox .spec-t tr td:first-child {
+    padding-left: 12px; }
+  .codebox .spec-t tr.g1 > td { background: rgba(15,17,21,.02); }
+  .codebox .spec-t td.vn { font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .codebox .spec-t td.st { color: var(--doc-muted); white-space: nowrap; }
+  .codebox .spec-t td.cls { line-height: 1.8; }
+  .codebox .spec-t .tkk { display: inline-block; white-space: nowrap; margin-right: 14px; }
   .codebox .spec-t .tsw { display: inline-block; width: 8px; height: 8px; margin-right: 5px;
     border: 1px solid rgba(15,17,21,.14); vertical-align: baseline; }
-  .codebox .spec-t td.rowcopy { padding: 0 4px; width: 20px; }
+  .codebox .spec-t td.rowcopy { padding: 4px 6px 0 0; width: 24px; text-align: right; }
   .codebox .rcbtn { opacity: 0; border: 0; background: transparent; cursor: pointer;
-    font-size: 11px; color: var(--doc-muted); padding: 2px; line-height: 1; }
-  .codebox tr:hover .rcbtn, .codebox .sbhead:hover .rcbtn { opacity: 1; }
+    font-size: 15px; color: var(--doc-muted); padding: 2px 4px; line-height: 1; vertical-align: baseline; }
+  .codebox .spec-t tr:hover td.rowcopy .rcbtn,
+  .codebox .spec-t td.vn:hover .rcbtn,
+  .codebox .specbase summary:hover .rcbtn { opacity: 1; }
   .codebox .rcbtn:hover { color: var(--ink); }
-  .codebox .specbase { padding: 6px 10px 8px; }
-  .codebox .sbhead { display: flex; align-items: center; justify-content: space-between;
+  .codebox .spec-t td.vn .rcbtn { margin-left: 4px; font-size: 13px; }
+  /* base classes — 기본 접힘(공통값이라 매번 볼 정보는 아님) */
+  .codebox .specbase { padding: 0; }
+  .codebox .specbase > summary { display: flex; align-items: center; gap: 6px; cursor: pointer;
+    list-style: none; padding: 8px 10px 8px 12px;
     font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .05em;
-    color: var(--doc-muted); margin-bottom: 4px; }
-  .codebox .sbval { font-size: 10.5px; line-height: 1.7; word-break: break-word; }
+    color: var(--doc-muted); }
+  .codebox .specbase > summary::-webkit-details-marker { display: none; }
+  .codebox .specbase > summary .tri::before { content: "▶"; font-size: 8px; }
+  .codebox .specbase[open] > summary .tri::before { content: "▼"; }
+  .codebox .specbase > summary .sp { margin-left: auto; }
+  .codebox .sbval { font-size: 10.5px; line-height: 1.8; word-break: break-word;
+    padding: 0 12px 10px; }
   .codebox .props { border: 1px solid var(--line); background: var(--surface);
     padding: 10px 12px 8px; margin-bottom: 6px; font-size: 12px; }
   .codebox .props .pk { color: var(--doc-muted); margin: 10px 0 5px; font-size: 11px;

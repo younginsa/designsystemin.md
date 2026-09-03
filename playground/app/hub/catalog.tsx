@@ -141,24 +141,13 @@ function FoldView({ nodes }: { nodes: FoldNode[] }) {
   );
 }
 
-/* 스펙 추출(2026-09-03 — 프론트 요청: 코드 대신 variant·size·state·토큰 표).
-   cva 정의에서 클래스를 상태별로 갈라 배경/글자/테두리 토큰만 남긴다.
+/* 스펙 추출(2026-09-03 재설계 — 3열: variant | state | classes).
+   bg-·text- 접두사가 곧 열 제목이므로 속성 열 분리는 중복(잘림·빈 칸만 남긴다).
+   값은 코드 원문 클래스 그대로 — variant 원문 전체(raw)는 그룹 복사 단위.
    우리 DS는 hover·disabled 전용 토큰이 없다 — 원 토큰의 불투명도 변형(primary/90)·opacity-50이 실물. */
-type SpecRow = { name: string; states: Record<string, { bg?: string; text?: string; border?: string; ring?: string }> };
+type SpecState = { st: string; tokens: string[] };
+type SpecRow = { name: string; raw: string; states: SpecState[] };
 type Spec = { variants: SpecRow[]; sizes: { name: string; tokens: string[] }[]; base: string[] };
-
-/* 값은 코드 원문 그대로 — 접두사(bg-·hover: 등)를 떼지 않는다(그대로 붙여넣기 가능해야 함) */
-function classToSlots(cls: string) {
-  const slot: { bg?: string; text?: string; border?: string; ring?: string } = {};
-  for (const t of cls.split(/\s+/)) {
-    const bare = t.replace(/^(hover|focus-visible|dark|disabled):/, "");
-    if (/^bg-/.test(bare)) slot.bg = t;
-    else if (/^text-(?!xs|sm|base|lg|xl|\dxl|left|right|center)/.test(bare)) slot.text = t;
-    else if (/^ring-(?!\[)/.test(bare)) slot.ring = t;
-    else if (/^border(-|$)/.test(bare) && !/^border-\d/.test(bare)) slot.border = t;
-  }
-  return slot;
-}
 
 function extractSpec(src: string): Spec | null {
   // 따옴표는 역참조로 짝을 맞춘다 — [&_svg:not([class*='size-'])]처럼 다른 따옴표가 값 안에 산다
@@ -168,23 +157,19 @@ function extractSpec(src: string): Spec | null {
   const entries = (block: string) =>
     [...block.matchAll(/(?:^|\n)\s*"?([\w-]+)"?:\s*\n?\s*(["'`])(.*?)\2/g)].map((m) => [m[1], m[3]] as const);
   const variants: SpecRow[] = entries(blockOf("variant")).map(([name, cls]) => {
-    const states: SpecRow["states"] = {};
-    const toks = cls.split(/\s+/);
-    // 값은 원문 클래스 그대로(hover:·focus-visible: 접두사 포함) — 상태별로 행만 나눈다
-    // 상태 라벨도 코드 실물 — 무접두사=base, hover:, focus-visible: (발명어 금지)
-    // 색 슬롯(bg·text·border·ring)이 하나도 없는 상태는 행을 만들지 않는다(빈 행 방지)
-    const put = (label: string, list: string[]) => {
-      const s = classToSlots(list.join(" "));
-      if (s.bg || s.text || s.border || s.ring) states[label] = s;
-    };
-    put("base", toks.filter((t) => !/^(hover|focus-visible|dark|disabled|aria-invalid):/.test(t)));
-    put("hover", toks.filter((t) => /^hover:/.test(t)));
-    put("focus-visible", toks.filter((t) => /^focus-visible:/.test(t)));
-    return { name, states };
+    const toks = cls.split(/\s+/).filter(Boolean);
+    // 상태 라벨 = 코드 실물(무접두사=base, hover:, focus-visible:). dark:·aria-invalid:는
+    // 제품 3모드(변수 스왑)에서 미사용이라 표에서 제외 — 전체 원문은 raw·코드 탭에 있다.
+    const states: SpecState[] = [
+      { st: "base", tokens: toks.filter((t) => !/^[\w-]+:/.test(t)) },
+      { st: "hover", tokens: toks.filter((t) => /^hover:/.test(t)) },
+      { st: "focus-visible", tokens: toks.filter((t) => /^focus-visible:/.test(t)) },
+    ].filter((s) => s.tokens.length);
+    return { name, raw: cls, states };
   });
   // size 값도 원문 문자열 그대로(has-[>svg]:px-3 등 포함) — 필터·가공 금지
   const sizes = entries(blockOf("size")).map(([name, cls]) => ({ name, tokens: [cls] }));
-  return { variants: variants.filter((v) => Object.keys(v.states).length), sizes, base: baseM[2].trim().split(/\s+/) };
+  return { variants: variants.filter((v) => v.states.length), sizes, base: baseM[2].trim().split(/\s+/) };
 }
 
 function specToMarkdown(card: HubCard, spec: Spec, overrides: Record<string, string>): string {
@@ -193,11 +178,9 @@ function specToMarkdown(card: HubCard, spec: Spec, overrides: Record<string, str
     L.push("365 overrides: " + Object.entries(overrides).map(([k, v]) => k + "=" + v).join(" · "), "");
   }
   L.push("## Base classes", "", "```", spec.base.join(" "), "```", "");
-  L.push("## Variant × State — token mapping", "", "| variant | state | background | text | border | ring |", "|---|---|---|---|---|---|");
+  L.push("## Variant × State", "", "| variant | state | classes |", "|---|---|---|");
   for (const v of spec.variants) {
-    for (const [st, s] of Object.entries(v.states)) {
-      L.push(`| ${v.name} | ${st} | ${s.bg ?? ""} | ${s.text ?? ""} | ${s.border ?? ""} | ${s.ring ?? ""} |`);
-    }
+    for (const s of v.states) L.push(`| ${v.name} | ${s.st} | ${s.tokens.join(" ")} |`);
   }
   L.push("", "## Size", "", "| size | classes |", "|---|---|");
   for (const s of spec.sizes) L.push(`| ${s.name} | ${s.tokens.join(" ")} |`);
@@ -309,26 +292,31 @@ function CodePanel({ card, entry, onClose }: { card: HubCard; entry: any; onClos
                 {Object.keys(overrides).length ? (
                   <div className="specnote">365 overrides — {Object.entries(overrides).map(([k, v]) => k + ": " + v).join(" · ")}</div>
                 ) : null}
-                <div className="specbox specbase">
-                  <div className="sbhead"><span>base classes</span><RowCopy text={spec!.base.join(" ")} /></div>
+                <details className="specbox specbase">
+                  <summary>
+                    <span className="tri" aria-hidden />base classes
+                    <span className="sp" onClick={(e) => e.preventDefault()}><RowCopy text={spec!.base.join(" ")} /></span>
+                  </summary>
                   <div className="mono sbval">{spec!.base.join(" ")}</div>
-                </div>
+                </details>
                 <div className="specbox">
                   <table className="spec-t">
-                    <thead><tr><th>variant</th><th>state</th><th>background</th><th>text</th><th>border</th><th>ring</th><th /></tr></thead>
+                    <thead><tr><th>variant</th><th>state</th><th>classes</th><th /></tr></thead>
                     <tbody>
-                      {spec!.variants.map((v) =>
-                        Object.entries(v.states).map(([st, s], i) => (
-                          <tr key={v.name + st} className={i === 0 ? "vstart" : undefined}>
-                            {i === 0 ? <td rowSpan={Object.keys(v.states).length} className="mono vn">{v.name}</td> : null}
-                            <td className="mono st">{st}</td>
-                            <td className="mono"><Tok v={s.bg} /></td>
-                            <td className="mono"><Tok v={s.text} /></td>
-                            <td className="mono"><Tok v={s.border} /></td>
-                            <td className="mono"><Tok v={s.ring} /></td>
-                            <td className="rowcopy">
-                              <RowCopy text={[s.bg, s.text, s.border, s.ring].filter(Boolean).join(" ")} />
+                      {spec!.variants.map((v, vi) =>
+                        v.states.map((s, i) => (
+                          <tr key={v.name + s.st} className={vi % 2 ? "g1" : "g0"}>
+                            {i === 0 ? (
+                              <td rowSpan={v.states.length} className="mono vn">
+                                {v.name}
+                                <RowCopy text={v.raw} />
+                              </td>
+                            ) : null}
+                            <td className="mono st">{s.st}</td>
+                            <td className="mono cls">
+                              {s.tokens.map((t) => <span className="tkk" key={t}><Tok v={t} /></span>)}
                             </td>
+                            <td className="rowcopy"><RowCopy text={s.tokens.join(" ")} /></td>
                           </tr>
                         ))
                       )}
@@ -340,10 +328,10 @@ function CodePanel({ card, entry, onClose }: { card: HubCard; entry: any; onClos
                     <table className="spec-t">
                       <thead><tr><th>size</th><th>classes</th><th /></tr></thead>
                       <tbody>
-                        {spec!.sizes.map((s) => (
-                          <tr key={s.name} className="vstart">
+                        {spec!.sizes.map((s, si) => (
+                          <tr key={s.name} className={si % 2 ? "g1" : "g0"}>
                             <td className="mono vn">{s.name}</td>
-                            <td className="mono sz">{s.tokens.join(" ")}</td>
+                            <td className="mono cls">{s.tokens.join(" ")}</td>
                             <td className="rowcopy"><RowCopy text={s.tokens.join(" ")} /></td>
                           </tr>
                         ))}
