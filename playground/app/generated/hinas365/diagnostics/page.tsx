@@ -342,7 +342,17 @@ const DIAG_FILTERS: FilterDef[] = [
 
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
 
+// useSearchParams는 Suspense 경계 필수 — 정적 export 프리렌더가 경계 없이는 실패한다
+// (2026-09-03 Vercel 빌드 중단 원인 교정 — 본체는 무변경, 래퍼만 추가)
 export default function DiagnosticsPage() {
+  return (
+    <React.Suspense fallback={null}>
+      <DiagnosticsBody />
+    </React.Suspense>
+  );
+}
+
+function DiagnosticsBody() {
   const searchParams = useSearchParams();
   const router = useRouter(); // 현재 진단 상태 행 클릭 → 상세 (A 문법)
   const [view, setView] = React.useState<ViewState>("default");
