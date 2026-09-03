@@ -119,7 +119,7 @@ export function useDsViewers() {
         // desktop-*: 행간 병기 + 피그마 제공 4무게 전부 명기(미리보기 전개는 안 함 — 대표 무게로만 렌더)
         const sz = v.size + (v.lineHeight ? "/" + v.lineHeight : "");
         const wt = name.startsWith("desktop-")
-          ? "regular(400) · medium(500) · semi bold(600) · bold(700)"
+          ? '<span class="typo-w">regular(400)·medium(500)·semi bold(600)·bold(700)</span>'
           : (v.weight ? v.weight : "");
         const spec = sz + (wt ? " · " + wt : "") + (v.family ? " · " + v.family : "") + (tok.$note ? " (" + tok.$note + ")" : "");
         const fam = v.family === "mono" ? "var(--mono)" : "inherit";

@@ -599,4 +599,17 @@ if (existsSync(join(ROOT, "playground", "public"))) {
   }
 }
 
-console.log("built → dist/dstk.css + dist/products/*.css + dist/handoff(4파일+zip) + public/dstk/*");
+// ── 컴포넌트 소스 동기화 — 허브 02 카드 「코드」 복사 버튼이 fetch (public/ui-src/) ──
+{
+  const uiDir = join(ROOT, "components/src/ui");
+  if (existsSync(uiDir) && existsSync(join(ROOT, "playground", "public"))) {
+    const outDir = join(ROOT, "playground/public/ui-src");
+    mkdirSync(outDir, { recursive: true });
+    // .txt 접미 — tsc·Next가 컴파일 대상으로 오인하지 않게(내용은 tsx 원본 그대로)
+    for (const f of readdirSync(uiDir).filter((x) => x.endsWith(".tsx"))) {
+      copyFileSync(join(uiDir, f), join(outDir, f + ".txt"));
+    }
+  }
+}
+
+console.log("built → dist/dstk.css + dist/products/*.css + dist/handoff(4파일+zip) + public/dstk/* + public/ui-src/*");

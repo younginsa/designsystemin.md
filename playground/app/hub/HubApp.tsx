@@ -55,6 +55,7 @@ export default function HubApp({ fragments, hist, shotNames }: {
   const [dsnavSec, setDsnavSec] = React.useState("pipeline");
   const [stack, setStack] = React.useState<{ title: string; names: string[] } | null>(null);
   const [lightbox, setLightbox] = React.useState<string | null>(null);
+  const [live, setLive] = React.useState<string | null>(null); // 실물 팝업 — /generated/<slug>/ iframe
   const [flash, setFlash] = React.useState<string | null>(null);
 
   const { urls, unlocked, unlock } = useScreens(shotNames);
@@ -118,6 +119,8 @@ export default function HubApp({ fragments, hist, shotNames }: {
       const t = e.target as HTMLElement;
       const open365 = t.closest("#dsnav-open-365");
       if (open365) { e.preventDefault(); switchDoc("d365"); return; }
+      const lc = t.closest(".livecut") as HTMLElement | null;
+      if (lc && lc.dataset.live) { setLive(lc.dataset.live); return; }
       const r = t.closest(".rowlink") as HTMLElement | null;
       if (r) {
         setStack({
@@ -130,7 +133,7 @@ export default function HubApp({ fragments, hist, shotNames }: {
       const sc = t.closest(".shot, .cut") as HTMLElement | null;
       if (sc && sc.dataset.shot && urls[sc.dataset.shot]) setLightbox(urls[sc.dataset.shot]);
     };
-    const onKey = (e: KeyboardEvent) => { if (e.code === "Escape") setLightbox(null); };
+    const onKey = (e: KeyboardEvent) => { if (e.code === "Escape") { setLightbox(null); setLive(null); } };
     document.addEventListener("click", onClick);
     document.addEventListener("keydown", onKey);
     return () => { document.removeEventListener("click", onClick); document.removeEventListener("keydown", onKey); };
@@ -284,6 +287,21 @@ export default function HubApp({ fragments, hist, shotNames }: {
 
       <div className={"lightbox" + (lightbox ? " on" : "")} onClick={() => setLightbox(null)}>
         {lightbox ? <img src={lightbox} alt="" /> : null}
+      </div>
+
+      <div className={"livebox" + (live ? " on" : "")} onClick={() => setLive(null)}>
+        {live ? (
+          <div className="frame-wrap" onClick={(e) => e.stopPropagation()}>
+            <div className="bar">
+              <span className="mono">/generated/{live}/</span>
+              <span style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+                <a className="chip" href={"/generated/" + live + "/"} target="_blank" rel="noopener">새 탭에서 열기</a>
+                <button type="button" className="chip" onClick={() => setLive(null)}>닫기</button>
+              </span>
+            </div>
+            <iframe src={"/generated/" + live + "/"} title="실물 미리보기" />
+          </div>
+        ) : null}
       </div>
     </div>
   );

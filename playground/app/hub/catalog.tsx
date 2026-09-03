@@ -17,6 +17,37 @@ const SOURCE: HubCard[] = CARD_GROUPS.flatMap((g) => g.cards).filter((c) => c.sl
 
 const isAdjusted = (e: any) => (e.overrides && Object.keys(e.overrides).length) || e.note;
 
+/* 「코드」 복사 — vocab-map files 조회 → /ui-src/<f>.tsx(ds:build 동기화) 클립보드 복사.
+   내용물은 CSS가 아니라 컴포넌트 소스(tsx·Tailwind) — 프론트 코드베이스에 드롭인되는 단위(2026-09-03 확정) */
+let vocabCache: Promise<any> | null = null;
+const loadVocab = () => (vocabCache ??= fetch("/vocab-map.json").then((r) => r.json()));
+
+function CodeButton({ slug }: { slug: string }) {
+  const [state, setState] = React.useState<"idle" | "ok" | "err">("idle");
+  const copy = async () => {
+    try {
+      const vm = await loadVocab();
+      const files: string[] = vm.vocab?.[slug]?.files ?? [];
+      if (!files.length) throw new Error("no files");
+      const parts = await Promise.all(files.map(async (f) => {
+        const r = await fetch("/ui-src/" + f + ".tsx.txt");
+        if (!r.ok) throw new Error(f);
+        return "/* ── components/src/ui/" + f + ".tsx ── */\n" + (await r.text());
+      }));
+      await navigator.clipboard.writeText(parts.join("\n\n"));
+      setState("ok");
+    } catch {
+      setState("err");
+    }
+    setTimeout(() => setState("idle"), 1500);
+  };
+  return (
+    <button type="button" className="chip" onClick={copy}>
+      {state === "ok" ? "copied ✓" : state === "err" ? "복사 실패" : "코드"}
+    </button>
+  );
+}
+
 function Editor({ entry, onSave }: { entry: any; onSave: (overrides: Record<string, string>, note: string) => void }) {
   const ov = entry.overrides || {};
   const [rows, setRows] = React.useState<Array<[string, string]>>(
@@ -154,6 +185,7 @@ export function CatalogPanel({ approvals, ds365, urls }: {
                   </>
                 )}
                 {s.shadcn ? <span className="chip">shadcn: {s.shadcn}</span> : null}
+                <CodeButton slug={s.slug!} />
                 <button type="button" className="chip edit" onClick={() => setEditing(editing === s.slug ? null : s.slug!)}>편집</button>
               </div>
               {editing === s.slug ? <Editor entry={e} onSave={(o, n) => save(s.slug!, o, n)} /> : null}

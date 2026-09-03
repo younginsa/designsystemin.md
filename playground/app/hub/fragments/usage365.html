@@ -1,24 +1,62 @@
 
-        <h3>프론트 구현 연결 — shadcn 기반 확인·전달물</h3>
-        <p class="lead"><strong>세션으로 화면 만드는 법</strong>(클론·채팅·DS 요청)의 정본은 <strong>HINAS DS 탭 「사용방법」</strong>이다 — 이 페이지는 프론트 구현 연동 전용(중복 카드 제거, 2026-09-03). 생성 화면은 공통 DS <strong>시맨틱 토큰만</strong> 쓴다(임의 hex·<span class="mono">dark:</span> 0건 — self-check 게이트로 강제). 렌더 기본은 <span class="mono">:root</span>=Light 값 — 화면 코드가 Light를 하드코딩하는 게 아니라 토큰을 참조하므로, <span class="mono">.dark</span> 클래스 하나로 코드 수정 없이 재스킨된다. 컴포넌트는 <strong>shadcn 구조</strong>(Radix + Tailwind v4 + cva, 변수명도 shadcn 규약)라 shadcn을 아는 프론트라면 그대로 읽고 쓸 수 있다 — 단 <strong>스톡 shadcn 설치(<span class="mono">npx shadcn add</span>)로는 재현이 안 된다</strong>. 아래 전달물을 복사해 쓴다.</p>
+        <h3>프론트 구현 연결</h3>
+        <p class="lead">세션으로 화면 만드는 법(클론·채팅·DS 요청)의 정본은 <strong>HINAS DS 탭 「사용방법」</strong>.<br>
+        이 페이지는 <strong>프론트 연동 전용</strong>이다 — CSS 핸드오프 · 스톡 shadcn과의 차이 · 연결 방법.</p>
+
+        <h3>CSS 핸드오프</h3>
         <div class="card">
           <div class="card-body kv">
-            <div class="k">스톡 설치가 안 되는 이유</div>
-            <div class="v">① 스톡 컴포넌트의 문법 수정분 — Button 추가 variant(<span class="mono">destructive-outline·destructive-ghost·xs</span>), Table 내장 라운드 래퍼·행 hover 제거, ✓ 우측 셀렉트 문법 등 ② shadcn에 없는 <strong>자체 프리셋 12종가량</strong> — FilterBar·SearchBox·NotificationPanel·ErrorState·StatePreview·DetailPanel·IconSelect·RowsPerPage 등 ③ 토큰 <strong>값</strong>이 dstk 빌드(변수 이름만 shadcn과 동일).</div>
-            <div class="k">CSS 핸드오프</div>
-            <div class="v"><a class="chip" href="/dstk/handoff/handoff.zip" download>⬇ handoff.zip 다운로드</a> — 프론트 4파일 세트. 값은 primitives가 단독 소유하고 시맨틱·타이포·shadcn 매핑이 var 사슬로 연결된다(dstk 갱신 = 자동 전파). 브라우저 열람·복붙:
-            <a class="mono" href="/dstk/handoff/primitives.css" target="_blank" rel="noopener">primitives.css</a> ·
-            <a class="mono" href="/dstk/handoff/semantic-token.css" target="_blank" rel="noopener">semantic-token.css</a> ·
-            <a class="mono" href="/dstk/handoff/typography.css" target="_blank" rel="noopener">typography.css</a> ·
-            <a class="mono" href="/dstk/handoff/index.css" target="_blank" rel="noopener">index.css</a>.
-            push마다 자동 최신 — 버전은 각 파일 첫 줄 주석(커밋·날짜)으로 확인.</div>
+            <div class="k">받기</div>
+            <div class="v"><a class="chip" href="/dstk/handoff/handoff.zip" download>⬇ handoff.zip 다운로드</a> — 프론트 4파일 세트.<br><br>
+            개별 열람·복붙:<br>
+            <a class="mono" href="/dstk/handoff/primitives.css" target="_blank" rel="noopener">primitives.css</a> — 컬러 팔레트 원천(값은 이 파일만 소유)<br>
+            <a class="mono" href="/dstk/handoff/semantic-token.css" target="_blank" rel="noopener">semantic-token.css</a> — 팔레트 → 시맨틱 매칭(var 참조)<br>
+            <a class="mono" href="/dstk/handoff/typography.css" target="_blank" rel="noopener">typography.css</a> — Desktop 타이포 10종(Inter)<br>
+            <a class="mono" href="/dstk/handoff/index.css" target="_blank" rel="noopener">index.css</a> — shadcn·Tailwind 매핑(배선)</div>
+            <div class="k">구조</div>
+            <div class="v">값은 primitives가 단독 소유한다.<br>
+            시맨틱은 <span class="mono">var()</span> 참조 사슬 — dstk를 갱신하면 자동 전파된다.<br>
+            교차 조명 핀은 <span class="mono">--dusk-red-600</span> 패턴 프리픽스.</div>
+            <div class="k">갱신 · 버전</div>
+            <div class="v">push마다 같은 URL이 항상 최신.<br>
+            버전 확인 = 각 파일 <strong>첫 줄 주석</strong>(커밋 · 날짜).</div>
+            <div class="k">개별 컴포넌트</div>
+            <div class="v">02 「365 DS」 카드 우하단 <strong>「코드」 버튼</strong> = 해당 컴포넌트 소스(tsx) 클립보드 복사.</div>
+          </div>
+        </div>
+
+        <h3>왜 스톡 shadcn 설치로는 재현이 안 되나</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">① 문법 수정분</div>
+            <div class="v">Button 추가 variant(<span class="mono">destructive-outline · destructive-ghost · xs</span>).<br>
+            Table 내장 라운드 래퍼 · 행 hover 제거.<br>
+            ✓ 우측 셀렉트 문법 등.</div>
+            <div class="k">② 자체 프리셋</div>
+            <div class="v">shadcn에 없는 프리셋 12종가량 —<br>
+            FilterBar · SearchBox · NotificationPanel · ErrorState · StatePreview · DetailPanel · IconSelect · RowsPerPage 등.</div>
+            <div class="k">③ 토큰 값</div>
+            <div class="v">변수 <strong>이름</strong>만 shadcn과 동일하고 <strong>값</strong>은 dstk 빌드다.</div>
+          </div>
+        </div>
+
+        <h3>연결 방법</h3>
+        <div class="card">
+          <div class="card-body kv">
             <div class="k">전달물 4개</div>
-            <div class="v"><span class="mono">components/src</span>(@ds/ui 소스 — 레지스트리 대신 이걸 복사) · <span class="mono">dist/dstk.css</span>(제품별이면 <span class="mono">dist/products/*.css</span>) · 화면 코드(<span class="mono">playground/app/generated/*</span>) · 규칙 문서(<span class="mono">design.md</span>·<span class="mono">ds365.json</span>)</div>
+            <div class="v"><span class="mono">components/src</span> — @ds/ui 소스(레지스트리 대신 이걸 복사)<br>
+            <span class="mono">dist/dstk.css</span> — 제품별이면 <span class="mono">dist/products/*.css</span><br>
+            화면 코드 — <span class="mono">playground/app/generated/*</span><br>
+            규칙 문서 — <span class="mono">design.md</span> · <span class="mono">ds365.json</span></div>
             <div class="k">의존성</div>
-            <div class="v"><span class="mono">tailwindcss@4</span> · <span class="mono">radix-ui</span> · <span class="mono">class-variance-authority</span> · <span class="mono">lucide-react</span> · <span class="mono">tailwind-merge</span>+<span class="mono">clsx</span>(cn 유틸)</div>
+            <div class="v"><span class="mono">tailwindcss@4</span> · <span class="mono">radix-ui</span> · <span class="mono">class-variance-authority</span><br>
+            <span class="mono">lucide-react</span> · <span class="mono">tailwind-merge</span> + <span class="mono">clsx</span>(cn 유틸)</div>
             <div class="k">배선</div>
-            <div class="v">전역 CSS에 <span class="mono">dstk.css</span> import(그거면 토큰 끝 — <span class="mono">:root</span>=Light라 기본 라이트) → <span class="mono">@ds/ui</span> 경로 alias(tsconfig paths) → 컴포넌트는 우리 소스 그대로, 임의 수정 금지.</div>
+            <div class="v">전역 CSS에 <span class="mono">dstk.css</span> import — 그거면 토큰 끝(<span class="mono">:root</span>=Light).<br>
+            <span class="mono">@ds/ui</span> 경로 alias(tsconfig paths).<br>
+            컴포넌트는 우리 소스 그대로 — 임의 수정 금지.</div>
             <div class="k">모드</div>
-            <div class="v">다크/컨트롤 필요 시 래퍼에 <span class="mono">.dark</span> / <span class="mono">.theme-control</span> 클래스만 — 화면 코드는 불변.</div>
+            <div class="v">다크/컨트롤 = 래퍼에 <span class="mono">.dark</span> / <span class="mono">.theme-control</span> 클래스만.<br>
+            화면 코드는 불변.</div>
           </div>
         </div>
