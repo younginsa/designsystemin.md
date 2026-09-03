@@ -144,63 +144,74 @@ function FoldView({ nodes }: { nodes: FoldNode[] }) {
 /* 스펙 추출(2026-09-03 — 프론트 요청: 코드 대신 variant·size·state·토큰 표).
    cva 정의에서 클래스를 상태별로 갈라 배경/글자/테두리 토큰만 남긴다.
    우리 DS는 hover·disabled 전용 토큰이 없다 — 원 토큰의 불투명도 변형(primary/90)·opacity-50이 실물. */
-type SpecRow = { name: string; states: Record<string, { bg?: string; text?: string; border?: string }> };
+type SpecRow = { name: string; states: Record<string, { bg?: string; text?: string; border?: string; ring?: string }> };
 type Spec = { variants: SpecRow[]; sizes: { name: string; tokens: string[] }[]; base: string[] };
 
+/* 값은 코드 원문 그대로 — 접두사(bg-·hover: 등)를 떼지 않는다(그대로 붙여넣기 가능해야 함) */
 function classToSlots(cls: string) {
-  const slot: { bg?: string; text?: string; border?: string } = {};
+  const slot: { bg?: string; text?: string; border?: string; ring?: string } = {};
   for (const t of cls.split(/\s+/)) {
-    if (/^bg-/.test(t)) slot.bg = t.replace(/^bg-/, "");
-    else if (/^text-(?!xs|sm|base|lg|xl|\dxl|left|right|center)/.test(t)) slot.text = t.replace(/^text-/, "");
-    else if (/^border(-|$)/.test(t) && !/^border-\d/.test(t)) slot.border = t === "border" ? "border(기본)" : t.replace(/^border-/, "");
+    const bare = t.replace(/^(hover|focus-visible|dark|disabled):/, "");
+    if (/^bg-/.test(bare)) slot.bg = t;
+    else if (/^text-(?!xs|sm|base|lg|xl|\dxl|left|right|center)/.test(bare)) slot.text = t;
+    else if (/^ring-(?!\[)/.test(bare)) slot.ring = t;
+    else if (/^border(-|$)/.test(bare) && !/^border-\d/.test(bare)) slot.border = t;
   }
   return slot;
 }
 
 function extractSpec(src: string): Spec | null {
-  const baseM = src.match(/cva\(\s*["'`]([^"'`]+)["'`]/);
+  // 따옴표는 역참조로 짝을 맞춘다 — [&_svg:not([class*='size-'])]처럼 다른 따옴표가 값 안에 산다
+  const baseM = src.match(/cva\(\s*(["'`])([\s\S]*?)\1/);
   if (!baseM) return null;
   const blockOf = (label: string) => src.match(new RegExp(label + ':\\s*{([\\s\\S]*?)\\n\\s*}'))?.[1] ?? "";
   const entries = (block: string) =>
-    [...block.matchAll(/(?:^|\n)\s*"?([\w-]+)"?:\s*\n?\s*["'`]([^"'`]*)["'`]/g)].map((m) => [m[1], m[2]] as const);
+    [...block.matchAll(/(?:^|\n)\s*"?([\w-]+)"?:\s*\n?\s*(["'`])(.*?)\2/g)].map((m) => [m[1], m[3]] as const);
   const variants: SpecRow[] = entries(blockOf("variant")).map(([name, cls]) => {
     const states: SpecRow["states"] = {};
-    const plain = cls.split(/\s+/).filter((t) => !/^(hover|focus-visible|dark|disabled|aria-invalid):/.test(t)).join(" ");
-    states["기본"] = classToSlots(plain);
-    const hover = cls.split(/\s+/).filter((t) => /^hover:/.test(t)).map((t) => t.slice(6)).join(" ");
-    if (hover) states["hover"] = classToSlots(hover);
-    const focus = cls.split(/\s+/).filter((t) => /^focus-visible:/.test(t)).map((t) => t.slice(14)).join(" ");
-    if (focus) states["focus"] = { border: focus.replace(/ring-/, "ring ") };
+    const toks = cls.split(/\s+/);
+    // 값은 원문 클래스 그대로(hover:·focus-visible: 접두사 포함) — 상태별로 행만 나눈다
+    // 상태 라벨도 코드 실물 — 무접두사=base, hover:, focus-visible: (발명어 금지)
+    // 색 슬롯(bg·text·border·ring)이 하나도 없는 상태는 행을 만들지 않는다(빈 행 방지)
+    const put = (label: string, list: string[]) => {
+      const s = classToSlots(list.join(" "));
+      if (s.bg || s.text || s.border || s.ring) states[label] = s;
+    };
+    put("base", toks.filter((t) => !/^(hover|focus-visible|dark|disabled|aria-invalid):/.test(t)));
+    put("hover", toks.filter((t) => /^hover:/.test(t)));
+    put("focus-visible", toks.filter((t) => /^focus-visible:/.test(t)));
     return { name, states };
   });
-  const sizes = entries(blockOf("size")).map(([name, cls]) => ({
-    name,
-    tokens: cls.split(/\s+/).filter((t) => /^(h-|w-|size-|px-|py-|p-|gap-|text-|rounded)/.test(t)),
-  }));
-  return { variants, sizes, base: baseM[1].trim().split(/\s+/) };
+  // size 값도 원문 문자열 그대로(has-[>svg]:px-3 등 포함) — 필터·가공 금지
+  const sizes = entries(blockOf("size")).map(([name, cls]) => ({ name, tokens: [cls] }));
+  return { variants: variants.filter((v) => Object.keys(v.states).length), sizes, base: baseM[2].trim().split(/\s+/) };
 }
 
 function specToMarkdown(card: HubCard, spec: Spec, overrides: Record<string, string>): string {
   const L: string[] = ["# " + card.name + (card.shadcn ? " (" + card.shadcn + ")" : ""), ""];
   if (Object.keys(overrides).length) {
-    L.push("365 조정값: " + Object.entries(overrides).map(([k, v]) => k + "=" + v).join(" · "), "");
+    L.push("365 overrides: " + Object.entries(overrides).map(([k, v]) => k + "=" + v).join(" · "), "");
   }
-  L.push("## Variant × State — 토큰 매핑", "", "| variant | state | background | text | border |", "|---|---|---|---|---|");
+  L.push("## Base classes", "", "```", spec.base.join(" "), "```", "");
+  L.push("## Variant × State — token mapping", "", "| variant | state | background | text | border | ring |", "|---|---|---|---|---|---|");
   for (const v of spec.variants) {
     for (const [st, s] of Object.entries(v.states)) {
-      L.push(`| ${v.name} | ${st} | ${s.bg ?? "—"} | ${s.text ?? "—"} | ${s.border ?? "—"} |`);
+      L.push(`| ${v.name} | ${st} | ${s.bg ?? ""} | ${s.text ?? ""} | ${s.border ?? ""} | ${s.ring ?? ""} |`);
     }
   }
-  L.push("", "## Size", "", "| size | 값 |", "|---|---|");
-  for (const s of spec.sizes) L.push(`| ${s.name} | ${s.tokens.join(" · ") || "—"} |`);
-  L.push("", "※ hover·disabled 전용 토큰은 없다 — 원 토큰의 불투명도 변형(예: primary/90)과 disabled:opacity-50이 실물.");
+  L.push("", "## Size", "", "| size | classes |", "|---|---|");
+  for (const s of spec.sizes) L.push(`| ${s.name} | ${s.tokens.join(" ")} |`);
+  L.push("", "Note: no dedicated hover/disabled tokens — opacity variants of the base token (e.g. primary/90) and disabled:opacity-50.");
   return L.join("\n");
 }
 
 /* 토큰 셀 — 빈 값은 공백(— 제거), 값 앞에 실제 색 스와치(불투명도 변형은 opacity로 근사) */
 function Tok({ v }: { v?: string }) {
   if (!v) return null;
-  const m = v.match(/^([a-z-]+)(?:\/(\d+))?$/);
+  // 표시는 원문 그대로. 칩 색만 접두사(bg-·hover: 등)를 벗겨 토큰명으로 판정
+  const m = v.replace(/^(hover|focus-visible|dark|disabled):/, "")
+    .replace(/^(bg|text|border|ring)-/, "")
+    .match(/^([a-z-]+)(?:\/(\d+))?$/);
   const base = m?.[1];
   const alpha = m?.[2] ? Number(m[2]) / 100 : 1;
   const KNOWN = ["primary", "primary-foreground", "secondary", "secondary-foreground", "destructive",
@@ -214,6 +225,16 @@ function Tok({ v }: { v?: string }) {
       {swatch ? <span className="tsw" style={swatch} /> : null}
       {v}
     </>
+  );
+}
+
+/* 행 hover 복사 — 스샷(Statsig 로그 뷰어) 문법: 행에 올리면 우측에 작은 아이콘 */
+function RowCopy({ text }: { text: string }) {
+  const [ok, setOk] = React.useState(false);
+  return (
+    <button type="button" className="rcbtn" title="이 행 복사" onClick={async () => {
+      try { await navigator.clipboard.writeText(text); setOk(true); setTimeout(() => setOk(false), 1200); } catch { /* noop */ }
+    }}>{ok ? "✓" : "⧉"}</button>
   );
 }
 
@@ -275,7 +296,7 @@ function CodePanel({ card, entry, onClose }: { card: HubCard; entry: any; onClos
           {files && tab === "spec" ? (() => {
             const withSpec = files.map((f) => ({ f, spec: extractSpec(f.src) })).filter((x) => x.spec);
             if (!withSpec.length) {
-              return <div className="props">이 컴포넌트는 variant 정의(cva)가 없다 — 「코드」 탭에서 소스를 확인.</div>;
+              return <div className="props">No cva variant definition — see the 코드 tab for source.</div>;
             }
             return withSpec.map(({ f, spec }) => (
               <div className="specwrap" key={f.name}>
@@ -286,20 +307,28 @@ function CodePanel({ card, entry, onClose }: { card: HubCard; entry: any; onClos
                   </span>
                 </div>
                 {Object.keys(overrides).length ? (
-                  <div className="specnote">365 조정값 — {Object.entries(overrides).map(([k, v]) => k + ": " + v).join(" · ")}</div>
+                  <div className="specnote">365 overrides — {Object.entries(overrides).map(([k, v]) => k + ": " + v).join(" · ")}</div>
                 ) : null}
+                <div className="specbox specbase">
+                  <div className="sbhead"><span>base classes</span><RowCopy text={spec!.base.join(" ")} /></div>
+                  <div className="mono sbval">{spec!.base.join(" ")}</div>
+                </div>
                 <div className="specbox">
                   <table className="spec-t">
-                    <thead><tr><th>variant</th><th>state</th><th>background</th><th>text</th><th>border</th></tr></thead>
+                    <thead><tr><th>variant</th><th>state</th><th>background</th><th>text</th><th>border</th><th>ring</th><th /></tr></thead>
                     <tbody>
                       {spec!.variants.map((v) =>
                         Object.entries(v.states).map(([st, s], i) => (
                           <tr key={v.name + st} className={i === 0 ? "vstart" : undefined}>
                             {i === 0 ? <td rowSpan={Object.keys(v.states).length} className="mono vn">{v.name}</td> : null}
-                            <td className="st">{st}</td>
+                            <td className="mono st">{st}</td>
                             <td className="mono"><Tok v={s.bg} /></td>
                             <td className="mono"><Tok v={s.text} /></td>
                             <td className="mono"><Tok v={s.border} /></td>
+                            <td className="mono"><Tok v={s.ring} /></td>
+                            <td className="rowcopy">
+                              <RowCopy text={[s.bg, s.text, s.border, s.ring].filter(Boolean).join(" ")} />
+                            </td>
                           </tr>
                         ))
                       )}
@@ -309,16 +338,20 @@ function CodePanel({ card, entry, onClose }: { card: HubCard; entry: any; onClos
                 {spec!.sizes.length ? (
                   <div className="specbox">
                     <table className="spec-t">
-                      <thead><tr><th>size</th><th>값</th></tr></thead>
+                      <thead><tr><th>size</th><th>classes</th><th /></tr></thead>
                       <tbody>
                         {spec!.sizes.map((s) => (
-                          <tr key={s.name} className="vstart"><td className="mono vn">{s.name}</td><td className="mono">{s.tokens.join(" · ")}</td></tr>
+                          <tr key={s.name} className="vstart">
+                            <td className="mono vn">{s.name}</td>
+                            <td className="mono sz">{s.tokens.join(" ")}</td>
+                            <td className="rowcopy"><RowCopy text={s.tokens.join(" ")} /></td>
+                          </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
                 ) : null}
-                <div className="specnote">hover·disabled 전용 토큰 없음 — 원 토큰의 불투명도 변형(예: <span className="mono">primary/90</span>)과 <span className="mono">disabled:opacity-50</span>이 실물.</div>
+                <div className="specnote">No dedicated hover/disabled tokens — opacity variants of the base token (e.g. <span className="mono">primary/90</span>) and <span className="mono">disabled:opacity-50</span>.</div>
               </div>
             ));
           })() : null}

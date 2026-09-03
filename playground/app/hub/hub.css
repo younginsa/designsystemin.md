@@ -369,18 +369,31 @@
   .codebox .specwrap { margin-bottom: 18px; }
   .codebox .fhead { display: flex; align-items: center; gap: 8px; margin: 4px 0 8px; font-size: 12px; }
   .codebox .specnote { font-size: 11px; color: var(--doc-muted); margin: 6px 0 10px; line-height: 1.6; }
-  /* 스펙 표 — 코드 탭과 같은 박스 안 · 작은 mono · 빈 값 공백 · 색 스와치(2026-09-03 가독 개선) */
-  .codebox .specbox { border: 1px solid var(--line); background: var(--surface);
-    padding: 4px 10px 6px; margin-bottom: 10px; overflow-x: auto; }
-  .codebox .spec-t { width: 100%; border-collapse: collapse; font-size: 10.5px; }
-  .codebox .spec-t th { text-align: left; font-weight: 500; color: var(--doc-muted); font-size: 9.5px;
-    text-transform: uppercase; letter-spacing: .05em; padding: 7px 10px 6px; }
-  .codebox .spec-t td { padding: 6px 10px; vertical-align: middle; white-space: nowrap; }
-  .codebox .spec-t tr.vstart > td { border-top: 1px solid var(--line); }
-  .codebox .spec-t td.vn { font-weight: 600; color: var(--ink); font-size: 11px; }
+  /* 스펙 표 — 코드 레벨 산출물(2026-09-03 재설계): 값은 코드 원문 클래스 그대로.
+     연한 박스 · 전체 mono · 빈 값 공백 · 색 스와치 · 행 hover 복사 아이콘 */
+  .codebox .specbox { border: 1px solid rgba(15,17,21,.08); background: rgba(15,17,21,.02);
+    padding: 2px 8px 4px; margin-bottom: 10px; overflow-x: auto; }
+  .codebox .spec-t { width: 100%; border-collapse: collapse;
+    font-family: var(--mono); font-size: 10.5px; }
+  .codebox .spec-t th { text-align: left; font-weight: 500; color: var(--doc-muted); font-size: 9px;
+    text-transform: uppercase; letter-spacing: .05em; padding: 7px 8px 5px; }
+  .codebox .spec-t td { padding: 6px 8px; vertical-align: middle; white-space: nowrap; }
+  .codebox .spec-t tr.vstart > td { border-top: 1px solid rgba(15,17,21,.06); }
+  .codebox .spec-t td.vn { font-weight: 600; color: var(--ink); }
   .codebox .spec-t td.st { color: var(--doc-muted); }
+  .codebox .spec-t td.sz { white-space: normal; word-break: normal; }
   .codebox .spec-t .tsw { display: inline-block; width: 8px; height: 8px; margin-right: 5px;
-    border: 1px solid var(--line); vertical-align: baseline; }
+    border: 1px solid rgba(15,17,21,.14); vertical-align: baseline; }
+  .codebox .spec-t td.rowcopy { padding: 0 4px; width: 20px; }
+  .codebox .rcbtn { opacity: 0; border: 0; background: transparent; cursor: pointer;
+    font-size: 11px; color: var(--doc-muted); padding: 2px; line-height: 1; }
+  .codebox tr:hover .rcbtn, .codebox .sbhead:hover .rcbtn { opacity: 1; }
+  .codebox .rcbtn:hover { color: var(--ink); }
+  .codebox .specbase { padding: 6px 10px 8px; }
+  .codebox .sbhead { display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: .05em;
+    color: var(--doc-muted); margin-bottom: 4px; }
+  .codebox .sbval { font-size: 10.5px; line-height: 1.7; word-break: break-word; }
   .codebox .props { border: 1px solid var(--line); background: var(--surface);
     padding: 10px 12px 8px; margin-bottom: 6px; font-size: 12px; }
   .codebox .props .pk { color: var(--doc-muted); margin: 10px 0 5px; font-size: 11px;
