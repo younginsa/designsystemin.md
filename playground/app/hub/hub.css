@@ -361,6 +361,19 @@
     border-bottom: 1px solid var(--line); font-size: 13px; font-weight: 600; }
   .codebox .bar .sp { margin-left: auto; display: flex; gap: 8px; }
   .codebox .codescroll { flex: 1; overflow: auto; padding: 14px; }
+  /* 스펙/코드 탭 — 상단 속성 블록(다이어그램·클래스 칩) 은퇴(2026-09-03) */
+  .codebox .tabs { display: flex; gap: 4px; padding: 8px 14px 0; border-bottom: 1px solid var(--line); }
+  .codebox .tab { font-size: 12px; padding: 6px 12px; border: 1px solid var(--line);
+    border-bottom: 0; background: var(--surface); color: var(--doc-muted); cursor: pointer; }
+  .codebox .tab.on { background: var(--bg); color: var(--ink); font-weight: 600; }
+  .codebox .specwrap { margin-bottom: 18px; }
+  .codebox .fhead { display: flex; align-items: center; gap: 8px; margin: 4px 0 8px; font-size: 12px; }
+  .codebox .specnote { font-size: 11px; color: var(--doc-muted); margin: 6px 0 10px; line-height: 1.6; }
+  .codebox .spec-t { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-bottom: 10px; }
+  .codebox .spec-t th { text-align: left; font-weight: 500; color: var(--doc-muted); font-size: 10px;
+    text-transform: uppercase; letter-spacing: .04em; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  .codebox .spec-t td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .codebox .spec-t td.vn { font-weight: 600; color: var(--ink); white-space: nowrap; }
   .codebox .props { border: 1px solid var(--line); background: var(--surface);
     padding: 10px 12px 8px; margin-bottom: 6px; font-size: 12px; }
   .codebox .props .pk { color: var(--doc-muted); margin: 10px 0 5px; font-size: 11px;
