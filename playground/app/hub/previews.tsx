@@ -431,16 +431,6 @@ export const PREVIEWS: Record<string, Pv> = {
       </Button>
     ),
   },
-  "btn-fab": {
-    className: "flex items-center justify-center gap-3 " + BOX,
-    style: strip,
-    node: (
-      <Button size="icon" className="size-12 rounded-full" aria-label="리포트">
-        <FileText />
-      </Button>
-    ),
-  },
-
   /* ── 피드백(인라인)·시각화 ── */
   "fb-banner": {
     className: "flex flex-col gap-3 " + BOX + " p-6",
@@ -1104,7 +1094,7 @@ export const CAPTURE_EXTRAS: Record<string, Pv> = {
 /* 캡처 페이지 섹션 순서 — 구 페이지의 원래 순서 그대로 (hubOnly 제외) */
 export const CAPTURE_ORDER = [
   "app-shell", "sidebar-nav", "page-header", "breadcrumb",
-  "btn-basic", "btn-destructive", "btn-states", "btn-split", "btn-icon", "btn-dashed", "btn-fab",
+  "btn-basic", "btn-destructive", "btn-states", "btn-split", "btn-icon", "btn-dashed",
   "fb-banner", "fb-empty", "fb-console", "viz-line", "viz-donut",
   "form-text", "form-number", "form-search", "form-textarea", "form-select", "form-controls",
   "form-choicecard", "form-segment", "form-tags", "form-daterange", "form-file",

@@ -106,14 +106,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "shadcn": "Button 변형",
         "shot": "topo-3",
         "crop": "730,630,455,60"
-      },
-      {
-        "slug": "btn-fab",
-        "name": "원형 FAB",
-        "prio": "P3",
-        "shadcn": "Button 변형",
-        "shot": "diagnosis",
-        "crop": "1595,1000,300,65"
       }
     ]
   },
