@@ -7,6 +7,7 @@
 // rest/hover 사진 스왑은 은퇴했다. 라이브 렌더 = 365 토큰 적용 실물이 곧 기본 그림이다.
 
 import * as React from "react";
+import { Check, Copy } from "lucide-react";
 
 import { CARD_GROUPS, type HubCard } from "./cards-data";
 import { PREVIEWS, FitScale } from "./previews";
@@ -217,7 +218,7 @@ function RowCopy({ text }: { text: string }) {
   return (
     <button type="button" className="rcbtn" title="이 행 복사" onClick={async () => {
       try { await navigator.clipboard.writeText(text); setOk(true); setTimeout(() => setOk(false), 1200); } catch { /* noop */ }
-    }}>{ok ? "✓" : "⧉"}</button>
+    }}>{ok ? <Check size={14} /> : <Copy size={14} />}</button>
   );
 }
 

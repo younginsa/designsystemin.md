@@ -384,21 +384,28 @@
   .hubdoc .codebox .spec-t tr td { padding: 7px 10px; }
   .hubdoc .codebox .spec-t tr th:first-child, .hubdoc .codebox .spec-t tr td:first-child {
     padding-left: 12px; }
-  .codebox .spec-t tr.g1 > td { background: rgba(15,17,21,.02); }
-  .codebox .spec-t td.vn { font-weight: 600; color: var(--ink); white-space: nowrap; }
+  /* 면 구분은 tr에 불투명 색으로 — sticky 셀이 inherit해도 밑 내용이 비치지 않게(color-mix) */
+  .codebox .spec-t tr.g0 { background: var(--bg); }
+  .codebox .spec-t tr.g1 { background: color-mix(in srgb, var(--ink) 2%, var(--bg)); }
+  /* 가로 스크롤에도 variant 이름·복사 아이콘은 보이는 영역에 고정(sticky) */
+  .codebox .spec-t td.vn { position: sticky; left: 0; z-index: 1; background: inherit;
+    font-weight: 600; color: var(--ink); white-space: nowrap; }
   .codebox .spec-t td.st { color: var(--doc-muted); white-space: nowrap; }
   .codebox .spec-t td.cls { line-height: 1.8; }
   .codebox .spec-t .tkk { display: inline-block; white-space: nowrap; margin-right: 14px; }
   .codebox .spec-t .tsw { display: inline-block; width: 8px; height: 8px; margin-right: 5px;
     border: 1px solid rgba(15,17,21,.14); vertical-align: baseline; }
-  .codebox .spec-t td.rowcopy { padding: 4px 6px 0 0; width: 24px; text-align: right; }
+  .codebox .spec-t td.rowcopy { position: sticky; right: 0; z-index: 1; background: inherit;
+    padding: 4px 6px 0 0; width: 24px; text-align: right; }
   .codebox .rcbtn { opacity: 0; border: 0; background: transparent; cursor: pointer;
-    font-size: 15px; color: var(--doc-muted); padding: 2px 4px; line-height: 1; vertical-align: baseline; }
+    color: var(--doc-muted); padding: 2px 4px; line-height: 1; vertical-align: middle; }
+  .codebox .rcbtn svg { display: block; }
   .codebox .spec-t tr:hover td.rowcopy .rcbtn,
   .codebox .spec-t td.vn:hover .rcbtn,
   .codebox .specbase summary:hover .rcbtn { opacity: 1; }
   .codebox .rcbtn:hover { color: var(--ink); }
-  .codebox .spec-t td.vn .rcbtn { margin-left: 4px; font-size: 13px; }
+  .codebox .spec-t td.vn .rcbtn { margin-left: 4px; }
+  .codebox .spec-t td.vn .rcbtn svg { width: 12px; height: 12px; }
   /* base classes — 기본 접힘(공통값이라 매번 볼 정보는 아님) */
   .codebox .specbase { padding: 0; }
   .codebox .specbase > summary { display: flex; align-items: center; gap: 6px; cursor: pointer;
