@@ -26,7 +26,7 @@ const META: Record<DocKey, { label: string; stamp: string }> = {
 
 const DEEP_LINKS: Record<string, [DocKey, string]> = {
   "#templates": ["d365", "페이지 템플릿"],
-  "#usage365": ["d365", "사용법"],
+  "#usage365": ["d365", "프론트 연동"],
   "#adopt": ["d365", "컴포넌트 채택"],
   "#ds365": ["d365", "365 DS"],
   "#history": ["d365", "히스토리"],
@@ -78,7 +78,7 @@ export default function HubApp({ fragments, hist, shotNames }: {
       { title: "컴포넌트 채택", visual: "adopt" },
       { title: "365 DS" },
       { title: "페이지 템플릿" },
-      { title: "사용법" },
+      { title: "프론트 연동" },
       { title: "히스토리", visual: "stack" },
     ],
   };
