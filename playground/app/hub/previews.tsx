@@ -457,18 +457,13 @@ export const PREVIEWS: Record<string, Pv> = {
           <AlertTitle>업데이트 실패</AlertTitle>
           <AlertDescription>Agent 로그를 확인해 주세요.</AlertDescription>
         </Alert>
+        {/* 사용방식 ② 상시 정적 안내(info) — 구 「안내 노트」 병합(2026-09-03) */}
+        <Alert>
+          <Info className="size-4" />
+          <AlertTitle>안내</AlertTitle>
+          <AlertDescription>별 아이콘을 눌러 권장 버전을 설정할 수 있습니다. 모든 변경사항은 즉시 반영됩니다.</AlertDescription>
+        </Alert>
       </>
-    ),
-  },
-  "fb-note": {
-    className: BOX + " p-6",
-    style: { width: 640 },
-    node: (
-      <Alert>
-        <Info className="size-4" />
-        <AlertTitle>안내</AlertTitle>
-        <AlertDescription>별 아이콘을 눌러 권장 버전을 설정할 수 있습니다. 모든 변경사항은 즉시 반영됩니다.</AlertDescription>
-      </Alert>
     ),
   },
   "fb-empty": {
@@ -714,6 +709,7 @@ export const PREVIEWS: Record<string, Pv> = {
   },
 
   /* ── 데이터 표시 ── */
+  // 셀 변형·정렬 헤더 흡수(2026-09-03) — 정렬 버튼 헤더 + 링크 셀·2줄 셀·행 액션을 한 표로
   "data-table": {
     className: BOX + " p-6",
     style: { width: 640 },
@@ -721,24 +717,34 @@ export const PREVIEWS: Record<string, Pv> = {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>IMO NUMBER</TableHead>
-            <TableHead>SHIP NAME</TableHead>
-            <TableHead>PRODUCT</TableHead>
-            <TableHead className="text-right">CREATED</TableHead>
+            <TableHead>
+              <Button variant="ghost" size="sm" className="-ml-2">호선명 <ArrowUpDown /></Button>
+            </TableHead>
+            <TableHead>제품</TableHead>
+            <TableHead>
+              <Button variant="ghost" size="sm" className="-ml-2">생성일 <ArrowUpDown /></Button>
+            </TableHead>
+            <TableHead className="text-right">액션</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow>
-            <TableCell className="font-mono text-xs">9876543</TableCell>
-            <TableCell>SVM_BUSAN_1</TableCell>
+            <TableCell><a href="#" className="text-primary underline underline-offset-4">SVM_BUSAN_1</a></TableCell>
             <TableCell><Badge variant="secondary">SVM</Badge></TableCell>
-            <TableCell className="text-right text-muted-foreground">2026-07-27</TableCell>
+            <TableCell className="text-muted-foreground">2026-07-27</TableCell>
+            <TableCell className="text-right">
+              <Button variant="ghost" size="icon" aria-label="편집"><Pencil /></Button>
+              <Button variant="ghost" size="icon" aria-label="삭제"><Trash2 /></Button>
+            </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell className="font-mono text-xs">9876544</TableCell>
-            <TableCell>CONTROL_TEST</TableCell>
+            <TableCell>
+              <div>CONTROL_TEST</div>
+              <div className="text-xs text-muted-foreground">REAL_FINAL_TEST_1</div>
+            </TableCell>
             <TableCell><Badge variant="secondary">CONTROL</Badge></TableCell>
-            <TableCell className="text-right text-muted-foreground">2026-07-23</TableCell>
+            <TableCell className="text-muted-foreground">2026-07-23</TableCell>
+            <TableCell className="text-right text-muted-foreground">—</TableCell>
           </TableRow>
         </TableBody>
       </Table>
@@ -755,49 +761,6 @@ export const PREVIEWS: Record<string, Pv> = {
       </ItemGroup>
     ),
   },
-  "data-colhead": {
-    className: BOX + " p-6",
-    style: { width: 560 },
-    node: (
-      // 컬럼 헤더 필터(▾) 폐기(design.md §4, 2026-08-26) — 헤더는 정렬만, 필터는 FilterBar 전담
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>
-              <Button variant="ghost" size="sm" className="-ml-2">상태 <ArrowUpDown /></Button>
-            </TableHead>
-            <TableHead>
-              <Button variant="ghost" size="sm" className="-ml-2">상태 갱신일 <ArrowUpDown /></Button>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow><TableCell className="text-muted-foreground" colSpan={2}>…</TableCell></TableRow>
-        </TableBody>
-      </Table>
-    ),
-  },
-  "data-cells": {
-    className: BOX + " p-6",
-    style: { width: 640 },
-    node: (
-      <Table>
-        <TableBody>
-          <TableRow>
-            <TableCell><a href="#" className="text-primary underline underline-offset-4">SVM_BUSAN_1</a></TableCell>
-            <TableCell>
-              <div>REAL_FINAL_TEST</div>
-              <div className="text-xs text-muted-foreground">REAL_FINAL_TEST_1</div>
-            </TableCell>
-            <TableCell className="text-right">
-              <Button variant="ghost" size="icon" aria-label="편집"><Pencil /></Button>
-              <Button variant="ghost" size="icon" aria-label="삭제"><Trash2 /></Button>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    ),
-  },
   "data-status": {
     className: "flex items-center justify-center gap-3 " + BOX,
     style: strip,
@@ -811,9 +774,10 @@ export const PREVIEWS: Record<string, Pv> = {
       </>
     ),
   },
+  // 사용방식 3가지 병합(2026-09-03) — ① 일반 칩 ② 버전 칩(mono) ③ 역할 태그(제거 X)
   "data-badge": {
-    className: "flex items-center justify-center gap-3 " + BOX,
-    style: strip,
+    className: "flex flex-wrap items-center justify-center gap-3 " + BOX + " px-6 py-4",
+    style: { width: 640 },
     node: (
       <>
         <Badge>NAVIGATION</Badge>
@@ -821,28 +785,10 @@ export const PREVIEWS: Record<string, Pv> = {
         <Badge variant="outline">CONTROL</Badge>
         <Badge variant="destructive">HIGH 9</Badge>
         <Badge variant="secondary" className="rounded-full">34</Badge>
-      </>
-    ),
-  },
-  "data-verchip": {
-    className: "flex items-center justify-center gap-3 " + BOX,
-    style: strip,
-    node: (
-      <>
         <Badge variant="outline" className="font-mono">v3.5.0-test.15</Badge>
         <ArrowRight className="size-4 text-muted-foreground" />
         <Badge variant="outline" className="font-mono">v4.0.0-update.1</Badge>
-      </>
-    ),
-  },
-  "data-roletag": {
-    className: "flex items-center justify-center gap-2 " + BOX,
-    style: strip,
-    node: (
-      <>
         <Badge variant="secondary">avikus <X className="size-3" /></Badge>
-        <Badge variant="secondary">qa <X className="size-3" /></Badge>
-        <Badge variant="secondary">service_engineer <X className="size-3" /></Badge>
         <Badge variant="outline">+ 역할 추가</Badge>
       </>
     ),
@@ -1159,11 +1105,11 @@ export const CAPTURE_EXTRAS: Record<string, Pv> = {
 export const CAPTURE_ORDER = [
   "app-shell", "sidebar-nav", "page-header", "breadcrumb",
   "btn-basic", "btn-destructive", "btn-states", "btn-split", "btn-icon", "btn-dashed", "btn-fab",
-  "fb-banner", "fb-note", "fb-empty", "fb-console", "viz-line", "viz-donut",
+  "fb-banner", "fb-empty", "fb-console", "viz-line", "viz-donut",
   "form-text", "form-number", "form-search", "form-textarea", "form-select", "form-controls",
   "form-choicecard", "form-segment", "form-tags", "form-daterange", "form-file",
-  "data-table", "data-kv", "data-colhead", "data-cells", "data-status", "data-badge",
-  "data-verchip", "data-roletag", "data-matrix", "data-perm", "data-stat", "data-accordion",
+  "data-table", "data-kv", "data-status", "data-badge",
+  "data-matrix", "data-perm", "data-stat", "data-accordion",
   "data-tabs", "data-pagination", "data-pagination-stock", "data-progress", "data-tree",
   "timeline", "stepper", "data-listrow", "form-chipgrid",
 ];

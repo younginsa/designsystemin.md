@@ -257,8 +257,8 @@ export const CARD_GROUPS: HubGroup[] = [
       },
       {
         "slug": "data-table",
-        "name": "테이블",
-        "shadcn": "Table",
+        "name": "테이블 (셀 변형 · 정렬 헤더 포함)",
+        "shadcn": "Table — 정렬 헤더·링크 셀·2줄 셀·행 액션 흡수",
         "shot": "ships-list",
         "crop": "233,185,1660,280"
       },
@@ -270,20 +270,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "crop": "250,270,600,330"
       },
       {
-        "slug": "data-colhead",
-        "name": "정렬 헤더 (컬럼 필터 폐기 — 필터는 FilterBar 전담)",
-        "shadcn": "DataTable 패턴",
-        "shot": "ships-colfilter",
-        "crop": "1225,190,190,240"
-      },
-      {
-        "slug": "data-cells",
-        "name": "테이블 셀 변형 (링크·2줄·행 액션·중첩 헤더)",
-        "shadcn": "Table 조합",
-        "shot": "ships-list",
-        "crop": "233,250,1660,150"
-      },
-      {
         "slug": "data-status",
         "name": "상태 필 · 도트",
         "prio": "P1",
@@ -293,25 +279,10 @@ export const CARD_GROUPS: HubGroup[] = [
       },
       {
         "slug": "data-badge",
-        "name": "칩 · 뱃지",
-        "shadcn": "Badge",
+        "name": "칩 · 뱃지 (일반 · 버전 · 역할 태그)",
+        "shadcn": "Badge — 사용방식 3가지",
         "shot": "ships-list",
         "crop": "905,960,290,100"
-      },
-      {
-        "slug": "data-verchip",
-        "name": "버전 칩 (before→after)",
-        "shadcn": "Badge(mono)",
-        "shot": "update-wizard",
-        "crop": "245,240,260,90"
-      },
-      {
-        "slug": "data-roletag",
-        "name": "역할 태그 칩",
-        "prio": "P2",
-        "shadcn": "Badge 조합",
-        "shot": "accounts",
-        "crop": "945,235,390,330"
       },
       {
         "slug": "stepper",
@@ -483,9 +454,9 @@ export const CARD_GROUPS: HubGroup[] = [
       },
       {
         "slug": "fb-banner",
-        "name": "배너 · 결과 카드",
+        "name": "배너 · 안내 노트 (결과 피드백 · 상시 안내)",
         "prio": "P1",
-        "shadcn": "Alert",
+        "shadcn": "Alert — 사용방식 2가지",
         "shot": "update-download",
         "crop": "595,350,1290,95"
       },
@@ -518,13 +489,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "shadcn": "Tooltip",
         "shot": "update-wizard",
         "crop": "1230,355,340,130"
-      },
-      {
-        "slug": "fb-note",
-        "name": "안내 노트",
-        "shadcn": "Alert",
-        "shot": "release-notes",
-        "crop": "638,258,684,72"
       },
       {
         "slug": "ov-toast",
