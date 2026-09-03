@@ -377,17 +377,21 @@
   .codebox .fchev { width: 16px; height: 16px; flex: none; color: var(--doc-muted);
     transition: transform .12s; }
   .codebox details[open] > summary .fchev { transform: rotate(90deg); }
-  .codebox .segwrap { border: 1px solid var(--line); border-top: 0; padding: 8px 10px 10px; }
-  .codebox .seg { margin-top: 6px; }
-  .codebox .seg summary { display: flex; align-items: center; gap: 6px; font-size: 12px;
-    cursor: pointer; padding: 4px 6px; background: var(--surface); border: 1px solid var(--line);
-    list-style: none; }
-  .codebox .seg summary::-webkit-details-marker { display: none; }
-  .codebox .seg summary .st { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .codebox .seg summary .lc { margin-left: auto; flex: none; color: var(--doc-muted); font-size: 10px; }
-  .codebox pre { border: 1px solid var(--line); border-top: 0; background: var(--bg); padding: 12px;
-    overflow: auto; font-family: var(--mono); font-size: 11.5px; line-height: 1.55;
-    white-space: pre; margin: 0; }
+  /* IDE식 인라인 폴딩 — 코드는 한 덩어리, 거터 셰브런으로 블록 접기(중첩 유지) */
+  .codebox .codepre { border: 1px solid var(--line); border-top: 0; background: var(--bg);
+    padding: 10px 12px; overflow: auto; font-family: var(--mono); font-size: 11.5px;
+    line-height: 1.6; }
+  .codebox .codepre .cl, .codebox .codepre .fold > summary { white-space: pre;
+    padding-left: 16px; position: relative; min-height: 1.6em; }
+  .codebox .codepre .fold { margin: 0; }
+  .codebox .codepre .fold > summary { list-style: none; cursor: pointer; }
+  .codebox .codepre .fold > summary::-webkit-details-marker { display: none; }
+  .codebox .codepre .fold > summary::before { content: "▸"; position: absolute; left: 0;
+    top: 0; width: 14px; color: var(--doc-muted); font-size: 11px; }
+  .codebox .codepre .fold[open] > summary::before { content: "▾"; }
+  .codebox .codepre .fold > summary:hover::before { color: var(--ink); }
+  .codebox .codepre .ell { color: var(--doc-muted); display: none; }
+  .codebox .codepre .fold:not([open]) > summary .ell { display: inline; }
   /* 하이라이트 4색 */
   .codebox .tk-k { color: #7b5bd6; }
   .codebox .tk-s { color: #1a7f4b; }

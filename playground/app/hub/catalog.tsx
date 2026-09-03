@@ -88,71 +88,113 @@ function BoxDiagram({ box }: { box: BoxSpec }) {
   );
 }
 
-/* 경량 하이라이터 — 주석·문자열·숫자·키워드 4색(의존성 없음). 표시용이라 완벽 파싱은 목표 아님 */
-function highlight(src: string): string {
-  const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const kw = (chunk: string) => esc(chunk).replace(
-    /\b(import|export|from|const|let|var|function|return|type|interface|extends|default|if|else|for|of|new|async|await|null|undefined|true|false|as)\b/g,
-    '<span class="tk-k">$1</span>');
-  const re = /(\/\*[\s\S]*?\*\/|\/\/[^\n]*)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`)|(\b\d+(?:\.\d+)?\b)/g;
-  let out = "", last = 0, m: RegExpExecArray | null;
-  while ((m = re.exec(src))) {
-    out += kw(src.slice(last, m.index));
-    if (m[1]) out += '<span class="tk-c">' + esc(m[1]) + "</span>";
-    else if (m[2]) out += '<span class="tk-s">' + esc(m[2]) + "</span>";
-    else out += '<span class="tk-n">' + esc(m[3]) + "</span>";
-    last = re.lastIndex;
-  }
-  return out + kw(src.slice(last));
-}
+/* IDE식 인라인 폴딩(2026-09-03 재설계 — 구간 카드 방식 폐기): 코드는 한 덩어리로 흐르고,
+   접기는 코드 자신의 들여쓰기 계층에서 일어난다. 여는 줄 = 원문 그대로, 거터 셰브런,
+   접힘 시 줄 끝 "⋯ }" 표시. 3줄 미만 블록은 접기 생략(노이즈 방지). */
+const KWRE = /\b(import|export|from|const|let|var|function|return|type|interface|extends|default|if|else|for|of|new|async|await|null|undefined|true|false|as)\b/g;
 
-/* 코드 세그먼트 분할 — 최상위(들여쓰기 0) 선언 단위 접기. 블록 주석·백틱 문자열 상태를
-   추적해 오분할 방지, 끝의 // 주석 줄은 다음 선언 소속(문서 주석 유지). 표시용 근사 파서 */
-type Seg = { title: string; body: string; kind: "imports" | "block" };
-function segmentSource(src: string): Seg[] {
-  const lines = src.split("\n");
-  const segs: Seg[] = [];
-  let buf: string[] = [];
+/* 줄 단위 하이라이트 — 블록 주석·백틱 문자열 상태를 줄 간에 이어받는다 */
+function highlightLines(src: string): string[] {
+  const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const plain = (s: string) => esc(s)
+    .replace(KWRE, '<span class="tk-k">$1</span>')
+    .replace(/\b(\d+(?:\.\d+)?)\b(?![^<]*>)/g, '<span class="tk-n">$1</span>');
   let inC = false, inT = false;
-  const isTop = (l: string) =>
-    /^(?:"use client"|import\b|export\b|const\b|let\b|async\b|function\b|type\b|interface\b|class\b)/.test(l);
-  const isImpLine = (l: string) => /^("use client"|import\b)/.test(l.trim());
-  const flush = () => {
-    if (!buf.some((l) => l.trim())) { buf = []; return; }
-    const first = buf.find((l) => {
-      const t = l.trim();
-      return t && !t.startsWith("//") && !t.startsWith("/*") && !t.startsWith("*");
-    }) ?? buf[0];
-    const imp = isImpLine(first);
-    const title = imp
-      ? "import 묶음 (" + buf.filter((l) => /^import\b/.test(l)).length + "건)"
-      : first.trim().slice(0, 72);
-    segs.push({ kind: imp ? "imports" : "block", title, body: buf.join("\n").replace(/\n+$/, "") });
-    buf = [];
-  };
-  for (const line of lines) {
-    if (!inC && !inT && isTop(line) && buf.length) {
-      const prevFirst = (buf.find((l) => l.trim()) ?? "").trim();
-      if (!(isImpLine(prevFirst) && isImpLine(line))) {
-        let i = buf.length;
-        while (i > 0 && (buf[i - 1].trim() === "" || buf[i - 1].trim().startsWith("//"))) i--;
-        const carry = buf.slice(i);
-        buf = buf.slice(0, i);
-        flush();
-        buf = carry;
+  return src.split("\n").map((line) => {
+    let out = "", i = 0;
+    while (i < line.length) {
+      if (inC) {
+        const e = line.indexOf("*/", i);
+        if (e === -1) { out += '<span class="tk-c">' + esc(line.slice(i)) + "</span>"; i = line.length; }
+        else { out += '<span class="tk-c">' + esc(line.slice(i, e + 2)) + "</span>"; i = e + 2; inC = false; }
+      } else if (inT) {
+        let j = i;
+        while (j < line.length && !(line[j] === "`" && line[j - 1] !== "\\")) j++;
+        const end = j < line.length ? j + 1 : line.length;
+        out += '<span class="tk-s">' + esc(line.slice(i, end)) + "</span>";
+        i = end;
+        if (j < line.length) inT = false;
+      } else {
+        const m = line.slice(i).match(/\/\/|\/\*|["'`]/);
+        if (!m) { out += plain(line.slice(i)); break; }
+        const idx = i + (m.index as number);
+        out += plain(line.slice(i, idx));
+        const tok = m[0];
+        if (tok === "//") { out += '<span class="tk-c">' + esc(line.slice(idx)) + "</span>"; i = line.length; }
+        else if (tok === "/*") { inC = true; i = idx; }
+        else if (tok === "`") { out += '<span class="tk-s">`</span>'; i = idx + 1; inT = true; }
+        else {
+          let j = idx + 1;
+          while (j < line.length && !(line[j] === tok && line[j - 1] !== "\\")) j++;
+          const end = j < line.length ? j + 1 : line.length;
+          out += '<span class="tk-s">' + esc(line.slice(idx, end)) + "</span>";
+          i = end;
+        }
       }
     }
-    buf.push(line);
-    const noLc = inC ? line : line.replace(/\/\/.*$/, "");
-    if (inC) {
-      if (noLc.includes("*/")) inC = false;
-    } else {
-      if ((noLc.match(/\/\*/g) || []).length > (noLc.match(/\*\//g) || []).length) inC = true;
-      if (((noLc.match(/`/g) || []).length) % 2 === 1) inT = !inT;
+    return out;
+  });
+}
+
+type FoldNode = { html: string } | { headHtml: string; tail: string; children: FoldNode[] };
+function countLines(nodes: FoldNode[]): number {
+  return nodes.reduce((n, x) => n + ("children" in x ? 1 + countLines(x.children) : 1), 0);
+}
+function buildFolds(src: string): FoldNode[] {
+  const lines = src.split("\n");
+  const htmls = highlightLines(src);
+  const indentOf = (l: string) => (l.match(/^\s*/) as RegExpMatchArray)[0].length;
+  let pos = 0;
+  function parse(minIndent: number): FoldNode[] {
+    const nodes: FoldNode[] = [];
+    while (pos < lines.length) {
+      const line = lines[pos];
+      if (line.trim() === "") { nodes.push({ html: "&nbsp;" }); pos++; continue; }
+      const ind = indentOf(line);
+      if (ind < minIndent) break;
+      let k = pos + 1;
+      while (k < lines.length && lines[k].trim() === "") k++;
+      if (k < lines.length && indentOf(lines[k]) > ind && lines[k].trim() !== "") {
+        const headIdx = pos;
+        pos++;
+        const children = parse(ind + 1);
+        let tail = "";
+        if (pos < lines.length && lines[pos].trim() !== "" && indentOf(lines[pos]) === ind
+          && /^[\s)\]};,>]*$/.test(lines[pos])) {
+          tail = lines[pos].trim();
+          children.push({ html: htmls[pos] });
+          pos++;
+        }
+        if (countLines(children) >= 3) nodes.push({ headHtml: htmls[headIdx], tail, children });
+        else { nodes.push({ html: htmls[headIdx] }); nodes.push(...children); }
+      } else {
+        nodes.push({ html: htmls[pos] });
+        pos++;
+      }
     }
+    return nodes;
   }
-  flush();
-  return segs;
+  return parse(0);
+}
+
+function FoldView({ nodes }: { nodes: FoldNode[] }) {
+  return (
+    <>
+      {nodes.map((n, i) =>
+        "children" in n ? (
+          <details key={i} className="fold" open>
+            <summary>
+              <span dangerouslySetInnerHTML={{ __html: n.headHtml }} />
+              <span className="ell"> ⋯ {n.tail || "}"}</span>
+            </summary>
+            <FoldView nodes={n.children} />
+          </details>
+        ) : (
+          <div key={i} className="cl" dangerouslySetInnerHTML={{ __html: n.html }} />
+        )
+      )}
+    </>
+  );
 }
 
 function CopyChip({ text, label = "복사" }: { text: string; label?: string }) {
@@ -256,17 +298,8 @@ function CodePanel({ card, entry, onClose }: { card: HubCard; entry: any; onClos
                     <span className="mono">components/src/ui/{f.name}.tsx</span>
                     <span className="sp" onClick={(e) => e.preventDefault()}><CopyChip text={f.src} /></span>
                   </summary>
-                  <div className="segwrap">
-                    {segmentSource(f.src).map((sg, j) => (
-                      <details key={j} className="seg" open={sg.kind !== "imports"}>
-                        <summary>
-                          <ChevronRight className="fchev" />
-                          <span className="mono st">{sg.title}</span>
-                          <span className="lc">{sg.body.split("\n").length}줄</span>
-                        </summary>
-                        <pre dangerouslySetInnerHTML={{ __html: highlight(sg.body) }} />
-                      </details>
-                    ))}
+                  <div className="codepre">
+                    <FoldView nodes={buildFolds(f.src)} />
                   </div>
                 </details>
               ))}
