@@ -197,6 +197,26 @@ function specToMarkdown(card: HubCard, spec: Spec, overrides: Record<string, str
   return L.join("\n");
 }
 
+/* 토큰 셀 — 빈 값은 공백(— 제거), 값 앞에 실제 색 스와치(불투명도 변형은 opacity로 근사) */
+function Tok({ v }: { v?: string }) {
+  if (!v) return null;
+  const m = v.match(/^([a-z-]+)(?:\/(\d+))?$/);
+  const base = m?.[1];
+  const alpha = m?.[2] ? Number(m[2]) / 100 : 1;
+  const KNOWN = ["primary", "primary-foreground", "secondary", "secondary-foreground", "destructive",
+    "destructive-foreground", "accent", "accent-foreground", "muted", "muted-foreground",
+    "background", "foreground", "card", "card-foreground", "popover", "border", "input", "ring", "success", "white"];
+  const swatch = base && KNOWN.includes(base)
+    ? { background: base === "white" ? "#fff" : "var(--" + base + ")", opacity: alpha }
+    : null;
+  return (
+    <>
+      {swatch ? <span className="tsw" style={swatch} /> : null}
+      {v}
+    </>
+  );
+}
+
 function CopyChip({ text, label = "복사" }: { text: string; label?: string }) {
   const [ok, setOk] = React.useState(false);
   return (
@@ -268,31 +288,35 @@ function CodePanel({ card, entry, onClose }: { card: HubCard; entry: any; onClos
                 {Object.keys(overrides).length ? (
                   <div className="specnote">365 조정값 — {Object.entries(overrides).map(([k, v]) => k + ": " + v).join(" · ")}</div>
                 ) : null}
-                <table className="spec-t">
-                  <thead><tr><th>variant</th><th>state</th><th>background</th><th>text</th><th>border</th></tr></thead>
-                  <tbody>
-                    {spec!.variants.map((v) =>
-                      Object.entries(v.states).map(([st, s], i) => (
-                        <tr key={v.name + st}>
-                          {i === 0 ? <td rowSpan={Object.keys(v.states).length} className="mono vn">{v.name}</td> : null}
-                          <td>{st}</td>
-                          <td className="mono">{s.bg ?? "—"}</td>
-                          <td className="mono">{s.text ?? "—"}</td>
-                          <td className="mono">{s.border ?? "—"}</td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-                {spec!.sizes.length ? (
+                <div className="specbox">
                   <table className="spec-t">
-                    <thead><tr><th>size</th><th>값</th></tr></thead>
+                    <thead><tr><th>variant</th><th>state</th><th>background</th><th>text</th><th>border</th></tr></thead>
                     <tbody>
-                      {spec!.sizes.map((s) => (
-                        <tr key={s.name}><td className="mono vn">{s.name}</td><td className="mono">{s.tokens.join(" · ") || "—"}</td></tr>
-                      ))}
+                      {spec!.variants.map((v) =>
+                        Object.entries(v.states).map(([st, s], i) => (
+                          <tr key={v.name + st} className={i === 0 ? "vstart" : undefined}>
+                            {i === 0 ? <td rowSpan={Object.keys(v.states).length} className="mono vn">{v.name}</td> : null}
+                            <td className="st">{st}</td>
+                            <td className="mono"><Tok v={s.bg} /></td>
+                            <td className="mono"><Tok v={s.text} /></td>
+                            <td className="mono"><Tok v={s.border} /></td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
+                </div>
+                {spec!.sizes.length ? (
+                  <div className="specbox">
+                    <table className="spec-t">
+                      <thead><tr><th>size</th><th>값</th></tr></thead>
+                      <tbody>
+                        {spec!.sizes.map((s) => (
+                          <tr key={s.name} className="vstart"><td className="mono vn">{s.name}</td><td className="mono">{s.tokens.join(" · ")}</td></tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 ) : null}
                 <div className="specnote">hover·disabled 전용 토큰 없음 — 원 토큰의 불투명도 변형(예: <span className="mono">primary/90</span>)과 <span className="mono">disabled:opacity-50</span>이 실물.</div>
               </div>
