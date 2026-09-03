@@ -373,9 +373,18 @@
     cursor: pointer; padding: 6px 8px; border: 1px solid var(--line); background: var(--surface);
     list-style: none; }
   .codebox .fdetail summary::-webkit-details-marker { display: none; }
-  .codebox .fdetail summary::before { content: "▸"; color: var(--doc-muted); }
-  .codebox .fdetail[open] summary::before { content: "▾"; }
   .codebox .fdetail summary .sp { margin-left: auto; }
+  .codebox .fchev { width: 16px; height: 16px; flex: none; color: var(--doc-muted);
+    transition: transform .12s; }
+  .codebox details[open] > summary .fchev { transform: rotate(90deg); }
+  .codebox .segwrap { border: 1px solid var(--line); border-top: 0; padding: 8px 10px 10px; }
+  .codebox .seg { margin-top: 6px; }
+  .codebox .seg summary { display: flex; align-items: center; gap: 6px; font-size: 12px;
+    cursor: pointer; padding: 4px 6px; background: var(--surface); border: 1px solid var(--line);
+    list-style: none; }
+  .codebox .seg summary::-webkit-details-marker { display: none; }
+  .codebox .seg summary .st { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .codebox .seg summary .lc { margin-left: auto; flex: none; color: var(--doc-muted); font-size: 10px; }
   .codebox pre { border: 1px solid var(--line); border-top: 0; background: var(--bg); padding: 12px;
     overflow: auto; font-family: var(--mono); font-size: 11.5px; line-height: 1.55;
     white-space: pre; margin: 0; }
@@ -390,17 +399,19 @@
   .codebox .diag .dc { position: absolute; color: var(--ink); }
   .codebox .diag .dc.tl { top: 0; left: 4px; } .codebox .diag .dc.tr { top: 0; right: 4px; }
   .codebox .diag .dc.bl { bottom: 0; left: 4px; } .codebox .diag .dc.br { bottom: 0; right: 4px; }
-  .codebox .diag .d-border { position: relative; border: 1px solid var(--ink); padding: 20px 34px; }
+  /* 겹층 배경 교차 — 바탕 → 6% 틴트 → 바탕(점선) 순으로 층이 즉시 읽히게 (2026-09-03) */
+  .codebox .diag .d-border { position: relative; border: 1px solid var(--ink); padding: 20px 34px;
+    background: var(--bg); }
   .codebox .diag .dl { position: absolute; top: 3px; left: 8px; }
   .codebox .diag .dv { position: absolute; color: var(--ink); }
   .codebox .diag .dv.t { top: 3px; left: 50%; transform: translateX(-50%); }
   .codebox .diag .dv.b { bottom: 3px; left: 50%; transform: translateX(-50%); }
   .codebox .diag .dv.l { left: 8px; top: 50%; transform: translateY(-50%); }
   .codebox .diag .dv.r { right: 8px; top: 50%; transform: translateY(-50%); }
-  .codebox .diag .d-pad { position: relative; border: 1px solid var(--line); background: var(--surface);
-    padding: 22px 40px; }
+  .codebox .diag .d-pad { position: relative; border: 1px solid var(--line);
+    background: rgba(15, 17, 21, .06); padding: 22px 40px; }
   .codebox .diag .d-size { border: 1px dashed var(--ink); color: var(--ink); text-align: center;
-    padding: 5px 8px; white-space: nowrap; }
+    padding: 5px 8px; white-space: nowrap; background: var(--bg); }
   .hovercut .cropwin { position: relative; overflow: hidden; flex: none;
     border: 1px solid var(--line); background: var(--bg); }
   .comp-chips { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 16px 16px; }

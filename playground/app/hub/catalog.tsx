@@ -7,6 +7,7 @@
 // rest/hover 사진 스왑은 은퇴했다. 라이브 렌더 = 365 토큰 적용 실물이 곧 기본 그림이다.
 
 import * as React from "react";
+import { ChevronRight } from "lucide-react";
 
 import { CARD_GROUPS, type HubCard } from "./cards-data";
 import { PREVIEWS, FitScale } from "./previews";
@@ -103,6 +104,55 @@ function highlight(src: string): string {
     last = re.lastIndex;
   }
   return out + kw(src.slice(last));
+}
+
+/* 코드 세그먼트 분할 — 최상위(들여쓰기 0) 선언 단위 접기. 블록 주석·백틱 문자열 상태를
+   추적해 오분할 방지, 끝의 // 주석 줄은 다음 선언 소속(문서 주석 유지). 표시용 근사 파서 */
+type Seg = { title: string; body: string; kind: "imports" | "block" };
+function segmentSource(src: string): Seg[] {
+  const lines = src.split("\n");
+  const segs: Seg[] = [];
+  let buf: string[] = [];
+  let inC = false, inT = false;
+  const isTop = (l: string) =>
+    /^(?:"use client"|import\b|export\b|const\b|let\b|async\b|function\b|type\b|interface\b|class\b)/.test(l);
+  const isImpLine = (l: string) => /^("use client"|import\b)/.test(l.trim());
+  const flush = () => {
+    if (!buf.some((l) => l.trim())) { buf = []; return; }
+    const first = buf.find((l) => {
+      const t = l.trim();
+      return t && !t.startsWith("//") && !t.startsWith("/*") && !t.startsWith("*");
+    }) ?? buf[0];
+    const imp = isImpLine(first);
+    const title = imp
+      ? "import 묶음 (" + buf.filter((l) => /^import\b/.test(l)).length + "건)"
+      : first.trim().slice(0, 72);
+    segs.push({ kind: imp ? "imports" : "block", title, body: buf.join("\n").replace(/\n+$/, "") });
+    buf = [];
+  };
+  for (const line of lines) {
+    if (!inC && !inT && isTop(line) && buf.length) {
+      const prevFirst = (buf.find((l) => l.trim()) ?? "").trim();
+      if (!(isImpLine(prevFirst) && isImpLine(line))) {
+        let i = buf.length;
+        while (i > 0 && (buf[i - 1].trim() === "" || buf[i - 1].trim().startsWith("//"))) i--;
+        const carry = buf.slice(i);
+        buf = buf.slice(0, i);
+        flush();
+        buf = carry;
+      }
+    }
+    buf.push(line);
+    const noLc = inC ? line : line.replace(/\/\/.*$/, "");
+    if (inC) {
+      if (noLc.includes("*/")) inC = false;
+    } else {
+      if ((noLc.match(/\/\*/g) || []).length > (noLc.match(/\*\//g) || []).length) inC = true;
+      if (((noLc.match(/`/g) || []).length) % 2 === 1) inT = !inT;
+    }
+  }
+  flush();
+  return segs;
 }
 
 function CopyChip({ text, label = "복사" }: { text: string; label?: string }) {
@@ -202,10 +252,22 @@ function CodePanel({ card, entry, onClose }: { card: HubCard; entry: any; onClos
               {files.map((f, i) => (
                 <details key={f.name} className="fdetail" open={i === 0}>
                   <summary>
+                    <ChevronRight className="fchev" />
                     <span className="mono">components/src/ui/{f.name}.tsx</span>
                     <span className="sp" onClick={(e) => e.preventDefault()}><CopyChip text={f.src} /></span>
                   </summary>
-                  <pre dangerouslySetInnerHTML={{ __html: highlight(f.src) }} />
+                  <div className="segwrap">
+                    {segmentSource(f.src).map((sg, j) => (
+                      <details key={j} className="seg" open={sg.kind !== "imports"}>
+                        <summary>
+                          <ChevronRight className="fchev" />
+                          <span className="mono st">{sg.title}</span>
+                          <span className="lc">{sg.body.split("\n").length}줄</span>
+                        </summary>
+                        <pre dangerouslySetInnerHTML={{ __html: highlight(sg.body) }} />
+                      </details>
+                    ))}
+                  </div>
                 </details>
               ))}
             </>
