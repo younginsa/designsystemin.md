@@ -6,6 +6,8 @@
 @source "../../components/src";
 
 @theme inline {
+  /* 서체 — Inter(라이브러리 정합), 한글은 시스템 폴백 */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
