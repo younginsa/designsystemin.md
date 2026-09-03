@@ -40,6 +40,71 @@ function extractProps(src: string): { base: string[]; variants: string[]; sizes:
   return out;
 }
 
+/* 박스 다이어그램 수치 파싱 — 기본 클래스에서 border·padding·크기·radius (Tailwind 스케일 ×4) */
+type BoxSpec = { bw: number; pt: number; pr: number; pb: number; pl: number; h: number | null; w: number | null; r: number | null };
+function parseBox(tokens: string[]): BoxSpec | null {
+  const S = (n: string) => { const v = parseFloat(n); return isNaN(v) ? null : v * 4; };
+  const box: BoxSpec = { bw: 0, pt: 0, pr: 0, pb: 0, pl: 0, h: null, w: null, r: null };
+  const RAD: Record<string, number> = { "rounded-sm": 6, "rounded-md": 8, "rounded-lg": 10, "rounded-xl": 14, "rounded-full": 999, rounded: 10 };
+  for (const t of tokens) {
+    let m: RegExpMatchArray | null;
+    if (t === "border") box.bw = 1;
+    else if ((m = t.match(/^border-(\d)$/))) box.bw = +m[1];
+    else if ((m = t.match(/^p-([\d.]+)$/))) { const v = S(m[1]); if (v != null) { box.pt = box.pr = box.pb = box.pl = v; } }
+    else if ((m = t.match(/^px-([\d.]+)$/))) { const v = S(m[1]); if (v != null) { box.pl = box.pr = v; } }
+    else if ((m = t.match(/^py-([\d.]+)$/))) { const v = S(m[1]); if (v != null) { box.pt = box.pb = v; } }
+    else if ((m = t.match(/^pt-([\d.]+)$/))) { const v = S(m[1]); if (v != null) box.pt = v; }
+    else if ((m = t.match(/^pr-([\d.]+)$/))) { const v = S(m[1]); if (v != null) box.pr = v; }
+    else if ((m = t.match(/^pb-([\d.]+)$/))) { const v = S(m[1]); if (v != null) box.pb = v; }
+    else if ((m = t.match(/^pl-([\d.]+)$/))) { const v = S(m[1]); if (v != null) box.pl = v; }
+    else if ((m = t.match(/^h-([\d.]+)$/))) box.h = S(m[1]);
+    else if ((m = t.match(/^w-([\d.]+)$/))) box.w = S(m[1]);
+    else if ((m = t.match(/^size-([\d.]+)$/))) { box.h = box.w = S(m[1]); }
+    else if (RAD[t] != null) box.r = RAD[t];
+  }
+  return box.bw || box.pt || box.pr || box.pb || box.pl || box.h != null || box.w != null || box.r != null ? box : null;
+}
+
+function BoxDiagram({ box }: { box: BoxSpec }) {
+  const size = (box.w ?? "auto") + " × " + (box.h ?? "auto");
+  const r = box.r == null ? "" : box.r === 999 ? "○" : String(box.r);
+  return (
+    <div className="diag">
+      <span className="dc tl">{r}</span><span className="dc tr">{r}</span>
+      <span className="dc bl">{r}</span><span className="dc br">{r}</span>
+      <div className="d-border">
+        <span className="dl">Border</span>
+        <span className="dv t">{box.bw}</span><span className="dv b">{box.bw}</span>
+        <span className="dv l">{box.bw}</span><span className="dv r">{box.bw}</span>
+        <div className="d-pad">
+          <span className="dl">Padding</span>
+          <span className="dv t">{box.pt}</span><span className="dv b">{box.pb}</span>
+          <span className="dv l">{box.pl}</span><span className="dv r">{box.pr}</span>
+          <div className="d-size">{size}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* 경량 하이라이터 — 주석·문자열·숫자·키워드 4색(의존성 없음). 표시용이라 완벽 파싱은 목표 아님 */
+function highlight(src: string): string {
+  const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const kw = (chunk: string) => esc(chunk).replace(
+    /\b(import|export|from|const|let|var|function|return|type|interface|extends|default|if|else|for|of|new|async|await|null|undefined|true|false|as)\b/g,
+    '<span class="tk-k">$1</span>');
+  const re = /(\/\*[\s\S]*?\*\/|\/\/[^\n]*)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`)|(\b\d+(?:\.\d+)?\b)/g;
+  let out = "", last = 0, m: RegExpExecArray | null;
+  while ((m = re.exec(src))) {
+    out += kw(src.slice(last, m.index));
+    if (m[1]) out += '<span class="tk-c">' + esc(m[1]) + "</span>";
+    else if (m[2]) out += '<span class="tk-s">' + esc(m[2]) + "</span>";
+    else out += '<span class="tk-n">' + esc(m[3]) + "</span>";
+    last = re.lastIndex;
+  }
+  return out + kw(src.slice(last));
+}
+
 function CopyChip({ text, label = "복사" }: { text: string; label?: string }) {
   const [ok, setOk] = React.useState(false);
   return (
@@ -93,6 +158,14 @@ function CodePanel({ card, entry, onClose }: { card: HubCard; entry: any; onClos
           {files ? (
             <>
               <div className="props">
+                {(() => {
+                  // 다이어그램 = 베이스 + default 변형 클래스(h·px 등은 size default에 산다)
+                  const f = files.find((x) => extractProps(x.src).base.length);
+                  if (!f) return null;
+                  const defs = [...f.src.matchAll(/default:\s*"([^"]+)"/g)].flatMap((m) => m[1].split(/\s+/));
+                  const box = parseBox([...extractProps(f.src).base, ...defs]);
+                  return box ? <BoxDiagram box={box} /> : null;
+                })()}
                 {Object.keys(overrides).length ? (
                   <>
                     <div className="pk">365 조정값</div>
@@ -126,14 +199,14 @@ function CodePanel({ card, entry, onClose }: { card: HubCard; entry: any; onClos
                   );
                 })}
               </div>
-              {files.map((f) => (
-                <React.Fragment key={f.name}>
-                  <div className="fhead">
+              {files.map((f, i) => (
+                <details key={f.name} className="fdetail" open={i === 0}>
+                  <summary>
                     <span className="mono">components/src/ui/{f.name}.tsx</span>
-                    <span style={{ marginLeft: "auto" }}><CopyChip text={f.src} /></span>
-                  </div>
-                  <pre>{f.src}</pre>
-                </React.Fragment>
+                    <span className="sp" onClick={(e) => e.preventDefault()}><CopyChip text={f.src} /></span>
+                  </summary>
+                  <pre dangerouslySetInnerHTML={{ __html: highlight(f.src) }} />
+                </details>
               ))}
             </>
           ) : !err ? <div className="props">불러오는 중…</div> : null}

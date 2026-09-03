@@ -368,10 +368,39 @@
   .codebox .props .pk:first-child { margin-top: 0; }
   .codebox .props .tok { display: inline-block; margin: 0 5px 5px 0; padding: 1px 6px;
     border: 1px solid var(--line); background: var(--bg); font-family: var(--mono); font-size: 11px; }
-  .codebox .fhead { display: flex; align-items: center; gap: 8px; margin: 14px 0 6px; font-size: 12px; }
-  .codebox pre { border: 1px solid var(--line); background: var(--surface); padding: 12px;
+  .codebox .fdetail { margin-top: 12px; }
+  .codebox .fdetail summary { display: flex; align-items: center; gap: 8px; font-size: 12px;
+    cursor: pointer; padding: 6px 8px; border: 1px solid var(--line); background: var(--surface);
+    list-style: none; }
+  .codebox .fdetail summary::-webkit-details-marker { display: none; }
+  .codebox .fdetail summary::before { content: "▸"; color: var(--doc-muted); }
+  .codebox .fdetail[open] summary::before { content: "▾"; }
+  .codebox .fdetail summary .sp { margin-left: auto; }
+  .codebox pre { border: 1px solid var(--line); border-top: 0; background: var(--bg); padding: 12px;
     overflow: auto; font-family: var(--mono); font-size: 11.5px; line-height: 1.55;
     white-space: pre; margin: 0; }
+  /* 하이라이트 4색 */
+  .codebox .tk-k { color: #7b5bd6; }
+  .codebox .tk-s { color: #1a7f4b; }
+  .codebox .tk-c { color: #98a1ad; font-style: italic; }
+  .codebox .tk-n { color: #b3591f; }
+  /* 피그마식 박스 다이어그램 */
+  .codebox .diag { position: relative; width: 320px; max-width: 100%; margin: 2px auto 12px;
+    padding: 16px 22px; font-family: var(--mono); font-size: 11px; color: var(--doc-muted); }
+  .codebox .diag .dc { position: absolute; color: var(--ink); }
+  .codebox .diag .dc.tl { top: 0; left: 4px; } .codebox .diag .dc.tr { top: 0; right: 4px; }
+  .codebox .diag .dc.bl { bottom: 0; left: 4px; } .codebox .diag .dc.br { bottom: 0; right: 4px; }
+  .codebox .diag .d-border { position: relative; border: 1px solid var(--ink); padding: 20px 34px; }
+  .codebox .diag .dl { position: absolute; top: 3px; left: 8px; }
+  .codebox .diag .dv { position: absolute; color: var(--ink); }
+  .codebox .diag .dv.t { top: 3px; left: 50%; transform: translateX(-50%); }
+  .codebox .diag .dv.b { bottom: 3px; left: 50%; transform: translateX(-50%); }
+  .codebox .diag .dv.l { left: 8px; top: 50%; transform: translateY(-50%); }
+  .codebox .diag .dv.r { right: 8px; top: 50%; transform: translateY(-50%); }
+  .codebox .diag .d-pad { position: relative; border: 1px solid var(--line); background: var(--surface);
+    padding: 22px 40px; }
+  .codebox .diag .d-size { border: 1px dashed var(--ink); color: var(--ink); text-align: center;
+    padding: 5px 8px; white-space: nowrap; }
   .hovercut .cropwin { position: relative; overflow: hidden; flex: none;
     border: 1px solid var(--line); background: var(--bg); }
   .comp-chips { display: flex; gap: 6px; flex-wrap: wrap; padding: 14px 16px 16px; }
