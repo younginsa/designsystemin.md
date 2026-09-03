@@ -368,15 +368,15 @@
   .codebox .props .pk:first-child { margin-top: 0; }
   .codebox .props .tok { display: inline-block; margin: 0 5px 5px 0; padding: 1px 6px;
     border: 1px solid var(--line); background: var(--bg); font-family: var(--mono); font-size: 11px; }
+  /* 파일 헤더 — 직계 한정(자손 폴드 줄로 박스 스타일 누수 금지, 2026-09-03 교정) */
   .codebox .fdetail { margin-top: 12px; }
-  .codebox .fdetail summary { display: flex; align-items: center; gap: 8px; font-size: 12px;
+  .codebox .fdetail > summary { display: flex; align-items: center; gap: 8px; font-size: 12px;
     cursor: pointer; padding: 6px 8px; border: 1px solid var(--line); background: var(--surface);
     list-style: none; }
-  .codebox .fdetail summary::-webkit-details-marker { display: none; }
-  .codebox .fdetail summary .sp { margin-left: auto; }
-  .codebox .fchev { width: 16px; height: 16px; flex: none; color: var(--doc-muted);
-    transition: transform .12s; }
-  .codebox details[open] > summary .fchev { transform: rotate(90deg); }
+  .codebox .fdetail > summary::-webkit-details-marker { display: none; }
+  .codebox .fdetail > summary::before { content: "▶"; font-size: 9px; color: var(--doc-muted); }
+  .codebox .fdetail[open] > summary::before { content: "▼"; }
+  .codebox .fdetail > summary .sp { margin-left: auto; }
   /* IDE식 인라인 폴딩 — 코드는 한 덩어리, 거터 셰브런으로 블록 접기(중첩 유지) */
   .codebox .codepre { border: 1px solid var(--line); border-top: 0; background: var(--bg);
     padding: 10px 12px; overflow: auto; font-family: var(--mono); font-size: 11.5px;
@@ -384,11 +384,13 @@
   .codebox .codepre .cl, .codebox .codepre .fold > summary { white-space: pre;
     padding-left: 16px; position: relative; min-height: 1.6em; }
   .codebox .codepre .fold { margin: 0; }
-  .codebox .codepre .fold > summary { list-style: none; cursor: pointer; }
+  /* 폴드 줄 = 민짜 코드 줄 + filled 삼각형만 — 박스·배경·플렉스 전면 금지(명시 가드) */
+  .codebox .codepre .fold > summary { list-style: none; cursor: pointer; display: block;
+    background: transparent; border: 0; font-size: inherit; gap: 0; align-items: normal; }
   .codebox .codepre .fold > summary::-webkit-details-marker { display: none; }
-  .codebox .codepre .fold > summary::before { content: "▸"; position: absolute; left: 0;
-    top: 0; width: 14px; color: var(--doc-muted); font-size: 11px; }
-  .codebox .codepre .fold[open] > summary::before { content: "▾"; }
+  .codebox .codepre .fold > summary::before { content: "▶"; position: absolute; left: 1px;
+    top: .3em; color: var(--doc-muted); font-size: 8px; }
+  .codebox .codepre .fold[open] > summary::before { content: "▼"; }
   .codebox .codepre .fold > summary:hover::before { color: var(--ink); }
   .codebox .codepre .ell { color: var(--doc-muted); display: none; }
   .codebox .codepre .fold:not([open]) > summary .ell { display: inline; }

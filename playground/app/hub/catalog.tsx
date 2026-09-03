@@ -7,7 +7,6 @@
 // rest/hover 사진 스왑은 은퇴했다. 라이브 렌더 = 365 토큰 적용 실물이 곧 기본 그림이다.
 
 import * as React from "react";
-import { ChevronRight } from "lucide-react";
 
 import { CARD_GROUPS, type HubCard } from "./cards-data";
 import { PREVIEWS, FitScale } from "./previews";
@@ -294,7 +293,6 @@ function CodePanel({ card, entry, onClose }: { card: HubCard; entry: any; onClos
               {files.map((f, i) => (
                 <details key={f.name} className="fdetail" open={i === 0}>
                   <summary>
-                    <ChevronRight className="fchev" />
                     <span className="mono">components/src/ui/{f.name}.tsx</span>
                     <span className="sp" onClick={(e) => e.preventDefault()}><CopyChip text={f.src} /></span>
                   </summary>
