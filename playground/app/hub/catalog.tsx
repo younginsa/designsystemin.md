@@ -156,7 +156,7 @@ export function CatalogPanel({ approvals, ds365, urls }: {
             : [];
           return (
             <div className="card comp ds-card" data-slug={s.slug!} key={s.slug!}>
-              <div className="card-head"><span>{s.name}</span></div>
+              <div className="card-head"><span>{s.name}</span><CodeButton slug={s.slug!} /></div>
               <div className="comp-vis">
                 {pv ? (
                   <div className="livehole"><FitScale pv={pv} /></div>
@@ -185,7 +185,6 @@ export function CatalogPanel({ approvals, ds365, urls }: {
                   </>
                 )}
                 {s.shadcn ? <span className="chip">shadcn: {s.shadcn}</span> : null}
-                <CodeButton slug={s.slug!} />
                 <button type="button" className="chip edit" onClick={() => setEditing(editing === s.slug ? null : s.slug!)}>편집</button>
               </div>
               {editing === s.slug ? <Editor entry={e} onSave={(o, n) => save(s.slug!, o, n)} /> : null}
