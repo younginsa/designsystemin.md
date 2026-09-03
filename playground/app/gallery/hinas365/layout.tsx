@@ -70,7 +70,7 @@ import { Separator } from "@ds/ui/ui/separator";
 import { Switch } from "@ds/ui/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
 
-const BASE = "/generated/hinas365";
+const BASE = "/gallery/hinas365";
 
 const NAV_GROUPS: {
   label: string;
@@ -234,7 +234,7 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
                   </DropdownMenuItem>
                   {/* Jira↔Confluence식 앱 전환 — 세일즈포스 대체(별도 앱) */}
                   <DropdownMenuItem asChild>
-                    <Link href="/generated/sales365/contracts">
+                    <Link href="/gallery/sales365/contracts">
                       <Briefcase className="size-4" />
                       <span>세일즈포스 대체</span>
                     </Link>

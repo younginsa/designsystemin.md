@@ -45,7 +45,7 @@ import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
 import { CommentsRail } from "../../../_detail/comments-rail";
 import { SubscriptionsTab } from "./subscriptions-tab";
 
-const BASE = "/generated/sales365";
+const BASE = "/gallery/sales365";
 
 // dl 섹션 — 타이틀 + 키-값 (S3 개요와 동일 위계)
 function InfoSection({ title, rows, action }: { title: string; rows: [string, React.ReactNode][]; action?: React.ReactNode }) {

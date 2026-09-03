@@ -58,7 +58,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
 import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
 import { Textarea } from "@ds/ui/ui/textarea";
 
-const BASE = "/generated/sales365";
+const BASE = "/gallery/sales365";
 
 // 계약 정보 체인 — 계약 → 계약 항목 → 슬롯 → 호선
 const CHAIN: { label: string; value: string; link: string; sub?: string }[] = [

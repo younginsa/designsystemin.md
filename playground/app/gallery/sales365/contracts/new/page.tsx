@@ -64,7 +64,7 @@ import {
 } from "@ds/ui/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 
-const BASE = "/generated/sales365";
+const BASE = "/gallery/sales365";
 
 /* ---------------------------------------------------------------- 선택지 */
 

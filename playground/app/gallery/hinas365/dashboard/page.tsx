@@ -184,7 +184,7 @@ export default function DashboardPage() {
                   ).map(([value, label, numTone, labelTone, inset]) => (
                     <Link
                       key={label}
-                      href={`/generated/hinas365/diagnostics?status=${label}`}
+                      href={`/gallery/hinas365/diagnostics?status=${label}`}
                       className={"min-w-0 flex-1 rounded-md py-1 hover:bg-accent " + inset}
                     >
                       <p className={"text-2xl font-bold " + numTone}>{value}</p>
@@ -223,7 +223,7 @@ export default function DashboardPage() {
                 </div>
                 {/* 진행 파이프라인 — 숫자만 볼드, 호버 전체 밑줄 → 업데이트 페이지 */}
                 <Link
-                  href="/generated/hinas365/updates"
+                  href="/gallery/hinas365/updates"
                   className="flex flex-wrap items-center gap-3 pb-3 pl-6 text-sm hover:underline"
                 >
                   <span>

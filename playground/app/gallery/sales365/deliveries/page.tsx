@@ -45,7 +45,7 @@ import {
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
 
-const BASE = "/generated/sales365";
+const BASE = "/gallery/sales365";
 
 type Row = {
   id: string;

@@ -86,7 +86,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui
 
 import { FilterBar, type FilterDef, type FilterValues } from "@ds/ui/ui/filter-bar";
 
-const BASE = "/generated/hinas365";
+const BASE = "/gallery/hinas365";
 
 // 진단 항목 셀 톤 — 고정 6슬롯 3×2 그리드, 아웃라인 없이 배경 틴트 + 텍스트 동색(색 쌍)
 // 정상 success / 이상·주의 destructive(칩은 빨간 글자 통일) / 무데이터 muted

@@ -45,7 +45,7 @@ import { Textarea } from "@ds/ui/ui/textarea";
 import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
 import { CommentsRail } from "../../../_detail/comments-rail";
 
-const BASE = "/generated/sales365";
+const BASE = "/gallery/sales365";
 
 const MANAGERS = [
   { name: "김철수", role: "구매팀 / 부장", phone: "010-1234-5678", email: "cskim@shipping.com" },

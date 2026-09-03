@@ -2,5 +2,5 @@
 import { redirect } from "next/navigation";
 
 export default function ShipsIndexPage() {
-  redirect("/generated/hinas365/ships/delivery");
+  redirect("/gallery/hinas365/ships/delivery");
 }

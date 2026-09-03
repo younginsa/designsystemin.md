@@ -11,7 +11,7 @@ import { KeyRound, UserRound } from "lucide-react";
 import { Button } from "@ds/ui/ui/button";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@ds/ui/ui/empty";
 
-const BASE = "/generated/hinas365";
+const BASE = "/gallery/hinas365";
 
 export default function PermissionsPage() {
   return (

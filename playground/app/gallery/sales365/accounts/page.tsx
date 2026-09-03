@@ -60,7 +60,7 @@ import {
 } from "@ds/ui/ui/filter-bar";
 import { Textarea } from "@ds/ui/ui/textarea";
 
-const BASE = "/generated/sales365";
+const BASE = "/gallery/sales365";
 
 type Row = {
   name: string;

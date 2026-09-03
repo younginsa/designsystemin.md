@@ -60,7 +60,7 @@ import {
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
 
-const BASE = "/generated/sales365";
+const BASE = "/gallery/sales365";
 
 type Row = {
   id: string;
@@ -265,7 +265,7 @@ export default function Sales365ContractsPage() {
                   <TableCell>
                     {/* 계약 상세(S3) 연결 — 샘플 상세는 C-2026-001 기준 */}
                     <Link
-                      href="/generated/sales365/contracts/detail"
+                      href="/gallery/sales365/contracts/detail"
                       className="font-medium text-primary hover:underline"
                     >
                       {r.name}

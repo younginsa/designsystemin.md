@@ -40,7 +40,7 @@ import {
 } from "@ds/ui/ui/rows-per-page";
 import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 
-const BASE = "/generated/sales365";
+const BASE = "/gallery/sales365";
 
 /* ---------------------------------------------------------------- 날짜 유틸 (UTC 고정) */
 

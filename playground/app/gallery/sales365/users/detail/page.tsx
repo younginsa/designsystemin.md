@@ -41,7 +41,7 @@ import {
   TableRow,
 } from "@ds/ui/ui/table";
 
-const BASE = "/generated/sales365";
+const BASE = "/gallery/sales365";
 
 const CONTRACTS = [
   { code: "C-2026-044", name: "☆☆해운 Navi 2척", shipType: "Container", product: "Safety Forward", date: "2026-07-20" },

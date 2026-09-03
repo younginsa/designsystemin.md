@@ -55,7 +55,7 @@ import { Textarea } from "@ds/ui/ui/textarea";
 
 import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
 
-const BASE = "/generated/sales365";
+const BASE = "/gallery/sales365";
 
 const CONTRACT = {
   id: "C-2026-001",

@@ -48,7 +48,7 @@ import { IconSelect } from "@ds/ui/ui/icon-select";
 import { NotificationPanel } from "@ds/ui/ui/notification-panel";
 import { Separator } from "@ds/ui/ui/separator";
 
-const BASE = "/generated/sales365";
+const BASE = "/gallery/sales365";
 
 // 와이어프레임 v2 내비 7종 — 구독(만료 임박 조회) 메뉴 추가(2026-08-26)
 const NAV: { icon: React.ElementType; label: string; href: string }[] = [
@@ -141,7 +141,7 @@ export default function Sales365Layout({ children }: { children: React.ReactNode
                 <DropdownMenuContent align="start" className="w-60">
                   <DropdownMenuLabel>앱 전환</DropdownMenuLabel>
                   <DropdownMenuItem asChild>
-                    <Link href="/generated/hinas365">
+                    <Link href="/gallery/hinas365">
                       <Ship className="size-4" />
                       <span>HiNAS 365</span>
                     </Link>
