@@ -340,7 +340,7 @@
   .comp:hover .hovercut.ready { display: flex; }
   /* 실물 컷(livecut) — 클릭 = 실물 팝업(iframe). 잠금 무관(공개 실물).
      hover 미리보기는 제자리 오버레이가 아니라 커서 추종 플로팅(.hoverfly, 2026-09-04) —
-     여기서는 투명 hover·클릭 영역만 남긴다(이미지 원천 = data-src).
+     여기서는 투명 hover·클릭 영역만 남긴다(라우트 원천 = data-live, hover·클릭 공용).
      width·height auto 명시 = .cut 공통 규칙(280px·:empty 90px·'잠김' 라벨) 누수 차단 —
      구 제자리 오버레이가 280×90 조각 + 잠김 글자로 깨져 보이던 원인 */
   .comp-vis .livecut, .bp-wire .livecut { display: block; position: absolute; inset: 0; margin: 0;
@@ -350,12 +350,19 @@
      01·02 카드(컴포넌트 채택·365 DS)의 hovercut 제자리 표시는 불변 */
   .tpl .hovercut.ready { display: block; background: none; }
   .tpl .hovercut.ready .cropwin { display: none; }
-  /* 커서 추종 미리보기 — HubApp 루트(fixed)·포인터 통과. 팝업(60)·코드 드로어(70)·라이트박스(100) 아래 */
-  .hoverfly { position: fixed; left: 0; top: 0; z-index: 50; width: 480px; display: none;
+  /* 커서 추종 미리보기 — HubApp 루트(fixed)·포인터 통과. 팝업(60)·코드 드로어(70)·라이트박스(100) 아래.
+     display 대신 visibility — 숨긴 상태에서도 iframe이 실제 크기로 레이아웃·렌더돼야 hover 즉시 뜬다 */
+  .hoverfly { position: fixed; left: 0; top: 0; z-index: 50; width: 480px; visibility: hidden;
     pointer-events: none; background: var(--bg); border: 1px solid var(--line); overflow: hidden;
     box-shadow: 0 8px 24px color-mix(in srgb, var(--ink) 18%, transparent); }
-  .hoverfly.on { display: block; }
-  .hoverfly > img { display: block; width: 100%; height: auto; }
+  .hoverfly.on { visibility: visible; }
+  /* 실물 라우트 축소 렌더 — /gallery/<slug>/ 1440×900을 1/3(480×300). 캡처 PNG 은퇴(2026-09-04):
+     배포되는 순간 hover가 항상 최신. 한 번 로드한 iframe은 숨김 유지(재hover 즉시) */
+  .hoverfly.live { height: 300px; }
+  .hoverfly .lv { position: absolute; inset: 0; visibility: hidden; }
+  .hoverfly.on .lv.on { visibility: visible; }
+  .hoverfly .lv iframe { display: block; width: 1440px; height: 900px; border: 0;
+    transform: scale(0.333333); transform-origin: 0 0; pointer-events: none; }
   .hoverfly .cropwin { position: relative; overflow: hidden; width: 100%; border: 0; background: var(--bg); }
   .hoverfly .cropwin img { position: absolute; top: 0; left: 0; max-width: none; display: block; }
   .livebox { position: fixed; inset: 0; z-index: 60; display: none;

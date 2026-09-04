@@ -56,7 +56,10 @@ export default function HubApp({ fragments, hist, shotNames }: {
   const [stack, setStack] = React.useState<{ title: string; names: string[] } | null>(null);
   const [lightbox, setLightbox] = React.useState<string | null>(null);
   const [live, setLive] = React.useState<string | null>(null); // 실물 팝업 — /gallery/<slug>/ iframe
-  const [fly, setFly] = React.useState<{ src: string; crop?: string } | null>(null); // 커서 추종 미리보기(템플릿 카드)
+  // 커서 추종 미리보기(템플릿 카드, 2026-09-04) — live: /gallery/<slug>/ 실물 iframe(캡처 PNG 은퇴, 배포=최신) ·
+  // src+crop: 암호화 컷(C 위저드처럼 gallery 라우트가 없는 카드)
+  const [fly, setFly] = React.useState<{ live?: string; src?: string; crop?: string } | null>(null);
+  const [liveSeen, setLiveSeen] = React.useState<string[]>([]); // 한 번 띄운 슬러그의 iframe은 유지(재hover 즉시)
   const flyRef = React.useRef<HTMLDivElement>(null);
   const [flash, setFlash] = React.useState<string | null>(null);
 
@@ -117,6 +120,14 @@ export default function HubApp({ fragments, hist, shotNames }: {
     });
   }, [dsnavSec, doc, sel]);
 
+  /* 템플릿 패널이 열리면 hover 미리보기 iframe을 미리 로드 — 첫 hover 지연 제거 */
+  React.useEffect(() => {
+    if (doc !== "d365" || panel.title !== "페이지 템플릿") return;
+    const slugs = Array.from(document.querySelectorAll<HTMLElement>(".tpl .livecut[data-live]")).map((el) => el.dataset.live!);
+    setLiveSeen((prev) => (slugs.every((s) => prev.includes(s)) ? prev : Array.from(new Set([...prev, ...slugs]))));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [doc, sel]);
+
   /* 문서 레벨 리스너 — rowlink 스택 · 라이트박스 · 365 탭 점프 · Escape · 커서 추종 미리보기 */
   React.useEffect(() => {
     /* 커서 추종 미리보기(템플릿 카드 .livecut·.hovercut.ready, 2026-09-04) — 이미지 전환만 state,
@@ -127,10 +138,15 @@ export default function HubApp({ fragments, hist, shotNames }: {
     const hideFly = () => { if (flySig) { flySig = ""; setFly(null); } };
     const placeFly = (t: Element | null, cx: number, cy: number) => {
       const el = (t && t.closest ? t.closest(".tpl .livecut, .tpl .hovercut.ready") : null) as HTMLElement | null;
-      const src = el ? el.dataset.src || (el.dataset.shot ? urls[el.dataset.shot] : "") : "";
-      if (!el || !src) { hideFly(); return; }
-      const sig = src + "|" + (el.dataset.crop || "");
-      if (sig !== flySig) { flySig = sig; setFly({ src, crop: el.dataset.crop }); }
+      const live = el ? el.dataset.live || "" : "";
+      const src = el && !live && el.dataset.shot ? urls[el.dataset.shot] || "" : "";
+      if (!el || (!live && !src)) { hideFly(); return; }
+      const sig = live ? "live:" + live : src + "|" + (el.dataset.crop || "");
+      if (sig !== flySig) {
+        flySig = sig;
+        if (live) { setLiveSeen((prev) => (prev.includes(live) ? prev : [...prev, live])); setFly({ live }); }
+        else setFly({ src, crop: el.dataset.crop });
+      }
       const box = flyRef.current;
       if (!box) return;
       const h = box.offsetHeight || FLY_W * 0.625;
@@ -326,8 +342,13 @@ export default function HubApp({ fragments, hist, shotNames }: {
         {lightbox ? <img src={lightbox} alt="" /> : null}
       </div>
 
-      <div ref={flyRef} className={"hoverfly" + (fly ? " on" : "")} aria-hidden="true">
-        {fly ? (fly.crop ? <CropImg src={fly.src} crop={fly.crop} /> : <img src={fly.src} alt="" />) : null}
+      <div ref={flyRef} className={"hoverfly" + (fly ? " on" : "") + (fly && fly.live ? " live" : "")} aria-hidden="true">
+        {liveSeen.map((slug) => (
+          <div key={slug} className={"lv" + (fly && fly.live === slug ? " on" : "")}>
+            <iframe src={"/gallery/" + slug + "/"} title="" tabIndex={-1} />
+          </div>
+        ))}
+        {fly && fly.src && fly.crop ? <CropImg src={fly.src} crop={fly.crop} /> : null}
       </div>
 
       <div className={"livebox" + (live ? " on" : "")} onClick={() => setLive(null)}>
