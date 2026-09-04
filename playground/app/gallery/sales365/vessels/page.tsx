@@ -238,6 +238,8 @@ export default function Sales365VesselsPage() {
                 <TableHead>선종</TableHead>
                 <TableHead>선급</TableHead>
                 <TableHead>시리즈 코드</TableHead>
+                {/* 조선소 헤더 누락 교정(2026-09-04) — 본문 9열 vs 헤더 8열이라 마지막 헤더 칸이 비어 흰색으로 보였다 */}
+                <TableHead>조선소</TableHead>
                 <TableHead>
                   <button type="button" className="inline-flex items-center gap-1 rounded-sm px-1 py-0.5 hover:bg-accent" onClick={() => sortBy("deliveryOn")}>
                     인도 예정일 {sort === "deliveryOn" ? (sortAsc ? <ArrowUp className="size-3" /> : <ArrowDown className="size-3" />) : <ChevronsUpDown className="size-3 text-secondary-foreground" />}

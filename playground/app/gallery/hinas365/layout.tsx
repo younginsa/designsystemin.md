@@ -219,7 +219,7 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="shrink-0" aria-label="앱 전환">
+              <Button variant="primary-ghost" size="icon" className="shrink-0" aria-label="앱 전환">
                 <Menu className="size-4" />
               </Button>
             </DropdownMenuTrigger>
