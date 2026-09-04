@@ -21,7 +21,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "before=$(git rev-parse HEAD 2>/dev/null); if GIT_TERMINAL_PROMPT=0 git pull --ff-only --quiet >/dev/null 2>&1; then printf 'session start check(%s)' \"$(date +%-I:%M%p)\" > .git/ds-pull-last 2>/dev/null; after=$(git rev-parse HEAD 2>/dev/null); if [ \"$before\" = \"$after\" ]; then echo \"[365 DS] 이미 최신 상태 ✓\"; else echo \"[365 DS] 자동 최신화 완료 ✓ — 받은 변경:\"; git diff --stat \"$before\" \"$after\" | tail -n 30; fi; else echo \"[365 DS] 원격 동기화 불가(오프라인·충돌 등) — 현재 상태로 진행. 필요시 git pull 수동 실행\"; fi; echo '라이브러리 참조: https://designsystemin-md.vercel.app/'; echo 'DS 요청·문의: 세션에 「DS 요청」이라고 말하면 Jira DES 티켓 경로 안내'",
+            "command": "before=$(git rev-parse HEAD 2>/dev/null); if GIT_TERMINAL_PROMPT=0 git pull --ff-only --quiet >/dev/null 2>&1; then printf 'session start check(%s)' \"$(date +%-I:%M%p)\" > .git/ds-pull-last 2>/dev/null; after=$(git rev-parse HEAD 2>/dev/null); if [ \"$before\" = \"$after\" ]; then echo \"[365 DS] 이미 최신 상태 ✓\"; else echo \"[365 DS] 자동 최신화 완료 ✓ — 받은 변경:\"; git diff --stat \"$before\" \"$after\" | tail -n 30; fi; else echo \"[365 DS] 원격 동기화 불가(오프라인·충돌 등) — 현재 상태로 진행. 필요시 git pull 수동 실행\"; fi; echo '라이브러리 참조: https://designsystemin-md.vercel.app/'; echo 'DS 요청·문의: 세션에 「DS 요청」이라고 말하면 Jira DES 티켓 경로 안내'; if [ -f .ds-admin ] && [ -f scripts/sync-gallery.mjs ]; then g=$(node scripts/sync-gallery.mjs --check 2>/dev/null | tail -n 1); [ -n \"$g\" ] && echo \"[gallery] ${g#  → }\" || true; fi",
             "timeout": 30
           }
         ]
