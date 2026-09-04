@@ -103,25 +103,34 @@ export function Shot({ name, urls }: { name: string; urls: Record<string, string
   );
 }
 
+/* 크롭 창 — 1920×1080 원본 좌표(x,y,w,h)를 %로 환산해 잘라 보인다.
+   HoverCut(제자리)·HubApp .hoverfly(커서 추종, 2026-09-04)가 공유 */
+export function CropImg({ src, crop, winStyle }: { src: string; crop: string; winStyle?: React.CSSProperties }) {
+  const [x, y, w, h] = crop.split(",").map(Number);
+  return (
+    <span className="cropwin" style={{ aspectRatio: `${w} / ${h}`, display: "block", ...winStyle }}>
+      <img
+        src={src}
+        alt=""
+        style={{
+          width: (1920 / w) * 100 + "%",
+          height: (1080 / h) * 100 + "%",
+          transform: `translate(${(-x / 1920) * 100}%, ${(-y / 1080) * 100}%)`,
+        }}
+      />
+    </span>
+  );
+}
+
 export function HoverCut({ shot, crop, urls }: { shot: string; crop: string; urls: Record<string, string> }) {
   const u = urls[shot];
   if (!u) return <span className="cut hovercut" data-shot={shot} data-react />;
-  const [x, y, w, h] = crop.split(",").map(Number);
-  const winStyle: React.CSSProperties = { aspectRatio: `${w} / ${h}` };
+  const [, , w, h] = crop.split(",").map(Number);
+  const winStyle: React.CSSProperties = {};
   if (w / h >= 16 / 9) winStyle.width = "86%"; else winStyle.height = "86%";
   return (
     <span className="cut hovercut ready" data-shot={shot} data-react>
-      <span className="cropwin" style={{ ...winStyle, display: "block" }}>
-        <img
-          src={u}
-          alt=""
-          style={{
-            width: (1920 / w) * 100 + "%",
-            height: (1080 / h) * 100 + "%",
-            transform: `translate(${(-x / 1920) * 100}%, ${(-y / 1080) * 100}%)`,
-          }}
-        />
-      </span>
+      <CropImg src={u} crop={crop} winStyle={winStyle} />
     </span>
   );
 }

@@ -10,7 +10,7 @@ import * as React from "react";
 
 import { AdoptPanel, AdoptRail, useAdoption, useHubData } from "./adopt";
 import { CatalogPanel } from "./catalog";
-import { Lockbar, hydrateFragments, useScreens } from "./screens";
+import { CropImg, Lockbar, hydrateFragments, useScreens } from "./screens";
 import { useDsViewers, useGallery } from "./viewers";
 
 type DocKey = "hinas" | "d365";
@@ -55,7 +55,9 @@ export default function HubApp({ fragments, hist, shotNames }: {
   const [dsnavSec, setDsnavSec] = React.useState("pipeline");
   const [stack, setStack] = React.useState<{ title: string; names: string[] } | null>(null);
   const [lightbox, setLightbox] = React.useState<string | null>(null);
-  const [live, setLive] = React.useState<string | null>(null); // 실물 팝업 — /generated/<slug>/ iframe
+  const [live, setLive] = React.useState<string | null>(null); // 실물 팝업 — /gallery/<slug>/ iframe
+  const [fly, setFly] = React.useState<{ src: string; crop?: string } | null>(null); // 커서 추종 미리보기(템플릿 카드)
+  const flyRef = React.useRef<HTMLDivElement>(null);
   const [flash, setFlash] = React.useState<string | null>(null);
 
   const { urls, unlocked, unlock } = useScreens(shotNames);
@@ -115,14 +117,39 @@ export default function HubApp({ fragments, hist, shotNames }: {
     });
   }, [dsnavSec, doc, sel]);
 
-  /* 문서 레벨 리스너 — rowlink 스택 · 라이트박스 · 365 탭 점프 · Escape */
+  /* 문서 레벨 리스너 — rowlink 스택 · 라이트박스 · 365 탭 점프 · Escape · 커서 추종 미리보기 */
   React.useEffect(() => {
+    /* 커서 추종 미리보기(템플릿 카드 .livecut·.hovercut.ready, 2026-09-04) — 이미지 전환만 state,
+       위치는 ref 직접 갱신(픽셀마다 렌더 방지). 커서 +16px, 가장자리에서 반대편으로 뒤집기 */
+    const FLY_W = 480, FLY_OFF = 16, FLY_PAD = 8;
+    let flySig = "";
+    let lastX = -1, lastY = -1;
+    const hideFly = () => { if (flySig) { flySig = ""; setFly(null); } };
+    const placeFly = (t: Element | null, cx: number, cy: number) => {
+      const el = (t && t.closest ? t.closest(".tpl .livecut, .tpl .hovercut.ready") : null) as HTMLElement | null;
+      const src = el ? el.dataset.src || (el.dataset.shot ? urls[el.dataset.shot] : "") : "";
+      if (!el || !src) { hideFly(); return; }
+      const sig = src + "|" + (el.dataset.crop || "");
+      if (sig !== flySig) { flySig = sig; setFly({ src, crop: el.dataset.crop }); }
+      const box = flyRef.current;
+      if (!box) return;
+      const h = box.offsetHeight || FLY_W * 0.625;
+      let x = cx + FLY_OFF, y = cy + FLY_OFF;
+      if (x + FLY_W + FLY_PAD > window.innerWidth) x = cx - FLY_OFF - FLY_W;
+      if (y + h + FLY_PAD > window.innerHeight) y = cy - FLY_OFF - h;
+      box.style.transform = `translate(${Math.max(FLY_PAD, x)}px, ${Math.max(FLY_PAD, y)}px)`;
+    };
+    const onMove = (e: MouseEvent) => { lastX = e.clientX; lastY = e.clientY; placeFly(e.target as Element | null, lastX, lastY); };
+    /* 스크롤 중엔 커서가 안 움직여도 밑의 요소가 바뀐다 — 숨기지 말고 마지막 커서 위치로 재판정
+       (scroll 이벤트는 다음 프레임에 오므로, 스크롤 직후 hover가 지워지던 문제 방지) */
+    const onScroll = () => { if (lastX >= 0) placeFly(document.elementFromPoint(lastX, lastY), lastX, lastY); };
+    const onLeave = () => { lastX = lastY = -1; hideFly(); };
     const onClick = (e: MouseEvent) => {
       const t = e.target as HTMLElement;
       const open365 = t.closest("#dsnav-open-365");
       if (open365) { e.preventDefault(); switchDoc("d365"); return; }
       const lc = t.closest(".livecut") as HTMLElement | null;
-      if (lc && lc.dataset.live) { setLive(lc.dataset.live); return; }
+      if (lc && lc.dataset.live) { hideFly(); setLive(lc.dataset.live); return; }
       const r = t.closest(".rowlink") as HTMLElement | null;
       if (r) {
         setStack({
@@ -133,12 +160,20 @@ export default function HubApp({ fragments, hist, shotNames }: {
       }
       if (t.classList.contains("stack-img")) { setLightbox((t as HTMLImageElement).src); return; }
       const sc = t.closest(".shot, .cut") as HTMLElement | null;
-      if (sc && sc.dataset.shot && urls[sc.dataset.shot]) setLightbox(urls[sc.dataset.shot]);
+      if (sc && sc.dataset.shot && urls[sc.dataset.shot]) { hideFly(); setLightbox(urls[sc.dataset.shot]); }
     };
     const onKey = (e: KeyboardEvent) => { if (e.code === "Escape") { setLightbox(null); setLive(null); } };
     document.addEventListener("click", onClick);
     document.addEventListener("keydown", onKey);
-    return () => { document.removeEventListener("click", onClick); document.removeEventListener("keydown", onKey); };
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseleave", onLeave);
+    window.addEventListener("scroll", onScroll, true);
+    window.addEventListener("blur", onLeave);
+    return () => {
+      document.removeEventListener("click", onClick); document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousemove", onMove); document.removeEventListener("mouseleave", onLeave);
+      window.removeEventListener("scroll", onScroll, true); window.removeEventListener("blur", onLeave);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urls]);
 
@@ -289,6 +324,10 @@ export default function HubApp({ fragments, hist, shotNames }: {
 
       <div className={"lightbox" + (lightbox ? " on" : "")} onClick={() => setLightbox(null)}>
         {lightbox ? <img src={lightbox} alt="" /> : null}
+      </div>
+
+      <div ref={flyRef} className={"hoverfly" + (fly ? " on" : "")} aria-hidden="true">
+        {fly ? (fly.crop ? <CropImg src={fly.src} crop={fly.crop} /> : <img src={fly.src} alt="" />) : null}
       </div>
 
       <div className={"livebox" + (live ? " on" : "")} onClick={() => setLive(null)}>

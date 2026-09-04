@@ -338,11 +338,26 @@
     background-image: radial-gradient(#d9d9d9 1px, transparent 1px); background-size: 8px 8px;
     align-items: center; justify-content: center; }
   .comp:hover .hovercut.ready { display: flex; }
-  /* 실물 컷(livecut) — hover에 실물 스샷, 클릭 = 실물 팝업(iframe). 잠금 무관(공개 실물) */
-  .comp-vis .livecut, .bp-wire .livecut { display: none; position: absolute; inset: 0; margin: 0;
-    background-size: cover; background-position: top center; cursor: pointer; z-index: 2;
-    border: 0; }
-  .comp:hover .livecut { display: block; }
+  /* 실물 컷(livecut) — 클릭 = 실물 팝업(iframe). 잠금 무관(공개 실물).
+     hover 미리보기는 제자리 오버레이가 아니라 커서 추종 플로팅(.hoverfly, 2026-09-04) —
+     여기서는 투명 hover·클릭 영역만 남긴다(이미지 원천 = data-src).
+     width·height auto 명시 = .cut 공통 규칙(280px·:empty 90px·'잠김' 라벨) 누수 차단 —
+     구 제자리 오버레이가 280×90 조각 + 잠김 글자로 깨져 보이던 원인 */
+  .comp-vis .livecut, .bp-wire .livecut { display: block; position: absolute; inset: 0; margin: 0;
+    width: auto; height: auto; border: 0; background: none; cursor: pointer; z-index: 2; }
+  .comp-vis .livecut::after, .bp-wire .livecut::after { content: none; }
+  /* 템플릿 카드의 암호화 컷(hovercut)도 같은 동작 — 제자리 표시 대신 플로팅.
+     01·02 카드(컴포넌트 채택·365 DS)의 hovercut 제자리 표시는 불변 */
+  .tpl .hovercut.ready { display: block; background: none; }
+  .tpl .hovercut.ready .cropwin { display: none; }
+  /* 커서 추종 미리보기 — HubApp 루트(fixed)·포인터 통과. 팝업(60)·코드 드로어(70)·라이트박스(100) 아래 */
+  .hoverfly { position: fixed; left: 0; top: 0; z-index: 50; width: 480px; display: none;
+    pointer-events: none; background: var(--bg); border: 1px solid var(--line); overflow: hidden;
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--ink) 18%, transparent); }
+  .hoverfly.on { display: block; }
+  .hoverfly > img { display: block; width: 100%; height: auto; }
+  .hoverfly .cropwin { position: relative; overflow: hidden; width: 100%; border: 0; background: var(--bg); }
+  .hoverfly .cropwin img { position: absolute; top: 0; left: 0; max-width: none; display: block; }
   .livebox { position: fixed; inset: 0; z-index: 60; display: none;
     background: rgba(15, 17, 21, .62); align-items: center; justify-content: center; }
   .livebox.on { display: flex; }
