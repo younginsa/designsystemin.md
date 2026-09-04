@@ -3,37 +3,32 @@
 // FilterBar — header-filter 시스템 프리셋 (조합 제작, 새 엔진 아님).
 // 피그마 세일즈포스 365 전환 UI 209-17188 구조 · 날짜 패널 209-36201.
 //
-// 확정 스펙 (2026-08-24 디자이너 결정, 2026-08-25 승격)
+// 확정 스펙 (2026-08-24 디자이너 결정, 2026-08-25 승격 · 2026-09-04 패널 문법 개정)
 // - 행: 검색 → 적용 필터 칩 → [+ 필터 추가] │ 우측 액션 슬롯
 // - 칩 문법 2종:
 //   · 기본 필터(base) = 삭제 불가 → ✕ 없이 꺾쇠만
-//   · 추가 필터([+ 필터 추가]로 꺼낸 것) = ✕만(꺾쇠 없음). 칩 본문 클릭이 드롭다운을 연다
-// - 값 드롭다운 문법(sales365 공통):
+//   · 추가 필터([+ 필터 추가]로 꺼낸 것) = ✕만(꺾쇠 없음). 칩 본문 클릭이 패널을 연다
+// - 값 패널 문법(2026-09-04 개정 — 즉시 반영 드롭다운 폐기, 전 kind 「고르고 적용」):
 //   · 상단 타이틀 없음 — 칩이 바로 위에서 이름을 말하므로 중복이다
-//   · 단일 = ✓ 오른쪽 ml-auto(shadcn Select 문법 통일, 2026-08-26) · 다중 = 왼쪽 Checkbox 상시 노출
-//   · 구분선 없음. 하단 우측 [초기화]가 값 해제를 맡는다(옛 "전체" 항목 대체)
-//   · 단일은 고르면 즉시 적용·닫힘 · 다중은 토글해도 닫히지 않는다
-// - [+ 필터 추가] 선택 = 칩 추가 + 값 패널 즉시 오픈(클릭 뎁스 4→3, Statsig 관용구 —
-//   complex의 즉시 오픈을 전 kind로 확장, 2026-08-26). 값 없이 닫아도 칩은 남는다(✕ 제거)
+//   · 단일 = ✓ 오른쪽 ml-auto(shadcn Select 문법) · 다중 = 왼쪽 Checkbox 상시 노출
+//   · 고른 값은 pending — [적용]으로 확정·닫힘, [취소]·바깥 클릭·Esc = 버림, [초기화] = 값 해제·닫힘
+//   · 푸터 = 날짜 패널과 동일: 좌 [초기화] / 우 [취소][적용]
+// - [+ 필터 추가] = 2열 팝오버(2026-09-04, 이미지 레퍼런스: 목록 옆에 패널이 붙는 구조):
+//   좌 필터 목록(클릭 = 선택, 목록은 계속 보임) → 우 그 필터의 값 패널 → [적용]에야 칩이 생긴다.
+//   [취소]·바깥 클릭이면 칩 없음. complex(모달 위임)만 예외 — 고르면 칩 추가 + 모달 오픈
 // - 칩은 최대 2줄까지 자동 줄바꿈
 // - 정렬은 이 바에 없다 — 테이블 컬럼 헤더가 전담
 //
-// 어휘 게이트: 전부 채택분 조합 — form-search(InputGroup) · ov-menus(DropdownMenu) ·
-// ov-popover(Popover) · form-controls(Checkbox) · form-daterange(Calendar) · btn-basic(Button).
+// 어휘 게이트: 전부 채택분 조합 — form-search(InputGroup) · ov-popover(Popover) ·
+// form-controls(Checkbox) · form-daterange(Calendar) · btn-basic(Button).
 // 신규 틴트 없음. 대비 선언: secondary-foreground×muted(body) · primary×muted(aux).
 
 import * as React from "react"
-import { Check, ChevronDown, ListFilter, Plus, RotateCcw, Search, X } from "lucide-react"
+import { Check, ChevronDown, Plus, RotateCcw, Search, X } from "lucide-react"
 
 import { Button } from "./button"
 import { Calendar } from "./calendar"
 import { Checkbox } from "./checkbox"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./dropdown-menu"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./input-group"
 import { Popover, PopoverContent, PopoverTrigger } from "./popover"
 
@@ -88,10 +83,13 @@ function FilterBar({
   const addable = filters.filter((f) => !f.base && !extraShown.includes(f.name))
   const hasCondition = keyword.trim() !== "" || shown.some((f) => values[f.name])
 
-  // 열린 패널의 단일 소유자 — 칩별 내부 state로 두면 필터추가 메뉴(모달)가
-  // 바깥 클릭 감지를 눌러버려 이전 패널이 안 닫히고 겹친다(2026-08-26 버그).
-  // FilterBar가 하나만 쥔다: 새 칩 자동 오픈 = 이전 패널 자동 닫힘.
+  // 열린 패널의 단일 소유자 — 칩별 내부 state로 두면 패널이 겹친다(2026-08-26 버그).
+  // FilterBar가 하나만 쥔다: 칩 패널(openName)과 필터추가 팝오버(addOpen)는 서로 배타.
   const [openName, setOpenName] = React.useState<string | null>(null)
+  const [addOpen, setAddOpen] = React.useState(false)
+  // 필터추가 팝오버 좌열에서 고른 필터 — 우열에 그 값 패널이 붙는다
+  const [addPick, setAddPick] = React.useState<string | null>(null)
+  const picked = addable.find((f) => f.name === addPick) ?? null
 
   const removeFilter = (f: FilterDef) => {
     onChange(f.name, undefined)
@@ -102,6 +100,15 @@ function FilterBar({
     onKeyword("")
     filters.forEach((f) => onChange(f.name, undefined))
     onExtraShownChange?.([])
+  }
+
+  // 필터추가 [적용] — 값이 있을 때만 칩이 생긴다. 취소·초기화(undefined)는 칩 없이 닫힘
+  const commitAdd = (f: FilterDef, v: string | undefined) => {
+    if (v !== undefined) {
+      onExtraShownChange?.([...extraShown, f.name])
+      onChange(f.name, v)
+    }
+    setAddOpen(false)
   }
 
   return (
@@ -144,42 +151,84 @@ function FilterBar({
             onRemove={() => removeFilter(f)}
             onComplexOpen={() => onComplexOpen?.(f.name)}
             open={openName === f.name}
-            onOpenChange={(o) => setOpenName(o ? f.name : null)}
+            onOpenChange={(o) => {
+              setOpenName(o ? f.name : null)
+              if (o) setAddOpen(false)
+            }}
           />
         ))}
 
         {addable.length > 0 && onExtraShownChange && (
-          // 필터추가 메뉴가 열리면 떠 있던 값 패널을 닫는다 — 단일 오픈 보장
-          <DropdownMenu onOpenChange={(o) => o && setOpenName(null)}>
-            <DropdownMenuTrigger asChild>
+          // 필터추가 = 2열 팝오버. 열리면 떠 있던 칩 패널을 닫는다 — 단일 오픈 보장
+          <Popover
+            open={addOpen}
+            onOpenChange={(o) => {
+              setAddOpen(o)
+              setAddPick(null)
+              if (o) setOpenName(null)
+            }}
+          >
+            <PopoverTrigger asChild>
               <Button variant="ghost" size="sm" className="text-secondary-foreground">
                 <Plus className="size-4" /> 필터 추가
               </Button>
-            </DropdownMenuTrigger>
-            {/* 타이틀 없음 — 트리거가 "필터 추가"라고 말하고 있다.
-                onCloseAutoFocus: 닫힐 때 트리거로 포커스를 되돌리지 않는다 — 되돌리면 방금
-                자동으로 연 값 패널이 포커스 이탈로 즉시 닫힌다(날짜 Popover에서 재현된 경합) */}
-            <DropdownMenuContent
-              align="start"
-              className="w-52"
-              onCloseAutoFocus={(e) => e.preventDefault()}
-            >
-              {addable.map((f) => (
-                <DropdownMenuItem
-                  key={f.name}
-                  onSelect={() => {
-                    onExtraShownChange([...extraShown, f.name])
-                    // complex의 즉시 오픈 관용구를 전 kind로 확장 — 클릭 뎁스 4→3.
-                    // 다음 틱 오픈 — 닫히는 메뉴의 애니메이션 프레임과 겹치지 않게
-                    if (f.kind === "complex") onComplexOpen?.(f.name)
-                    else setTimeout(() => setOpenName(f.name), 0)
-                  }}
-                >
-                  <ListFilter className="size-4" /> {f.label}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </PopoverTrigger>
+            {/* 타이틀 없음 — 트리거가 "필터 추가"라고 말하고 있다 */}
+            <PopoverContent align="start" className="flex w-auto p-0">
+              {/* 좌열: 필터 목록 — 클릭 = 선택(하이라이트), 목록은 계속 보인다 */}
+              <div className="w-40 space-y-0.5 p-1" role="listbox" aria-label="추가할 필터">
+                {addable.map((f) => {
+                  const on = addPick === f.name
+                  return (
+                    <button
+                      key={f.name}
+                      type="button"
+                      role="option"
+                      aria-selected={on}
+                      className={
+                        "flex w-full items-center rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground " +
+                        (on ? "bg-accent text-accent-foreground" : "")
+                      }
+                      onClick={() => {
+                        if (f.kind === "complex") {
+                          // 모달 위임형은 예외 — 칩 추가 + 모달 오픈(모달이 자체 적용·취소를 가진다)
+                          setAddOpen(false)
+                          onExtraShownChange([...extraShown, f.name])
+                          onComplexOpen?.(f.name)
+                        } else {
+                          setAddPick(f.name)
+                        }
+                      }}
+                    >
+                      {f.label}
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* 우열: 고른 필터의 값 패널 — [적용]에야 칩이 생긴다 */}
+              {picked && (
+                <div className="border-l">
+                  {picked.kind === "date" ? (
+                    <DateRangePanel
+                      key={picked.name}
+                      value={undefined}
+                      presets={picked.presets ?? DATE_PRESETS}
+                      onSelect={(v) => commitAdd(picked, v)}
+                    />
+                  ) : (
+                    <OptionPanel
+                      key={picked.name}
+                      def={picked}
+                      value={undefined}
+                      onApply={(v) => commitAdd(picked, v)}
+                      onCancel={() => setAddOpen(false)}
+                    />
+                  )}
+                </div>
+              )}
+            </PopoverContent>
+          </Popover>
         )}
 
         {hasCondition && (
@@ -196,7 +245,7 @@ function FilterBar({
   )
 }
 
-// 필터 칩 — 값이 있으면 파란 테두리·파란 글자, 없으면 기본. 클릭하면 그 자리에서 값 수정.
+// 필터 칩 — 값이 있으면 파란 테두리·파란 글자, 없으면 기본. 클릭하면 그 자리에서 값 패널.
 function FilterChip({
   def,
   value,
@@ -211,14 +260,12 @@ function FilterChip({
   onSelect: (v: string | undefined) => void
   onRemove: () => void
   onComplexOpen: () => void
-  /** 패널 열림은 FilterBar가 단일 소유 — 자동 오픈·단일 오픈 보장용 (2026-08-26) */
+  /** 패널 열림은 FilterBar가 단일 소유 — 단일 오픈 보장용 (2026-08-26) */
   open: boolean
   onOpenChange: (o: boolean) => void
 }) {
   const active = Boolean(value)
   const options = def.presets ?? def.options ?? []
-  // 다중 선택 필터의 현재 체크 목록 — 값은 ", " 병합 문자열로 흐른다
-  const selectedList = def.multi && value ? value.split(", ") : []
   // 제거 가능 = 추가 필터. 기본 필터는 화면에서 뺄 수 없다.
   const removable = !def.base
   const setOpen = onOpenChange
@@ -227,7 +274,7 @@ function FilterChip({
     <>
       <span>{def.label}</span>
       {active && <span className="font-medium">· {value}</span>}
-      {/* 꺾쇠는 ✕가 없는 기본 필터에만 — 추가 필터는 ✕가 드롭다운 어포던스를 대신한다 */}
+      {/* 꺾쇠는 ✕가 없는 기본 필터에만 — 추가 필터는 ✕가 패널 어포던스를 대신한다 */}
       {!removable && <ChevronDown className="size-3.5" />}
     </>
   )
@@ -247,35 +294,7 @@ function FilterChip({
         (active ? "border-primary" : "border-transparent hover:bg-accent")
       }
     >
-      {def.kind === "date" ? (
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <button type="button" className={triggerCls} aria-label={`${def.label} 필터`}>
-              {label}
-            </button>
-          </PopoverTrigger>
-          <PopoverContent
-            align="start"
-            className="w-auto p-0"
-            // 자동 오픈 경합의 진짜 원인: 필터추가 메뉴가 닫힐 때 애니메이션(~150ms) 동안
-            // 모달 포커스 트랩이 유지된 채 포커스를 도로 빼앗는다. 알림형 칩(자기도 모달
-            // 트랩)은 버티지만 Popover(비모달)는 "포커스 이탈"로 판단해 즉시 닫힌다.
-            // → 포커스를 뺏지도(open), 이탈로 닫지도(focusOutside) 않는다.
-            // 닫기 경로는 그대로: 바깥 클릭 · Esc · 적용/취소.
-            onOpenAutoFocus={(e) => e.preventDefault()}
-            onFocusOutside={(e) => e.preventDefault()}
-          >
-            <DateRangePanel
-              value={value}
-              presets={options}
-              onSelect={(v) => {
-                onSelect(v)
-                setOpen(false)
-              }}
-            />
-          </PopoverContent>
-        </Popover>
-      ) : def.kind === "complex" ? (
+      {def.kind === "complex" ? (
         <button
           type="button"
           className={triggerCls}
@@ -285,55 +304,38 @@ function FilterChip({
           {label}
         </button>
       ) : (
-        <DropdownMenu open={open} onOpenChange={setOpen}>
-          <DropdownMenuTrigger asChild>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
             <button type="button" className={triggerCls} aria-label={`${def.label} 필터`}>
               {label}
             </button>
-          </DropdownMenuTrigger>
-          {/* 상단 타이틀 없음 · 단일 = ✓ 오른쪽(shadcn Select 문법) · 다중 = 왼쪽 Checkbox 상시 노출 */}
-          <DropdownMenuContent align="start" className="w-44">
-            {options.map((o) =>
-              def.multi ? (
-                <DropdownMenuItem
-                  key={o}
-                  onSelect={(e) => {
-                    // 다중 선택은 고를 때마다 닫지 않는다
-                    e.preventDefault()
-                    const next = selectedList.includes(o)
-                      ? selectedList.filter((x) => x !== o)
-                      : options.filter((x) => selectedList.includes(x) || x === o) // 옵션 순서 고정
-                    onSelect(next.length ? next.join(", ") : undefined)
-                  }}
-                >
-                  <Checkbox checked={selectedList.includes(o)} className="pointer-events-none" />
-                  {o}
-                </DropdownMenuItem>
-              ) : (
-                // 단일 선택 ✓는 오른쪽 — shadcn Select 문법으로 통일(2026-08-26 확정)
-                <DropdownMenuItem key={o} onSelect={() => onSelect(o)}>
-                  {o}
-                  <Check className={"ml-auto size-4 " + (value === o ? "opacity-100" : "opacity-0")} />
-                </DropdownMenuItem>
-              )
-            )}
-            {/* 값 해제 경로 — 옛 "전체" 항목을 대신한다. 구분선 없이 여백으로만 띄운다 */}
-            <div className="flex justify-end px-1 pt-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-secondary-foreground"
-                disabled={!active}
-                onClick={() => {
-                  onSelect(undefined)
+          </PopoverTrigger>
+          {/* 상단 타이틀 없음 · 값은 pending → [적용]으로 확정 (2026-09-04) */}
+          <PopoverContent align="start" className="w-auto p-0">
+            {def.kind === "date" ? (
+              <DateRangePanel
+                key={value ?? ""}
+                value={value}
+                presets={options}
+                onSelect={(v) => {
+                  onSelect(v)
                   setOpen(false)
                 }}
-              >
-                초기화
-              </Button>
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              />
+            ) : (
+              <OptionPanel
+                key={value ?? ""}
+                def={def}
+                value={value}
+                onApply={(v) => {
+                  onSelect(v)
+                  setOpen(false)
+                }}
+                onCancel={() => setOpen(false)}
+              />
+            )}
+          </PopoverContent>
+        </Popover>
       )}
       {removable && (
         <button
@@ -349,6 +351,86 @@ function FilterChip({
         </button>
       )}
     </span>
+  )
+}
+
+// 옵션 패널 — 단일/다중 공통. 고른 값은 pending, [적용]으로 확정. 푸터는 날짜 패널과 같은 문법.
+// 부모가 key={value}로 리마운트해 열릴 때마다 현재 값에서 시작한다.
+function OptionPanel({
+  def,
+  value,
+  onApply,
+  onCancel,
+}: {
+  def: FilterDef
+  value?: string
+  /** undefined = 초기화(값 해제) */
+  onApply: (v: string | undefined) => void
+  onCancel: () => void
+}) {
+  const options = def.options ?? []
+  const [pending, setPending] = React.useState<string[]>(value ? value.split(", ") : [])
+  const toggle = (o: string) => {
+    if (!def.multi) return [o]
+    return pending.includes(o)
+      ? pending.filter((x) => x !== o)
+      : options.filter((x) => pending.includes(x) || x === o) // 옵션 순서 고정
+  }
+
+  return (
+    <div className="w-56">
+      <div
+        className="space-y-0.5 p-1"
+        role="listbox"
+        aria-multiselectable={def.multi}
+        aria-label={def.label}
+      >
+        {options.map((o) => {
+          const on = pending.includes(o)
+          return (
+            <button
+              key={o}
+              type="button"
+              role="option"
+              aria-selected={on}
+              className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
+              onClick={() => setPending(toggle(o))}
+            >
+              {/* 다중 = 왼쪽 Checkbox 상시 노출 · 단일 = ✓ 오른쪽(shadcn Select 문법) */}
+              {def.multi && <Checkbox checked={on} className="pointer-events-none" />}
+              {o}
+              {!def.multi && (
+                <Check className={"ml-auto size-4 " + (on ? "opacity-100" : "opacity-0")} />
+              )}
+            </button>
+          )
+        })}
+      </div>
+      {/* 푸터 — 날짜 패널과 동일: 좌 [초기화] / 우 [취소][적용] */}
+      <div className="flex items-center justify-between gap-2 px-2 pt-1 pb-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-secondary-foreground"
+          disabled={!value && pending.length === 0}
+          onClick={() => onApply(undefined)}
+        >
+          초기화
+        </Button>
+        <div className="flex gap-2">
+          <Button variant="ghost" size="sm" onClick={onCancel}>
+            취소
+          </Button>
+          <Button
+            size="sm"
+            disabled={pending.length === 0}
+            onClick={() => onApply(pending.join(", "))}
+          >
+            적용
+          </Button>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -488,4 +570,4 @@ function DateRangePanel({
   )
 }
 
-export { FilterBar, FilterChip, DateRangePanel, resolveDateRange, DATE_PRESETS }
+export { FilterBar, FilterChip, OptionPanel, DateRangePanel, resolveDateRange, DATE_PRESETS }

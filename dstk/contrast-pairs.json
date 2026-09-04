@@ -107,7 +107,7 @@
       { "class": "destructive/10", "use": "hover·focus 잉크(destructive-ghost·outline·메뉴 destructive) · ErrorState 재시도 버튼 필(hover /20)" },
       { "class": "destructive/12", "use": "진단 칩(상태 필 에러 배경)" },
       { "class": "success/12", "use": "진단 칩(상태 필 정상 배경)" },
-      { "class": "primary/5", "use": "선택 강조 칩" },
+      { "class": "primary/5", "use": "선택 강조 칩 · primary-ghost 버튼 hover 잉크(셸 앱 전환 햄버거 — 2026-09-04)" },
       { "class": "primary-foreground/10", "use": "bg-primary 면 위 아이콘 박스" }
     ]
   }

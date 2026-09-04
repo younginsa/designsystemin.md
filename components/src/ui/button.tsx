@@ -17,6 +17,10 @@ const buttonVariants = cva(
         // 파괴 보조 액션(항목·행 레벨) — 텍스트/아이콘 동형. Control 제외(design.md CTA ④)
         "destructive-ghost":
           "text-destructive hover:bg-destructive/10 hover:text-destructive focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
+        // 파랑 보조 액션(셸 앱 전환 햄버거 등) — destructive-ghost의 primary 판(2026-09-04 디자이너 확정).
+        // hover 틴트는 허용 목록의 primary/5, 글자·아이콘은 hover에도 파랑 유지
+        "primary-ghost":
+          "text-primary hover:bg-primary/5 hover:text-primary",
         outline:
           "border bg-card hover:bg-accent hover:text-accent-foreground dark:border-border dark:bg-input/30 dark:hover:bg-input/50",
         secondary:

@@ -23,7 +23,9 @@ function Checkbox({
         data-slot="checkbox-indicator"
         className="grid place-content-center text-current transition-none"
       >
-        <CheckIcon className="size-3.5" />
+        {/* text-current 명시 — 메뉴 항목의 svg 회색 규칙([&_svg:not([class*='text-'])])이
+            체크 표시를 덮어 검게 보이던 문제 차단(2026-09-04). 색은 Root의 primary-foreground를 잇는다 */}
+        <CheckIcon className="size-3.5 text-current" />
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   )

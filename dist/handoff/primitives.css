@@ -1,4 +1,4 @@
-/* 자동 생성 — 손 편집 금지 · commit f98a40a · 2026-09-03 · 원천: dstk/*.json (git이 source of truth) */
+/* 자동 생성 — 손 편집 금지 · commit 44f5534 · 2026-09-04 · 원천: dstk/*.json (git이 source of truth) */
 
 /* primitives — 컬러 팔레트 원천(값은 이 파일만 소유). 모드 전환 세트: :root=Day(Light 제품) · .dark=Dusk · .night=Night.
    조명 프리픽스 세트(--day-*/--dusk-*/--night-*)는 모드 무관 고정 라벨 — semantic-token.css의 교차 조명 핀 참조용(--dusk-red-600 패턴) */

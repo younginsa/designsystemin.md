@@ -4,6 +4,8 @@
 
 @custom-variant dark (&:is(.dark *));
 @source "../../components/src";
+/* generated/는 .gitignore 경로라 Tailwind v4 자동 감지에서 빠진다 — 명시 선언(2026-09-04, h-16·-my-1.5 미생성 실측) */
+@source "./generated";
 
 @theme inline {
   /* 서체 — Inter(라이브러리 정합), 한글은 시스템 폴백 */
