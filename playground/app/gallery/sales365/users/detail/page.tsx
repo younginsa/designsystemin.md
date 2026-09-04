@@ -41,6 +41,9 @@ import {
   TableRow,
 } from "@ds/ui/ui/table";
 
+// 사람 요소 잠금(2026-09-04): 헤더 유저 = DS Avatar default(32) + 이름 — _detail/person 공유
+import { PersonAvatar } from "../../../_detail/person";
+
 const BASE = "/gallery/sales365";
 
 const CONTRACTS = [
@@ -67,20 +70,23 @@ export default function Sales365UserDetailPage() {
           </Link>
         </Button>
         <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <h1 className="flex items-center gap-2 text-lg font-bold">
-              김민준
-              {active ? (
-                <span className="inline-flex items-center gap-1.5 text-sm font-normal">
-                  <span className="size-2 rounded-full bg-success" /> 활성
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1.5 text-sm font-normal text-secondary-foreground">
-                  <span className="size-2 rounded-full bg-muted-foreground" /> 비활성
-                </span>
-              )}
-            </h1>
-            <p className="text-sm text-secondary-foreground">영업 · mj.kim@company.com</p>
+          <div className="flex items-center gap-3">
+            <PersonAvatar name="김민준" size="default" />
+            <div>
+              <h1 className="flex items-center gap-2 text-lg font-bold">
+                김민준
+                {active ? (
+                  <span className="inline-flex items-center gap-1.5 text-sm font-normal">
+                    <span className="size-2 rounded-full bg-success" /> 활성
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 text-sm font-normal text-secondary-foreground">
+                    <span className="size-2 rounded-full bg-muted-foreground" /> 비활성
+                  </span>
+                )}
+              </h1>
+              <p className="text-sm text-secondary-foreground">영업 · mj.kim@company.com</p>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />

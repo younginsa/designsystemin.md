@@ -58,6 +58,9 @@ import {
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+
+// 사람 요소 잠금(2026-09-04): 담당자(내부 유저) = 프로필(이니셜) + 이름 — _detail/person 공유
+import { Person } from "../../_detail/person";
 import { Textarea } from "@ds/ui/ui/textarea";
 
 const BASE = "/gallery/sales365";
@@ -204,7 +207,9 @@ export default function Sales365AccountsPage() {
                   </Badge>
                 </TableCell>
                 <TableCell>{r.country}</TableCell>
-                <TableCell>{r.manager}</TableCell>
+                <TableCell>
+                  <Person name={r.manager} />
+                </TableCell>
                 <TableCell>{r.contracts > 0 ? `${r.contracts}건` : <span className="text-secondary-foreground">—</span>}</TableCell>
                 <TableCell>{r.vessels}척</TableCell>
                 <TableCell>{r.tier}</TableCell>

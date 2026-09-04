@@ -7,7 +7,7 @@
 // - 부제 "총 N건 (취소 제외)" — 취소 여부 필터 기본값이 '정상'이라 건수 옆에 명시
 // - 새 규칙(2026-08-26): 헤더는 정렬 전담(계약명·척수·계약일) · 필터는 전부 FilterBar
 //   (취소 여부 base 기본 정상 · 담당 base · 고객·계약 유형은 [+ 필터 추가])
-// - 행: 계약명(링크+ID 서브) / 고객 / 유형 칩 / 담당 / 척수(유효 슬롯 수 하나 — v2: 전체 병기 금지) /
+// - 행: 계약명(링크+ID 서브) / 고객 / 유형 칩 / 담당(프로필+이름, 2026-09-04) / 척수(유효 슬롯 수 하나 — v2: 전체 병기 금지) /
 //   계약일 / 취소 여부. 취소 행은 흐림 + 사유 서브
 // - 행 클릭 → S3 계약 상세(추후 생성 — 링크는 자리만)
 // - 내보내기는 목록 공통 요소 규칙(CSV/XLSX 드롭다운)으로 통일 — 와이어프레임은 플레인 버튼
@@ -59,6 +59,9 @@ import {
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+
+// 사람 요소 잠금(2026-09-04): 담당 = 프로필(이니셜) + 이름 — _detail/person 공유
+import { Person } from "../../_detail/person";
 
 const BASE = "/gallery/sales365";
 
@@ -278,7 +281,9 @@ export default function Sales365ContractsPage() {
                       {r.ctype}
                     </Badge>
                   </TableCell>
-                  <TableCell>{r.owner}</TableCell>
+                  <TableCell>
+                    <Person name={r.owner} />
+                  </TableCell>
                   <TableCell>
                     {/* v2: 척수 = 취소되지 않은 유효 슬롯 수 하나 — 전체 병기 금지.
                         원래 몇 척이었는지는 계약 상세의 취소된 슬롯이 답한다 */}

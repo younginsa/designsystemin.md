@@ -58,6 +58,9 @@ import {
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
 
+// 사람 요소 잠금(2026-09-04): 유저 이름 = 프로필(이니셜) + 이름(상세 Link) — _detail/person 공유
+import { Person } from "../../_detail/person";
+
 const BASE = "/gallery/sales365";
 
 type Row = { name: string; team: string; email: string; contracts: number; active: boolean; createdOn: string };
@@ -170,12 +173,14 @@ export default function Sales365UsersPage() {
                 onClick={() => router.push(`${BASE}/users/detail`)}
               >
                 <TableCell>
-                  <Link
-                    href={`${BASE}/users/detail`}
-                    className="font-medium text-primary hover:underline"
-                  >
-                    {r.name}
-                  </Link>
+                  <Person name={r.name}>
+                    <Link
+                      href={`${BASE}/users/detail`}
+                      className="font-medium text-primary hover:underline"
+                    >
+                      {r.name}
+                    </Link>
+                  </Person>
                 </TableCell>
                 <TableCell>{r.team}</TableCell>
                 <TableCell className="font-mono text-sm">{r.email}</TableCell>

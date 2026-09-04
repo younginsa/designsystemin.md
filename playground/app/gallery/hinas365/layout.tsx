@@ -29,8 +29,8 @@ import {
   GitCompare,
   KeyRound,
   LayoutDashboard,
-  LayoutGrid,
   LogOut,
+  Menu,
   RefreshCw,
   Ship,
   Tag,
@@ -187,62 +187,57 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
           "flex shrink-0 flex-col border-r bg-card " + (collapsed ? "w-16" : "w-64")
         }
       >
-        {/* 브랜드 존 */}
+        {/* 브랜드 존 — 64px(상단바와 동일 높이, 경계선 정렬). 좌: 워드마크(+환경 마커) + 버전(행간 12px, 바짝) /
+            우: 앱 전환 햄버거(존 전체 높이 기준 수직 중앙). 2026-09-04 디자이너 확정: 제품 아이콘 제거 ·
+            그리드 → 햄버거(Menu). 접힘 모드는 햄버거만 남는다 */}
         <div
           className={
-            "flex h-14 shrink-0 items-center border-b " +
+            "flex h-16 shrink-0 items-center border-b " +
             (collapsed ? "justify-center" : "justify-between px-4")
           }
         >
-          {collapsed ? (
-            <Link href={BASE} aria-label="메인으로 이동">
-              <Ship className="size-5 text-primary" />
-            </Link>
-          ) : (
-            <>
-              <div className="min-w-0">
-                <Link href={BASE} className="flex items-center gap-2" aria-label="메인으로 이동">
-                  <Ship className="size-5 text-primary" />
-                  <span className="text-base font-bold text-primary">HiNAS 365</span>
-                  {/* 계정 분기 표기 — dev/qa 계정으로 로그인하면 로고 뒤에 환경이 붙는다. 로고와 같은 파랑 */}
-                  <span className="font-mono text-xs text-primary">({account.marker})</span>
-                </Link>
-                {/* 버전 표기 — 실제품은 사이드바 최하단, 로고 밑 이동 스펙(2026-09-02 확정). 접힘 모드 생략.
-                    caption_xs(10/16) dstk 변수 참조 · text-input(placeholder 토큰, 3모드 동일값) — 디자이너 직접 지정.
-                    input×card 게이트 선언은 UX-DS 반영 대기(aux 3:1 전 모드 통과 실측) */}
-                <p
-                  className="pl-7 font-mono text-input"
-                  style={{
-                    fontSize: "var(--type-desktop-caption-xs-size)",
-                    lineHeight: "var(--type-desktop-caption-xs-line-height)",
-                  }}
-                >
-                  v3.0.0-rc.26
-                </p>
-              </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="앱 전환">
-                    <LayoutGrid className="size-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-60">
-                  <DropdownMenuLabel>앱 전환</DropdownMenuLabel>
-                  <DropdownMenuItem>
-                    <Ship className="size-4" />
-                    <span className="font-mono font-semibold">HiNAS 365</span>
-                  </DropdownMenuItem>
-                  {/* Jira↔Confluence식 앱 전환 — 세일즈포스 대체(별도 앱) */}
-                  <DropdownMenuItem asChild>
-                    <Link href="/gallery/sales365/contracts">
-                      <Briefcase className="size-4" />
-                      <span>세일즈포스 대체</span>
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </>
+          {!collapsed && (
+            <div className="min-w-0">
+              <Link
+                href={BASE}
+                className="flex items-center gap-2 text-base font-bold text-primary"
+                aria-label="메인으로 이동"
+              >
+                HiNAS 365
+                {/* 계정 분기 표기 — dev/qa 계정으로 로그인하면 로고 뒤에 환경이 붙는다. 로고와 같은 파랑 */}
+                <span className="font-mono text-xs font-normal text-primary">({account.marker})</span>
+              </Link>
+              {/* 버전 표기 — 실제품은 사이드바 최하단, 로고 밑 이동 스펙(2026-09-02 확정). caption_xs 크기 dstk 변수 ·
+                  text-input(3모드 동일값). input×card 쌍은 dstk/contrast-pairs.json에 선언됨(장식 표기 한정) */}
+              <p
+                className="font-mono leading-3 text-input"
+                style={{ fontSize: "var(--type-desktop-caption-xs-size)" }}
+              >
+                v3.0.0-rc.26
+              </p>
+            </div>
           )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="shrink-0" aria-label="앱 전환">
+                <Menu className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-60">
+              <DropdownMenuLabel>앱 전환</DropdownMenuLabel>
+              <DropdownMenuItem>
+                <Ship className="size-4" />
+                <span className="font-mono font-semibold">HiNAS 365</span>
+              </DropdownMenuItem>
+              {/* Jira↔Confluence식 앱 전환 — 세일즈포스 대체(별도 앱) */}
+              <DropdownMenuItem asChild>
+                <Link href="/gallery/sales365/contracts">
+                  <Briefcase className="size-4" />
+                  <span>세일즈포스 대체</span>
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* 중앙 메뉴 */}
@@ -393,7 +388,7 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
 
       {/* ── 우측: 상단바(사이드바 우측 끝~페이지 우측 끝) + 본문 ── */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-4 border-b bg-card px-6">
+        <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between gap-4 border-b bg-card px-6">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>

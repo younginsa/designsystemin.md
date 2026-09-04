@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "ds:build": "tsx scripts/build-dstk.ts",
+    "gallery:sync": "node scripts/sync-gallery.mjs",
     "dev": "pnpm --filter playground dev",
     "build": "pnpm ds:build && pnpm --filter playground build"
   },

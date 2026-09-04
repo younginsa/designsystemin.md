@@ -8,9 +8,11 @@
 import * as React from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
-import { Avatar, AvatarFallback } from "@ds/ui/ui/avatar";
 import { Button } from "@ds/ui/ui/button";
 import { Input } from "@ds/ui/ui/input";
+
+// 사람 요소 잠금(2026-09-04): 작성자 = DS Avatar sm(이니셜) — size-7 오프스케일 은퇴
+import { PersonAvatar } from "./person";
 
 export type Comment = {
   author: string;
@@ -41,9 +43,7 @@ function Body({ text }: { text: string }) {
 function Item({ c, reply = false }: { c: Comment; reply?: boolean }) {
   return (
     <div className={"flex gap-2.5" + (reply ? " pl-8" : "")}>
-      <Avatar className="size-7">
-        <AvatarFallback className="text-xs">{c.author[0]}</AvatarFallback>
-      </Avatar>
+      <PersonAvatar name={c.author} />
       <div className="min-w-0 flex-1 space-y-0.5">
         <p className="text-xs text-secondary-foreground">
           <span className="font-medium text-foreground">{c.author}</span> · {c.team} · {c.at}
@@ -97,9 +97,7 @@ export function CommentsRail({
 
           <div className="space-y-1.5 border-t pt-3">
             <div className="flex gap-2">
-              <Avatar className="size-7">
-                <AvatarFallback className="text-xs">{me[0]}</AvatarFallback>
-              </Avatar>
+              <PersonAvatar name={me} />
               <Input
                 placeholder="댓글 남기기 — @로 유저 태그"
                 value={draft}
@@ -119,7 +117,8 @@ export function CommentsRail({
                 등록
               </Button>
             </div>
-            <p className="pl-9 text-xs text-secondary-foreground">태그된 유저에게 알림이 갑니다</p>
+            {/* 들여쓰기 = 아바타 sm(24) + gap-2(8) */}
+            <p className="pl-8 text-xs text-secondary-foreground">태그된 유저에게 알림이 갑니다</p>
           </div>
         </div>
       )}

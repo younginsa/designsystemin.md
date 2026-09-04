@@ -64,6 +64,9 @@ import {
 } from "@ds/ui/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 
+// 사람 요소 잠금(2026-09-04): 담당자 picker 항목 = 프로필(이니셜) + 이름 — _detail/person 공유
+import { Person } from "../../../_detail/person";
+
 const BASE = "/gallery/sales365";
 
 /* ---------------------------------------------------------------- 선택지 */
@@ -409,7 +412,7 @@ export default function Sales365ContractCreatePage() {
                   <SelectContent>
                     {OWNERS.map((o) => (
                       <SelectItem key={o} value={o}>
-                        {o}
+                        <Person name={o} />
                       </SelectItem>
                     ))}
                   </SelectContent>

@@ -54,6 +54,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
 import { Textarea } from "@ds/ui/ui/textarea";
 
 import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
+// 사람 요소 잠금(2026-09-04): 담당·댓글 작성자 = DS Avatar(이니셜) — _detail/person 공유
+import { Person, PersonAvatar } from "../../../_detail/person";
 
 const BASE = "/gallery/sales365";
 
@@ -439,9 +441,7 @@ export default function Sales365ContractDetailPage() {
                 <TabsContent value="comments" className="mt-3 space-y-4">
                   {comments.map((c, i) => (
                     <div key={c.time + i} className="flex gap-2.5">
-                      <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold">
-                        {c.author.slice(0, 1)}
-                      </span>
+                      <PersonAvatar name={c.author} />
                       <div className="min-w-0 flex-1 space-y-0.5">
                         <p className="text-xs text-secondary-foreground">
                           <span className="font-medium text-foreground">{c.author}</span> · {c.time}
@@ -451,9 +451,7 @@ export default function Sales365ContractDetailPage() {
                     </div>
                   ))}
                   <div className="flex gap-2.5 border-t pt-4">
-                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold">
-                      김
-                    </span>
+                    <PersonAvatar name="김민준" />
                     <div className="min-w-0 flex-1 space-y-2">
                       <Textarea
                         placeholder="댓글을 입력하세요 — @로 유저 태그"
@@ -528,9 +526,11 @@ export default function Sales365ContractDetailPage() {
                   <dt className="w-24 shrink-0 text-secondary-foreground">계약일</dt>
                   <dd>{CONTRACT.date}</dd>
                 </div>
-                <div className="flex items-baseline">
+                <div className="flex items-center">
                   <dt className="w-24 shrink-0 text-secondary-foreground">담당</dt>
-                  <dd>{CONTRACT.owner}</dd>
+                  <dd>
+                    <Person name={CONTRACT.owner} />
+                  </dd>
                 </div>
               </dl>
             </section>

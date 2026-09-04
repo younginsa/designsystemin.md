@@ -44,6 +44,8 @@ import { Textarea } from "@ds/ui/ui/textarea";
 
 import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
 import { CommentsRail } from "../../../_detail/comments-rail";
+// 사람 요소 잠금(2026-09-04): 댓글 작성자 = DS Avatar sm(이니셜) — _detail/person 공유
+import { PersonAvatar } from "../../../_detail/person";
 
 const BASE = "/gallery/sales365";
 
@@ -287,9 +289,7 @@ export default function Sales365AccountDetailPage() {
             {comments.map((c, i) => (
               <div key={c.time + i} className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold">
-                    {c.author.slice(0, 1)}
-                  </span>
+                  <PersonAvatar name={c.author} />
                   <span className="text-sm font-medium">{c.author}</span>
                   <span className="text-xs text-secondary-foreground">{c.time}</span>
                 </div>

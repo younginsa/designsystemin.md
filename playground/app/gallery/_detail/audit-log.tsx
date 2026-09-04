@@ -11,6 +11,9 @@ import { Info } from "lucide-react";
 import { Alert, AlertDescription } from "@ds/ui/ui/alert";
 import { Badge } from "@ds/ui/ui/badge";
 
+// 사람 요소 잠금(2026-09-04): 행위자 = 프로필(이니셜) + 이름
+import { Person } from "./person";
+
 export type AuditField = { label: string; from: string | null; to: string };
 export type AuditEntry = {
   at: string;
@@ -45,7 +48,7 @@ export function AuditLog({ subject, entries }: { subject: string; entries: Audit
                 {e.action === "C" ? "생성" : "수정"}
               </Badge>
               <span className="font-mono text-xs text-secondary-foreground">{e.at}</span>
-              <span>{e.actor}</span>
+              <Person name={e.actor} />
             </div>
             <div className="space-y-1">
               {e.fields.map((f) => (

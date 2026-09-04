@@ -20,7 +20,7 @@ import {
   CalendarClock,
   Clock,
   FileText,
-  LayoutGrid,
+  Menu,
   PanelLeftClose,
   PanelLeftOpen,
   Package,
@@ -37,6 +37,8 @@ import {
   BreadcrumbSeparator,
 } from "@ds/ui/ui/breadcrumb";
 import { Button } from "@ds/ui/ui/button";
+// 사람 요소 잠금(2026-09-04): 계정 존 아바타 = DS Avatar default(32) — _detail/person 공유
+import { PersonAvatar } from "../_detail/person";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -97,63 +99,54 @@ export default function Sales365Layout({ children }: { children: React.ReactNode
           "flex shrink-0 flex-col border-r bg-card " + (collapsed ? "w-16" : "w-64")
         }
       >
-        {/* 브랜드 존 */}
+        {/* 브랜드 존 — 64px(상단바와 동일 높이, 경계선 정렬). 좌: 워드마크 + 버전(행간 12px, 바짝) /
+            우: 앱 전환 햄버거(존 전체 높이 기준 수직 중앙). 2026-09-04 디자이너 확정: 제품 아이콘 제거 ·
+            그리드 → 햄버거(Menu). 접힘 모드는 햄버거만 남는다 */}
         <div
           className={
-            "flex h-14 shrink-0 items-center border-b " +
+            "flex h-16 shrink-0 items-center border-b " +
             (collapsed ? "justify-center" : "justify-between px-4")
           }
         >
-          {collapsed ? (
-            <Link href={`${BASE}/contracts`} aria-label="계약 목록으로 이동">
-              <Briefcase className="size-5 text-primary" />
-            </Link>
-          ) : (
-            <>
-              <div className="min-w-0">
-                <Link
-                  href={`${BASE}/contracts`}
-                  className="flex items-center gap-2"
-                  aria-label="계약 목록으로 이동"
-                >
-                  <Briefcase className="size-5 text-primary" />
-                  <span className="text-base font-bold text-primary">세일즈포스 대체</span>
-                </Link>
-                {/* 버전 표기 — 셸 관례 통일(로고 밑 작게, 2026-09-02). 데모 값 · 접힘 모드 생략.
-                    caption_xs(10/16) dstk 변수 참조 · text-input(placeholder 토큰) — 디자이너 직접 지정.
-                    input×card 게이트 선언은 UX-DS 반영 대기 */}
-                <p
-                  className="pl-7 font-mono text-input"
-                  style={{
-                    fontSize: "var(--type-desktop-caption-xs-size)",
-                    lineHeight: "var(--type-desktop-caption-xs-line-height)",
-                  }}
-                >
-                  v1.4.0
-                </p>
-              </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="앱 전환">
-                    <LayoutGrid className="size-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-60">
-                  <DropdownMenuLabel>앱 전환</DropdownMenuLabel>
-                  <DropdownMenuItem asChild>
-                    <Link href="/gallery/hinas365">
-                      <Ship className="size-4" />
-                      <span>HiNAS 365</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Briefcase className="size-4" />
-                    <span className="font-semibold">세일즈포스 대체</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </>
+          {!collapsed && (
+            <div className="min-w-0">
+              <Link
+                href={`${BASE}/contracts`}
+                className="block truncate text-base font-bold text-primary"
+                aria-label="계약 목록으로 이동"
+              >
+                세일즈포스 대체
+              </Link>
+              {/* 버전 표기 — 셸 관례(로고 밑 작게, 2026-09-02). caption_xs 크기 dstk 변수 · text-input.
+                  input×card 쌍은 dstk/contrast-pairs.json에 선언됨(장식 표기 한정) */}
+              <p
+                className="font-mono leading-3 text-input"
+                style={{ fontSize: "var(--type-desktop-caption-xs-size)" }}
+              >
+                v1.4.0
+              </p>
+            </div>
           )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="shrink-0" aria-label="앱 전환">
+                <Menu className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-60">
+              <DropdownMenuLabel>앱 전환</DropdownMenuLabel>
+              <DropdownMenuItem asChild>
+                <Link href="/gallery/hinas365">
+                  <Ship className="size-4" />
+                  <span>HiNAS 365</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Briefcase className="size-4" />
+                <span className="font-semibold">세일즈포스 대체</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* 중앙 메뉴 — 와이어프레임 내비 순서 그대로 */}
@@ -198,9 +191,7 @@ export default function Sales365Layout({ children }: { children: React.ReactNode
         <div className={"shrink-0 pb-3 " + (collapsed ? "px-2" : "px-4")}>
           {!collapsed && (
             <div className="flex items-center gap-2 py-2">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold">
-                김
-              </span>
+              <PersonAvatar name="김민준" size="default" />
               <span className="min-w-0">
                 <span className="block truncate text-sm font-medium">김민준 · 영업</span>
                 <span className="block truncate text-xs text-secondary-foreground">
@@ -229,7 +220,7 @@ export default function Sales365Layout({ children }: { children: React.ReactNode
 
       {/* ── 본문 컬럼 ── */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between gap-4 border-b bg-card px-6">
+        <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between gap-4 border-b bg-card px-6">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
