@@ -185,7 +185,7 @@ export default function Sales365UsersPage() {
                 <TableCell>{r.team}</TableCell>
                 <TableCell className="font-mono text-sm">{r.email}</TableCell>
                 <TableCell>
-                  {r.contracts > 0 ? `${r.contracts}건` : <span className="text-secondary-foreground">—</span>}
+                  {r.contracts > 0 ? `${r.contracts}건` : <span className="text-muted-foreground">—</span>}
                 </TableCell>
                 <TableCell>
                   {r.active ? (

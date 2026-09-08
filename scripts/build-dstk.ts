@@ -324,7 +324,11 @@ if (existsSync(snapPath)) {
       const approved: string[] = JSON.parse(readFileSync(apPath, "utf8")).approved ?? [];
       const vocab: Record<string, { files: string[] }> = vm.vocab ?? {};
       const uiDir = join(ROOT, "components/src/ui");
-      const files = new Set(readdirSync(uiDir).filter((f) => f.endsWith(".tsx")).map((f) => f.slice(0, -4)));
+      // *.stories.tsx 는 컴포넌트가 아니라 Storybook·허브 카드가 공유하는 스토리 선언(2026-09-08) —
+      // 어휘 게이트 대상에서 제외한다. FE가 스토리 파일을 추가할 때마다 vocab-map을 손대지 않도록.
+      const files = new Set(
+        readdirSync(uiDir).filter((f) => f.endsWith(".tsx") && !f.endsWith(".stories.tsx")).map((f) => f.slice(0, -4)),
+      );
       const vocabErrs: string[] = [];
 
       const apSet = new Set(approved);

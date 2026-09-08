@@ -1,15 +1,18 @@
 "use client";
 
-// S10 납품 제품 상세 — 세일즈포스 대체 (① 프레임 셸 상속 + B 상세)
+// S10 납품 제품 상세 — 세일즈포스 대체 (① 프레임 셸 상속 + B 상세 · Jira형 상세 템플릿 롤아웃 3번째)
 // 원천: hinas365 와이어프레임 wireframe_s10_delivery_detail.html
 //
+// 재제작(2026-09-08) — 계약 상세(파일럿, 2026-08-28 확정)와 같은 골격:
+// - 루트 max-w-7xl · 헤더는 타이틀 단독(메타는 우측 Details 패널 소유) · 우측 액션 [✕ 취소]
+// - 본문 컬럼: 도면 (3) → Activity [댓글 | 변경 이력] 탭(pt-16 여백으로 구분)
+// - 우측 sticky 레일: 일정(✏ 수정 → 예정일 수정 모달) · 납품 제품 정보 · 계약 정보 체인(계약→항목→슬롯→호선)
+// - 종전 구조 폐기: 페이지 탭(개요/도면/변경 이력)과 댓글 도킹 패널 — 단일 스크롤로
+//
 // 와이어프레임 대조 메모
-// - 헤더: Hull 1001 · Control + 계약 항목 칩(납품 + 구독 · C-2026-001 ↗) / 우측 [✕ 취소]
+// - 헤더: Hull 1001 · Control + 계약 항목 칩(납품 + 구독 · C-2026-001 ↗) / 우측 [✕ 취소] — 칩은 레일로
 // - 취소 시나리오: 취소되면 배너(⛔ 예정일 수정·도면 등록 차단, 취소 기점 표시) — 토글로 시연
-// - 탭 2: ① 개요(일정 — 예정일 수정 모달 · 납품 제품 정보 · 계약 정보 체인:
-//   계약→항목→슬롯→호선 각 링크) ② 도면(승인/작업/최종 3종 — 버전·다운로드·업로드·
-//   이전 버전, 도면 등록 모달)
-// - 우측 댓글 도킹 패널(S3와 동일 패턴 — 접으면 헤더 ghost 버튼)
+// - 도면 승인/작업/최종 3종 — 버전·다운로드·업로드·이전 버전, 도면 등록 모달
 //
 // 어휘 게이트 메모: skeleton 채택 완료(DES-205 해소, 2026-08-25) — 로딩=스켈레톤 · 프로그레스 바=실제 진행률 전용
 
@@ -17,17 +20,7 @@ import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
-import {
-  ArrowUpRight,
-  ChevronDown,
-  ChevronRight,
-  Download,
-  Info,
-  MessageSquare,
-  Paperclip,
-  Plus,
-  Upload,
-} from "lucide-react";
+import { Download, Info, Paperclip, Pencil, Plus, Upload } from "lucide-react";
 
 import { Alert, AlertTitle } from "@ds/ui/ui/alert";
 import { Badge } from "@ds/ui/ui/badge";
@@ -52,22 +45,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@ds/ui/ui/select";
-import { Separator } from "@ds/ui/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
+import { Textarea } from "@ds/ui/ui/textarea";
 
 import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
+// 납품 유형 표기 잠금(2026-09-07) — 4곳 공유
+import { DeliveryType } from "../../../_detail/delivery-type";
 // 사람 요소 잠금(2026-09-04): 댓글 작성자 = DS Avatar sm(이니셜) — _detail/person 공유
 import { PersonAvatar } from "../../../_detail/person";
-import { Textarea } from "@ds/ui/ui/textarea";
 
 const BASE = "/gallery/sales365";
 
 // 계약 정보 체인 — 계약 → 계약 항목 → 슬롯 → 호선
-const CHAIN: { label: string; value: string; link: string; sub?: string }[] = [
-  { label: "계약", value: "C-2026-001 · ○○해운 Navi + SVM 구독 5척", link: `${BASE}/contracts/detail`, sub: "계약 상세 →" },
-  { label: "계약 항목", value: "C-2026-001-01 · Control + SVM 구독 5척", link: `${BASE}/contracts/detail`, sub: "유효 척수 4/5 · 계약 항목 →" },
-  { label: "슬롯", value: "1호선 슬롯 · USD 1,200,000", link: `${BASE}/contracts/detail`, sub: "슬롯 →" },
-  { label: "호선", value: "Hull 1001 · MV EXAMPLE", link: `${BASE}/vessels/detail`, sub: "호선 상세 →" },
+const CHAIN: { label: string; value: string; link: string }[] = [
+  { label: "계약", value: "C-2026-001 · 대양해운 Navi + SVM 구독 5척", link: `${BASE}/contracts/detail` },
+  { label: "계약 항목", value: "C-2026-001-01 · Control + SVM 구독 5척", link: `${BASE}/contracts/detail` },
+  { label: "슬롯", value: "1호선 슬롯 · USD 1,200,000", link: `${BASE}/contracts/detail` },
+  { label: "호선", value: "Hull 1001 · MV EXAMPLE", link: `${BASE}/vessels/detail` },
 ];
 
 const DRAWINGS: { type: string; name: string; version: string; date: string; history: [string, string][] }[] = [
@@ -111,281 +105,270 @@ export default function Sales365DeliveryDetailPage() {
   const [cancelled, setCancelled] = React.useState(false);
   const [scheduleOpen, setScheduleOpen] = React.useState(false);
   const [drawingOpen, setDrawingOpen] = React.useState(false);
-  const [commentsOpen, setCommentsOpen] = React.useState(false);
   const [comments, setComments] = React.useState([
     { author: "이수진", time: "2026-08-19 10:12", text: "일정 변경 사유와 현장 이슈를 남깁니다" },
   ]);
   const [draft, setDraft] = React.useState("");
 
   return (
-    <div className="flex min-h-0 flex-1 items-stretch gap-6">
-      <div className="min-w-0 flex-1 space-y-6">
-        {/* ── 페이지 헤더 ── */}
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-1">
-            <h1 className="text-lg font-bold">Hull 1001 · Control</h1>
-            <p className="flex flex-wrap items-center gap-1.5 text-sm text-secondary-foreground">
-              계약 항목 <Badge variant="secondary" className="font-normal">납품 + 구독</Badge> ·
-              <Link
-                href={`${BASE}/contracts/detail`}
-                className="inline-flex items-center gap-0.5 text-primary hover:underline"
-              >
-                C-2026-001 ○○해운 Navi + SVM 구독 5척 <ArrowUpRight className="size-3" />
-              </Link>
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
-            {!commentsOpen && (
-              <Button variant="ghost" onClick={() => setCommentsOpen(true)}>
-                <MessageSquare className="size-4" /> 댓글 ({comments.length})
-                <ChevronRight className="size-4" />
-              </Button>
-            )}
-            {/* 취소 시나리오 토글 (와이어프레임: 정상/취소 상태 시연) */}
-            <Button
-              variant="destructive-outline"
-              size="sm"
-              className="rounded-sm"
-              onClick={() => setCancelled((c) => !c)}
-            >
-              {cancelled ? "취소 해제" : "✕ 취소"}
-            </Button>
-          </div>
+    // Jira 문법: 콘텐츠 컬럼은 풀스크린에서도 max-width 캡(계약 상세와 동일 1280)
+    <div className="mx-auto w-full max-w-7xl space-y-6">
+      {/* ── 페이지 헤더 — 타이틀 단독, 메타(계약 항목·납품 유형)는 우측 Details 패널 소유 ── */}
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <h1 className="text-lg font-bold">Hull 1001 · Control</h1>
+        <div className="flex items-center gap-2">
+          <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
+          {/* 취소 시나리오 토글 (와이어프레임: 정상/취소 상태 시연) */}
+          <Button
+            variant="destructive-outline"
+            size="sm"
+            className="rounded-sm"
+            onClick={() => setCancelled((c) => !c)}
+          >
+            {cancelled ? "취소 해제" : "✕ 취소"}
+          </Button>
         </div>
+      </div>
 
-        {/* 취소 배너 — 예정일 수정·도면 등록 차단 */}
-        {cancelled && (
-          <Alert variant="destructive" className="border-0 bg-destructive/5">
-            <Info className="size-4" />
-            <AlertTitle className="font-semibold text-foreground">
-              이 납품은 취소되었습니다.
-            </AlertTitle>
-            <div className="col-start-2 text-sm text-secondary-foreground">
-              예정일 수정과 도면 등록이 차단됩니다. 취소 기점: 계약 항목 (취소 2026-03-10 ·
-              발주처 사양 변경 — 상위 전파). 재개하려면 계약부터 순서대로 해제하세요.
-            </div>
-          </Alert>
-        )}
-
-        {view === "loading" && <BlockSkeleton />}
-        {view === "progress" && (
-          <div className="space-y-4 rounded-lg border bg-card p-6">
-            <div className="flex items-center gap-4">
-              <Progress value={62} className="flex-1" />
-              <span className="font-mono text-sm text-secondary-foreground">62%</span>
-            </div>
-            <p className="text-sm text-secondary-foreground">납품 제품 정보를 불러오는 중입니다…</p>
+      {/* 취소 배너 — 예정일 수정·도면 등록 차단. 배너 표준 양식: variant destructive + /5 틴트 */}
+      {cancelled && (
+        <Alert variant="destructive" className="border-0 bg-destructive/5">
+          <Info className="size-4" />
+          <AlertTitle className="font-semibold text-foreground">이 납품은 취소되었습니다.</AlertTitle>
+          <div className="col-start-2 text-sm text-secondary-foreground">
+            예정일 수정과 도면 등록이 차단됩니다. 취소 기점: 계약 항목 (취소 2026-03-10 · 발주처 사양 변경 —
+            상위 전파). 재개하려면 계약부터 순서대로 해제하세요.
           </div>
-        )}
+        </Alert>
+      )}
 
-        {view === "error" && (
-          <ErrorState
-            title="납품 제품 정보를 불러오지 못했습니다."
-            description="잠시 후 다시 시도해 주세요."
-            onRetry={() => setView("default")}
-          />
-        )}
+      {view === "loading" && <BlockSkeleton />}
+      {view === "progress" && (
+        <div className="space-y-4 rounded-lg border bg-card p-6">
+          <div className="flex items-center gap-4">
+            <Progress value={62} className="flex-1" />
+            <span className="font-mono text-sm text-secondary-foreground">62%</span>
+          </div>
+          <p className="text-sm text-secondary-foreground">납품 제품 정보를 불러오는 중입니다…</p>
+        </div>
+      )}
 
-        {view === "empty" && (
-          <Empty className="border border-dashed">
-            <EmptyHeader>
-              <EmptyTitle>납품 제품을 찾을 수 없습니다.</EmptyTitle>
-              <EmptyDescription>삭제되었거나 접근 권한이 없습니다.</EmptyDescription>
-            </EmptyHeader>
-            <Button asChild variant="outline">
-              <Link href={`${BASE}/deliveries`}>납품 제품 목록으로</Link>
-            </Button>
-          </Empty>
-        )}
+      {view === "error" && (
+        <ErrorState
+          title="납품 제품 정보를 불러오지 못했습니다."
+          description="잠시 후 다시 시도해 주세요."
+          onRetry={() => setView("default")}
+        />
+      )}
 
-        {view === "default" && (
-          <Tabs defaultValue="overview">
-            <TabsList>
-              <TabsTrigger value="overview">개요</TabsTrigger>
-              <TabsTrigger value="drawings">도면</TabsTrigger>
-              <TabsTrigger value="audit">변경 이력</TabsTrigger>
-            </TabsList>
+      {view === "empty" && (
+        <Empty className="border border-dashed">
+          <EmptyHeader>
+            <EmptyTitle>납품 제품을 찾을 수 없습니다.</EmptyTitle>
+            <EmptyDescription>삭제되었거나 접근 권한이 없습니다.</EmptyDescription>
+          </EmptyHeader>
+          <Button asChild variant="outline">
+            <Link href={`${BASE}/deliveries`}>납품 제품 목록으로</Link>
+          </Button>
+        </Empty>
+      )}
 
-            {/* ── ① 개요 ── */}
-            <TabsContent value="overview" className="mt-4 space-y-4">
-              <section className="rounded-lg border bg-card p-5">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-medium text-secondary-foreground">일정</h2>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    disabled={cancelled}
-                    onClick={() => setScheduleOpen(true)}
-                  >
-                    예정일 수정
-                  </Button>
-                </div>
-                <dl className="mt-3 grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2">
-                  <div className="flex items-baseline">
-                    <dt className="w-36 shrink-0 text-secondary-foreground">납품 예정일</dt>
-                    <dd className="font-mono">2027-03-01</dd>
-                  </div>
-                  <div className="flex items-baseline">
-                    <dt className="w-36 shrink-0 text-secondary-foreground">커미셔닝 예정일</dt>
-                    <dd className="font-mono">2027-05-01</dd>
-                  </div>
-                </dl>
-              </section>
-
-              <section className="rounded-lg border bg-card p-5">
-                <h2 className="text-sm font-medium text-secondary-foreground">납품 제품 정보</h2>
-                <dl className="mt-3 grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2">
-                  <div className="flex items-baseline">
-                    <dt className="w-36 shrink-0 text-secondary-foreground">이름</dt>
-                    <dd>Hull 1001 · Control <span className="text-xs text-secondary-foreground">— 자동 생성</span></dd>
-                  </div>
-                  <div className="flex items-baseline">
-                    <dt className="w-36 shrink-0 text-secondary-foreground">제품</dt>
-                    <dd>
-                      Control{" "}
-                      <Link href={`${BASE}/products`} className="text-primary hover:underline">
-                        제품 마스터 →
-                      </Link>
-                    </dd>
-                  </div>
-                  <div className="flex items-baseline">
-                    <dt className="w-36 shrink-0 text-secondary-foreground">납품 유형</dt>
-                    <dd>납품 + 구독 <span className="text-xs text-secondary-foreground">— 계약 항목 제품에서 상속</span></dd>
-                  </div>
-                  <div className="flex items-baseline">
-                    <dt className="w-36 shrink-0 text-secondary-foreground">구독 조건</dt>
-                    <dd>36개월 <span className="text-xs text-secondary-foreground">— 계약 항목 제품에 붙은 조건</span></dd>
-                  </div>
-                </dl>
-              </section>
-
-              {/* 계약 정보 체인 — 계약 → 항목 → 슬롯 → 호선 */}
-              <section className="rounded-lg border bg-card p-5">
-                <h2 className="text-sm font-medium text-secondary-foreground">계약 정보</h2>
-                <div className="mt-3 space-y-3">
-                  {CHAIN.map((c) => (
-                    <div key={c.label} className="flex items-baseline text-sm">
-                      <span className="w-36 shrink-0 text-secondary-foreground">{c.label}</span>
-                      <span className="min-w-0">
-                        {c.value}{" "}
-                        <Link href={c.link} className="text-xs text-primary hover:underline">
-                          {c.sub}
-                        </Link>
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            </TabsContent>
-
-            {/* ── ② 도면 ── */}
-            <TabsContent value="drawings" className="mt-4 space-y-4">
+      {view === "default" && (
+        <div className="flex items-start gap-6">
+          {/* ══ 본문 컬럼 — 도면 → Activity ══ */}
+          <div className="min-w-0 flex-1 space-y-16">
+            {/* 도면 — 계약 상세 문서 목록과 같은 문법(divide-y 박스 · 종류 + 버전 배지 · 우측 액션) */}
+            <section id="drawings" className="scroll-mt-24 space-y-3">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">
-                  도면 3건 (최신 버전 기준)
+                  도면 ({DRAWINGS.length}) <span className="font-normal">· 최신 버전 기준</span>
                 </h2>
-                <Button size="sm" disabled={cancelled} onClick={() => setDrawingOpen(true)}>
+                <Button variant="outline" size="sm" disabled={cancelled} onClick={() => setDrawingOpen(true)}>
                   <Plus className="size-4" /> 도면 등록
                 </Button>
               </div>
-              {DRAWINGS.map((d) => (
-                <section key={d.type} className="rounded-lg border bg-card p-5">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                      <p className="text-sm font-medium">
-                        <Badge variant="secondary" className="mr-2 font-normal">{d.type}</Badge>
-                        {d.name}
+              <div className="divide-y rounded-md border bg-card">
+                {DRAWINGS.map((d) => (
+                  <div key={d.type} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 text-sm font-medium">
+                        {d.type}
+                        <Badge variant="secondary" className="font-mono font-normal">
+                          {d.version}
+                        </Badge>
+                      </div>
+                      <p className="mt-0.5 text-xs text-secondary-foreground">
+                        {d.name} · <span className="font-mono">{d.date}</span>
                       </p>
-                      <p className="mt-0.5 font-mono text-xs text-secondary-foreground">
-                        {d.version} · {d.date}
-                      </p>
+                      {d.history.length > 0 ? (
+                        <details className="mt-1">
+                          <summary className="cursor-pointer text-xs text-primary hover:underline">
+                            이전 버전 {d.history.length}건 보기
+                          </summary>
+                          <ul className="mt-1 space-y-0.5 pl-4 font-mono text-xs text-secondary-foreground">
+                            {d.history.map(([v, dt]) => (
+                              <li key={v}>
+                                {v} · {dt}
+                              </li>
+                            ))}
+                          </ul>
+                        </details>
+                      ) : (
+                        <p className="mt-1 text-xs text-secondary-foreground">이전 버전 없음</p>
+                      )}
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="sm" className="text-secondary-foreground">
                         <Download className="size-4" /> 다운로드
                       </Button>
-                      <Button variant="ghost" size="sm" disabled={cancelled}>
-                        <Upload className="size-4" /> 업로드
+                      <Button variant="ghost" size="sm" className="text-secondary-foreground" disabled={cancelled}>
+                        <Upload className="size-4" /> 새 버전
                       </Button>
                     </div>
                   </div>
-                  {d.history.length > 0 ? (
-                    <details className="mt-2">
-                      <summary className="cursor-pointer text-xs text-secondary-foreground">
-                        이전 버전 보기 ({d.history.length})
-                      </summary>
-                      <ul className="mt-1 space-y-0.5 pl-4 font-mono text-xs text-secondary-foreground">
-                        {d.history.map(([v, dt]) => (
-                          <li key={v}>
-                            {v} · {dt}
-                          </li>
-                        ))}
-                      </ul>
-                    </details>
-                  ) : (
-                    <p className="mt-2 text-xs text-secondary-foreground">이전 버전 없음</p>
-                  )}
-                </section>
-              ))}
-            </TabsContent>
-            {/* ── 변경 이력 — 공통 AuditLog 시안 ── */}
-            <TabsContent value="audit" className="mt-4">
-              <AuditLog subject="납품 제품 · Hull 1001 · Control" entries={AUDIT} />
-            </TabsContent>
-          </Tabs>
-        )}
-      </div>
-
-      {/* ── 우측 댓글 도킹 패널 (S3 패턴) ── */}
-      {commentsOpen && (
-        <aside className="flex w-80 shrink-0 flex-col rounded-lg border bg-card">
-          <div className="flex items-center justify-between border-b px-4 py-3">
-            <h2 className="text-sm font-medium text-secondary-foreground">댓글 ({comments.length})</h2>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-secondary-foreground"
-              onClick={() => setCommentsOpen(false)}
-            >
-              접기 <ChevronRight className="size-4" />
-            </Button>
-          </div>
-          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4">
-            {comments.map((c, i) => (
-              <div key={c.time + i} className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <PersonAvatar name={c.author} />
-                  <span className="text-sm font-medium">{c.author}</span>
-                  <span className="text-xs text-secondary-foreground">{c.time}</span>
-                </div>
-                <p className="whitespace-normal pl-8 text-sm">{c.text}</p>
+                ))}
               </div>
-            ))}
+            </section>
+
+            {/* ══ Activity — Jira 문법: [댓글 | 변경 이력] 탭 스위치. 라벨 없이 여백(pt-16)으로 구분 ══ */}
+            <section className="pt-16">
+              <Tabs defaultValue="comments">
+                <TabsList>
+                  <TabsTrigger value="comments">댓글 ({comments.length})</TabsTrigger>
+                  <TabsTrigger value="audit">변경 이력</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="comments" className="mt-3 space-y-4">
+                  {comments.map((c, i) => (
+                    <div key={c.time + i} className="flex gap-2.5">
+                      <PersonAvatar name={c.author} />
+                      <div className="min-w-0 flex-1 space-y-0.5">
+                        <p className="text-xs text-secondary-foreground">
+                          <span className="font-medium text-foreground">{c.author}</span> · {c.time}
+                        </p>
+                        <p className="whitespace-normal text-sm">{c.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="flex gap-2.5 border-t pt-4">
+                    <PersonAvatar name="김민준" />
+                    <div className="min-w-0 flex-1 space-y-2">
+                      <Textarea
+                        placeholder="댓글을 입력하세요 — @로 유저 태그"
+                        value={draft}
+                        onChange={(e) => setDraft(e.target.value)}
+                        className="min-h-20"
+                      />
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-xs text-secondary-foreground">
+                          태그된 유저에게 알림이 갑니다
+                        </p>
+                        <Button
+                          size="sm"
+                          disabled={!draft.trim()}
+                          onClick={() => {
+                            setComments((prev) => [
+                              ...prev,
+                              { author: "김민준", time: "방금", text: draft.trim() },
+                            ]);
+                            setDraft("");
+                          }}
+                        >
+                          등록
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="audit" className="mt-3">
+                  <AuditLog subject="납품 제품 · Hull 1001 · Control" entries={AUDIT} />
+                </TabsContent>
+              </Tabs>
+            </section>
           </div>
-          <Separator />
-          <div className="space-y-2 p-4">
-            <Textarea
-              placeholder="댓글을 입력하세요"
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              className="min-h-20"
-            />
-            <div className="flex items-center justify-between gap-2">
-              <p className="text-xs text-secondary-foreground">@로 태그하면 알림이 갑니다</p>
-              <Button
-                size="sm"
-                disabled={!draft.trim()}
-                onClick={() => {
-                  setComments((prev) => [...prev, { author: "김민준", time: "방금", text: draft.trim() }]);
-                  setDraft("");
-                }}
-              >
-                등록
-              </Button>
-            </div>
-          </div>
-        </aside>
+
+          {/* ══ 우측 Details 패널 — Jira 문법: 개요 KV가 스크롤 내내 고정 ══ */}
+          <aside className="sticky top-6 w-80 shrink-0 space-y-4 self-start">
+            {/* 일정 — 이 엔티티의 편집 가능 필드. 수정 = 저강조 ghost(4개 상세 페이지 공통) */}
+            <section className="rounded-lg border bg-card p-5">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-medium text-secondary-foreground">일정</h2>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-secondary-foreground"
+                  disabled={cancelled}
+                  onClick={() => setScheduleOpen(true)}
+                >
+                  <Pencil className="size-4" /> 수정
+                </Button>
+              </div>
+              <dl className="mt-3 space-y-3 text-sm">
+                <div className="flex items-baseline">
+                  <dt className="w-32 shrink-0 text-secondary-foreground">납품 예정일</dt>
+                  <dd className="font-mono">2027-03-01</dd>
+                </div>
+                <div className="flex items-baseline">
+                  <dt className="w-32 shrink-0 text-secondary-foreground">커미셔닝 예정일</dt>
+                  <dd className="font-mono">2027-05-01</dd>
+                </div>
+              </dl>
+            </section>
+
+            <section className="rounded-lg border bg-card p-5">
+              <h2 className="text-sm font-medium text-secondary-foreground">납품 제품 정보</h2>
+              <dl className="mt-3 space-y-3 text-sm">
+                <div className="flex items-baseline">
+                  <dt className="w-32 shrink-0 text-secondary-foreground">이름</dt>
+                  <dd className="min-w-0">
+                    Hull 1001 · Control
+                    <div className="text-xs text-secondary-foreground">자동 생성</div>
+                  </dd>
+                </div>
+                <div className="flex items-baseline">
+                  <dt className="w-32 shrink-0 text-secondary-foreground">제품</dt>
+                  <dd>
+                    <Link href={`${BASE}/products`} className="text-primary hover:underline">
+                      Control
+                    </Link>
+                  </dd>
+                </div>
+                {/* 배지 행이라 items-center — baseline이면 칩이 라벨보다 내려앉는다 */}
+                <div className="flex items-center">
+                  <dt className="w-32 shrink-0 text-secondary-foreground">납품 유형</dt>
+                  <dd>
+                    <DeliveryType value="납품 + 구독" />
+                  </dd>
+                </div>
+                <div className="flex items-baseline">
+                  <dt className="w-32 shrink-0 text-secondary-foreground">구독 조건</dt>
+                  <dd className="min-w-0">
+                    36개월
+                    <div className="text-xs text-secondary-foreground">계약 항목 제품에 붙은 조건</div>
+                  </dd>
+                </div>
+              </dl>
+            </section>
+
+            {/* 계약 정보 체인 — 계약 → 항목 → 슬롯 → 호선, 값 자체가 링크 */}
+            <section className="rounded-lg border bg-card p-5">
+              <h2 className="text-sm font-medium text-secondary-foreground">계약 정보</h2>
+              <dl className="mt-3 space-y-3 text-sm">
+                {CHAIN.map((c) => (
+                  <div key={c.label} className="flex items-baseline">
+                    <dt className="w-32 shrink-0 text-secondary-foreground">{c.label}</dt>
+                    <dd className="min-w-0">
+                      <Link href={c.link} className="text-primary hover:underline">
+                        {c.value}
+                      </Link>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          </aside>
+        </div>
       )}
 
       {/* ── 예정일 수정 모달 ── */}

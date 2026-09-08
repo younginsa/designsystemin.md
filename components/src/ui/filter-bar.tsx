@@ -44,8 +44,10 @@ export type FilterDef = {
   base?: boolean
   /** complex: 값 편집을 모달에 위임(버전 조건 등) · date: 프리셋 레일 + 두 달 range 캘린더 */
   kind?: "select" | "complex" | "date"
-  /** 날짜형 프리셋(오늘·어제·최근 7일…·직접 지정) */
+  /** 날짜형 프리셋(오늘·어제·최근 7일…·직접 지정 / 앞으로 30일…·이미 만료) */
   presets?: string[]
+  /** 날짜형 기준일 — 화면이 고정 기준일(와이어프레임 TODAY 등)을 쓰면 넘긴다. 기본 = 실제 오늘(2026-09-08) */
+  now?: Date
 }
 
 export type FilterValues = Record<string, string | undefined>
@@ -214,6 +216,7 @@ function FilterBar({
                       key={picked.name}
                       value={undefined}
                       presets={picked.presets ?? DATE_PRESETS}
+                      now={picked.now}
                       onSelect={(v) => commitAdd(picked, v)}
                     />
                   ) : (
@@ -317,6 +320,7 @@ function FilterChip({
                 key={value ?? ""}
                 value={value}
                 presets={options}
+                now={def.now}
                 onSelect={(v) => {
                   onSelect(v)
                   setOpen(false)
@@ -434,17 +438,20 @@ function OptionPanel({
   )
 }
 
-// 날짜 프리셋 — 피그마 209-36201 구조 한글화(확정)
+// 날짜 프리셋 — 피그마 209-36201 구조 한글화(확정). 뒤를 보는 기본 세트(갱신일·생성일·요청 기간용).
+// 앞을 보는 화면(만료일·예정일)은 FilterDef.presets로 "앞으로 30일·60일·90일 · 이미 만료 · 직접 지정"을 넘긴다(2026-09-08)
 const DATE_PRESETS = ["오늘", "어제", "최근 7일", "최근 14일", "최근 30일", "직접 지정"]
 
 const pad2 = (n: number) => String(n).padStart(2, "0")
-const fmtMD = (d: Date) => `${pad2(d.getMonth() + 1)}/${pad2(d.getDate())}`
+// 직접 지정 값은 연도를 품는다(2026-09-08) — 만료일처럼 해를 넘기는 기간 때문. 구형 "MM/DD–MM/DD"도 계속 읽는다
+const fmtYMD = (d: Date) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`
 
-/** 칩 값 → 실제 기간. 프리셋은 이름으로 계산, 직접 지정은 "MM/DD–MM/DD"(올해 가정) */
-function resolveDateRange(value: string): { from: Date; to: Date } | null {
-  const now = new Date()
+/** 칩 값 → 실제 기간. 프리셋은 이름으로 계산(기준일 now — 화면 고정 기준일이 있으면 넘긴다),
+    직접 지정은 "YYYY-MM-DD–YYYY-MM-DD"(구형 "MM/DD–MM/DD"는 올해 가정) */
+function resolveDateRange(value: string, now: Date = new Date()): { from: Date; to: Date } | null {
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
   const day = 86_400_000
+  const endOf = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59)
   switch (value) {
     case "오늘":
       return { from: today, to: now }
@@ -456,6 +463,23 @@ function resolveDateRange(value: string): { from: Date; to: Date } | null {
       return { from: new Date(today.getTime() - 13 * day), to: now }
     case "최근 30일":
       return { from: new Date(today.getTime() - 29 * day), to: now }
+    // 앞을 보는 프리셋(2026-09-08) — 오늘부터 N일 뒤 자정 직전까지
+    case "앞으로 30일":
+      return { from: today, to: endOf(new Date(today.getTime() + 30 * day)) }
+    case "앞으로 60일":
+      return { from: today, to: endOf(new Date(today.getTime() + 60 * day)) }
+    case "앞으로 90일":
+      return { from: today, to: endOf(new Date(today.getTime() + 90 * day)) }
+    // 열린 과거 — 오늘까지 지난 것 전부(만료일 당일 = 만료)
+    case "이미 만료":
+      return { from: new Date(2000, 0, 1), to: endOf(today) }
+  }
+  const ymd = value.match(/^(\d{4})-(\d{2})-(\d{2})–(\d{4})-(\d{2})-(\d{2})$/)
+  if (ymd) {
+    return {
+      from: new Date(Number(ymd[1]), Number(ymd[2]) - 1, Number(ymd[3])),
+      to: new Date(Number(ymd[4]), Number(ymd[5]) - 1, Number(ymd[6]), 23, 59, 59),
+    }
   }
   const m = value.match(/^(\d{2})\/(\d{2})–(\d{2})\/(\d{2})$/)
   if (!m) return null
@@ -471,10 +495,13 @@ function resolveDateRange(value: string): { from: Date; to: Date } | null {
 function DateRangePanel({
   value,
   presets,
+  now,
   onSelect,
 }: {
   value?: string
   presets: string[]
+  /** 프리셋 미리보기 기준일 — 화면 고정 기준일이 있으면 넘긴다(기본 = 실제 오늘) */
+  now?: Date
   onSelect: (v: string | undefined) => void
 }) {
   const [range, setRange] = React.useState<{ from?: Date; to?: Date } | undefined>(undefined)
@@ -502,7 +529,7 @@ function DateRangePanel({
                 setPendingPreset(null)
                 setRange(undefined)
               } else {
-                const r = resolveDateRange(p)
+                const r = resolveDateRange(p, now)
                 setPendingPreset(p)
                 setRange(r ?? undefined)
                 if (r) setMonth(new Date(r.from.getFullYear(), r.from.getMonth(), 1))
@@ -520,11 +547,11 @@ function DateRangePanel({
         <div className="flex items-center gap-2 pb-2 text-sm">
           <span className="text-secondary-foreground">From</span>
           <span className="rounded-md border px-2 py-1 font-mono text-xs">
-            {range?.from ? fmtMD(range.from) : "—"}
+            {range?.from ? fmtYMD(range.from) : "—"}
           </span>
           <span className="text-secondary-foreground">to</span>
           <span className="rounded-md border px-2 py-1 font-mono text-xs">
-            {range?.to ? fmtMD(range.to) : "—"}
+            {range?.to ? fmtYMD(range.to) : "—"}
           </span>
         </div>
         <Calendar
@@ -558,7 +585,7 @@ function DateRangePanel({
               onClick={() =>
                 range?.from &&
                 range?.to &&
-                onSelect(pendingPreset ?? `${fmtMD(range.from)}–${fmtMD(range.to)}`)
+                onSelect(pendingPreset ?? `${fmtYMD(range.from)}–${fmtYMD(range.to)}`)
               }
             >
               적용

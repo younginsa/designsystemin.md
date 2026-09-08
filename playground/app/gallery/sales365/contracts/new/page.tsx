@@ -71,7 +71,7 @@ const BASE = "/gallery/sales365";
 
 /* ---------------------------------------------------------------- 선택지 */
 
-const CUSTOMERS = ["○○해운", "△△해운", "▲▲선사", "☆☆해운", "□□해운"];
+const CUSTOMERS = ["대양해운", "한성해운", "동보선사", "우진해운", "신광해운"];
 const OWNERS = ["홍길동", "김담당", "이대리"];
 
 // 제품 타입 5선택(패키지 4종 + 직접 선택) — 2행 라디오
@@ -99,7 +99,7 @@ const SLOT_COUNTS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 // 원본 호선 생성 화면의 선택지 전체
 const SHIP_TYPES = ["Container", "Bulk Carrier", "Tanker", "LNG Carrier", "RoRo"];
 const CLASSES = ["KR", "LR", "BV", "DNV", "ABS", "NK"];
-const YARDS = ["△△중공업", "□□조선", "○○중공업", "XX중공업"];
+const YARDS = ["한빛중공업", "대건조선", "금강중공업", "XX중공업"];
 const ENGINE_TYPES = ["diesel", "dual-fuel", "LNG", "electric"];
 
 // 로컬 기준 yyyy-mm-dd — toISOString은 UTC라 하루 밀린다
@@ -128,7 +128,8 @@ function SpecFields() {
       <div className="space-y-3 rounded-md border p-4">
         <p className="text-sm font-medium text-secondary-foreground">제원 정보</p>
         <div className="space-y-1.5">
-          <Label>선급 (복수 선택 · ★ 주선급)</Label>
+          {/* 주선급 표기 통일(2026-09-07) — ★ 기호를 버리고 목록·상세와 같은 말로 */}
+          <Label>선급 (복수 선택 · 첫 번째가 주선급)</Label>
           <ToggleGroup type="multiple" variant="outline" size="sm" className="justify-start">
             {CLASSES.map((c) => (
               <ToggleGroupItem key={c} value={c}>
@@ -137,7 +138,7 @@ function SpecFields() {
             ))}
           </ToggleGroup>
           <p className="text-xs text-secondary-foreground">
-            선급 미정 — 확정 후 호선 상세에서 추가할 수 있습니다
+            주선급은 승인도면 제출 상대입니다. 미입력이면 확정 후 호선 상세에서 추가할 수 있습니다
           </p>
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -337,13 +338,19 @@ export default function Sales365ContractCreatePage() {
                 <Label htmlFor="c-name">
                   계약명 <span className="text-destructive">*</span>
                 </Label>
+                {/* 계약명 40자 제한(2026-09-07 확정) — 목록 셀이 2줄까지 보여주는 상한과 같은 값.
+                    입력 중 남은 글자 수를 우측에 알려 준다 */}
                 <Input
                   id="c-name"
                   className="max-w-sm"
-                  placeholder="예: ○○해운 Navi + SVM 구독 5척"
+                  placeholder="예: 대양해운 Navi + SVM 구독 5척"
+                  maxLength={40}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
+                <p className="max-w-sm text-right text-xs text-secondary-foreground">
+                  {name.length} / 40
+                </p>
               </div>
               <div className="space-y-2">
                 <Label>
@@ -435,15 +442,20 @@ export default function Sales365ContractCreatePage() {
                 <h2 className="text-sm font-medium text-secondary-foreground">
                   계약 항목 {itemIdx + 1}
                 </h2>
-                <Button
-                  variant="destructive-ghost"
-                  size="icon"
-                  className="size-8"
-                  aria-label="계약 항목 제거"
-                  onClick={() => removeItem(it.id)}
-                >
-                  <Trash2 className="size-4" />
-                </Button>
+                {/* 항목이 하나뿐이면 삭제 버튼을 아예 내린다(2026-09-07) — 지우면 계약 항목이
+                    0이 되는데, 그건 만들 수 없는 상태다. disabled로 두면 왜 못 누르는지
+                    설명이 필요하니 노출 자체를 없앤다. 2개째부터 다시 보인다 */}
+                {items.length > 1 && (
+                  <Button
+                    variant="destructive-ghost"
+                    size="icon"
+                    className="size-8"
+                    aria-label="계약 항목 제거"
+                    onClick={() => removeItem(it.id)}
+                  >
+                    <Trash2 className="size-4" />
+                  </Button>
+                )}
               </div>
 
               {/* 제품 타입 — 2행 라디오 5선택 */}

@@ -77,12 +77,12 @@ type Row = {
 };
 
 const ROWS: Row[] = [
-  { name: "○○해운", type: "선사", country: "대한민국", manager: "김영업", contracts: 3, vessels: 8, tier: "Tier 1", createdOn: "2024-03-01" },
-  { name: "△△해운", type: "선사", country: "대한민국", manager: "박세일", contracts: 1, vessels: 3, tier: "Tier 2", createdOn: "2024-06-12" },
-  { name: "▲▲선사", type: "운항사", country: "그리스", manager: "김영업", contracts: 2, vessels: 5, tier: "Tier 2", createdOn: "2024-09-20" },
-  { name: "☆☆해운", type: "선사", country: "싱가포르", manager: "이대리", contracts: 1, vessels: 2, tier: "Tier 3", createdOn: "2025-01-15" },
-  { name: "△△중공업", type: "조선소", country: "대한민국", manager: "박세일", contracts: 0, vessels: 12, tier: "Tier 1", createdOn: "2024-02-01" },
-  { name: "□□조선", type: "조선소", country: "중국", manager: "이대리", contracts: 0, vessels: 4, tier: "Tier 3", createdOn: "2025-04-08" },
+  { name: "대양해운", type: "선사", country: "대한민국", manager: "김영업", contracts: 3, vessels: 8, tier: "Tier 1", createdOn: "2024-03-01" },
+  { name: "한성해운", type: "선사", country: "대한민국", manager: "박세일", contracts: 1, vessels: 3, tier: "Tier 2", createdOn: "2024-06-12" },
+  { name: "동보선사", type: "운항사", country: "그리스", manager: "김영업", contracts: 2, vessels: 5, tier: "Tier 2", createdOn: "2024-09-20" },
+  { name: "우진해운", type: "선사", country: "싱가포르", manager: "이대리", contracts: 1, vessels: 2, tier: "Tier 3", createdOn: "2025-01-15" },
+  { name: "한빛중공업", type: "조선소", country: "대한민국", manager: "박세일", contracts: 0, vessels: 12, tier: "Tier 1", createdOn: "2024-02-01" },
+  { name: "대건조선", type: "조선소", country: "중국", manager: "이대리", contracts: 0, vessels: 4, tier: "Tier 3", createdOn: "2025-04-08" },
 ];
 
 const TYPE_CARDS = [
@@ -210,7 +210,7 @@ export default function Sales365AccountsPage() {
                 <TableCell>
                   <Person name={r.manager} />
                 </TableCell>
-                <TableCell>{r.contracts > 0 ? `${r.contracts}건` : <span className="text-secondary-foreground">—</span>}</TableCell>
+                <TableCell>{r.contracts > 0 ? `${r.contracts}건` : <span className="text-muted-foreground">—</span>}</TableCell>
                 <TableCell>{r.vessels}척</TableCell>
                 <TableCell>{r.tier}</TableCell>
                 <TableCell className="font-mono text-sm">{r.createdOn}</TableCell>
@@ -245,8 +245,10 @@ export default function Sales365AccountsPage() {
                     onClick={() => setAccountType(label)}
                     className={
                       "rounded-md border p-3 text-left text-sm " +
+                      // 선택 상태는 DS Field 문법을 따른다(2026-09-08 교정) — 파란 테두리 + primary/5 연파랑 면.
+                      // 종전 bg-accent는 중립 회색 hover 잉크라, 파란 테두리에 회색 면이 붙어 어긋나 보였다.
                       (accountType === label
-                        ? "border-primary bg-accent"
+                        ? "border-primary bg-primary/5"
                         : "hover:bg-accent")
                     }
                   >
@@ -260,7 +262,7 @@ export default function Sales365AccountsPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="a-name">계정명</Label>
-                <Input id="a-name" placeholder="예) ○○해운" />
+                <Input id="a-name" placeholder="예) 대양해운" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="a-brn">사업자등록번호</Label>

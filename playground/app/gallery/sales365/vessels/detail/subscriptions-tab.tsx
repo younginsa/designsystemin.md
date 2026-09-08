@@ -489,7 +489,7 @@ export function SubscriptionsTab() {
               <div className="flex gap-2">
                 <span className="w-28 shrink-0 text-secondary-foreground">구독 만료일</span>
                 <span>
-                  {subEnd(cur) ?? <span className="text-secondary-foreground">—</span>}{" "}
+                  {subEnd(cur) ?? <span className="text-muted-foreground">—</span>}{" "}
                   <span className="text-xs text-secondary-foreground">{endWhy(cur)}</span>
                 </span>
               </div>

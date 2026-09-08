@@ -15,23 +15,20 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
-import { TableSkeleton } from "@ds/ui/ui/skeleton";
+import { Skeleton, TableSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
 import { ArrowDown, ArrowUp, ChevronsUpDown, Info, Plus } from "lucide-react";
 
+import { Badge } from "@ds/ui/ui/badge";
 import { Button } from "@ds/ui/ui/button";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@ds/ui/ui/empty";
 import { ErrorState } from "@ds/ui/ui/error-state";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@ds/ui/ui/pagination";
 import { Progress } from "@ds/ui/ui/progress";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
+
+// 빈 값 규칙(2026-09-08 디자이너 확정): 목록 표의 빈 칸은 전부 흐린 대시(—) — 「미입력」 표기는
+// 상세·모달(값을 채우는 면)에서만 쓴다. 종전 MissingMark(2026-09-07)는 이 목록에서 뺐다.
+const EMPTY = <span className="text-muted-foreground">—</span>;
 import {
   Table,
   TableBody,
@@ -41,10 +38,6 @@ import {
   TableRow,
 } from "@ds/ui/ui/table";
 
-import {
-  ROWS_PER_PAGE_DEFAULT,
-  RowsPerPage,
-} from "@ds/ui/ui/rows-per-page";
 // 새 규칙(2026-08-26): 정렬은 헤더 전담 · 필터는 전부 FilterBar(2026-08-26 승격 완료)
 import {
   FilterBar,
@@ -63,29 +56,60 @@ type Row = {
   shipType: string;
   classes: string[]; // 첫 항목 = ★ 주선급
   seriesCode: string | null;
-  deliveryOn: string;
+  /** 인도 예정일 — 미확정이면 null(미입력 표기). 발주 초기 호선은 대체로 비어 있다 */
+  deliveryOn: string | null;
 };
 
 const ROWS: Row[] = [
-  { hull: "1001", shipName: "MV EXAMPLE", imo: "9876543", owner: "○○해운", yard: "△△중공업", shipType: "Container", classes: ["KR", "DNV"], seriesCode: "SER-2026-A", deliveryOn: "2027-06-01" },
-  { hull: "1002", shipName: "MV PIONEER", imo: "9876544", owner: "○○해운", yard: "△△중공업", shipType: "Container", classes: ["KR"], seriesCode: "SER-2026-A", deliveryOn: "2027-09-01" },
-  { hull: "1003", shipName: null, imo: null, owner: "○○해운", yard: "△△중공업", shipType: "Container", classes: ["KR"], seriesCode: "SER-2026-A", deliveryOn: "2027-12-01" },
-  { hull: "1004", shipName: null, imo: null, owner: "○○해운", yard: "△△중공업", shipType: "Container", classes: ["KR"], seriesCode: "SER-2026-A", deliveryOn: "2028-02-01" },
-  { hull: "HN-2025-001", shipName: "OCEAN STAR", imo: "9765432", owner: "◇◇해운", yard: "□□조선", shipType: "Bulk Carrier", classes: ["BV"], seriesCode: "SER-2025-B", deliveryOn: "2026-03-15" },
-  { hull: "HN-2025-002", shipName: "OCEAN MOON", imo: "9765433", owner: "◇◇해운", yard: "□□조선", shipType: "Bulk Carrier", classes: ["BV"], seriesCode: "SER-2025-B", deliveryOn: "2026-06-15" },
-  { hull: "HN-2026-010", shipName: null, imo: null, owner: "▽▽선사", yard: null, shipType: "Tanker", classes: ["NK"], seriesCode: null, deliveryOn: "2028-01-01" },
-  { hull: "HN-2026-011", shipName: null, imo: null, owner: "▽▽선사", yard: null, shipType: "Tanker", classes: ["NK"], seriesCode: null, deliveryOn: "2028-04-01" },
-  { hull: "2001", shipName: "BLUE HORIZON", imo: "8123456", owner: "△△선사", yard: "○○중공업", shipType: "Container", classes: ["LR", "ABS"], seriesCode: "SER-2024-C", deliveryOn: "2025-11-01" },
-  { hull: "2002", shipName: "RED HORIZON", imo: "8123457", owner: "△△선사", yard: "○○중공업", shipType: "Container", classes: ["LR"], seriesCode: "SER-2024-C", deliveryOn: "2026-01-01" },
+  { hull: "1001", shipName: "MV EXAMPLE", imo: "9876543", owner: "대양해운", yard: "한빛중공업", shipType: "Container", classes: ["KR", "DNV"], seriesCode: "SER-2026-A", deliveryOn: "2027-06-01" },
+  { hull: "1002", shipName: "MV PIONEER", imo: "9876544", owner: "대양해운", yard: "한빛중공업", shipType: "Container", classes: ["KR"], seriesCode: "SER-2026-A", deliveryOn: "2027-09-01" },
+  { hull: "1003", shipName: null, imo: null, owner: "대양해운", yard: "한빛중공업", shipType: "Container", classes: ["KR"], seriesCode: "SER-2026-A", deliveryOn: "2027-12-01" },
+  { hull: "1004", shipName: null, imo: null, owner: "대양해운", yard: "한빛중공업", shipType: "Container", classes: ["KR"], seriesCode: "SER-2026-A", deliveryOn: "2028-02-01" },
+  { hull: "HN-2025-001", shipName: "OCEAN STAR", imo: "9765432", owner: "서해해운", yard: "대건조선", shipType: "Bulk Carrier", classes: ["BV"], seriesCode: "SER-2025-B", deliveryOn: "2026-03-15" },
+  { hull: "HN-2025-002", shipName: "OCEAN MOON", imo: "9765433", owner: "서해해운", yard: "대건조선", shipType: "Bulk Carrier", classes: ["BV"], seriesCode: "SER-2025-B", deliveryOn: "2026-06-15" },
+  { hull: "HN-2026-010", shipName: null, imo: null, owner: "명진선사", yard: null, shipType: "Tanker", classes: ["NK"], seriesCode: null, deliveryOn: null },
+  { hull: "HN-2026-011", shipName: null, imo: null, owner: "명진선사", yard: null, shipType: "Tanker", classes: ["NK"], seriesCode: null, deliveryOn: null },
+  { hull: "2001", shipName: "BLUE HORIZON", imo: "8123456", owner: "청해선사", yard: "금강중공업", shipType: "Container", classes: ["LR", "ABS"], seriesCode: "SER-2024-C", deliveryOn: "2025-11-01" },
+  { hull: "2002", shipName: "RED HORIZON", imo: "8123457", owner: "청해선사", yard: "금강중공업", shipType: "Container", classes: ["LR"], seriesCode: "SER-2024-C", deliveryOn: "2026-01-01" },
 ];
 
-const TOTAL = 247;
-const MISSING = 38;
+// 무한 스크롤 볼륨(2026-09-07) — 종전엔 행 10개인데 푸터만 "전체 247척"이라 숫자가 거짓말이었다.
+// 실제 247행을 만들고 건수·미입력 수를 데이터에서 뽑는다.
+const OWNERS = ["대양해운", "서해해운", "명진선사", "청해선사"];
+const YARDS = ["한빛중공업", "대건조선", "금강중공업", null];
+const SHIP_TYPES = ["Container", "Bulk Carrier", "Tanker", "LNG Carrier", "RoRo"];
+const CLASS_SETS = [["KR"], ["LR", "ABS"], ["BV"], ["NK"], ["DNV", "KR"], ["ABS"]];
+const SERIES = ["SER-2026-A", "SER-2025-B", "SER-2024-C", null];
+
+const FILLER: Row[] = Array.from({ length: 237 }, (_, i): Row => {
+  // 7행마다 식별자 미입력 — 237/7 = 34행(대표 4행과 합쳐 38척)
+  const missing = i % 7 === 0;
+  const year = 2026 + (i % 3);
+  return {
+    hull: `HN-${2025 + (i % 4)}-${String(100 + i).padStart(3, "0")}`,
+    shipName: missing ? null : `MV ${["ARIA", "BOREAS", "CIRRUS", "DELTA", "EOS", "FALCON"][i % 6]} ${i + 1}`,
+    imo: missing ? null : String(9500000 + i),
+    owner: OWNERS[i % OWNERS.length],
+    yard: YARDS[i % YARDS.length],
+    shipType: SHIP_TYPES[i % SHIP_TYPES.length],
+    classes: CLASS_SETS[i % CLASS_SETS.length],
+    seriesCode: SERIES[i % SERIES.length],
+    // 인도 예정일 미입력 약 30% — 10행 중 3행(i%10 < 3)
+    deliveryOn:
+      i % 10 < 3
+        ? null
+        : `${year}-${String((i % 12) + 1).padStart(2, "0")}-${String(((i * 5) % 27) + 1).padStart(2, "0")}`,
+  };
+});
+
+const ALL_ROWS: Row[] = [...ROWS, ...FILLER];
+/** 무한 스크롤 한 번에 불러오는 행 수 */
+const PAGE = 20;
 
 // 새 규칙(2026-08-26): 필터는 전부 FilterBar — 컬럼 헤더 필터 편입.
 // 주선급 스위치는 별도 칩(선급 기준)으로, 미입력만 보기는 식별자 칩으로 흡수.
 const VESSEL_FILTERS: FilterDef[] = [
-  { name: "owner", label: "선주", options: ["○○해운", "◇◇해운", "▽▽선사", "△△선사"], multi: true },
+  { name: "owner", label: "선주", options: ["대양해운", "서해해운", "명진선사", "청해선사"], multi: true },
   { name: "shipType", label: "선종", options: ["Container", "Bulk Carrier", "Tanker", "LNG Carrier", "RoRo"], multi: true },
   { name: "shipClass", label: "선급", options: ["KR", "LR", "BV", "DNV", "ABS", "NK"], multi: true },
   { name: "classBasis", label: "선급 기준", options: ["하나라도 일치", "주선급만"] },
@@ -95,24 +119,13 @@ const VESSEL_FILTERS: FilterDef[] = [
 
 const splitVal = (v?: string) => (v ? v.split(", ") : []);
 
-// 미입력 표기 — warning 도트 + 이탤릭 (도트+텍스트 규칙)
-function MissingMark() {
-  return (
-    <span className="inline-flex items-center gap-1.5 text-sm italic text-secondary-foreground">
-      <span className="size-1.5 rounded-full bg-destructive" /> 미입력
-    </span>
-  );
-}
+// 미입력 표기는 공용 부품으로 이관(2026-09-07) — 납품 제품 목록도 같은 표기를 쓴다
 
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
 
 export default function Sales365VesselsPage() {
   const router = useRouter(); // 행 클릭 → 상세 (A 문법)
   const [view, setView] = React.useState<ViewState>("default");
-  const [page, setPage] = React.useState(1);
-  // 페이지당 행 수 — 기본 15, 푸터 드롭업에서 변경(2026-08-26)
-  const [pageSize, setPageSize] = React.useState(ROWS_PER_PAGE_DEFAULT);
-  const PAGE_COUNT = Math.max(1, Math.ceil(TOTAL / pageSize));
   const [keyword, setKeyword] = React.useState("");
   const [filterValues, setFilterValues] = React.useState<FilterValues>({});
   const [extraShown, setExtraShown] = React.useState<string[]>([]);
@@ -128,7 +141,7 @@ export default function Sales365VesselsPage() {
     }
   };
   const q = keyword.trim().toLowerCase();
-  const rows = (view === "empty" ? [] : [...ROWS])
+  const rows = (view === "empty" ? [] : [...ALL_ROWS])
     .filter((r) => {
       if (
         q &&
@@ -153,9 +166,48 @@ export default function Sales365VesselsPage() {
       return true;
     })
     .sort((a, b) => {
-      const c = a[sort].localeCompare(b[sort]);
+      // 인도 예정일 미입력(null)은 정렬 방향과 무관하게 맨 아래 — 납품 제품 목록과 같은 규칙
+      const av = a[sort];
+      const bv = b[sort];
+      if (!av && !bv) return 0;
+      if (!av) return 1;
+      if (!bv) return -1;
+      const c = av.localeCompare(bv);
       return sortAsc ? c : -c;
     });
+
+  /* 무한 스크롤(2026-09-07) — 계약 목록과 같은 문법. 푸터 페이지네이션 폐기,
+     건수는 툴바 우측. 센티넬이 보이면 PAGE만큼 더 채우고, shown이 늘 때마다
+     감시자를 다시 걸어 화면이 커도 이어서 로드된다. 400ms는 스켈레톤용 시늉 */
+  const [shown, setShown] = React.useState(PAGE);
+  const [loadingMore, setLoadingMore] = React.useState(false);
+  const sentinelRef = React.useRef<HTMLDivElement | null>(null);
+  const shownTotal = rows.length;
+  const hasMore = shown < shownTotal;
+
+  React.useEffect(() => {
+    setShown(PAGE);
+  }, [keyword, filterValues, sort, sortAsc, view]);
+
+  React.useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !hasMore) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting) return;
+        setLoadingMore(true);
+        window.setTimeout(() => {
+          setShown((n) => Math.min(n + PAGE, shownTotal));
+          setLoadingMore(false);
+        }, 400);
+      },
+      { rootMargin: "200px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [hasMore, shownTotal, shown]);
+
+  const visible = rows.slice(0, shown);
 
   return (
     <div className="space-y-6">
@@ -178,11 +230,19 @@ export default function Sales365VesselsPage() {
         extraShown={extraShown}
         onExtraShownChange={setExtraShown}
         actions={
-          <Button asChild>
-            <Link href={`${BASE}/contracts/new`}>
-              <Plus className="size-4" /> 호선 등록
-            </Link>
-          </Button>
+          <>
+            {/* 건수 — 무한 스크롤이라 푸터가 없다. 미입력 보조 카운트는 제거(2026-09-07 확정):
+                표 안에서 이미 행마다 미입력을 표시하고 있어 상단 숫자는 중복이었다 */}
+            {/* mr-3 — 액션 행이 gap-2라 mr-1이면 CTA와 12px밖에 안 떨어져 버튼처럼 붙어 읽혔다(2026-09-07) */}
+            {view === "default" && (
+              <span className="mr-3 text-sm text-secondary-foreground">전체 {shownTotal}척</span>
+            )}
+            <Button asChild>
+              <Link href={`${BASE}/contracts/new`}>
+                <Plus className="size-4" /> 호선 등록
+              </Link>
+            </Button>
+          </>
         }
       />
 
@@ -222,7 +282,8 @@ export default function Sales365VesselsPage() {
       )}
 
       {view === "default" && (
-        <>
+        /* TooltipProvider — 주선급 점의 툴팁이 붙는다(DS Tooltip은 Provider를 품지 않는다) */
+        <TooltipProvider>
           <Table className="bg-card">
             <TableHeader>
               <TableRow>
@@ -248,7 +309,7 @@ export default function Sales365VesselsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {rows.map((r) => (
+              {visible.map((r) => (
                 <TableRow
                   key={r.hull}
                   className="cursor-pointer hover:bg-accent"
@@ -262,82 +323,79 @@ export default function Sales365VesselsPage() {
                       {r.hull}
                     </Link>
                   </TableCell>
-                  <TableCell>{r.shipName ?? <MissingMark />}</TableCell>
-                  <TableCell className="font-mono text-sm">
-                    {r.imo ?? <MissingMark />}
-                  </TableCell>
+                  <TableCell>{r.shipName ?? EMPTY}</TableCell>
+                  <TableCell className="font-mono text-sm">{r.imo ?? EMPTY}</TableCell>
                   <TableCell>{r.owner}</TableCell>
                   <TableCell>{r.shipType}</TableCell>
+                  {/* 선급 칩(2026-09-08 디자이너 확정) — 선급마다 outline 배지. 첫 항목이 주선급이며
+                      복수일 때만 그 칩 안에 중립 진회색 점(bg-foreground)을 넣고 칩 전체가 툴팁 트리거.
+                      빨강 점은 쓰지 않는다(오류로 읽힘). 단일 선급은 구분할 게 없어 점 없음 */}
                   <TableCell>
-                    {/* 첫 항목 = ★ 주선급, 복수는 " / " 연결 */}
-                    {r.classes.join(" / ")}
+                    <span className="inline-flex flex-wrap items-center gap-1">
+                      {r.classes.map((c, i) => {
+                        const primary = r.classes.length > 1 && i === 0;
+                        const chip = (
+                          <Badge variant="outline" className="cursor-default gap-1.5 font-normal">
+                            {primary && <span className="size-1.5 shrink-0 rounded-full bg-foreground" />}
+                            {c}
+                          </Badge>
+                        );
+                        return primary ? (
+                          <Tooltip key={c}>
+                            <TooltipTrigger asChild>{chip}</TooltipTrigger>
+                            <TooltipContent>주선급 — 승인도면 제출 상대</TooltipContent>
+                          </Tooltip>
+                        ) : (
+                          <React.Fragment key={c}>{chip}</React.Fragment>
+                        );
+                      })}
+                    </span>
                   </TableCell>
-                  <TableCell className="font-mono text-sm">
-                    {r.seriesCode ?? <span className="text-secondary-foreground">—</span>}
-                  </TableCell>
-                  <TableCell>
-                    {r.yard ?? <span className="italic text-secondary-foreground">미정</span>}
-                  </TableCell>
-                  <TableCell className="font-mono text-sm">{r.deliveryOn}</TableCell>
+                  <TableCell className="font-mono text-sm">{r.seriesCode ?? EMPTY}</TableCell>
+                  <TableCell>{r.yard ?? EMPTY}</TableCell>
+                  <TableCell className="font-mono text-sm">{r.deliveryOn ?? EMPTY}</TableCell>
                 </TableRow>
               ))}
+
+              {/* 다음 묶음 로딩 — 열 정렬을 유지하려 표 안에 스켈레톤 행으로 둔다 */}
+              {loadingMore &&
+                [0, 1, 2].map((i) => (
+                  <TableRow key={`skeleton-${i}`}>
+                    <TableCell>
+                      <Skeleton className="h-4 w-24" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-28" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-20" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-16" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-20" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-14" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-24" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-20" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-24" />
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
 
-          <div className="flex items-center justify-between">
-            {/* 좌: 페이지당 표시 + 전체 건수 · 우: 페이지네이션 (2026-08-26 확정) */}
-            <RowsPerPage
-              value={pageSize}
-              onChange={(n) => {
-                setPageSize(n);
-                setPage(1);
-              }}
-              summary={
-                <span className="inline-flex items-center gap-1">
-                  전체 {TOTAL}척 (<span className="size-1.5 rounded-full bg-destructive" />
-                  미입력 {MISSING}척)
-                </span>
-              }
-            />
-            <Pagination className="mx-0 w-auto">
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    href="#"
-                    aria-disabled={page <= 1}
-                    onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  />
-                </PaginationItem>
-                {[1, 2, 3].map((p) => (
-                  <PaginationItem key={p}>
-                    <PaginationLink href="#" isActive={p === page} onClick={() => setPage(p)}>
-                      {p}
-                    </PaginationLink>
-                  </PaginationItem>
-                ))}
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink
-                    href="#"
-                    isActive={page === PAGE_COUNT}
-                    onClick={() => setPage(PAGE_COUNT)}
-                  >
-                    {PAGE_COUNT}
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext
-                    href="#"
-                    aria-disabled={page >= PAGE_COUNT}
-                    onClick={() => setPage((p) => Math.min(PAGE_COUNT, p + 1))}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </div>
-        </>
+          {/* 스크롤 센티넬 — 여기가 보이면 다음 묶음을 부른다 */}
+          {hasMore && <div ref={sentinelRef} aria-hidden />}
+        </TooltipProvider>
       )}
     </div>
   );

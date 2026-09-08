@@ -127,7 +127,7 @@ export default function Sales365ProductsPage() {
                             </Badge>
                           ))
                         ) : (
-                          <span className="text-secondary-foreground">—</span>
+                          <span className="text-muted-foreground">—</span>
                         )}
                       </div>
                     </TableCell>
@@ -180,7 +180,7 @@ export default function Sales365ProductsPage() {
                         {p.includes.includes(n) ? (
                           <Check className="mx-auto size-4 text-success" aria-label={`${n} 포함`} />
                         ) : (
-                          <span className="text-secondary-foreground">—</span>
+                          <span className="text-muted-foreground">—</span>
                         )}
                       </TableCell>
                     ))}
@@ -188,7 +188,7 @@ export default function Sales365ProductsPage() {
                       {p.subscription ? (
                         <Check className="mx-auto size-4 text-success" aria-label="구독 포함" />
                       ) : (
-                        <span className="text-secondary-foreground">—</span>
+                        <span className="text-muted-foreground">—</span>
                       )}
                     </TableCell>
                     {/* 계약 건수 = 그 패키지 코드를 가진 계약 항목의 조회 시점 집계 — 0건은 — */}
@@ -196,7 +196,7 @@ export default function Sales365ProductsPage() {
                       {p.contracts > 0 ? (
                         `${p.contracts}건`
                       ) : (
-                        <span className="text-secondary-foreground">—</span>
+                        <span className="text-muted-foreground">—</span>
                       )}
                     </TableCell>
                   </TableRow>

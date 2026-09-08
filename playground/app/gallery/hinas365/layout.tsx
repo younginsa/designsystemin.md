@@ -181,10 +181,13 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
 
   return (
     <div className="flex min-h-screen">
-      {/* ── 사이드바 — 풀하이트 ── */}
+      {/* ── 사이드바 — 뷰포트에 고정(2026-09-07). sticky+h-dvh가 없으면 문서 높이만큼
+           늘어나, 목록이 길 때 하단 계정 존과 [메뉴 접기]가 화면 밖으로 밀려난다.
+           내부 nav가 flex-1 overflow-y-auto라 메뉴가 길면 안에서 스크롤된다 ── */}
       <aside
         className={
-          "flex shrink-0 flex-col border-r bg-card " + (collapsed ? "w-16" : "w-64")
+          "sticky top-0 flex h-dvh shrink-0 flex-col border-r bg-card " +
+          (collapsed ? "w-16" : "w-64")
         }
       >
         {/* 브랜드 존 — 64px(상단바와 동일 높이, 경계선 정렬). 좌: 워드마크(+환경 마커) + 버전(행간 12px, 바짝) /
@@ -444,7 +447,8 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
         {/* flex-col: 자식 페이지가 하단 바를 컬럼 맨 아래로 밀 수 있게(mt-auto)
             본문 배경 연회색 — 카드가 떠 보이는 바탕 (피그마 172-3899) */}
         {/* 본문 배경 — secondary 토큰(배경 2 =gray-20, 배경 1보다 반 톤 어두운 캔버스) */}
-        <main className="flex min-w-0 flex-1 flex-col bg-secondary p-8">{children}</main>
+        {/* 본문 배경 흰색(2026-09-08 확정, 두 셸 공통) — sales365와 같은 이유·같은 값 */}
+        <main className="flex min-w-0 flex-1 flex-col bg-background p-8">{children}</main>
 
         {/* ── 알림 센터 모달 — NotificationCenter 시안 (ov-dialog·data-tabs·form-controls 조합) ── */}
         <Dialog open={centerOpen} onOpenChange={setCenterOpen}>
