@@ -21,7 +21,7 @@
             <div class="v">push마다 같은 URL이 항상 최신.<br>
             버전 확인 = 각 파일 <strong>첫 줄 주석</strong>(커밋 · 날짜).</div>
             <div class="k">개별 컴포넌트</div>
-            <div class="v">02 「365 DS」 카드 우하단 <strong>「코드」 버튼</strong> = 해당 컴포넌트 소스(tsx) 클립보드 복사.</div>
+            <div class="v">02 「365 DS」 카드 헤더 우측 <strong>「코드」</strong> → 우측 드로어. <strong>코드</strong> 탭 = 파일별 원문(접기 · 파일별 복사 · 전체 복사), <strong>스펙</strong> 탭 = cva에서 자동 추출한 <span class="mono">variant × state × classes</span> 표(값은 코드 원문 클래스 그대로 · 마크다운 복사). 딥링크 <span class="mono">#code=&lt;슬러그&gt;</span>.</div>
           </div>
         </div>
 
@@ -46,7 +46,7 @@
             <div class="k">전달물 4개</div>
             <div class="v"><span class="mono">components/src</span> — @ds/ui 소스(레지스트리 대신 이걸 복사)<br>
             <span class="mono">dist/dstk.css</span> — 제품별이면 <span class="mono">dist/products/*.css</span><br>
-            화면 코드 — <span class="mono">playground/app/generated/*</span><br>
+            화면 코드 — <span class="mono">playground/app/gallery/*</span>(클론 실물 사본 · <span class="mono">pnpm gallery:sync</span>로 이식)<br>
             규칙 문서 — <span class="mono">design.md</span> · <span class="mono">ds365.json</span></div>
             <div class="k">의존성</div>
             <div class="v"><span class="mono">tailwindcss@4</span> · <span class="mono">radix-ui</span> · <span class="mono">class-variance-authority</span><br>
@@ -58,5 +58,26 @@
             <div class="k">모드</div>
             <div class="v">다크/컨트롤 = 래퍼에 <span class="mono">.dark</span> / <span class="mono">.theme-control</span> 클래스만.<br>
             화면 코드는 불변.</div>
+          </div>
+        </div>
+
+        <h3>Storybook 작업대 (스파이크 · 로컬 전용)</h3>
+        <p class="lead"><strong>역할 분리</strong> — Storybook은 컴포넌트 <strong>작업대</strong>(상태·변형·측정), 이 허브는 <strong>정본</strong>(어휘 · 템플릿 · 문서 · 갤러리). 권한은 <span class="mono">approved.json</span>에만 있다. 2026-09-08 Button 1종으로 검증, 확대는 FE의 스토리 작성 합의 후.</p>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">실행</div>
+            <div class="v"><span class="mono">pnpm storybook</span> → <span class="mono">http://localhost:6006</span>. 배포하지 않는다(로컬 전용).</div>
+            <div class="k">스토리 파일</div>
+            <div class="v"><span class="mono">components/src/ui/&lt;컴포넌트&gt;.stories.tsx</span> — CSF 형식이지만 <strong><span class="mono">@storybook/*</span>을 import 하지 않는다</strong>(순수 객체). 그래서 <strong>02 카드도 같은 파일을 읽는다</strong>(<span class="mono">previews.tsx</span>의 <span class="mono">fromStories()</span>). 스토리를 추가하면 카드에 저절로 나타나고, 지우면 조용히 빠진다.</div>
+            <div class="k">규약</div>
+            <div class="v"><span class="mono">parameters.vocab</span> = 채택 어휘 슬러그(<span class="mono">btn-basic</span> 등). 카드 목록은 approved.json이 돌리므로 <strong>미채택 슬러그를 적은 스토리는 허브에 나오지 않는다</strong>(Storybook에는 「미채택」 배지로 나온다).<br>
+            <span class="mono">argTypes</span> = 컨트롤 패널 선택지(cva 정의와 동일하게).<br>
+            <span class="mono">__namedExportsOrder</span> = 선언 순서(모듈 export는 알파벳순이라 필요 · 실제 Storybook은 컴파일러가 자동 생성).<br>
+            조합형(ButtonGroup 묶음 등)은 <span class="mono">render</span> — 컨트롤은 포기.</div>
+            <div class="k">툴바 · 패널</div>
+            <div class="v"><strong>Mode</strong> = Light — Cloud · 365 / Dark — SVM · NAS / Control(래퍼 클래스 전환, 토큰은 허브와 동일).<br>
+            <strong>Measure · Outline</strong> = hover 박스 모델(px). <strong>Controls</strong> = variant · size · disabled 실시간. <strong>Docs</strong> = 타입에서 props 표. <strong>Accessibility</strong> = axe(대비 기준 4.5 — 허브 <span class="mono">aux</span> 3:1 정책과 다르니 판단 전까지 참고만).</div>
+            <div class="k">주지 않는 것</div>
+            <div class="v">토큰 <strong>이름</strong>·3모드 값 표·타이포 역할명·어휘 게이트·페이지 템플릿 — 전부 이 허브에만 있다. Storybook은 8px라고 말하고, 허브는 <span class="mono">radius-md</span>라고 말한다.</div>
           </div>
         </div>

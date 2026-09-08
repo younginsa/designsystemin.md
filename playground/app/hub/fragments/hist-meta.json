@@ -1,5 +1,10 @@
 [
   {
+    "date": "26.09.08",
+    "summary": "Storybook 스파이크 — 스토리 단일 원천 · 실물 iframe 미리보기 · 갤러리 동기화 · 클론 승격 4건",
+    "file": "hist-260908.html"
+  },
+  {
     "date": "26.09.02",
     "summary": "프론트 연동 — CSS 핸드오프 개통 · 5면 값 일치 · 피그마 정리 배치",
     "file": "hist-260902.html"

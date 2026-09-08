@@ -4,6 +4,7 @@
   "scripts": {
     "ds:build": "tsx scripts/build-dstk.ts",
     "gallery:sync": "node scripts/sync-gallery.mjs",
+    "storybook": "pnpm --filter playground storybook",
     "dev": "pnpm --filter playground dev",
     "build": "pnpm ds:build && pnpm --filter playground build"
   },

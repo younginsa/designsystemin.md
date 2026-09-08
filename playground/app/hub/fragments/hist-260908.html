@@ -1,0 +1,20 @@
+
+          <h3>결정 개요</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">계기</div>
+            <div class="v">9/2 프론트 연동 이후 6일간 <strong>세 갈래</strong>가 동시에 움직였다 — ① 프론트가 코드 전량 대신 <strong>표</strong>를 원해 허브 코드 드로어를 재설계, ② 템플릿 카드의 실물 미리보기가 캡처 PNG라 클론 고도화를 못 따라가는 문제, ③ "우리 허브가 Storybook과 뭐가 다른가"라는 질문. 셋 다 같은 답으로 수렴했다 — <strong>무엇을 보여줄지는 FE의 선언(스토리)으로, 무엇이 허용되는지는 365의 게이트(approved.json)로.</strong></div>
+            <div class="k">코드 드로어 · 스펙 탭 (9/3)</div>
+            <div class="v">02 카드 「코드」를 즉시 복사에서 <strong>우측 열람 드로어</strong>(피그마 Inspect 패턴)로 — 파일별 원문·IDE식 인라인 폴딩·하이라이트·복사, <span class="mono">#code=&lt;슬러그&gt;</span> 딥링크. 프론트 요청으로 <strong>「스펙」 탭</strong> 신설: cva에서 자동 추출한 <strong>variant × state × classes</strong> 3열 표(값은 코드 원문 클래스 그대로 · 색 칩 · 마크다운 복사 · sticky 열). 하루 13커밋 — 이 비용이 Storybook 검토의 직접 계기가 됐다.</div>
+            <div class="k">갤러리 재구성 (9/3~9/4)</div>
+            <div class="v">클론 hinas365·sales365 앱 실물 4장을 등재하며 <span class="mono">app/generated/</span>에 커밋한 것이 클론 pull을 차단 → <span class="mono">app/gallery/</span>로 분리·generated 추적 해제·내부 경로 24건 교정. 이어서 <strong><span class="mono">pnpm gallery:sync</span></strong> 신설(클론 generated → gallery 복사 + 경로 치환 · <span class="mono">--check</span>/<span class="mono">--prune</span>) + 세션 시작·1시간 훅이 "N파일 뒤처짐"을 보고. 첫 동기화 13 + 3파일.</div>
+            <div class="k">템플릿 hover = 실물 iframe (9/4)</div>
+            <div class="v">03 템플릿 카드 hover가 280×90 조각 + '잠김' 라벨로 깨져 보이던 원인(<span class="mono">.cut</span> 공통 규칙 누수) 제거 → <strong>커서 추종 플로팅</strong>(480px · 가장자리 반전 · 스크롤 재판정). 이어 캡처 PNG 4장을 은퇴하고 <strong><span class="mono">/gallery/&lt;slug&gt;/</span> 실물을 1/3 축소 iframe</strong>으로 — 배포되는 순간 hover가 항상 최신. 클릭 팝업은 현행 유지.</div>
+            <div class="k">클론 확정분 승격 (9/4)</div>
+            <div class="v">디자이너 확정 4파일 — <span class="mono">globals.css @source "./generated"</span>(Tailwind v4가 .gitignore 경로를 건너뛰어 generated 전용 클래스가 미생성되던 잠재 결함 · 배포 환경 무해 확인) · Button <strong><span class="mono">primary-ghost</span></strong> 변형(셸 앱 전환 햄버거) · Checkbox <span class="mono">text-current</span>(체크 표시 검게 보이던 것 교정) · <strong>FilterBar 「고르고 적용」 문법</strong>(즉시 반영 폐기 · 2열 팝오버 · API 불변, 사용처 8페이지 무수정). ui-src 코드 사본 동기화 · primary/5 용도 메모 병기.</div>
+            <div class="k">Storybook 스파이크 (9/8)</div>
+            <div class="v">옵션 3 <strong>역할 분리</strong>를 Button 하나로 검증 — Storybook 10.6(nextjs-vite)을 <strong>로컬 전용 작업대</strong>로, 어휘·템플릿·문서·갤러리는 365가 계속 정본. 핵심은 <strong><span class="mono">button.stories.tsx</span> 한 파일을 양쪽이 읽는다</strong>(CSF · @storybook import 0 → 365 카드는 <span class="mono">fromStories()</span>로 그린다). <span class="mono">parameters.vocab</span> = 채택 어휘 슬러그. 증명 3건: 스토리 한 줄 추가 → 카드 자동 반영(primary-ghost 첫 노출) · 스토리 삭제 → 조용히 빠짐 · 미채택 어휘 → 0건 노출(approved.json이 루프를 돌아 구조로 닫힘). 3모드 툴바·채택 배지·Measure·Controls·Docs·a11y 실측 — 3모드 bg <span class="mono">#FFFFFF/#1B1C21/#15161A</span>, primary <span class="mono">#4477F9</span> 허브와 동일.</div>
+            <div class="k">비용 · 판단 대기</div>
+            <div class="v">줄 수는 <strong>늘었다</strong>(Button 기준 순증 ≈85줄) — 이득은 줄 수가 아니라 등록 수동 제거·FE 선언·컨트롤/인스펙터 공짜. <strong>결정 필요 3건</strong>: ① 새 변형이 승인 없이 화면에 나타나도 되는가(게이트가 컴포넌트 단위) ② 채움 버튼 대비 ≈4.0:1 — contrast-pairs <span class="mono">aux</span> 3:1 정책 vs axe 4.5 기준 ③ 52종 확대 여부(전제 = FE가 스토리를 쓴다는 합의). 한계 실측: 조합형(Split)은 render로 내려가 컨트롤 불가 · 모듈 export 알파벳순 문제는 <span class="mono">__namedExportsOrder</span>로 해결(실제 Storybook은 컴파일러 자동).</div>
+          </div>
+        </div>
