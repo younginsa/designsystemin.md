@@ -18,6 +18,11 @@
 //   [취소]·바깥 클릭이면 칩 없음. complex(모달 위임)만 예외 — 고르면 칩 추가 + 모달 오픈
 // - 칩은 최대 2줄까지 자동 줄바꿈
 // - 정렬은 이 바에 없다 — 테이블 컬럼 헤더가 전담
+// - 상세 조건(2026-09-08, 필터 스펙 표 '상세 조건' 열 · 레퍼런스 Lemon Squeezy 테이블 필터):
+//   FilterDef.operators 를 주면 패널 상단에 연산자 라디오, 값은 "<op> <value>" 문자열로 저장,
+//   칩에 op 항상 병기("계약명 · contains 대양"). text kind 신설(자유 입력). 미지정 정의는 현행 그대로.
+//   유형→연산자: text = is·is not·contains·does not contain / select = is·is not(다중 조건 O = multi) /
+//   date = before·after·between·is(단일일은 single 캘린더). Number 열은 필터 아님(정렬 전용).
 //
 // 어휘 게이트: 전부 채택분 조합 — form-search(InputGroup) · ov-popover(Popover) ·
 // form-controls(Checkbox) · form-daterange(Calendar) · btn-basic(Button).
@@ -29,8 +34,16 @@ import { Check, ChevronDown, Plus, RotateCcw, Search, X } from "lucide-react"
 import { Button } from "./button"
 import { Calendar } from "./calendar"
 import { Checkbox } from "./checkbox"
+import { Input } from "./input"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./input-group"
 import { Popover, PopoverContent, PopoverTrigger } from "./popover"
+import { RadioGroup, RadioGroupItem } from "./radio-group"
+
+/** 상세 조건(연산자) — 필터 스펙 표 '상세 조건' 열 그대로(영문 확정 2026-09-08) */
+export type FilterOp = "is" | "is not" | "contains" | "does not contain" | "before" | "after" | "between"
+const OPS_TEXT: FilterOp[] = ["is", "is not", "contains", "does not contain"]
+const OPS_SELECT: FilterOp[] = ["is", "is not"]
+const OPS_DATE: FilterOp[] = ["before", "after", "between", "is"]
 
 export type FilterDef = {
   /** 상태 맵의 키 */
@@ -38,19 +51,51 @@ export type FilterDef = {
   label: string
   /** 단순형: 옵션 목록에서 값 하나 선택 */
   options?: string[]
-  /** 다중 선택: 체크박스 토글, 값은 옵션 순서대로 ", " 병합(예: "Cloud, Security") */
+  /** 다중 선택: 체크박스 토글, 값은 옵션 순서대로 ", " 병합(예: "Cloud, Security") — 스펙 표 '다중 조건 O' */
   multi?: boolean
   /** 기본 노출 여부 — false면 [+ 필터 추가]에서 꺼내 쓴다 */
   base?: boolean
-  /** complex: 값 편집을 모달에 위임(버전 조건 등) · date: 프리셋 레일 + 두 달 range 캘린더 */
-  kind?: "select" | "complex" | "date"
+  /** complex: 값 편집을 모달에 위임(버전 조건 등) · date: 프리셋 레일 + 두 달 range 캘린더(operators 지정 시 연산자 레일) ·
+      text: 자유 입력(2026-09-08, operators와 함께 쓴다) */
+  kind?: "select" | "complex" | "date" | "text"
   /** 날짜형 프리셋(오늘·어제·최근 7일…·직접 지정 / 앞으로 30일…·이미 만료) */
   presets?: string[]
   /** 날짜형 기준일 — 화면이 고정 기준일(와이어프레임 TODAY 등)을 쓰면 넘긴다. 기본 = 실제 오늘(2026-09-08) */
   now?: Date
+  /** 상세 조건(연산자) 목록 — 지정하면 값이 "<op> <value>"로 저장되고 칩에 op가 항상 병기된다(2026-09-08).
+      미지정 = 현행 문법(값만). 스펙 표 매핑: text=OPS_TEXT · select=OPS_SELECT · date=OPS_DATE */
+  operators?: FilterOp[]
+  /** text kind 입력 힌트 */
+  placeholder?: string
 }
 
 export type FilterValues = Record<string, string | undefined>
+
+// 값 "<op> <value>" 분해 — 긴 연산자부터 대야 "is not"이 "is"로 잘리지 않는다
+const OP_ORDER: FilterOp[] = ["does not contain", "is not", "contains", "between", "before", "after", "is"]
+function parseFilterValue(v: string | undefined): { op: FilterOp | null; value: string } {
+  if (!v) return { op: null, value: "" }
+  for (const op of OP_ORDER) {
+    if (v === op) return { op, value: "" }
+    if (v.startsWith(op + " ")) return { op, value: v.slice(op.length + 1) }
+  }
+  return { op: null, value: v }
+}
+/** text 연산자 판정(대소문자 무시) — 페이지가 행을 거를 때 쓴다. op 없음 = is */
+function matchText(op: FilterOp | null, cell: string, value: string): boolean {
+  const a = cell.toLowerCase()
+  const b = value.toLowerCase()
+  switch (op) {
+    case "is not":
+      return a !== b
+    case "contains":
+      return a.includes(b)
+    case "does not contain":
+      return !a.includes(b)
+    default:
+      return a === b
+  }
+}
 
 function FilterBar({
   searchPlaceholder,
@@ -216,6 +261,7 @@ function FilterBar({
                       key={picked.name}
                       value={undefined}
                       presets={picked.presets ?? DATE_PRESETS}
+                      operators={picked.operators}
                       now={picked.now}
                       onSelect={(v) => commitAdd(picked, v)}
                     />
@@ -320,6 +366,7 @@ function FilterChip({
                 key={value ?? ""}
                 value={value}
                 presets={options}
+                operators={def.operators}
                 now={def.now}
                 onSelect={(v) => {
                   onSelect(v)
@@ -373,50 +420,97 @@ function OptionPanel({
   onCancel: () => void
 }) {
   const options = def.options ?? []
-  const [pending, setPending] = React.useState<string[]>(value ? value.split(", ") : [])
+  const ops = def.operators
+  const isText = def.kind === "text"
+  // operators 있으면 저장값이 "<op> <value>" — 현재 값에서 op와 순수 값을 분리해 시작한다
+  const parsed = parseFilterValue(value)
+  const initial = ops ? parsed.value : (value ?? "")
+  const [op, setOp] = React.useState<FilterOp>(parsed.op ?? ops?.[0] ?? "is")
+  const [text, setText] = React.useState(isText ? initial : "")
+  const [pending, setPending] = React.useState<string[]>(!isText && initial ? initial.split(", ") : [])
   const toggle = (o: string) => {
     if (!def.multi) return [o]
     return pending.includes(o)
       ? pending.filter((x) => x !== o)
       : options.filter((x) => pending.includes(x) || x === o) // 옵션 순서 고정
   }
+  const canApply = isText ? text.trim() !== "" : pending.length > 0
+  const compose = () => {
+    const v = isText ? text.trim() : pending.join(", ")
+    return ops ? `${op} ${v}` : v
+  }
 
   return (
     <div className="w-56">
-      <div
-        className="space-y-0.5 p-1"
-        role="listbox"
-        aria-multiselectable={def.multi}
-        aria-label={def.label}
-      >
-        {options.map((o) => {
-          const on = pending.includes(o)
-          return (
-            <button
+      {/* 상세 조건 — 연산자 라디오(레퍼런스: is / is not / contains 세로 목록). 값 위에 둔다 */}
+      {ops && (
+        <RadioGroup
+          value={op}
+          onValueChange={(v) => setOp(v as FilterOp)}
+          className="gap-0.5 border-b p-1"
+          aria-label={`${def.label} 조건`}
+        >
+          {ops.map((o) => (
+            <label
               key={o}
-              type="button"
-              role="option"
-              aria-selected={on}
-              className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
-              onClick={() => setPending(toggle(o))}
+              className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
             >
-              {/* 다중 = 왼쪽 Checkbox 상시 노출 · 단일 = ✓ 오른쪽(shadcn Select 문법) */}
-              {def.multi && <Checkbox checked={on} className="pointer-events-none" />}
+              <RadioGroupItem value={o} aria-label={o} />
               {o}
-              {!def.multi && (
-                <Check className={"ml-auto size-4 " + (on ? "opacity-100" : "opacity-0")} />
-              )}
-            </button>
-          )
-        })}
-      </div>
+            </label>
+          ))}
+        </RadioGroup>
+      )}
+      {isText ? (
+        // text kind — 자유 입력. Enter = 적용
+        <div className="p-2">
+          <Input
+            value={text}
+            placeholder={def.placeholder ?? "값 입력"}
+            aria-label={def.label}
+            autoFocus
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && canApply) onApply(compose())
+            }}
+          />
+        </div>
+      ) : (
+        <div
+          className="space-y-0.5 p-1"
+          role="listbox"
+          aria-multiselectable={def.multi}
+          aria-label={def.label}
+        >
+          {options.map((o) => {
+            const on = pending.includes(o)
+            return (
+              <button
+                key={o}
+                type="button"
+                role="option"
+                aria-selected={on}
+                className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
+                onClick={() => setPending(toggle(o))}
+              >
+                {/* 다중 = 왼쪽 Checkbox 상시 노출 · 단일 = ✓ 오른쪽(shadcn Select 문법) */}
+                {def.multi && <Checkbox checked={on} className="pointer-events-none" />}
+                {o}
+                {!def.multi && (
+                  <Check className={"ml-auto size-4 " + (on ? "opacity-100" : "opacity-0")} />
+                )}
+              </button>
+            )
+          })}
+        </div>
+      )}
       {/* 푸터 — 날짜 패널과 동일: 좌 [초기화] / 우 [취소][적용] */}
       <div className="flex items-center justify-between gap-2 px-2 pt-1 pb-2">
         <Button
           variant="ghost"
           size="sm"
           className="text-secondary-foreground"
-          disabled={!value && pending.length === 0}
+          disabled={!value && !canApply}
           onClick={() => onApply(undefined)}
         >
           초기화
@@ -425,11 +519,7 @@ function OptionPanel({
           <Button variant="ghost" size="sm" onClick={onCancel}>
             취소
           </Button>
-          <Button
-            size="sm"
-            disabled={pending.length === 0}
-            onClick={() => onApply(pending.join(", "))}
-          >
+          <Button size="sm" disabled={!canApply} onClick={() => onApply(compose())}>
             적용
           </Button>
         </div>
@@ -452,6 +542,17 @@ function resolveDateRange(value: string, now: Date = new Date()): { from: Date; 
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
   const day = 86_400_000
   const endOf = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59)
+  // 상세 조건(2026-09-08): "before YYYY-MM-DD" · "after …" · "is …" 는 단일일, "between A–B" 는 기간
+  const parsed = parseFilterValue(value)
+  if (parsed.op === "before" || parsed.op === "after" || parsed.op === "is") {
+    const m = parsed.value.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+    if (!m) return null
+    const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]))
+    if (parsed.op === "is") return { from: d, to: endOf(d) }
+    if (parsed.op === "before") return { from: new Date(2000, 0, 1), to: new Date(d.getTime() - 1) }
+    return { from: new Date(d.getTime() + day), to: new Date(2100, 0, 1) }
+  }
+  if (parsed.op === "between") value = parsed.value
   switch (value) {
     case "오늘":
       return { from: today, to: now }
@@ -495,16 +596,24 @@ function resolveDateRange(value: string, now: Date = new Date()): { from: Date; 
 function DateRangePanel({
   value,
   presets,
+  operators,
   now,
   onSelect,
 }: {
   value?: string
   presets: string[]
+  /** 상세 조건(2026-09-08) — 지정 시 좌 레일이 프리셋 대신 연산자(before·after·between·is).
+      between = range 캘린더, 나머지 = 단일일 캘린더. 값은 "<op> <날짜>" */
+  operators?: FilterOp[]
   /** 프리셋 미리보기 기준일 — 화면 고정 기준일이 있으면 넘긴다(기본 = 실제 오늘) */
   now?: Date
   onSelect: (v: string | undefined) => void
 }) {
+  const parsed = parseFilterValue(value)
+  const [op, setOp] = React.useState<FilterOp>(parsed.op ?? operators?.[0] ?? "between")
+  const isRange = !operators || op === "between"
   const [range, setRange] = React.useState<{ from?: Date; to?: Date } | undefined>(undefined)
+  const [single, setSingle] = React.useState<Date | undefined>(undefined)
   // 프리셋도 즉시 적용하지 않는다 — 캘린더에 기간을 먼저 비추고 [적용]으로 확정
   const [pendingPreset, setPendingPreset] = React.useState<string | null>(null)
   const [month, setMonth] = React.useState<Date | undefined>(undefined)
@@ -514,57 +623,112 @@ function DateRangePanel({
       : p === "직접 지정"
         ? Boolean(value && /–/.test(value))
         : value === p
+  const canApply = isRange ? Boolean(range?.from && range?.to) : Boolean(single)
+  const compose = () => {
+    if (operators) {
+      return isRange
+        ? `between ${fmtYMD(range!.from!)}–${fmtYMD(range!.to!)}`
+        : `${op} ${fmtYMD(single!)}`
+    }
+    return pendingPreset ?? `${fmtYMD(range!.from!)}–${fmtYMD(range!.to!)}`
+  }
 
   return (
     <div className="flex">
-      {/* 프리셋 레일 — 클릭 = 미리보기, 확정은 [적용] */}
-      <div className="w-36 space-y-0.5 border-r p-2">
-        {presets.map((p) => (
-          <button
-            key={p}
-            type="button"
-            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
-            onClick={() => {
-              if (p === "직접 지정") {
-                setPendingPreset(null)
-                setRange(undefined)
-              } else {
-                const r = resolveDateRange(p, now)
-                setPendingPreset(p)
-                setRange(r ?? undefined)
-                if (r) setMonth(new Date(r.from.getFullYear(), r.from.getMonth(), 1))
-              }
-            }}
-          >
-            {p}
-            <Check className={"ml-auto size-4 " + (railChecked(p) ? "opacity-100" : "opacity-0")} />
-          </button>
-        ))}
-      </div>
+      {operators ? (
+        // 연산자 레일 — 라디오 문법(값 패널의 상세 조건과 동일). 바꾸면 선택은 비운다
+        <RadioGroup
+          value={op}
+          onValueChange={(v) => {
+            setOp(v as FilterOp)
+            setRange(undefined)
+            setSingle(undefined)
+          }}
+          className="w-36 gap-0.5 border-r p-2"
+          aria-label="날짜 조건"
+        >
+          {operators.map((o) => (
+            <label
+              key={o}
+              className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
+            >
+              <RadioGroupItem value={o} aria-label={o} />
+              {o}
+            </label>
+          ))}
+        </RadioGroup>
+      ) : (
+        // 프리셋 레일 — 클릭 = 미리보기, 확정은 [적용]
+        <div className="w-36 space-y-0.5 border-r p-2">
+          {presets.map((p) => (
+            <button
+              key={p}
+              type="button"
+              className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
+              onClick={() => {
+                if (p === "직접 지정") {
+                  setPendingPreset(null)
+                  setRange(undefined)
+                } else {
+                  const r = resolveDateRange(p, now)
+                  setPendingPreset(p)
+                  setRange(r ?? undefined)
+                  if (r) setMonth(new Date(r.from.getFullYear(), r.from.getMonth(), 1))
+                }
+              }}
+            >
+              {p}
+              <Check className={"ml-auto size-4 " + (railChecked(p) ? "opacity-100" : "opacity-0")} />
+            </button>
+          ))}
+        </div>
+      )}
 
-      {/* From/to + 두 달 캘린더 + 푸터 */}
+      {/* From/to(또는 단일일) + 캘린더 + 푸터 */}
       <div className="p-3">
         <div className="flex items-center gap-2 pb-2 text-sm">
-          <span className="text-secondary-foreground">From</span>
-          <span className="rounded-md border px-2 py-1 font-mono text-xs">
-            {range?.from ? fmtYMD(range.from) : "—"}
-          </span>
-          <span className="text-secondary-foreground">to</span>
-          <span className="rounded-md border px-2 py-1 font-mono text-xs">
-            {range?.to ? fmtYMD(range.to) : "—"}
-          </span>
+          {isRange ? (
+            <>
+              <span className="text-secondary-foreground">From</span>
+              <span className="rounded-md border px-2 py-1 font-mono text-xs">
+                {range?.from ? fmtYMD(range.from) : "—"}
+              </span>
+              <span className="text-secondary-foreground">to</span>
+              <span className="rounded-md border px-2 py-1 font-mono text-xs">
+                {range?.to ? fmtYMD(range.to) : "—"}
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="text-secondary-foreground">{op}</span>
+              <span className="rounded-md border px-2 py-1 font-mono text-xs">
+                {single ? fmtYMD(single) : "—"}
+              </span>
+            </>
+          )}
         </div>
-        <Calendar
-          mode="range"
-          numberOfMonths={2}
-          month={month}
-          onMonthChange={setMonth}
-          selected={range as never}
-          onSelect={(r: { from?: Date; to?: Date } | undefined) => {
-            setPendingPreset(null) // 그리드 직접 선택 = 직접 지정 모드
-            setRange(r ?? undefined)
-          }}
-        />
+        {isRange ? (
+          <Calendar
+            mode="range"
+            numberOfMonths={2}
+            month={month}
+            onMonthChange={setMonth}
+            selected={range as never}
+            onSelect={(r: { from?: Date; to?: Date } | undefined) => {
+              setPendingPreset(null) // 그리드 직접 선택 = 직접 지정 모드
+              setRange(r ?? undefined)
+            }}
+          />
+        ) : (
+          <Calendar
+            mode="single"
+            numberOfMonths={1}
+            month={month}
+            onMonthChange={setMonth}
+            selected={single as never}
+            onSelect={(d: Date | undefined) => setSingle(d)}
+          />
+        )}
         <div className="flex items-center justify-between pt-2">
           <Button
             variant="ghost"
@@ -579,15 +743,7 @@ function DateRangePanel({
             <Button variant="ghost" size="sm" onClick={() => onSelect(value)}>
               취소
             </Button>
-            <Button
-              size="sm"
-              disabled={!range?.from || !range?.to}
-              onClick={() =>
-                range?.from &&
-                range?.to &&
-                onSelect(pendingPreset ?? `${fmtYMD(range.from)}–${fmtYMD(range.to)}`)
-              }
-            >
+            <Button size="sm" disabled={!canApply} onClick={() => onSelect(compose())}>
               적용
             </Button>
           </div>
@@ -597,4 +753,16 @@ function DateRangePanel({
   )
 }
 
-export { FilterBar, FilterChip, OptionPanel, DateRangePanel, resolveDateRange, DATE_PRESETS }
+export {
+  FilterBar,
+  FilterChip,
+  OptionPanel,
+  DateRangePanel,
+  resolveDateRange,
+  DATE_PRESETS,
+  OPS_TEXT,
+  OPS_SELECT,
+  OPS_DATE,
+  parseFilterValue,
+  matchText,
+}
