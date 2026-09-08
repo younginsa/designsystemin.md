@@ -1,0 +1,6 @@
+/* next/font(Inter)가 앱에서 정의하던 --font-inter 의 Storybook 판.
+   globals.css 의 --font-sans 가 이 변수를 첫 후보로 쓴다. 로컬에 Inter 가 있으면 Inter,
+   없으면 시스템 sans(한글은 원래부터 시스템 폴백 — 앱과 같은 거동). */
+:root {
+  --font-inter: "Inter", ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", sans-serif;
+}

@@ -50,6 +50,9 @@ import {
 import { CartesianGrid, Cell, Line, LineChart, Pie, PieChart, XAxis } from "recharts";
 import { Badge } from "@ds/ui/ui/badge";
 import { Button } from "@ds/ui/ui/button";
+// 스파이크(2026-09-07) — 버튼 6개 어휘는 이 파일이 아니라 FE 쪽 스토리 파일에서 그린다.
+// CSF 형식이지만 @storybook/* 를 안 쓰는 순수 객체라 새 의존성이 붙지 않는다.
+import * as buttonStories from "@ds/ui/ui/button.stories";
 import { Card, CardContent, CardDescription, CardTitle } from "@ds/ui/ui/card";
 import {
   Collapsible,
@@ -268,6 +271,43 @@ export type Pv = {
 const BOX = "border border-border bg-background";
 const strip: Pv["style"] = { width: 560, height: 120 };
 
+/* ── 스토리 → 카드 (2026-09-07 스파이크) ──────────────────────────────
+ * 액자(className·style)는 365가 계속 소유한다 — 스토리에는 액자 개념이 없다.
+ * 스토리는 "무엇을 그릴지"만 주고, "어느 크기 액자에 넣을지"는 여기서 정한다.
+ * 게이트: 카드 목록 자체가 approved.json 에서 나오므로, 미채택 어휘를 적은 스토리는
+ * 조회조차 되지 않는다(필터로 거르는 게 아니라 구조로 닫힌다). */
+
+type Story = {
+  args?: Record<string, unknown>;
+  parameters?: { vocab?: string };
+  render?: () => React.ReactNode;
+};
+
+/** 한 어휘 슬러그에 속한 스토리를 선언 순서대로 모아 한 카드로 그린다.
+ *  순서 주의 — Object.keys(모듈)은 알파벳 순이라 선언 순서가 사라진다.
+ *  스토리 파일의 __namedExportsOrder(Storybook이 컴파일러로 만드는 것과 같은 배열)를 우선한다. */
+function fromStories(slug: string, mod: Record<string, unknown>, frame: Omit<Pv, "node">): Pv {
+  const Comp = (mod.default as { component: React.ElementType }).component;
+  const names = (mod.__namedExportsOrder as string[] | undefined) ?? Object.keys(mod);
+  const picked = names
+    .map((k) => [k, mod[k] as Story] as [string, Story])
+    .filter(([k, v]) => k !== "default" && !!v && v.parameters?.vocab === slug);
+  return {
+    ...frame,
+    node: (
+      <>
+        {picked.map(([name, s]) =>
+          s.render
+            ? <React.Fragment key={name}>{s.render()}</React.Fragment>
+            : <Comp key={name} {...s.args} />,
+        )}
+      </>
+    ),
+  };
+}
+
+const BTN_FRAME: Omit<Pv, "node"> = { className: "flex items-center justify-center gap-3 " + BOX, style: strip };
+
 /* ── 레지스트리 ────────────────────────────────────────────────────── */
 
 export const PREVIEWS: Record<string, Pv> = {
@@ -362,75 +402,14 @@ export const PREVIEWS: Record<string, Pv> = {
   },
 
   /* ── 버튼 ── */
-  "btn-basic": {
-    className: "flex items-center justify-center gap-3 " + BOX,
-    style: strip,
-    node: (
-      <>
-        <Button>채움</Button>
-        <Button variant="outline">아웃라인</Button>
-        <Button variant="ghost">텍스트</Button>
-      </>
-    ),
-  },
-  "btn-destructive": {
-    className: "flex items-center justify-center gap-3 " + BOX,
-    style: strip,
-    node: (
-      <>
-        <Button variant="destructive">삭제</Button>
-        <Button variant="destructive-outline">제품 삭제</Button>
-      </>
-    ),
-  },
-  "btn-states": {
-    className: "flex items-center justify-center gap-3 " + BOX,
-    style: strip,
-    node: (
-      <>
-        <Button disabled>비활성</Button>
-        <Button disabled>
-          <Spinner /> 처리 중…
-        </Button>
-      </>
-    ),
-  },
-  "btn-split": {
-    className: "flex items-center justify-center gap-3 " + BOX,
-    style: strip,
-    node: (
-      <ButtonGroup>
-        <Button variant="outline">
-          <Download /> 내보내기
-        </Button>
-        <Button variant="outline" size="icon" aria-label="옵션">
-          <ChevronDown />
-        </Button>
-      </ButtonGroup>
-    ),
-  },
-  "btn-icon": {
-    className: "flex items-center justify-center gap-3 " + BOX,
-    style: strip,
-    node: (
-      <>
-        <Button variant="ghost" size="icon" aria-label="복사"><Copy /></Button>
-        <Button variant="ghost" size="icon" aria-label="새로고침"><RefreshCw /></Button>
-        <Button variant="ghost" size="icon" aria-label="편집"><Pencil /></Button>
-        <Button variant="ghost" size="icon" aria-label="삭제"><Trash2 /></Button>
-        <Button variant="ghost" size="icon" aria-label="전체화면"><Maximize2 /></Button>
-      </>
-    ),
-  },
-  "btn-dashed": {
-    className: "flex items-center justify-center gap-3 " + BOX,
-    style: strip,
-    node: (
-      <Button variant="outline" className="w-2/3 border-dashed">
-        <Plus /> Source 추가
-      </Button>
-    ),
-  },
+  /* 버튼 6종 — 스파이크(2026-09-07): 여기서 직접 그리지 않고 button.stories.tsx 를 읽는다.
+     FE가 스토리를 추가하면 이 파일을 안 고쳐도 카드에 나타난다(확인 항목 4번). */
+  "btn-basic": fromStories("btn-basic", buttonStories, BTN_FRAME),
+  "btn-destructive": fromStories("btn-destructive", buttonStories, BTN_FRAME),
+  "btn-states": fromStories("btn-states", buttonStories, BTN_FRAME),
+  "btn-split": fromStories("btn-split", buttonStories, BTN_FRAME),
+  "btn-icon": fromStories("btn-icon", buttonStories, BTN_FRAME),
+  "btn-dashed": fromStories("btn-dashed", buttonStories, BTN_FRAME),
   /* ── 피드백(인라인)·시각화 ── */
   "fb-banner": {
     className: "flex flex-col gap-3 " + BOX + " p-6",
