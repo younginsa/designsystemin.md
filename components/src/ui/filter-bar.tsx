@@ -612,11 +612,29 @@ function DateRangePanel({
   const parsed = parseFilterValue(value)
   const [op, setOp] = React.useState<FilterOp>(parsed.op ?? operators?.[0] ?? "between")
   const isRange = !operators || op === "between"
-  const [range, setRange] = React.useState<{ from?: Date; to?: Date } | undefined>(undefined)
-  const [single, setSingle] = React.useState<Date | undefined>(undefined)
+  // 열릴 때 현재 값을 캘린더에 되비춘다(operators 문법) — 단일일은 그 날, between은 기간
+  const initialSingle = React.useMemo(() => {
+    if (!operators || parsed.op === "between" || !parsed.op) return undefined
+    const r = resolveDateRange(value ?? "", now)
+    if (!r) return undefined
+    return parsed.op === "before" ? new Date(r.to.getTime() + 1) : parsed.op === "after" ? new Date(r.from.getTime() - 86_400_000) : r.from
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  const initialRange = React.useMemo(() => {
+    if (!operators || parsed.op !== "between") return undefined
+    const r = resolveDateRange(value ?? "", now)
+    return r ? { from: r.from, to: new Date(r.to.getFullYear(), r.to.getMonth(), r.to.getDate()) } : undefined
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  const [range, setRange] = React.useState<{ from?: Date; to?: Date } | undefined>(initialRange)
+  const [single, setSingle] = React.useState<Date | undefined>(initialSingle)
   // 프리셋도 즉시 적용하지 않는다 — 캘린더에 기간을 먼저 비추고 [적용]으로 확정
   const [pendingPreset, setPendingPreset] = React.useState<string | null>(null)
-  const [month, setMonth] = React.useState<Date | undefined>(undefined)
+  const [month, setMonth] = React.useState<Date | undefined>(
+    initialSingle ? new Date(initialSingle.getFullYear(), initialSingle.getMonth(), 1)
+      : initialRange?.from ? new Date(initialRange.from.getFullYear(), initialRange.from.getMonth(), 1)
+        : undefined,
+  )
   const railChecked = (p: string) =>
     pendingPreset
       ? pendingPreset === p
@@ -644,7 +662,8 @@ function DateRangePanel({
             setRange(undefined)
             setSingle(undefined)
           }}
-          className="w-36 gap-0.5 border-r p-2"
+          // content-start — 레일이 캘린더 높이만큼 늘어나도 항목은 위에 붙는다(프리셋 레일과 같은 자세)
+          className="w-36 content-start gap-0.5 border-r p-2"
           aria-label="날짜 조건"
         >
           {operators.map((o) => (
