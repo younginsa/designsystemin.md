@@ -54,6 +54,13 @@ import { Button } from "@ds/ui/ui/button";
 // CSF 형식이지만 @storybook/* 를 안 쓰는 순수 객체라 새 의존성이 붙지 않는다.
 import * as buttonStories from "@ds/ui/ui/button.stories";
 import * as filterBarStories from "@ds/ui/ui/filter-bar.stories";
+import * as inputStories from "@ds/ui/ui/input.stories";
+import * as textareaStories from "@ds/ui/ui/textarea.stories";
+import * as checkboxStories from "@ds/ui/ui/checkbox.stories";
+import * as radioGroupStories from "@ds/ui/ui/radio-group.stories";
+import * as switchStories from "@ds/ui/ui/switch.stories";
+import * as selectStories from "@ds/ui/ui/select.stories";
+import * as commandStories from "@ds/ui/ui/command.stories";
 import { Card, CardContent, CardDescription, CardTitle } from "@ds/ui/ui/card";
 import {
   Collapsible,
@@ -493,32 +500,9 @@ export const PREVIEWS: Record<string, Pv> = {
   },
 
   /* ── 폼 ── */
-  "form-text": {
-    className: "flex items-center " + BOX + " px-10",
-    style: { width: 560, height: 150 },
-    node: (
-      <Field>
-        <FieldLabel htmlFor="f-name">호선명 <span className="text-destructive">*</span></FieldLabel>
-        <Input id="f-name" placeholder="예: Avikus Ship" />
-      </Field>
-    ),
-  },
-  "form-number": {
-    className: "flex items-center gap-4 " + BOX + " px-10",
-    style: { width: 560, height: 150 },
-    node: (
-      <>
-        <Field>
-          <FieldLabel htmlFor="f-loa">LOA (m)</FieldLabel>
-          <Input id="f-loa" type="number" defaultValue={200} />
-        </Field>
-        <Field>
-          <FieldLabel htmlFor="f-lbp">LBP (m)</FieldLabel>
-          <Input id="f-lbp" type="number" defaultValue={180} />
-        </Field>
-      </>
-    ),
-  },
+  // form-* 카드 — 스토리 원문(input · textarea · checkbox · radio-group · switch · select · command .stories) 을 읽는다(2026-09-09 배치 1)
+  "form-text": fromStories("form-text", inputStories, { className: "flex items-center " + BOX + " px-10", style: { width: 560, height: 150 } }),
+  "form-number": fromStories("form-number", inputStories, { className: "flex items-center gap-4 " + BOX + " px-10", style: { width: 560, height: 150 } }),
   "form-search": {
     className: "flex items-center " + BOX + " px-10",
     style: { width: 560, height: 120 },
@@ -531,53 +515,27 @@ export const PREVIEWS: Record<string, Pv> = {
       </InputGroup>
     ),
   },
-  "form-textarea": {
-    className: "flex items-center " + BOX + " px-10",
-    style: { width: 560, height: 190 },
-    node: (
-      <Field>
-        <FieldLabel htmlFor="f-desc">설명</FieldLabel>
-        <Textarea id="f-desc" placeholder="변경 사항을 입력하세요" rows={3} />
-        <div className="text-right text-xs text-muted-foreground">0 / 200</div>
-      </Field>
-    ),
-  },
+  "form-textarea": fromStories("form-textarea", textareaStories, { className: "flex items-center " + BOX + " px-10", style: { width: 560, height: 190 } }),
+  // 두 파일을 합쳐 읽는 카드 — select(셀렉트) + command(콤보박스 트리거)
   "form-select": {
     className: "flex items-center gap-4 " + BOX + " px-10",
     style: { width: 560, height: 130 },
     node: (
       <>
-        <Select defaultValue="nav">
-          <SelectTrigger className="w-56"><SelectValue /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="nav">Navigation</SelectItem>
-            <SelectItem value="svm">SVM</SelectItem>
-            <SelectItem value="ctrl">Control</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button variant="outline" role="combobox" className="w-56 justify-between font-normal text-muted-foreground">
-          버전 검색… <ChevronDown className="opacity-50" />
-        </Button>
+        {selectStories.Default.render()}
+        {commandStories.Combobox.render()}
       </>
     ),
   },
+  // 세 파일을 합쳐 읽는 카드 — checkbox · radio-group · switch
   "form-controls": {
     className: "flex items-center justify-center gap-8 " + BOX + " px-8",
     style: { width: 560, height: 140 },
     node: (
       <>
-        <div className="flex items-center gap-2">
-          <Checkbox id="c1" defaultChecked />
-          <Label htmlFor="c1">Cloud 연동</Label>
-        </div>
-        <RadioGroup defaultValue="a" className="flex gap-6">
-          <div className="flex items-center gap-2"><RadioGroupItem value="a" id="r1" /><Label htmlFor="r1">신조</Label></div>
-          <div className="flex items-center gap-2"><RadioGroupItem value="b" id="r2" /><Label htmlFor="r2">개조</Label></div>
-        </RadioGroup>
-        <div className="flex items-center gap-2">
-          <Switch id="s1" defaultChecked />
-          <Label htmlFor="s1">활성화</Label>
-        </div>
+        {checkboxStories.Checked.render()}
+        {radioGroupStories.Horizontal.render()}
+        {switchStories.On.render()}
       </>
     ),
   },
@@ -608,17 +566,7 @@ export const PREVIEWS: Record<string, Pv> = {
       </ToggleGroup>
     ),
   },
-  "form-tags": {
-    className: "flex items-center " + BOX + " px-10",
-    style: { width: 560, height: 130 },
-    node: (
-      <div className="flex w-full flex-wrap items-center gap-2 rounded-md border border-input px-3 py-2 shadow-xs">
-        <Badge variant="secondary">NAVIGATION <X className="size-3" /></Badge>
-        <Badge variant="secondary">SVM <X className="size-3" /></Badge>
-        <span className="text-sm text-muted-foreground">새 태그 입력…</span>
-      </div>
-    ),
-  },
+  "form-tags": fromStories("form-tags", inputStories, { className: "flex items-center " + BOX + " px-10", style: { width: 560, height: 130 } }),
   "form-daterange": {
     className: "flex w-fit items-center justify-center " + BOX + " p-4",
     node: (
@@ -630,16 +578,7 @@ export const PREVIEWS: Record<string, Pv> = {
       />
     ),
   },
-  "form-file": {
-    className: "flex items-center " + BOX + " px-10",
-    style: { width: 560, height: 150 },
-    node: (
-      <Field>
-        <FieldLabel htmlFor="f-file">첨부 파일</FieldLabel>
-        <Input id="f-file" type="file" />
-      </Field>
-    ),
-  },
+  "form-file": fromStories("form-file", inputStories, { className: "flex items-center " + BOX + " px-10", style: { width: 560, height: 150 } }),
   "form-chipgrid": {
     className: "flex items-center justify-center " + BOX + " p-6",
     style: { width: 560, height: 200 },
