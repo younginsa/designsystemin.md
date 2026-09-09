@@ -64,9 +64,9 @@ const USER = {
 };
 
 const CONTRACTS = [
-  { code: "C-2026-044", name: "우진해운 Navi 2척", shipType: "Container", product: "Safety Forward", date: "2026-07-20" },
-  { code: "C-2026-031", name: "대양해운 Cloud 구독", shipType: "Container", product: "Cloud", date: "2026-05-10" },
-  { code: "C-2026-001", name: "대양해운 Navi 5척", shipType: "Container", product: "Enterprise", date: "2026-01-15" },
+  { code: "C-2026-044", name: "2026-07-20-우진해운-Safety Forward-2척", shipType: "Container", product: "Safety Forward", date: "2026-07-20" },
+  { code: "C-2026-031", name: "2026-05-10-대양해운-Cloud-2척", shipType: "Container", product: "Cloud", date: "2026-05-10" },
+  { code: "C-2026-001", name: "2026-01-15-대양해운-Enterprise-5척", shipType: "Container", product: "Enterprise", date: "2026-01-15" },
 ];
 
 const CONTRACT_NOTE = "계약 담당은 기술영업·영업 팀 유저만 맡습니다.";

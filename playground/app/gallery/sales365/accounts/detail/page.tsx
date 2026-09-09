@@ -70,9 +70,9 @@ const MANAGERS = [
 ];
 
 const CONTRACTS = [
-  { code: "C-2026-001", name: "대양해운 Navi + SVM 구독 5척", shipType: "Container", product: "Enterprise", date: "2026-01-15" },
-  { code: "C-2026-031", name: "대양해운 Cloud 구독", shipType: "Container", product: "Cloud", date: "2026-05-10" },
-  { code: "C-2024-019", name: "대양해운 SVM 3척 (개조)", shipType: "Bulk Carrier", product: "Safety Around", date: "2024-02-28" },
+  { code: "C-2026-001", name: "2026-01-15-대양해운-Enterprise-5척", shipType: "Container", product: "Enterprise", date: "2026-01-15" },
+  { code: "C-2026-031", name: "2026-05-10-대양해운-Cloud-2척", shipType: "Container", product: "Cloud", date: "2026-05-10" },
+  { code: "C-2024-019", name: "2024-02-28-대양해운-Safety Around-3척", shipType: "Bulk Carrier", product: "Safety Around", date: "2024-02-28" },
 ];
 
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";

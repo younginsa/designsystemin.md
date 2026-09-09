@@ -66,16 +66,21 @@ import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
 import { Person, PersonAvatar } from "../../../_detail/person";
 // 미입력 표기 잠금(2026-09-07) — 슬롯 금액 미입력도 같은 부품
 import { MissingMark } from "../../../_detail/missing-mark";
+// 계약명 자동 생성 규칙(2026-09-09) — 목록·생성 폼과 같은 부품. 수정 모달에서도 손으로 못 고친다
+import { contractName } from "../../../_detail/contract-name";
 
 const BASE = "/gallery/sales365";
 
 const CONTRACT = {
   id: "C-2026-001",
-  name: "대양해운 Navi + SVM 구독 5척",
+  // 계약일-고객-패키지-N척 — 목록·계정 상세·유저 상세·구독·납품 상세가 같은 문자열을 쓴다
+  name: contractName("2026-01-15", "대양해운", [{ pkg: "Enterprise", count: 5 }]),
   customer: "대양해운",
   ctype: "신조",
   date: "2026-01-15",
   owner: "홍길동",
+  /** 계약서 시리얼 넘버 — 선택 필드(2026-09-09 신설). 비어 있으면 미입력 표기 */
+  serial: "SN-2026-0115-01" as string | null,
   memo: "—",
 };
 
@@ -307,7 +312,8 @@ const AUDIT: AuditEntry[] = [
     action: "U",
     actor: "김민준",
     fields: [
-      { label: "계약 이름", from: "대양해운 Navi 구독 5척", to: "대양해운 Navi + SVM 구독 5척" },
+      // 계약명은 자동 생성이라 직접 고칠 수 없다 — 항목 패키지가 바뀌면 이름이 따라 바뀐 것으로 기록된다(2026-09-09)
+      { label: "계약명", from: "2026-01-15-대양해운-Safety Forward-5척", to: "2026-01-15-대양해운-Enterprise-5척" },
     ],
   },
   {
@@ -795,6 +801,11 @@ export default function Sales365ContractDetailPage() {
                   <dt className="w-24 shrink-0 text-secondary-foreground">계약 번호</dt>
                   <dd className="font-mono">{CONTRACT.id}</dd>
                 </div>
+                {/* 계약서 시리얼 넘버 — 선택 필드(2026-09-09). 생성 폼에서 넣은 값, 없으면 미입력 */}
+                <div className="flex items-baseline">
+                  <dt className="w-24 shrink-0 text-secondary-foreground">시리얼 넘버</dt>
+                  <dd className="font-mono">{CONTRACT.serial ?? <MissingMark />}</dd>
+                </div>
                 <div className="flex items-baseline">
                   <dt className="w-24 shrink-0 text-secondary-foreground">고객</dt>
                   <dd>
@@ -867,9 +878,17 @@ export default function Sales365ContractDetailPage() {
             <DialogDescription>계약 기본 정보를 수정합니다.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
+            {/* 계약명은 자동 생성(2026-09-09 확정) — 수정 모달에서도 읽기 전용. 생성 폼과 같은 문법 */}
             <div className="space-y-2">
-              <Label htmlFor="c-name">계약명</Label>
-              <Input id="c-name" defaultValue={CONTRACT.name} />
+              <Label>계약명</Label>
+              <p className="text-sm break-all">{CONTRACT.name}</p>
+              <p className="text-xs text-secondary-foreground">
+                계약일·고객·제품 구성·척수에서 자동으로 만들어집니다.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="c-serial">계약서 시리얼 넘버 (선택)</Label>
+              <Input id="c-serial" defaultValue={CONTRACT.serial ?? ""} placeholder="예: SN-2026-0001" />
             </div>
             <div className="space-y-2">
               <Label>계약 유형</Label>

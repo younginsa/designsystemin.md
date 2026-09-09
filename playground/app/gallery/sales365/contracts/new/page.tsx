@@ -4,7 +4,8 @@
 // 원천: hinas365 와이어프레임 v2 wireframe_s2_contract_create.html (구조 개편)
 //
 // 확정 구조
-// - ① 기본 계약 정보(5필드 필수) → 전부 채워지면 [+ 계약 항목 추가] 활성
+// - ① 기본 계약 정보(4필드 필수 — 고객·유형·계약일·담당자) → 전부 채워지면 [+ 계약 항목 추가] 활성
+//   계약명은 입력이 아니라 자동 생성(2026-09-09 확정: 계약일-고객-패키지-N척, 항목마다 이어 붙음) · 계약서 시리얼 넘버는 선택
 // - ② 계약 항목 블록(반복 가능): 제품 타입 라디오 2행 5선택 → 선택 시
 //   「선택된 제품 및 납품 유형」 패널이 라디오 아래 임베드 등장 →
 //   슬롯 수 드롭다운 → N개 슬롯 콤보박스 행 등장
@@ -66,6 +67,8 @@ import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 
 // 사람 요소 잠금(2026-09-04): 담당자 picker 항목 = 프로필(이니셜) + 이름 — _detail/person 공유
 import { Person } from "../../../_detail/person";
+// 계약명 자동 생성 규칙(2026-09-09) — 목록·상세와 같은 부품
+import { contractName } from "../../../_detail/contract-name";
 
 const BASE = "/gallery/sales365";
 
@@ -239,13 +242,14 @@ function SpecFields() {
 export default function Sales365ContractCreatePage() {
   const [view, setView] = React.useState<ViewState>("default");
 
-  // ① 기본 계약 정보 — 5필드 전부 채워야 항목 추가 활성
-  const [name, setName] = React.useState("");
+  // ① 기본 계약 정보 — 4필드(고객·유형·계약일·담당자) 전부 채워야 항목 추가 활성.
+  // 계약명은 입력이 아니라 자동 생성(2026-09-09 확정) · 계약서 시리얼 넘버는 선택
   const [customer, setCustomer] = React.useState("");
   const [ctype, setCtype] = React.useState("");
   const [date, setDate] = React.useState("");
   const [owner, setOwner] = React.useState("");
-  const basicComplete = [name, customer, ctype, date, owner].every((v) => v.trim() !== "");
+  const [serial, setSerial] = React.useState("");
+  const basicComplete = [customer, ctype, date, owner].every((v) => v.trim() !== "");
 
   // ② 계약 항목 블록(반복)
   const [items, setItems] = React.useState<Item[]>([]);
@@ -261,7 +265,7 @@ export default function Sales365ContractCreatePage() {
   // 새 호선 추가를 요청한 슬롯 위치 — 생성 즉시 그 슬롯에 배정
   const [pendingSlot, setPendingSlot] = React.useState<{ item: number; slot: number } | null>(null);
 
-  // 5필드 완성 시 첫 계약 항목 블록 자동 오픈(2026-08-28 확정) — 한 번만
+  // 4필드 완성 시 첫 계약 항목 블록 자동 오픈(2026-08-28 확정) — 한 번만
   const autoOpened = React.useRef(false);
   React.useEffect(() => {
     if (basicComplete && !autoOpened.current && items.length === 0) {
@@ -335,22 +339,23 @@ export default function Sales365ContractCreatePage() {
             <h2 className="text-sm font-medium text-secondary-foreground">기본 계약 정보</h2>
             <div className="mt-4 space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="c-name">
-                  계약명 <span className="text-destructive">*</span>
-                </Label>
-                {/* 계약명 40자 제한(2026-09-07 확정) — 목록 셀이 2줄까지 보여주는 상한과 같은 값.
-                    입력 중 남은 글자 수를 우측에 알려 준다 */}
-                <Input
-                  id="c-name"
-                  className="max-w-sm"
-                  placeholder="예: 대양해운 Navi + SVM 구독 5척"
-                  maxLength={40}
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-                <p className="max-w-sm text-right text-xs text-secondary-foreground">
-                  {name.length} / 40
-                </p>
+                <Label>계약명</Label>
+                {/* 자동 생성(2026-09-09 디자이너 확정) — 입력 칸이 아니라 읽기 전용 텍스트.
+                    계약일·고객·(항목마다) 패키지·척수에서 조립되며, 항목이 늘면 뒤에 이어 붙어 100자 안팎까지 길어진다.
+                    종전 40자 입력 제한(2026-09-07)은 폐기 */}
+                {date && customer ? (
+                  <p className="text-sm break-all">
+                    {contractName(
+                      date,
+                      customer,
+                      items.filter((i) => i.pkg).map((i) => ({ pkg: i.pkg as string, count: i.slotCount })),
+                    )}
+                  </p>
+                ) : (
+                  <p className="text-sm text-secondary-foreground">
+                    계약일·고객·제품 구성·척수를 입력하면 자동으로 만들어집니다.
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label>
@@ -425,12 +430,24 @@ export default function Sales365ContractCreatePage() {
                   </SelectContent>
                 </Select>
               </div>
+              {/* 계약서 시리얼 넘버 — 선택 입력(2026-09-09 디자이너 확정, 피그마 코멘트 "필수 입력 X").
+                  선택 표기는 도면 등록 모달의 "메모 (선택)"과 같은 문법 */}
+              <div className="space-y-2">
+                <Label htmlFor="c-serial">계약서 시리얼 넘버 (선택)</Label>
+                <Input
+                  id="c-serial"
+                  className="max-w-sm"
+                  placeholder="예: SN-2026-0001"
+                  value={serial}
+                  onChange={(e) => setSerial(e.target.value)}
+                />
+              </div>
             </div>
 
-            {/* 5필드 전부 채워지면 계약 항목 블록이 자동으로 열린다 — 버튼 중복 제거(2026-08-28) */}
+            {/* 4필드 전부 채워지면 계약 항목 블록이 자동으로 열린다 — 버튼 중복 제거(2026-08-28) */}
             {!basicComplete && (
               <p className="mt-4 border-t pt-4 text-xs text-secondary-foreground">
-                기본 계약 정보 5개 항목을 모두 입력하면 계약 항목이 자동으로 열립니다.
+                기본 계약 정보 필수 4개 항목을 모두 입력하면 계약 항목이 자동으로 열립니다.
               </p>
             )}
           </section>

@@ -58,7 +58,7 @@ const BASE = "/gallery/sales365";
 
 // 계약 정보 체인 — 계약 → 계약 항목 → 슬롯 → 호선
 const CHAIN: { label: string; value: string; link: string }[] = [
-  { label: "계약", value: "C-2026-001 · 대양해운 Navi + SVM 구독 5척", link: `${BASE}/contracts/detail` },
+  { label: "계약", value: "C-2026-001 · 2026-01-15-대양해운-Enterprise-5척", link: `${BASE}/contracts/detail` },
   { label: "계약 항목", value: "C-2026-001-01 · Control + SVM 구독 5척", link: `${BASE}/contracts/detail` },
   { label: "슬롯", value: "1호선 슬롯 · USD 1,200,000", link: `${BASE}/contracts/detail` },
   { label: "호선", value: "Hull 1001 · MV EXAMPLE", link: `${BASE}/vessels/detail` },

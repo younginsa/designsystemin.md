@@ -12,8 +12,9 @@
 // - 내보내기는 목록 공통 요소 규칙(CSV/XLSX 드롭다운)으로 통일 — 와이어프레임은 플레인 버튼
 //
 // 2026-09-07 디자이너 확정 3건
-// ① 계약명 최대 40자(MAX_NAME) — 목록 셀은 max-w-xs + 2줄까지, 넘치면 말줄임(line-clamp-2).
-//    전체 이름은 계약 상세가 답한다. 생성 폼 입력도 같은 40자로 잠근다.
+// ① 계약명은 자동 생성(2026-09-09 개정 — 계약일-고객-패키지-N척, 항목마다 이어 붙음, _detail/contract-name).
+//    사람이 입력하지 않으므로 글자 수 제한은 없고 100자 안팎까지 길어진다. 목록 셀은 max-w-xs + 2줄까지,
+//    넘치면 말줄임(line-clamp-2). 전체 이름은 계약 상세가 답한다. (종전 40자 입력 제한은 폐기)
 // ② 취소 여부 = 취소된 행만 「취소됨」 표기 · 정상은 빈 칸(도트도 없음).
 //    9건 중 8건이 "정상"을 반복하던 노이즈 제거 — 예외만 눈에 띄게. 납품 목록도 같은 문법.
 // ③ 이 페이지만 무한 스크롤 — 푸터 RowsPerPage 폐기, 건수는 툴바 우측으로 이동.
@@ -69,14 +70,15 @@ import { BASE_NOW, passDate, passSelect, passText } from "../_filter";
 
 // 사람 요소 잠금(2026-09-04): 담당 = 프로필(이니셜) + 이름 — _detail/person 공유
 import { Person } from "../../_detail/person";
+// 계약명 자동 생성 규칙(2026-09-09) — 생성 폼·상세와 같은 부품
+import { contractName, type ContractItemSpec } from "../../_detail/contract-name";
 
 const BASE = "/gallery/sales365";
 
-/** 계약명 최대 길이(2026-09-07 확정) — 생성 폼 입력 제한과 같은 값 */
-const MAX_NAME = 40;
 /** 무한 스크롤 한 번에 불러오는 행 수 */
 const PAGE = 20;
 
+// 계약명은 저장값이 아니라 파생값 — items(패키지·척수)에서 contractName()으로 조립(2026-09-09 개정)
 type Row = {
   id: string;
   name: string;
@@ -86,8 +88,12 @@ type Row = {
   ctype: "신조" | "개조";
   date: string;
   owner: string;
+  /** 계약 항목별 패키지·척수 — 계약명의 원천 */
+  items: ContractItemSpec[];
   vessels: { valid: number; total: number };
 };
+/** 행 조립 — name은 항상 규칙에서 나온다(손으로 적지 않는다) */
+const row = (r: Omit<Row, "name">): Row => ({ ...r, name: contractName(r.date, r.customer, r.items) });
 
 const CUSTOMERS = [
   "대양해운",
@@ -101,69 +107,62 @@ const CUSTOMERS = [
   "청해선사",
 ];
 const OWNERS = ["홍길동", "김담당", "이대리"];
-const PRODUCTS = [
-  "Navi",
-  "SVM",
-  "Control",
-  "Cloud",
-  "Safety Forward",
-  "Safety Around",
-  "Smart Standard",
-  "Enterprise",
-];
+// 패키지 — 생성 폼 PKG_COMPOSITION의 키. 단품 계약(Cloud)은 직접 선택이라 제품명이 그대로 온다
+const PACKAGES = ["Enterprise", "Smart Standard", "Safety Forward", "Safety Around", "Cloud"];
 
 // 대표 행 — 이름 길이 경계와 취소 건을 손으로 박아 둔다.
-// · 44자 = 40자 제한 도입 전 레거시 데이터 → 2줄을 넘겨 말줄임되는 유일한 케이스
-// · 40자 ×3 = 상한 정확히 채운 이름, 2줄에 꽉 차되 잘리지 않는다
+// · 항목 4개(C-2026-047) = 100자 안팎으로 가장 긴 이름 → 2줄을 넘겨 말줄임되는 케이스
+// · 항목 2개(C-2026-041) = 2줄에 꽉 차되 잘리지 않는 케이스
 // · 취소 6건 — 기본 필터가 「정상」이라 칩을 「취소됨」으로 바꿔야 보인다
 const FEATURED: Row[] = [
-  // 레거시(제한 도입 전) 44자 — 말줄임 확인용
-  { id: "C-2026-047", name: "서해해운 Navi + SVM + Control 통합 도입 및 유지보수 연간 계약", cancelled: false, cancelReason: null, customer: "서해해운", ctype: "신조", date: "2026-08-20", owner: "홍길동", vessels: { valid: 6, total: 6 } },
-  // 40자 정각 ×3
-  { id: "C-2026-046", name: "대양해운 Smart Standard 신조 12척 연간 유지보수 계약 2차", cancelled: false, cancelReason: null, customer: "대양해운", ctype: "신조", date: "2026-08-05", owner: "김담당", vessels: { valid: 12, total: 12 } },
-  { id: "C-2026-045", name: "신광해운 그룹 전 선대 Enterprise 전환 프로젝트 1단계 기본계약", cancelled: false, cancelReason: null, customer: "신광해운", ctype: "개조", date: "2026-07-28", owner: "이대리", vessels: { valid: 9, total: 9 } },
-  { id: "C-2026-043", name: "청해선사 Navi + SVM + Control 통합 도입 13척 정식계약", cancelled: false, cancelReason: null, customer: "청해선사", ctype: "신조", date: "2026-06-30", owner: "홍길동", vessels: { valid: 13, total: 13 } },
+  // 항목 4개 — 말줄임 확인용(가장 긴 이름)
+  row({ id: "C-2026-047", cancelled: false, cancelReason: null, customer: "서해해운", ctype: "신조", date: "2026-08-20", owner: "홍길동", items: [{ pkg: "Enterprise", count: 3 }, { pkg: "Smart Standard", count: 2 }, { pkg: "Safety Forward", count: 1 }, { pkg: "Safety Around", count: 1 }], vessels: { valid: 7, total: 7 } }),
+  row({ id: "C-2026-046", cancelled: false, cancelReason: null, customer: "대양해운", ctype: "신조", date: "2026-08-05", owner: "김담당", items: [{ pkg: "Smart Standard", count: 12 }], vessels: { valid: 12, total: 12 } }),
+  row({ id: "C-2026-045", cancelled: false, cancelReason: null, customer: "신광해운", ctype: "개조", date: "2026-07-28", owner: "이대리", items: [{ pkg: "Enterprise", count: 9 }], vessels: { valid: 9, total: 9 } }),
+  row({ id: "C-2026-043", cancelled: false, cancelReason: null, customer: "청해선사", ctype: "신조", date: "2026-06-30", owner: "홍길동", items: [{ pkg: "Enterprise", count: 13 }], vessels: { valid: 13, total: 13 } }),
 
-  { id: "C-2026-044", name: "우진해운 Navi 2척", cancelled: false, cancelReason: null, customer: "우진해운", ctype: "신조", date: "2026-07-20", owner: "홍길동", vessels: { valid: 2, total: 2 } },
-  { id: "C-2026-041", name: "한성해운 Safety Forward + Around 개조 8척 통합 계약", cancelled: false, cancelReason: null, customer: "한성해운", ctype: "개조", date: "2026-07-02", owner: "김담당", vessels: { valid: 8, total: 8 } },
-  { id: "C-2026-038", name: "대양해운 Navi + SVM 통합 구독 12척 2026년 2차 발주", cancelled: false, cancelReason: null, customer: "대양해운", ctype: "신조", date: "2026-06-18", owner: "홍길동", vessels: { valid: 11, total: 12 } },
-  { id: "C-2026-031", name: "대양해운 Cloud 구독", cancelled: false, cancelReason: null, customer: "대양해운", ctype: "신조", date: "2026-05-10", owner: "홍길동", vessels: { valid: 2, total: 2 } },
-  { id: "C-2026-024", name: "청해선사 Smart Standard 시리즈 6척 연간 계약", cancelled: false, cancelReason: null, customer: "청해선사", ctype: "신조", date: "2026-04-07", owner: "이대리", vessels: { valid: 6, total: 6 } },
-  { id: "C-2026-017", name: "한성해운 SVM 3척", cancelled: false, cancelReason: null, customer: "한성해운", ctype: "신조", date: "2026-03-01", owner: "김담당", vessels: { valid: 3, total: 3 } },
-  { id: "C-2026-001", name: "대양해운 Navi + SVM 구독 5척", cancelled: false, cancelReason: null, customer: "대양해운", ctype: "신조", date: "2026-01-15", owner: "홍길동", vessels: { valid: 4, total: 5 } },
-  { id: "C-2025-031", name: "동보선사 Control 개조", cancelled: false, cancelReason: null, customer: "동보선사", ctype: "개조", date: "2025-11-03", owner: "이대리", vessels: { valid: 3, total: 3 } },
-  { id: "C-2025-008", name: "동보선사 Control 2척", cancelled: false, cancelReason: null, customer: "동보선사", ctype: "신조", date: "2025-04-18", owner: "이대리", vessels: { valid: 2, total: 2 } },
-  { id: "C-2024-092", name: "신광해운 Navi + SVM 시리즈", cancelled: false, cancelReason: null, customer: "신광해운", ctype: "신조", date: "2024-09-05", owner: "홍길동", vessels: { valid: 4, total: 4 } },
-  { id: "C-2024-019", name: "대양해운 SVM 3척 (개조)", cancelled: false, cancelReason: null, customer: "대양해운", ctype: "개조", date: "2024-02-28", owner: "이대리", vessels: { valid: 3, total: 3 } },
+  row({ id: "C-2026-044", cancelled: false, cancelReason: null, customer: "우진해운", ctype: "신조", date: "2026-07-20", owner: "홍길동", items: [{ pkg: "Safety Forward", count: 2 }], vessels: { valid: 2, total: 2 } }),
+  // 항목 2개 — 2줄에 꽉 차되 잘리지 않는 케이스
+  row({ id: "C-2026-041", cancelled: false, cancelReason: null, customer: "한성해운", ctype: "개조", date: "2026-07-02", owner: "김담당", items: [{ pkg: "Safety Forward", count: 4 }, { pkg: "Safety Around", count: 4 }], vessels: { valid: 8, total: 8 } }),
+  row({ id: "C-2026-038", cancelled: false, cancelReason: null, customer: "대양해운", ctype: "신조", date: "2026-06-18", owner: "홍길동", items: [{ pkg: "Enterprise", count: 12 }], vessels: { valid: 11, total: 12 } }),
+  row({ id: "C-2026-031", cancelled: false, cancelReason: null, customer: "대양해운", ctype: "신조", date: "2026-05-10", owner: "홍길동", items: [{ pkg: "Cloud", count: 2 }], vessels: { valid: 2, total: 2 } }),
+  row({ id: "C-2026-024", cancelled: false, cancelReason: null, customer: "청해선사", ctype: "신조", date: "2026-04-07", owner: "이대리", items: [{ pkg: "Smart Standard", count: 6 }], vessels: { valid: 6, total: 6 } }),
+  row({ id: "C-2026-017", cancelled: false, cancelReason: null, customer: "한성해운", ctype: "신조", date: "2026-03-01", owner: "김담당", items: [{ pkg: "Safety Around", count: 3 }], vessels: { valid: 3, total: 3 } }),
+  // C-2026-001 — 계약 상세·계정 상세·유저 상세·구독·납품 상세가 같은 이름을 쓴다(2026-01-15-대양해운-Enterprise-5척)
+  row({ id: "C-2026-001", cancelled: false, cancelReason: null, customer: "대양해운", ctype: "신조", date: "2026-01-15", owner: "홍길동", items: [{ pkg: "Enterprise", count: 5 }], vessels: { valid: 4, total: 5 } }),
+  row({ id: "C-2025-031", cancelled: false, cancelReason: null, customer: "동보선사", ctype: "개조", date: "2025-11-03", owner: "이대리", items: [{ pkg: "Smart Standard", count: 3 }], vessels: { valid: 3, total: 3 } }),
+  row({ id: "C-2025-008", cancelled: false, cancelReason: null, customer: "동보선사", ctype: "신조", date: "2025-04-18", owner: "이대리", items: [{ pkg: "Smart Standard", count: 2 }], vessels: { valid: 2, total: 2 } }),
+  row({ id: "C-2024-092", cancelled: false, cancelReason: null, customer: "신광해운", ctype: "신조", date: "2024-09-05", owner: "홍길동", items: [{ pkg: "Enterprise", count: 4 }], vessels: { valid: 4, total: 4 } }),
+  row({ id: "C-2024-019", cancelled: false, cancelReason: null, customer: "대양해운", ctype: "개조", date: "2024-02-28", owner: "이대리", items: [{ pkg: "Safety Around", count: 3 }], vessels: { valid: 3, total: 3 } }),
 
   // 취소 6건 — 사유는 각각 다르다(사유가 있으면 칩 아래 보조 줄로 붙는다)
-  { id: "C-2026-036", name: "우진해운 Control 개조 3척", cancelled: true, cancelReason: "선박 매각으로 발주 취소", customer: "우진해운", ctype: "개조", date: "2026-06-05", owner: "이대리", vessels: { valid: 0, total: 3 } },
-  { id: "C-2026-022", name: "서해해운 Cloud 구독 2척", cancelled: true, cancelReason: "예산 미승인", customer: "서해해운", ctype: "신조", date: "2026-03-24", owner: "홍길동", vessels: { valid: 0, total: 2 } },
-  { id: "C-2025-077", name: "태평조선 Navi 시험 계약", cancelled: true, cancelReason: "계약 협상 결렬로 계약 취소", customer: "태평조선", ctype: "신조", date: "2025-08-14", owner: "김담당", vessels: { valid: 0, total: 2 } },
-  { id: "C-2025-064", name: "명진선사 Enterprise 전 선대 전환 계약 2단계", cancelled: true, cancelReason: "발주처 사업 계획 변경", customer: "명진선사", ctype: "개조", date: "2025-07-01", owner: "이대리", vessels: { valid: 0, total: 4 } },
-  { id: "C-2024-071", name: "신광해운 SVM 4척", cancelled: true, cancelReason: "조선소 건조 계약 해지", customer: "신광해운", ctype: "신조", date: "2024-06-11", owner: "김담당", vessels: { valid: 0, total: 4 } },
-  { id: "C-2024-046", name: "청해선사 Safety Around 2척", cancelled: true, cancelReason: "중복 발주 확인 후 취소", customer: "청해선사", ctype: "신조", date: "2024-04-02", owner: "홍길동", vessels: { valid: 0, total: 2 } },
+  row({ id: "C-2026-036", cancelled: true, cancelReason: "선박 매각으로 발주 취소", customer: "우진해운", ctype: "개조", date: "2026-06-05", owner: "이대리", items: [{ pkg: "Smart Standard", count: 3 }], vessels: { valid: 0, total: 3 } }),
+  row({ id: "C-2026-022", cancelled: true, cancelReason: "예산 미승인", customer: "서해해운", ctype: "신조", date: "2026-03-24", owner: "홍길동", items: [{ pkg: "Cloud", count: 2 }], vessels: { valid: 0, total: 2 } }),
+  row({ id: "C-2025-077", cancelled: true, cancelReason: "계약 협상 결렬로 계약 취소", customer: "태평조선", ctype: "신조", date: "2025-08-14", owner: "김담당", items: [{ pkg: "Safety Forward", count: 2 }], vessels: { valid: 0, total: 2 } }),
+  row({ id: "C-2025-064", cancelled: true, cancelReason: "발주처 사업 계획 변경", customer: "명진선사", ctype: "개조", date: "2025-07-01", owner: "이대리", items: [{ pkg: "Enterprise", count: 4 }], vessels: { valid: 0, total: 4 } }),
+  row({ id: "C-2024-071", cancelled: true, cancelReason: "조선소 건조 계약 해지", customer: "신광해운", ctype: "신조", date: "2024-06-11", owner: "김담당", items: [{ pkg: "Safety Around", count: 4 }], vessels: { valid: 0, total: 4 } }),
+  row({ id: "C-2024-046", cancelled: true, cancelReason: "중복 발주 확인 후 취소", customer: "청해선사", ctype: "신조", date: "2024-04-02", owner: "홍길동", items: [{ pkg: "Safety Around", count: 2 }], vessels: { valid: 0, total: 2 } }),
 ];
 
 // 무한 스크롤 시연용 볼륨 — 대표 행 뒤에 규칙적으로 채운다(대표 21 + 채움 39 = 총 60건)
 const FILLER: Row[] = Array.from({ length: 39 }, (_, i): Row => {
   const customer = CUSTOMERS[i % CUSTOMERS.length];
-  const product = PRODUCTS[i % PRODUCTS.length];
+  const pkg = PACKAGES[i % PACKAGES.length];
   const count = (i % 5) + 1;
   const year = 2025 - Math.floor(i / 24);
   const month = (i % 12) + 1;
   const day = ((i * 7) % 27) + 1;
-  return {
+  return row({
     id: `C-${year}-${String(300 + i)}`,
-    name: `${customer} ${product} ${count}척`,
     cancelled: false,
     cancelReason: null,
     customer,
     ctype: i % 6 === 0 ? "개조" : "신조",
     date: `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`,
     owner: OWNERS[i % OWNERS.length],
+    items: [{ pkg, count }],
     vessels: { valid: count, total: count },
-  };
+  });
 });
 
 const ROWS: Row[] = [...FEATURED, ...FILLER];

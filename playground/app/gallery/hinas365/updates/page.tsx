@@ -65,11 +65,15 @@ import {
   RowsPerPage,
 } from "@ds/ui/ui/rows-per-page";
 import {
-  DATE_PRESETS,
   FilterBar,
+  OPS_DATE,
+  OPS_SELECT,
+  parseFilterValue,
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 상세 조건 매처(2026-09-09 두 앱 통일) — 세일즈 365 목록과 같은 부품
+import { BASE_NOW, passDate, passSelect } from "../../_detail/filter-match";
 import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
@@ -119,12 +123,25 @@ const DAYS = ["1일", "7일", "14일", "21일", "28일"];
 
 // 새 규칙(2026-08-26): 정렬은 헤더 전담 · 필터는 전부 FilterBar.
 // 최신만 보기는 기본값이 있는 필터라 base 칩(값 상시 노출).
+// 상세 조건(2026-09-09 디자이너 결정, 두 앱 통일): select → OPS_SELECT · date → OPS_DATE(프리셋 폐기, 기준일 지정).
+// 값 문법 "<op> <value>", 칩에 op 병기. 예) "표시 · is 최신 항목만" · "요청 기간 · after 2026-01-10"
 const UPDATE_FILTERS: FilterDef[] = [
-  { name: "latest", label: "표시", options: ["최신 항목만", "전체 이력"], base: true },
-  { name: "product", label: "제품", options: ["SVM", "Control", "Navigation"] },
-  { name: "status", label: "상태", options: ["Image Ready", "Pending", "Download Requested"] },
-  { name: "requested", label: "요청 기간", kind: "date", presets: DATE_PRESETS },
+  { name: "latest", label: "표시", options: ["최신 항목만", "전체 이력"], operators: OPS_SELECT, base: true },
+  { name: "product", label: "제품", options: ["SVM", "Control", "Navigation"], operators: OPS_SELECT },
+  { name: "status", label: "상태", options: ["Image Ready", "Pending", "Download Requested"], operators: OPS_SELECT },
+  { name: "requested", label: "요청 기간", kind: "date", operators: OPS_DATE, now: BASE_NOW },
 ];
+// 상태 옵션 표기(Image Ready) ↔ 데이터(IMAGE READY) — 대소문자만 다르다
+const statusLabel = (s: UpdateStatus) => s.toLowerCase().replace(/\b[a-z]/g, (c) => c.toUpperCase());
+// 최신 항목만 = IMO별 가장 최근 요청 1건(전체 이력 = 모두)
+const LATEST_IDS = new Set(
+  Object.values(
+    ROWS.reduce<Record<string, (typeof ROWS)[number]>>((acc, r) => {
+      if (!acc[r.imo] || acc[r.imo].start < r.start) acc[r.imo] = r;
+      return acc;
+    }, {}),
+  ).map((r) => r.id),
+);
 
 type SortField = "id" | "imo";
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
@@ -134,17 +151,34 @@ export default function UpdatesPage() {
   const [keyword, setKeyword] = React.useState("");
   const [sort, setSort] = React.useState<SortField>("id");
   const [sortAsc, setSortAsc] = React.useState(false);
-  const [filterValues, setFilterValues] = React.useState<FilterValues>({ latest: "최신 항목만" });
+  const [filterValues, setFilterValues] = React.useState<FilterValues>({ latest: "is 최신 항목만" });
   const [extraShown, setExtraShown] = React.useState<string[]>([]);
   const [page, setPage] = React.useState(1);
   // 페이지당 행 수 — 기본 15, 푸터 드롭업에서 변경(2026-08-26)
   const [pageSize, setPageSize] = React.useState(ROWS_PER_PAGE_DEFAULT);
 
+  // 행 거르기(2026-09-09 신설 — 종전엔 칩만 있고 거르지 않았다). 표시 칩: is 최신 항목만 = IMO별 최신 1건
+  const latestOnly = (() => {
+    const { op, value } = parseFilterValue(filterValues.latest);
+    if (!value) return false;
+    const on = value === "최신 항목만";
+    return op === "is not" ? !on : on;
+  })();
+  const q = keyword.trim().toLowerCase();
   // 헤더 정렬 실동작 — id·imo 문자열 사전순
-  const rows = (view === "empty" ? [] : [...ROWS]).sort((a, b) => {
-    const c = a[sort].localeCompare(b[sort]);
-    return sortAsc ? c : -c;
-  });
+  const rows = (view === "empty" ? [] : [...ROWS])
+    .filter(
+      (r) =>
+        (!q || r.imo.toLowerCase().includes(q)) &&
+        (!latestOnly || LATEST_IDS.has(r.id)) &&
+        passSelect(filterValues.product, r.product) &&
+        passSelect(filterValues.status, statusLabel(r.status)) &&
+        passDate(filterValues.requested, r.start.slice(0, 10), BASE_NOW),
+    )
+    .sort((a, b) => {
+      const c = a[sort].localeCompare(b[sort]);
+      return sortAsc ? c : -c;
+    });
 
   return (
     <TooltipProvider>

@@ -84,7 +84,15 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
-import { FilterBar, type FilterDef, type FilterValues } from "@ds/ui/ui/filter-bar";
+import {
+  FilterBar,
+  OPS_SELECT,
+  parseFilterValue,
+  type FilterDef,
+  type FilterValues,
+} from "@ds/ui/ui/filter-bar";
+// 상세 조건 매처(2026-09-09 두 앱 통일) — 세일즈 365 목록과 같은 부품
+import { passSelect } from "../../_detail/filter-match";
 
 const BASE = "/gallery/hinas365";
 
@@ -332,12 +340,21 @@ const DIAG_HISTORY: [string, string, string][] = [
 ];
 
 const STATUS_OPTIONS = ["전체", "Camera 이상", "장비 이상", "Normal"];
+// 산출 상태 → 칩 옵션 표기(상태 컬럼과 같은 원천)
+const STATUS_LABEL: Record<ReturnType<typeof diagStatusOf>, string> = {
+  WARNING_CAMERA: "Camera 이상",
+  WARNING: "장비 이상",
+  NORMAL: "Normal",
+};
 // header-filter 시스템(FilterBar) 정의 — 자가 진단은 4종 전부 기본 노출(디자이너 확정)
+// 상세 조건(2026-09-09 디자이너 결정, 두 앱 통일): select → OPS_SELECT. 값 문법 "<op> <value>", 칩에 op 병기.
+// 예) "상태 · is Camera 이상" · "활성 · is not Cloud"
 const DIAG_FILTERS: FilterDef[] = [
-  { name: "status", label: "상태", options: STATUS_OPTIONS.filter((o) => o !== "전체"), base: true },
-  // Cloud·Security 병합(2026-08-25 확정) — 다중 체크, 복수 선택 = AND(둘 다 활성인 호선만)
-  { name: "active", label: "활성", options: ["Cloud", "Security"], base: true, multi: true },
-  { name: "resolution", label: "해결 상태", options: ["미확인", "문제 없음"], base: true },
+  { name: "status", label: "상태", options: STATUS_OPTIONS.filter((o) => o !== "전체"), operators: OPS_SELECT, base: true },
+  // Cloud·Security 병합(2026-08-25 확정) — 다중 체크, is = 고른 서비스가 전부 활성(AND) / is not = 하나도 활성 아님
+  { name: "active", label: "활성", options: ["Cloud", "Security"], operators: OPS_SELECT, base: true, multi: true },
+  // 해결 상태 — 행 데이터에 해결 상태 필드가 없어 칩만 있고 거르지 않는다(종전과 같음)
+  { name: "resolution", label: "해결 상태", options: ["미확인", "문제 없음"], operators: OPS_SELECT, base: true },
 ];
 
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
@@ -360,12 +377,11 @@ function DiagnosticsBody() {
   const [pageSize, setPageSize] = React.useState(ROWS_PER_PAGE_DEFAULT);
   const [keyword, setKeyword] = React.useState("");
   const [selected, setSelected] = React.useState<ShipDiag | null>(null);
-  // 대시보드에서 ?status=Camera 이상 등으로 진입하면 필터가 걸린 채로 열린다
+  // 대시보드에서 ?status=Camera 이상 등으로 진입하면 필터가 걸린 채로 열린다 — 값 문법 "is <상태>"
   const [filterValues, setFilterValues] = React.useState<FilterValues>(() => {
     const q = searchParams.get("status");
-    return q && q !== "전체" ? { status: q } : {};
+    return q && q !== "전체" ? { status: `is ${q}` } : {};
   });
-  const statusFilter = filterValues.status ?? "전체";
 
   // ── 시트 상태 드롭다운 (Warning·Camera / Warning·장비 / Normal) ──
   // Normal 전환 시 알람 항목 리스트 확인 모달 → 확정하면 알람 셀이 전부 정상(초록)으로
@@ -413,15 +429,16 @@ function DiagnosticsBody() {
   const paneTone = (tone: ItemTone): ItemTone =>
     normalized && (tone === "bad" || tone === "warn") ? "ok" : tone;
 
-  // 활성 필터 — 다중 체크는 AND: 체크한 서비스가 전부 활성인 호선만
-  const activeFilter = filterValues.active ? filterValues.active.split(", ") : [];
+  // 활성 필터 — 다중 체크. is = 고른 서비스가 전부 활성(AND, 2026-08-25 확정) / is not = 하나도 활성 아님
+  const activeOk = (s: ShipDiag) => {
+    const { op, value } = parseFilterValue(filterValues.active);
+    if (!value) return true;
+    const wanted = value.split(", ");
+    const act = s.active as string[];
+    return op === "is not" ? !wanted.some((a) => act.includes(a)) : wanted.every((a) => act.includes(a));
+  };
   const rows = (view === "empty" ? [] : SHIPS).filter(
-    (s) =>
-      (statusFilter === "전체" ||
-        (statusFilter === "Camera 이상" && diagStatusOf(s) === "WARNING_CAMERA") ||
-        (statusFilter === "장비 이상" && diagStatusOf(s) === "WARNING") ||
-        (statusFilter === "Normal" && diagStatusOf(s) === "NORMAL")) &&
-      activeFilter.every((a) => (s.active as string[]).includes(a)),
+    (s) => passSelect(filterValues.status, STATUS_LABEL[diagStatusOf(s)]) && activeOk(s),
   );
 
   return (

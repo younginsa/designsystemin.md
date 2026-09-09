@@ -95,12 +95,14 @@ import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
 import {
-  DATE_PRESETS,
   FilterBar,
-  resolveDateRange,
+  OPS_DATE,
+  OPS_SELECT,
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 상세 조건 매처(2026-09-09 두 앱 통일) — 세일즈 365 목록과 같은 부품
+import { BASE_NOW, passDate, passSelect } from "../../_detail/filter-match";
 import { SearchBox } from "@ds/ui/ui/search-box";
 import {
   ROWS_PER_PAGE_DEFAULT,
@@ -144,12 +146,14 @@ const SUBSCRIPTION_LABEL: Record<SubscriptionStatus, string> = {
 // 기본 = PRODUCT 하나(계층 칩: 제품 → 공통버전 → 제품버전, 2026-08-26 확정).
 // 나머지는 전부 [+ 필터 추가]에서 꺼내 쓴다.
 // 새 규칙(2026-08-26): 정렬은 헤더 전담 · 필터는 전부 FilterBar — 구독도 여기로 편입.
+// 상세 조건(2026-09-09 디자이너 결정, 두 앱 통일): select → OPS_SELECT · date → OPS_DATE(프리셋 폐기, 기준일 지정).
+// 값 문법 "<op> <value>", 칩에 op 병기. 예) "구독 · is Active" · "상태 갱신일 · between 2026-08-01–2026-08-14"
 const SHIP_FILTERS: FilterDef[] = [
-  { name: "subscription", label: "구독", options: ["None", "Pending", "Active", "Expired"] },
-  { name: "statusUpdated", label: "상태 갱신일", kind: "date", presets: DATE_PRESETS },
-  { name: "created", label: "생성일", kind: "date", presets: DATE_PRESETS },
-  { name: "security", label: "사이버 보안", options: ["설치됨", "미설치"] },
-  { name: "cloud", label: "클라우드", options: ["설치됨", "미설치"] },
+  { name: "subscription", label: "구독", options: ["None", "Pending", "Active", "Expired"], operators: OPS_SELECT },
+  { name: "statusUpdated", label: "상태 갱신일", kind: "date", operators: OPS_DATE, now: BASE_NOW },
+  { name: "created", label: "생성일", kind: "date", operators: OPS_DATE, now: BASE_NOW },
+  { name: "security", label: "사이버 보안", options: ["설치됨", "미설치"], operators: OPS_SELECT },
+  { name: "cloud", label: "클라우드", options: ["설치됨", "미설치"], operators: OPS_SELECT },
 ];
 
 /* ------- 신규 호선 생성 선택지 (기획 캡처에서 읽은 값) */
@@ -481,14 +485,8 @@ export default function ShipsView({ kind }: { kind: ListKind }) {
     ],
     [source],
   );
-  // 날짜 필터 — 칩 값(프리셋·직접 지정)을 실제 기간으로 풀어 두 날짜 컬럼에 적용
-  const inRange = (dateStr: string, v?: string) => {
-    if (!v) return true;
-    const r = resolveDateRange(v);
-    if (!r) return true;
-    const d = new Date(dateStr.replace(" ", "T"));
-    return d >= r.from && d <= r.to;
-  };
+  // 날짜 필터 — "<op> YYYY-MM-DD" 값을 기간으로 풀어 두 날짜 컬럼에 적용. 셀은 시각을 떼고 날짜만 대조
+  const inRange = (dateStr: string, v?: string) => passDate(v, dateStr.slice(0, 10), BASE_NOW);
   // 검색 — IMO·호선명·Hull 부분 일치 (선사 필드는 샘플 데이터에 없어 미적용)
   const q = keyword.trim().toLowerCase();
   const keywordOk = (s: ShipRow) =>
@@ -496,9 +494,9 @@ export default function ShipsView({ kind }: { kind: ListKind }) {
     s.imo.toLowerCase().includes(q) ||
     s.shipName.toLowerCase().includes(q) ||
     (s.hull ?? "").toLowerCase().includes(q);
-  // 설치 여부 칩 — "설치됨"/"미설치" 값 ↔ boolean 필드
+  // 설치 여부 칩 — "<op> 설치됨|미설치" ↔ boolean 필드
   const installOk = (v: string | undefined, installed: boolean) =>
-    !v || (v === "설치됨") === installed;
+    passSelect(v, installed ? "설치됨" : "미설치");
   // PRODUCT 캐스케이드 — 제품 간 AND · 같은 제품 조건끼리 OR(모달 시절 규칙 승계).
   // 조건의 버전 미선택(빈 값)은 전체 허용.
   const versionOk = (s: ShipRow) => {
@@ -524,8 +522,7 @@ export default function ShipsView({ kind }: { kind: ListKind }) {
     .filter(
       (s) =>
         keywordOk(s) &&
-        (!filterValues.subscription ||
-          SUBSCRIPTION_LABEL[s.subscription] === filterValues.subscription) &&
+        passSelect(filterValues.subscription, SUBSCRIPTION_LABEL[s.subscription]) &&
         versionOk(s) &&
         installOk(filterValues.security, s.security) &&
         installOk(filterValues.cloud, s.cloud) &&
