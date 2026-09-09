@@ -6,9 +6,11 @@
 // 와이어프레임 대조 메모
 // - 조회 전용 화면 — 기간을 움직이는 액션(중단·재개·크레딧·조기 종료)은 전부
 //   계약 호선 상세 ② 구독 탭이 맡는다. 행 클릭 = 그 화면으로 이동.
-// - 필터 축은 둘 — 만료일 범위(프리셋 앞으로 30·60·90일 · 이미 만료 · 직접 지정, 전체 = 칩 초기화)와 상태(다중).
-//   기본 = 앞으로 60일 · 취소 제외. 2026-09-08 FilterBar(DS 프리셋)로 이식 — 종전 ToggleGroup·개별 캘린더 폐기.
-//   FilterBar 초기화 = 조건 없음(전체 + 취소 포함). 검색(Hull·호선명·제품·계약)은 이식 때 추가.
+// - 필터 = 필터 스펙 표 6.4 구독 리스트(2026-09-08, 정본 filter-bar.stories.tsx SUBSCRIPTION_FILTERS):
+//   상태(base·다중) · 호선 · 제품 · 구독 만료일(date) · 만료까지(30·60·90일·만료됨) · 유효 기간(date).
+//   기본 = 상태 취소 제외 + 만료까지 is 60일(추가 칩으로 켜 둠). 값 문법 "<op> <value>", 칩에 op 병기.
+//   FilterBar 초기화 = 조건 없음(전체 + 취소 포함). 검색가능 열(스펙) = 호선.
+//   종전 앞으로 N일 프리셋 칩(2026-09-08 오전 이식)은 스펙의 만료까지 select로 대체 — DS 프리셋은 hinas365용으로 남는다.
 // - 상태·D-day는 저장하지 않고 조회 시점 계산 — 만료일 = 시작일 + 기간 + 조정일,
 //   조기 종료가 있으면 지정 고정값. 시작일 미정이면 만료일 미정(범위 필터에 안 잡힘 → 전체에서만).
 // - 유효 기간 끝은 만료일 - 1일로 표시(만료일 당일 = 만료).
@@ -21,13 +23,17 @@ import Link from "next/link";
 import { Badge } from "@ds/ui/ui/badge";
 import { Button } from "@ds/ui/ui/button";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@ds/ui/ui/empty";
-// 필터는 전부 FilterBar(2026-09-08 이식) — 날짜 kind + 다중 select, 기준일은 화면 TODAY
+// 필터는 전부 FilterBar(2026-09-08 이식) — 상세 조건(연산자) 층, 기준일은 화면 TODAY
 import {
   FilterBar,
-  resolveDateRange,
+  OPS_DATE,
+  OPS_SELECT,
+  parseFilterValue,
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 상세 조건 매처(2026-09-08) — 여섯 목록 공용
+import { passDate, passDateSpan, passSelect } from "../_filter";
 import { ErrorState } from "@ds/ui/ui/error-state";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import { DEFAULT_STATES, StatePreview } from "@ds/ui/ui/state-preview";
@@ -64,8 +70,6 @@ const addDays = (s: string, n: number) => {
   t.setUTCDate(t.getUTCDate() + n);
   return iso(t);
 };
-const fmtLocal = (dt: Date) =>
-  `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
 const dayDiff = (a: string, b: string) =>
   Math.round((d(b).getTime() - d(a).getTime()) / 86400000);
 
@@ -149,18 +153,23 @@ const ST_DOT: Record<Status, string> = {
 
 type ViewState = "default" | "empty" | "loading" | "error";
 
-// 필터 정의 — 기본 칩 2개. 만료일은 앞을 보는 프리셋 세트(전체 = 칩 초기화), 상태는 다중
-const EXPIRY_PRESETS = ["앞으로 30일", "앞으로 60일", "앞으로 90일", "이미 만료", "직접 지정"];
+// 필터 정의 — 스펙 6.4. 연산자·유형·순서·base는 스펙, 옵션은 이 페이지 데이터(상태 표기 "진행 중" 현행 유지)
+const uniq = (xs: string[]) => Array.from(new Set(xs));
 const PAGE_FILTERS: FilterDef[] = [
-  { name: "expiry", label: "만료일", kind: "date", base: true, presets: EXPIRY_PRESETS, now: BASE_DATE },
-  { name: "status", label: "상태", options: ST_ALL, multi: true, base: true },
+  { name: "status", label: "상태", options: ST_ALL, multi: true, operators: OPS_SELECT, base: true },
+  { name: "vessel", label: "호선", options: uniq(ROWS.map((r) => r.vessel.hull)), multi: true, operators: OPS_SELECT },
+  { name: "product", label: "제품", options: uniq(ROWS.map((r) => r.product)), multi: true, operators: OPS_SELECT },
+  { name: "expiresOn", label: "구독 만료일", kind: "date", operators: OPS_DATE, now: BASE_DATE },
+  { name: "untilExpiry", label: "만료까지", options: ["30일", "60일", "90일", "만료됨"], operators: OPS_SELECT },
+  { name: "validity", label: "유효 기간", kind: "date", operators: OPS_DATE, now: BASE_DATE },
 ];
-// 기본값 = 앞으로 60일 · 취소 제외(와이어프레임). FilterBar 초기화는 이 값이 아니라 조건 없음으로 간다
+// 기본값 = 취소 제외 + 만료까지 60일(와이어프레임 "앞으로 60일"). 만료까지는 추가 칩이라 처음부터 꺼내 둔다.
+// FilterBar 초기화는 이 값이 아니라 조건 없음으로 간다
 const FILTER_DEFAULTS: FilterValues = {
-  expiry: "앞으로 60일",
-  status: ST_ALL.filter((s) => s !== "취소").join(", "),
+  status: `is ${ST_ALL.filter((s) => s !== "취소").join(", ")}`,
+  untilExpiry: "is 60일",
 };
-const splitVal = (v?: string) => (v ? v.split(", ") : []);
+const EXTRA_DEFAULTS = ["untilExpiry"];
 
 export default function SubscriptionListPage() {
   const router = useRouter();
@@ -168,41 +177,47 @@ export default function SubscriptionListPage() {
   // 푸터 페이지네이션 문법(2026-08-26) — 페이지네이션 없어도 페이지당·전체 건수는 하단
   const [pageSize, setPageSize] = React.useState(ROWS_PER_PAGE_DEFAULT);
 
-  // 기본 = 앞으로 60일 · 취소 제외 — FilterBar 값 맵. 빈 상태의 [필터 초기화]는 기본값으로 되돌린다
+  // 기본 = 취소 제외 + 만료까지 60일 — FilterBar 값 맵. 빈 상태의 [필터 초기화]는 기본값으로 되돌린다
   const [keyword, setKeyword] = React.useState("");
   const [filterValues, setFilterValues] = React.useState<FilterValues>(FILTER_DEFAULTS);
+  const [extraShown, setExtraShown] = React.useState<string[]>(EXTRA_DEFAULTS);
 
   const resetFilters = () => {
     setKeyword("");
     setFilterValues(FILTER_DEFAULTS);
+    setExtraShown(EXTRA_DEFAULTS);
   };
 
-  // 칩 값 → 기간(화면 기준일). 값 없음 = 범위 없음(전체). 이미 만료는 열린 과거(2000년~)라 표시는 끝만
-  const range = filterValues.expiry ? resolveDateRange(filterValues.expiry, BASE_DATE) : null;
-  const from = range ? fmtLocal(range.from) : "";
-  const to = range ? fmtLocal(range.to) : "";
-  const states = splitVal(filterValues.status);
-
-  // 만료일 미정 건은 범위에 걸 값이 없다 — 범위를 안 건 경우(전체)에만 보인다
-  const passRange = (expiry: string | null) => {
-    if (!range) return true;
+  // 만료까지 — 기준일부터 N일 창(만료됨 = 기준일 이하). 만료일 미정 건은 어느 창에도 안 든다. is not 은 여집합
+  const untilHit = (expiry: string | null, opt: string) => {
     if (!expiry) return false;
-    return expiry >= from && expiry <= to;
+    if (opt === "만료됨") return expiry <= TODAY;
+    return expiry >= TODAY && expiry <= addDays(TODAY, Number(opt.replace("일", "")));
   };
+  const passUntil = (expiry: string | null) => {
+    const { op, value } = parseFilterValue(filterValues.untilExpiry);
+    if (!value) return true;
+    const hit = value.split(", ").some((o) => untilHit(expiry, o));
+    return op === "is not" ? !hit : hit;
+  };
+  // 검색가능 열(스펙): 호선(Hull · 선명)
   const q = keyword.trim().toLowerCase();
   const passKeyword = (r: Row) =>
-    !q ||
-    [r.vessel.hull, r.vessel.name ?? "", r.product, r.contract.id, r.contract.name, r.item]
-      .join(" ")
-      .toLowerCase()
-      .includes(q);
+    !q || `${r.vessel.hull} ${r.vessel.name ?? ""}`.toLowerCase().includes(q);
 
-  const rows = ROWS.filter(
-    (r) =>
-      (states.length === 0 || states.includes(statusOf(r))) &&
-      passRange(expiryOf(r)) &&
-      passKeyword(r),
-  )
+  const rows = ROWS.filter((r) => {
+    const expiry = expiryOf(r);
+    return (
+      passSelect(filterValues.status, statusOf(r)) &&
+      passSelect(filterValues.vessel, r.vessel.hull) &&
+      passSelect(filterValues.product, r.product) &&
+      passDate(filterValues.expiresOn, expiry, BASE_DATE) &&
+      passUntil(expiry) &&
+      // 유효 기간 = 시작일 ~ 만료일 − 1일. 조건 기간과 겹치면 통과
+      passDateSpan(filterValues.validity, r.start, expiry ? addDays(expiry, -1) : null, BASE_DATE) &&
+      passKeyword(r)
+    );
+  })
     // 가장 임박한 것이 위 — 만료일 없는 건은 맨 아래
     .sort((a, b) => {
       const x = expiryOf(a);
@@ -213,12 +228,16 @@ export default function SubscriptionListPage() {
       return x.localeCompare(y);
     });
 
-  const span = !range
-    ? "만료일 전체"
-    : from < "2001"
-      ? `만료일 ~ ${to}`
-      : `만료일 ${from} ~ ${to}`;
-  const cancelExcluded = states.length > 0 && !states.includes("취소");
+  // 푸터 요약 — 켜진 조건만 이어 붙인다(칩과 같은 "<op> <value>" 표기)
+  const cancelExcluded = Boolean(filterValues.status) && !passSelect(filterValues.status, "취소");
+  const summary = [
+    `총 ${rows.length}건`,
+    filterValues.untilExpiry && `만료까지 ${filterValues.untilExpiry}`,
+    filterValues.expiresOn && `만료일 ${filterValues.expiresOn}`,
+    cancelExcluded && "취소 제외",
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
     <div className="space-y-6">
@@ -231,15 +250,17 @@ export default function SubscriptionListPage() {
         <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={DEFAULT_STATES} />
       </div>
 
-      {/* ── 필터 — FilterBar(2026-09-08 이식): 검색 + 기본 칩 2개(만료일 date · 상태 multi).
-          만료일 프리셋은 앞을 보는 세트, 전체 = 칩 초기화. 바의 [초기화]는 DS 문법대로 조건 없음 ── */}
+      {/* ── 필터 — FilterBar 상세 조건 층(스펙 6.4): 검색 + 기본 칩 상태 + 추가 칩(만료까지 기본 켜짐).
+          바의 [초기화]는 DS 문법대로 조건 없음 ── */}
       <FilterBar
-        searchPlaceholder="Hull · 호선명 · 제품 검색"
+        searchPlaceholder="호선 검색"
         keyword={keyword}
         onKeyword={setKeyword}
         filters={PAGE_FILTERS}
         values={filterValues}
         onChange={(name, value) => setFilterValues((v) => ({ ...v, [name]: value }))}
+        extraShown={extraShown}
+        onExtraShownChange={setExtraShown}
       />
 
       {/* ── 상태별 본문 ── */}
@@ -377,7 +398,7 @@ export default function SubscriptionListPage() {
         <RowsPerPage
           value={pageSize}
           onChange={setPageSize}
-          summary={`총 ${rows.length}건 · ${span}${cancelExcluded ? " · 취소 제외" : ""}`}
+          summary={summary}
         />
       )}
     </div>

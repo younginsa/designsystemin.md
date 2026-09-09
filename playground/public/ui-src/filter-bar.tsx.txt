@@ -255,7 +255,8 @@ function FilterBar({
 
               {/* 우열: 고른 필터의 값 패널 — [적용]에야 칩이 생긴다 */}
               {picked && (
-                <div className="border-l">
+                // flex-col — 목록이 패널보다 길 때 패널이 열 높이를 채우고 푸터는 바닥에 붙는다(2026-09-09)
+                <div className="flex flex-col border-l">
                   {picked.kind === "date" ? (
                     <DateRangePanel
                       key={picked.name}
@@ -441,7 +442,7 @@ function OptionPanel({
   }
 
   return (
-    <div className="w-56">
+    <div className="flex h-full w-56 flex-col">
       {/* 상세 조건 — 연산자 라디오(레퍼런스: is / is not / contains 세로 목록). 값 위에 둔다 */}
       {ops && (
         <RadioGroup
@@ -505,7 +506,7 @@ function OptionPanel({
         </div>
       )}
       {/* 푸터 — 날짜 패널과 동일: 좌 [초기화] / 우 [취소][적용] */}
-      <div className="flex items-center justify-between gap-2 px-2 pt-1 pb-2">
+      <div className="mt-auto flex items-center justify-between gap-2 px-2 pt-1 pb-2">
         <Button
           variant="ghost"
           size="sm"
@@ -703,8 +704,8 @@ function DateRangePanel({
         </div>
       )}
 
-      {/* From/to(또는 단일일) + 캘린더 + 푸터 */}
-      <div className="p-3">
+      {/* From/to(또는 단일일) + 캘린더 + 푸터 — flex-col: 푸터는 열 바닥에 붙는다 */}
+      <div className="flex flex-col p-3">
         <div className="flex items-center gap-2 pb-2 text-sm">
           {isRange ? (
             <>
@@ -748,7 +749,7 @@ function DateRangePanel({
             onSelect={(d: Date | undefined) => setSingle(d)}
           />
         )}
-        <div className="flex items-center justify-between pt-2">
+        <div className="mt-auto flex items-center justify-between pt-2">
           <Button
             variant="ghost"
             size="sm"

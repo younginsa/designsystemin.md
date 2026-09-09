@@ -45,9 +45,14 @@ import {
 // 새 규칙(2026-08-26): 정렬은 헤더 전담 · 필터는 전부 FilterBar(2026-08-26 승격 완료)
 import {
   FilterBar,
+  OPS_DATE,
+  OPS_SELECT,
+  OPS_TEXT,
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 상세 조건 매처(2026-09-08) — 여섯 목록 공용
+import { BASE_NOW, passDate, passSelect, passText } from "../_filter";
 
 const BASE = "/gallery/sales365";
 
@@ -119,18 +124,22 @@ const ALL_ROWS: Row[] = [...ROWS, ...FILLER];
 /** 무한 스크롤 한 번에 불러오는 행 수 */
 const PAGE = 20;
 
-// 새 규칙(2026-08-26): 필터는 전부 FilterBar — 컬럼 헤더 필터 편입.
+// 필터 스펙 표 6.3 납품 제품 리스트(2026-09-08) — 정본 filter-bar.stories.tsx DELIVERY_FILTERS.
+// 연산자·유형·순서·base는 스펙, 옵션은 이 페이지 데이터, 라벨·값 표기는 현행(정상·취소됨 · 납품 유형) 유지(디자이너 확정).
+// 도면 옵션은 스펙 문구(승인도면·작업도면·최종도면·도면 없음) — 행의 도면 종류(승인·작업·최종)에 "도면"을 붙여 대조한다.
+const DRAWING_OPTIONS = [...DRAWING_KINDS.map((k) => `${k}도면`), "도면 없음"];
+const drawingCells = (r: Row) => (r.drawings.length ? r.drawings.map((k) => `${k}도면`) : ["도면 없음"]);
 const PAGE_FILTERS: FilterDef[] = [
-  { name: "cancelled", label: "취소 여부", options: ["정상", "취소됨"], base: true },
-  { name: "product", label: "제품", options: PRODUCTS, multi: true },
-  { name: "vessel", label: "호선", options: HULLS, multi: true },
-  { name: "dtype", label: "납품 유형", options: DTYPES, multi: true },
-  { name: "contract", label: "계약", options: CONTRACT_IDS, multi: true },
-  { name: "drawing", label: "도면", options: ["있음", "없음"] },
+  { name: "cancelled", label: "취소 여부", options: ["정상", "취소됨"], multi: true, operators: OPS_SELECT, base: true },
+  { name: "productName", label: "납품 제품 이름", kind: "text", operators: OPS_TEXT, placeholder: "납품 제품 이름" },
+  { name: "product", label: "제품", options: PRODUCTS, multi: true, operators: OPS_SELECT },
+  { name: "vessel", label: "호선", options: HULLS, multi: true, operators: OPS_SELECT },
+  { name: "dtype", label: "납품 유형", options: DTYPES, multi: true, operators: OPS_SELECT },
+  { name: "contract", label: "계약", options: CONTRACT_IDS, multi: true, operators: OPS_SELECT },
+  { name: "dueOn", label: "납품 예정일", kind: "date", operators: OPS_DATE, now: BASE_NOW },
+  { name: "commissioningOn", label: "커미셔닝 예정일", kind: "date", operators: OPS_DATE, now: BASE_NOW },
+  { name: "drawing", label: "도면", options: DRAWING_OPTIONS, multi: true, operators: OPS_SELECT },
 ];
-
-// 다중 값은 ", " 병합 문자열 — 목록으로 되돌린다
-const splitVal = (v?: string) => (v ? v.split(", ") : []);
 
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
 
@@ -138,31 +147,29 @@ export default function Sales365DeliveriesPage() {
   const router = useRouter(); // 행 클릭 → 상세 (A 문법)
   const [view, setView] = React.useState<ViewState>("default");
   const [keyword, setKeyword] = React.useState("");
-  const [filterValues, setFilterValues] = React.useState<FilterValues>({ cancelled: "정상" });
+  const [filterValues, setFilterValues] = React.useState<FilterValues>({ cancelled: "is 정상" });
   const [extraShown, setExtraShown] = React.useState<string[]>([]);
   const [checked, setChecked] = React.useState<string[]>([]);
 
   // 헤더 정렬 실동작 — 납품 예정일
   const [sortAsc, setSortAsc] = React.useState(true);
+  // 검색가능 열(스펙): 납품 제품 이름 · 호선 · 계약
   const q = keyword.trim().toLowerCase();
-  // 필터 실동작(2026-09-07 신설) — 종전엔 칩만 있고 거르지 않아, 「정상」인데도 취소 건이 섞였다
+  // 필터 실동작(2026-09-07 신설, 2026-09-08 상세 조건 층) — 종전엔 칩만 있고 거르지 않아, 「정상」인데도 취소 건이 섞였다
   const rows = (view === "empty" ? [] : [...ALL_ROWS])
-    .filter((r) => {
-      if (q && !r.name.toLowerCase().includes(q)) return false;
-      if (filterValues.cancelled && (r.cancelled ? "취소됨" : "정상") !== filterValues.cancelled)
-        return false;
-      const products = splitVal(filterValues.product);
-      if (products.length && !products.includes(r.product)) return false;
-      const vessels = splitVal(filterValues.vessel);
-      if (vessels.length && !vessels.includes(r.hull)) return false;
-      const dtypes = splitVal(filterValues.dtype);
-      if (dtypes.length && !dtypes.includes(r.delivery)) return false;
-      const contracts = splitVal(filterValues.contract);
-      if (contracts.length && !contracts.includes(r.contract)) return false;
-      if (filterValues.drawing === "있음" && r.drawings.length === 0) return false;
-      if (filterValues.drawing === "없음" && r.drawings.length > 0) return false;
-      return true;
-    })
+    .filter(
+      (r) =>
+        (!q || `${r.name} ${r.hull} ${r.contract}`.toLowerCase().includes(q)) &&
+        passSelect(filterValues.cancelled, r.cancelled ? "취소됨" : "정상") &&
+        passText(filterValues.productName, r.name) &&
+        passSelect(filterValues.product, r.product) &&
+        passSelect(filterValues.vessel, r.hull) &&
+        passSelect(filterValues.dtype, r.delivery) &&
+        passSelect(filterValues.contract, r.contract) &&
+        passDate(filterValues.dueOn, r.dueOn) &&
+        passDate(filterValues.commissioningOn, r.commissioningOn) &&
+        passSelect(filterValues.drawing, drawingCells(r)),
+    )
     .sort((a, b) => {
       // 예정일 미정(null)은 정렬 방향과 무관하게 맨 아래
       if (!a.dueOn && !b.dueOn) return 0;
@@ -180,7 +187,8 @@ export default function Sales365DeliveriesPage() {
   const sentinelRef = React.useRef<HTMLDivElement | null>(null);
   const total = rows.length;
   const hasMore = shown < total;
-  const cancelExcluded = filterValues.cancelled === "정상";
+  // 취소됨 행이 걸러지는 조건이면 건수 옆에 밝힌다
+  const cancelExcluded = Boolean(filterValues.cancelled) && !passSelect(filterValues.cancelled, "취소됨");
 
   React.useEffect(() => {
     setShown(PAGE);
@@ -234,7 +242,7 @@ export default function Sales365DeliveriesPage() {
 
       {/* ── 툴바 — 새 규칙(2026-08-26): 필터는 전부 여기, 헤더는 정렬만 ── */}
       <FilterBar
-        searchPlaceholder="납품 제품 이름 검색"
+        searchPlaceholder="납품 제품 이름 · 호선 · 계약 검색"
         keyword={keyword}
         onKeyword={setKeyword}
         filters={PAGE_FILTERS}

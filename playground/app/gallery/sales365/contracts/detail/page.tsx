@@ -178,13 +178,17 @@ type PriceRow = {
   amount: number | null;
   free: number | null;
   unit: "월" | null;
-  derived: string;
+  /** 유상 개월(구독 기간 − 무상) — 일시납은 null */
+  paidMonths: number | null;
+  /** 파생 총액(숫자) — 미입력이면 null. 통화 코드는 모달의 통화 선택을 따라 렌더 시 붙인다(2026-09-08) */
+  total: number | null;
 };
+const fmtAmount = (n: number) => n.toLocaleString("en-US");
 const PRICING_FULL: PriceRow[] = [
-  { product: "Navigation", amount: 850000, free: null, unit: null, derived: "850,000" },
-  { product: "Control", amount: 20000, free: 3, unit: "월", derived: "× 유상 33개월 = 660,000" },
-  { product: "SVM", amount: 15000, free: 0, unit: "월", derived: "× 유상 12개월 = 180,000" },
-  { product: "Cloud", amount: 10000, free: 0, unit: "월", derived: "× 유상 36개월 = 360,000" },
+  { product: "Navigation", amount: 850000, free: null, unit: null, paidMonths: null, total: 850000 },
+  { product: "Control", amount: 20000, free: 3, unit: "월", paidMonths: 33, total: 660000 },
+  { product: "SVM", amount: 15000, free: 0, unit: "월", paidMonths: 12, total: 180000 },
+  { product: "Cloud", amount: 10000, free: 0, unit: "월", paidMonths: 36, total: 360000 },
 ];
 const PRICING: Record<number, PriceRow[]> = {
   1: PRICING_FULL,
@@ -193,8 +197,8 @@ const PRICING: Record<number, PriceRow[]> = {
   3: [
     PRICING_FULL[0],
     PRICING_FULL[1],
-    { product: "SVM", amount: null, free: 0, unit: "월", derived: "미입력" },
-    { product: "Cloud", amount: null, free: 0, unit: "월", derived: "미입력" },
+    { product: "SVM", amount: null, free: 0, unit: "월", paidMonths: 12, total: null },
+    { product: "Cloud", amount: null, free: 0, unit: "월", paidMonths: 36, total: null },
   ],
 };
 
@@ -250,13 +254,23 @@ function SlotStatus({ state }: { state: SlotState }) {
 }
 
 // 금액 목록 — 총 금액(합산 3행)·제품별 금액(제품 4행) 공용. null = 미입력(호선 목록과 같은 표기)
-function MoneyList({ rows }: { rows: MoneyRow[] }) {
+// strong = 값이 있는 금액만 굵게(미입력 표기는 굵기 상속 안 함) · className = 행 간격 등 자리별 덮어쓰기.
+// 둘 다 금액 수정 모달 Total 전용(2026-09-08). 표의 총 금액·제품별 금액 셀은 기본 굵기·기본 간격
+function MoneyList({
+  rows,
+  strong = false,
+  className = "",
+}: {
+  rows: MoneyRow[];
+  strong?: boolean;
+  className?: string;
+}) {
   return (
-    <dl className="space-y-1 text-sm">
+    <dl className={"space-y-1 text-sm " + className}>
       {rows.map((r) => (
         <div key={r.label} className="flex items-baseline gap-3">
           <dt className="w-28 shrink-0 text-secondary-foreground">{r.label}</dt>
-          <dd className="font-mono">
+          <dd className={strong && r.value ? "font-mono font-bold" : "font-mono"}>
             {r.value ?? <MissingMark />}
             {r.value && r.unit && (
               <span className="ml-1 font-sans text-xs text-secondary-foreground">/ {r.unit}</span>
@@ -310,6 +324,8 @@ export default function Sales365ContractDetailPage() {
   const [assignOpen, setAssignOpen] = React.useState(false);
   // 금액 수정 모달 — 열린 슬롯 번호(null = 닫힘). 배정 행의 연필이 연다(2026-09-08)
   const [priceSlot, setPriceSlot] = React.useState<number | null>(null);
+  // 금액 수정 모달의 통화 — 표의 총액·Total 표기가 따라간다(저장 전 미리보기, 닫으면 USD로 복귀)
+  const [currency, setCurrency] = React.useState("USD");
   const priceTarget = priceSlot ? SLOTS.find((s) => s.no === priceSlot) : undefined;
   const [comments, setComments] = React.useState(COMMENTS);
   const [draft, setDraft] = React.useState("");
@@ -920,7 +936,14 @@ export default function Sales365ContractDetailPage() {
       {/* 모달 문법 = 계정 등록 모달과 동일(2026-09-08 3차): 제목 + 평문 부제(DS 기본 토큰 그대로) · 라벨 위 필드 ·
           제품별 금액은 4열 표(제품 | 금액 | 기간 | 총액) · 기간 = 무상 개월(월 고정, 년 폐기) · 폭 2xl ·
           구분선 위 슬롯 총액 · 맨 아래 규칙 2문단은 은은한 회색 패널(유저 비활성 모달 패널 문법) */}
-      <Dialog open={priceSlot !== null} onOpenChange={(o) => !o && setPriceSlot(null)}>
+      <Dialog
+        open={priceSlot !== null}
+        onOpenChange={(o) => {
+          if (o) return;
+          setPriceSlot(null);
+          setCurrency("USD");
+        }}
+      >
         <DialogContent className="max-h-dvh overflow-y-auto sm:max-w-2xl">
           {priceTarget && (
             <>
@@ -937,7 +960,7 @@ export default function Sales365ContractDetailPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="price-currency">통화</Label>
-                    <Select defaultValue="USD">
+                    <Select value={currency} onValueChange={setCurrency}>
                       <SelectTrigger id="price-currency" className="w-full">
                         <SelectValue />
                       </SelectTrigger>
@@ -1005,27 +1028,34 @@ export default function Sales365ContractDetailPage() {
                             )}
                           </TableCell>
                           <TableCell className="font-mono text-secondary-foreground">
-                            {row.derived === "미입력" ? <MissingMark /> : row.derived}
+                            {row.total === null ? (
+                              <MissingMark />
+                            ) : (
+                              <>
+                                {row.paidMonths ? `× 유상 ${row.paidMonths}개월 = ` : ""}
+                                {currency} {fmtAmount(row.total)}
+                              </>
+                            )}
                           </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
 
-                  {/* Total — 표 박스 밖, 배경 없음(2026-09-08 디자이너 확정). 좌측 Total 라벨은 제품 열 폭(w-28).
-                      합산 라벨과 금액은 붙여서 한 덩어리로 우측 정렬 — 금액이 표의 오른쪽 끝(총액 열)에 닿고
-                      라벨은 그 바로 왼쪽(2026-09-08 확정) · 금액은 굵은 mono.
-                      두 합산 행 사이 구분선은 divide-y라 라벨 열에서 시작해 Total 앞에서 멈춘다(위계) */}
-                  <div className="flex items-start pt-2 text-sm">
-                    <span className="w-28 shrink-0 px-2 py-2 font-medium">Total</span>
-                    <dl className="min-w-0 flex-1 divide-y">
-                      {priceTarget.totals.map((t) => (
-                        <div key={t.label} className="flex items-baseline justify-end gap-4 px-2 py-2">
-                          <dt className="text-secondary-foreground">{t.label}</dt>
-                          <dd className="font-mono font-bold">{t.value ?? <MissingMark />}</dd>
-                        </div>
-                      ))}
-                    </dl>
+                  {/* Total — 표 박스 밖, 배경·구분선 없음(2026-09-08 5차 확정). 좌측 Total 라벨은 제품 열 폭(w-28).
+                      합산 묶음은 오른쪽 끝에 붙이고(justify-between), 묶음 안은 배정 호선 표의 총 금액 셀과 같은
+                      부품(MoneyList: 라벨 열 + 금액 열, 둘 다 좌정렬) — 가장 긴 금액이 오른쪽 끝에 닿는다 · 금액만 굵게 */}
+                  <div className="flex items-start justify-between px-2 py-4 text-sm">
+                    <span className="w-28 shrink-0 font-medium">Total</span>
+                    {/* 행 간격 2배(space-y-2) — 표 셀의 기본 간격은 그대로. 통화 코드는 모달 선택값으로 치환 */}
+                    <MoneyList
+                      rows={priceTarget.totals.map((t) => ({
+                        ...t,
+                        value: t.value ? t.value.replace(/^[A-Z]{3}/, currency) : null,
+                      }))}
+                      strong
+                      className="space-y-2"
+                    />
                   </div>
                 </div>
 

@@ -55,9 +55,14 @@ import {
 // 새 규칙(2026-08-26): 정렬은 헤더 전담 · 필터는 전부 FilterBar(2026-08-26 승격 완료)
 import {
   FilterBar,
+  OPS_DATE,
+  OPS_SELECT,
+  OPS_TEXT,
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 상세 조건 매처(2026-09-08) — 여섯 목록 공용
+import { BASE_NOW, passDate, passSelect, passText } from "../_filter";
 
 // 사람 요소 잠금(2026-09-04): 담당자(내부 유저) = 프로필(이니셜) + 이름 — _detail/person 공유
 import { Person } from "../../_detail/person";
@@ -91,11 +96,17 @@ const TYPE_CARDS = [
   { icon: Anchor, label: "운항사", desc: "Ship Operator / 운항사" },
 ] as const;
 
-// 새 규칙(2026-08-26): 필터는 전부 FilterBar — 컬럼 헤더 필터 편입(계정명은 검색으로).
+// 필터 스펙 표 6.5 계정 리스트(2026-09-08) — 정본 filter-bar.stories.tsx ACCOUNT_FILTERS.
+// 연산자·유형·순서·base는 스펙, 옵션은 이 페이지 데이터. 연락처(text)는 이 데이터에 연락처 필드가 없어
+// 담당자 이름에 대조한다(표의 담당자 열). 관련 계약·관련 호선(Number)은 정렬 전용이라 필터 아님.
+const uniq = (xs: string[]) => Array.from(new Set(xs));
 const PAGE_FILTERS: FilterDef[] = [
-  { name: "type", label: "계정 유형", options: ["선사", "조선소", "운항사"], multi: true },
-  { name: "country", label: "국가", options: ["대한민국", "일본", "중국", "노르웨이", "그리스", "싱가포르", "기타"], multi: true },
-  { name: "tier", label: "티어", options: ["Tier 1", "Tier 2", "Tier 3"], multi: true },
+  { name: "type", label: "계정 유형", options: ["선사", "조선소", "운항사"], multi: true, operators: OPS_SELECT, base: true },
+  { name: "accountName", label: "계정명", kind: "text", operators: OPS_TEXT, placeholder: "계정명" },
+  { name: "country", label: "국가", options: uniq(ROWS.map((r) => r.country)), multi: true, operators: OPS_SELECT },
+  { name: "contact", label: "연락처", kind: "text", operators: OPS_TEXT, placeholder: "연락처(담당자)" },
+  { name: "tier", label: "티어", options: uniq(ROWS.map((r) => r.tier)), multi: true, operators: OPS_SELECT },
+  { name: "createdOn", label: "등록일", kind: "date", operators: OPS_DATE, now: BASE_NOW },
 ];
 
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
@@ -111,8 +122,18 @@ export default function Sales365AccountsPage() {
   const [createOpen, setCreateOpen] = React.useState(false);
   const [accountType, setAccountType] = React.useState("선사");
 
-  const rows = view === "empty" ? [] : ROWS;
-
+  // 행 거르기(2026-09-08 신설 — 종전엔 칩만 있고 거르지 않았다). 검색가능 열(스펙): 계정명 · 국가 · 연락처
+  const q = keyword.trim().toLowerCase();
+  const rows = (view === "empty" ? [] : ROWS).filter(
+    (r) =>
+      (!q || `${r.name} ${r.country} ${r.manager}`.toLowerCase().includes(q)) &&
+      passSelect(filterValues.type, r.type) &&
+      passText(filterValues.accountName, r.name) &&
+      passSelect(filterValues.country, r.country) &&
+      passText(filterValues.contact, r.manager) &&
+      passSelect(filterValues.tier, r.tier) &&
+      passDate(filterValues.createdOn, r.createdOn),
+  );
 
   return (
     <div className="space-y-6">
@@ -126,7 +147,7 @@ export default function Sales365AccountsPage() {
 
       {/* ── 툴바 — 새 규칙(2026-08-26): 필터는 전부 여기, 헤더는 정렬만 ── */}
       <FilterBar
-        searchPlaceholder="계정명 검색"
+        searchPlaceholder="계정명 · 국가 · 연락처 검색"
         keyword={keyword}
         onKeyword={setKeyword}
         filters={PAGE_FILTERS}

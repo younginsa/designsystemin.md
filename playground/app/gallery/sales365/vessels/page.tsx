@@ -41,9 +41,14 @@ import {
 // 새 규칙(2026-08-26): 정렬은 헤더 전담 · 필터는 전부 FilterBar(2026-08-26 승격 완료)
 import {
   FilterBar,
+  OPS_DATE,
+  OPS_SELECT,
+  OPS_TEXT,
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 상세 조건 매처(2026-09-08) — 여섯 목록 공용
+import { BASE_NOW, passDate, passSelect, passText } from "../_filter";
 
 const BASE = "/gallery/sales365";
 
@@ -106,18 +111,22 @@ const ALL_ROWS: Row[] = [...ROWS, ...FILLER];
 /** 무한 스크롤 한 번에 불러오는 행 수 */
 const PAGE = 20;
 
-// 새 규칙(2026-08-26): 필터는 전부 FilterBar — 컬럼 헤더 필터 편입.
-// 주선급 스위치는 별도 칩(선급 기준)으로, 미입력만 보기는 식별자 칩으로 흡수.
+// 필터 스펙 표 6.2 계약 호선 리스트(2026-09-08) — 정본 filter-bar.stories.tsx VESSEL_FILTERS.
+// 연산자·유형·순서·base는 스펙, 옵션은 이 페이지 데이터. 식별자(미입력만 보기) 칩은 스펙의 선명 placeholder가
+// "미입력 식별자 필터 별도"라고 인정하므로 맨 뒤에 유지, 선급 기준(주선급만)은 제거 — 선급 is/is not이 대신한다(디자이너 확정).
+const YARD_OPTIONS = YARDS.filter((y): y is string => y !== null);
 const VESSEL_FILTERS: FilterDef[] = [
-  { name: "owner", label: "선주", options: ["대양해운", "서해해운", "명진선사", "청해선사"], multi: true },
-  { name: "shipType", label: "선종", options: ["Container", "Bulk Carrier", "Tanker", "LNG Carrier", "RoRo"], multi: true },
-  { name: "shipClass", label: "선급", options: ["KR", "LR", "BV", "DNV", "ABS", "NK"], multi: true },
-  { name: "classBasis", label: "선급 기준", options: ["하나라도 일치", "주선급만"] },
-  { name: "seriesCode", label: "시리즈 코드", options: ["SER-2026-A", "SER-2025-B", "SER-2024-C", "—"], multi: true },
+  { name: "hull", label: "Hull No.", kind: "text", operators: OPS_TEXT, placeholder: "Hull No." },
+  { name: "shipName", label: "선명", kind: "text", operators: OPS_TEXT, placeholder: "선명(미입력 식별자 필터 별도)" },
+  { name: "imo", label: "IMO", kind: "text", operators: OPS_TEXT, placeholder: "IMO" },
+  { name: "owner", label: "선주", options: OWNERS, multi: true, operators: OPS_SELECT, base: true },
+  { name: "yard", label: "조선소", options: YARD_OPTIONS, multi: true, operators: OPS_SELECT },
+  { name: "shipType", label: "선종", options: SHIP_TYPES, multi: true, operators: OPS_SELECT },
+  { name: "shipClass", label: "선급", options: ["KR", "BV", "NK", "LR", "DNV", "ABS"], multi: true, operators: OPS_SELECT },
+  { name: "seriesCode", label: "시리즈 코드", kind: "text", operators: OPS_TEXT, placeholder: "SER-2026-A" },
+  { name: "deliveryOn", label: "인도 예정일", kind: "date", operators: OPS_DATE, now: BASE_NOW },
   { name: "missing", label: "식별자", options: ["미입력만 보기"] },
 ];
-
-const splitVal = (v?: string) => (v ? v.split(", ") : []);
 
 // 미입력 표기는 공용 부품으로 이관(2026-09-07) — 납품 제품 목록도 같은 표기를 쓴다
 
@@ -140,31 +149,27 @@ export default function Sales365VesselsPage() {
       setSortAsc(true);
     }
   };
+  // 검색가능 열(스펙): Hull No. · 선명 · IMO · 선주 · 조선소 · 시리즈 코드
   const q = keyword.trim().toLowerCase();
   const rows = (view === "empty" ? [] : [...ALL_ROWS])
-    .filter((r) => {
-      if (
-        q &&
-        !r.hull.toLowerCase().includes(q) &&
-        !(r.shipName ?? "").toLowerCase().includes(q) &&
-        !(r.imo ?? "").includes(q)
-      )
-        return false;
-      const owners = splitVal(filterValues.owner);
-      if (owners.length && !owners.includes(r.owner)) return false;
-      const types = splitVal(filterValues.shipType);
-      if (types.length && !types.includes(r.shipType)) return false;
-      // 선급 — 기본은 하나라도 일치, [선급 기준: 주선급만]이면 첫 항목(★)만 대상
-      const classes = splitVal(filterValues.shipClass);
-      if (classes.length) {
-        const target = filterValues.classBasis === "주선급만" ? [r.classes[0]] : r.classes;
-        if (!target.some((c) => classes.includes(c))) return false;
-      }
-      const series = splitVal(filterValues.seriesCode);
-      if (series.length && !series.includes(r.seriesCode ?? "—")) return false;
-      if (filterValues.missing === "미입력만 보기" && r.shipName && r.imo) return false;
-      return true;
-    })
+    .filter(
+      (r) =>
+        (!q ||
+          `${r.hull} ${r.shipName ?? ""} ${r.imo ?? ""} ${r.owner} ${r.yard ?? ""} ${r.seriesCode ?? ""}`
+            .toLowerCase()
+            .includes(q)) &&
+        passText(filterValues.hull, r.hull) &&
+        passText(filterValues.shipName, r.shipName) &&
+        passText(filterValues.imo, r.imo) &&
+        passSelect(filterValues.owner, r.owner) &&
+        passSelect(filterValues.yard, r.yard) &&
+        passSelect(filterValues.shipType, r.shipType) &&
+        // 선급 — 한 행에 여러 값. is = 하나라도 일치 / is not = 하나도 없음
+        passSelect(filterValues.shipClass, r.classes) &&
+        passText(filterValues.seriesCode, r.seriesCode) &&
+        passDate(filterValues.deliveryOn, r.deliveryOn) &&
+        !(filterValues.missing === "미입력만 보기" && r.shipName && r.imo),
+    )
     .sort((a, b) => {
       // 인도 예정일 미입력(null)은 정렬 방향과 무관하게 맨 아래 — 납품 제품 목록과 같은 규칙
       const av = a[sort];
@@ -221,7 +226,7 @@ export default function Sales365VesselsPage() {
 
       {/* ── 툴바 — 새 규칙(2026-08-26): 필터는 전부 여기, 헤더는 정렬만 ── */}
       <FilterBar
-        searchPlaceholder="Hull · 호선명 · IMO 검색"
+        searchPlaceholder="Hull No. · 선명 · IMO · 선주 · 조선소 · 시리즈 코드 검색"
         keyword={keyword}
         onKeyword={setKeyword}
         filters={VESSEL_FILTERS}

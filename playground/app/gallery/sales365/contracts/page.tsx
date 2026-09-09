@@ -58,9 +58,14 @@ import {
 // 새 규칙(2026-08-26): 정렬은 헤더 전담 · 필터는 전부 FilterBar(2026-08-26 승격 완료)
 import {
   FilterBar,
+  OPS_DATE,
+  OPS_SELECT,
+  OPS_TEXT,
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 상세 조건 매처(2026-09-08) — 여섯 목록 공용
+import { BASE_NOW, passDate, passSelect, passText } from "../_filter";
 
 // 사람 요소 잠금(2026-09-04): 담당 = 프로필(이니셜) + 이름 — _detail/person 공유
 import { Person } from "../../_detail/person";
@@ -163,18 +168,17 @@ const FILLER: Row[] = Array.from({ length: 39 }, (_, i): Row => {
 
 const ROWS: Row[] = [...FEATURED, ...FILLER];
 
-// 새 규칙(2026-08-26): 필터는 전부 FilterBar — 컬럼 헤더 필터(FD_CONFIG) 편입.
-// 기본값이 있는 취소 여부(취소 제외)·담당(내 계약만 안내)은 base 칩, 나머지는 [+ 필터 추가].
-// 2026-09-07: 취소 값 라벨을 표기와 맞춰 「취소됨」으로 통일.
+// 필터 스펙 표 6.1 계약 리스트(2026-09-08) — 정본 filter-bar.stories.tsx CONTRACT_FILTERS.
+// 연산자·유형·순서·base는 스펙, 옵션 목록은 이 페이지 데이터, 값 표기는 현행(정상·취소됨) 유지(디자이너 확정).
+// 척수(Number)는 정렬 전용이라 필터 아님. 2026-09-07: 취소 값 라벨을 표기와 맞춰 「취소됨」으로 통일.
 const CONTRACT_FILTERS: FilterDef[] = [
-  { name: "cancelled", label: "취소 여부", options: ["정상", "취소됨"], base: true },
-  { name: "owner", label: "담당", options: OWNERS, multi: true, base: true },
-  { name: "customer", label: "고객", options: CUSTOMERS, multi: true },
-  { name: "ctype", label: "계약 유형", options: ["신조", "개조"], multi: true },
+  { name: "cancelled", label: "취소 여부", options: ["정상", "취소됨"], operators: OPS_SELECT, base: true },
+  { name: "name", label: "계약명", kind: "text", operators: OPS_TEXT, placeholder: "계약명" },
+  { name: "customer", label: "고객", options: CUSTOMERS, multi: true, operators: OPS_SELECT },
+  { name: "ctype", label: "계약 유형", options: ["신조", "개조"], multi: true, operators: OPS_SELECT },
+  { name: "owner", label: "담당", options: OWNERS, multi: true, operators: OPS_SELECT },
+  { name: "date", label: "계약일", kind: "date", operators: OPS_DATE, now: BASE_NOW },
 ];
-
-// 다중 값은 ", " 병합 문자열 — 목록으로 되돌린다
-const splitVal = (v?: string) => (v ? v.split(", ") : []);
 
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
 
@@ -182,8 +186,8 @@ export default function Sales365ContractsPage() {
   const router = useRouter(); // 행 클릭 → 상세 (A 문법)
   const [view, setView] = React.useState<ViewState>("default");
   const [keyword, setKeyword] = React.useState("");
-  // 기본: 취소 제외(정상만)
-  const [filterValues, setFilterValues] = React.useState<FilterValues>({ cancelled: "정상" });
+  // 기본: 취소 제외(정상만) — 값 문법 "<op> <value>"
+  const [filterValues, setFilterValues] = React.useState<FilterValues>({ cancelled: "is 정상" });
   const [extraShown, setExtraShown] = React.useState<string[]>([]);
   // 헤더 정렬 실동작 — 계약명·척수·계약일
   const [sort, setSort] = React.useState<"name" | "vessels" | "date">("date");
@@ -196,20 +200,19 @@ export default function Sales365ContractsPage() {
     }
   };
 
+  // 검색가능 열(스펙): 계약명 · 고객 · 담당
   const q = keyword.trim().toLowerCase();
   const rows = (view === "empty" ? [] : ROWS)
-    .filter((r) => {
-      if (q && !r.name.toLowerCase().includes(q) && !r.id.toLowerCase().includes(q)) return false;
-      if (filterValues.cancelled && (r.cancelled ? "취소됨" : "정상") !== filterValues.cancelled)
-        return false;
-      const owners = splitVal(filterValues.owner);
-      if (owners.length && !owners.includes(r.owner)) return false;
-      const customers = splitVal(filterValues.customer);
-      if (customers.length && !customers.includes(r.customer)) return false;
-      const ctypes = splitVal(filterValues.ctype);
-      if (ctypes.length && !ctypes.includes(r.ctype)) return false;
-      return true;
-    })
+    .filter(
+      (r) =>
+        (!q || `${r.name} ${r.customer} ${r.owner}`.toLowerCase().includes(q)) &&
+        passSelect(filterValues.cancelled, r.cancelled ? "취소됨" : "정상") &&
+        passText(filterValues.name, r.name) &&
+        passSelect(filterValues.customer, r.customer) &&
+        passSelect(filterValues.ctype, r.ctype) &&
+        passSelect(filterValues.owner, r.owner) &&
+        passDate(filterValues.date, r.date),
+    )
     .sort((a, b) => {
       const c =
         sort === "vessels"
@@ -219,8 +222,8 @@ export default function Sales365ContractsPage() {
             : a.date.localeCompare(b.date);
       return sortAsc ? c : -c;
     });
-  // 취소 제외가 기본값이므로 건수 옆에 밝혀 둔다 (와이어프레임 2.3)
-  const cancelExcluded = filterValues.cancelled === "정상";
+  // 취소 제외가 기본값이므로 건수 옆에 밝혀 둔다 (와이어프레임 2.3) — 취소됨 행이 걸러지는 조건이면 참
+  const cancelExcluded = Boolean(filterValues.cancelled) && !passSelect(filterValues.cancelled, "취소됨");
 
   /* ── 무한 스크롤(2026-09-07, 이 페이지 한정) ──────────────────────────
      감시자(IntersectionObserver)가 목록 끝 센티넬을 보면 PAGE만큼 더 채운다.
@@ -271,7 +274,7 @@ export default function Sales365ContractsPage() {
 
       {/* ── 툴바 — 새 규칙(2026-08-26): 필터는 전부 여기, 헤더는 정렬만 ── */}
       <FilterBar
-        searchPlaceholder="계약명 · 계약 ID 검색"
+        searchPlaceholder="계약명 · 고객 · 담당 검색"
         keyword={keyword}
         onKeyword={setKeyword}
         filters={CONTRACT_FILTERS}

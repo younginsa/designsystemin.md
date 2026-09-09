@@ -54,9 +54,14 @@ import {
 // 새 규칙(2026-08-26): 정렬은 헤더 전담 · 필터는 전부 FilterBar(2026-08-26 승격 완료)
 import {
   FilterBar,
+  OPS_DATE,
+  OPS_SELECT,
+  OPS_TEXT,
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 상세 조건 매처(2026-09-08) — 여섯 목록 공용
+import { BASE_NOW, passDate, passSelect, passText } from "../_filter";
 
 // 사람 요소 잠금(2026-09-04): 유저 이름 = 프로필(이니셜) + 이름(상세 Link) — _detail/person 공유
 import { Person } from "../../_detail/person";
@@ -74,10 +79,14 @@ const ROWS: Row[] = [
   { name: "박전직", team: "영업", email: "jj.park@company.com", contracts: 0, active: false, createdOn: "2022-11-01" },
 ];
 
-// 새 규칙(2026-08-26): 필터는 전부 FilterBar — 컬럼 헤더 필터 편입(이름은 검색으로).
+// 필터 스펙 표 6.6 유저 리스트(2026-09-08) — 정본 filter-bar.stories.tsx USER_FILTERS.
+// 연산자·유형·순서·base는 스펙, 옵션은 이 페이지 데이터. 스펙의 역할은 이 표의 팀 열이라 라벨 팀 유지(디자이너 확정).
+// 담당 계약(Number)은 정렬 전용이라 필터 아님.
 const PAGE_FILTERS: FilterDef[] = [
-  { name: "team", label: "팀", options: ["영업", "기술영업", "PM"], multi: true },
-  { name: "active", label: "활성 여부", options: ["활성", "비활성"] },
+  { name: "active", label: "활성 여부", options: ["활성", "비활성"], operators: OPS_SELECT, base: true },
+  { name: "userName", label: "이름", kind: "text", operators: OPS_TEXT, placeholder: "이름" },
+  { name: "team", label: "팀", options: Array.from(new Set(ROWS.map((r) => r.team))), multi: true, operators: OPS_SELECT },
+  { name: "createdOn", label: "등록일", kind: "date", operators: OPS_DATE, now: BASE_NOW },
 ];
 
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
@@ -92,8 +101,16 @@ export default function Sales365UsersPage() {
   const [extraShown, setExtraShown] = React.useState<string[]>([]);
   const [createOpen, setCreateOpen] = React.useState(false);
 
-  const rows = view === "empty" ? [] : ROWS;
-
+  // 행 거르기(2026-09-08 신설 — 종전엔 칩만 있고 거르지 않았다). 검색가능 열(스펙): 이름 · 팀
+  const q = keyword.trim().toLowerCase();
+  const rows = (view === "empty" ? [] : ROWS).filter(
+    (r) =>
+      (!q || `${r.name} ${r.team}`.toLowerCase().includes(q)) &&
+      passSelect(filterValues.active, r.active ? "활성" : "비활성") &&
+      passText(filterValues.userName, r.name) &&
+      passSelect(filterValues.team, r.team) &&
+      passDate(filterValues.createdOn, r.createdOn),
+  );
 
   return (
     <div className="space-y-6">
@@ -107,7 +124,7 @@ export default function Sales365UsersPage() {
 
       {/* ── 툴바 — 새 규칙(2026-08-26): 필터는 전부 여기, 헤더는 정렬만 ── */}
       <FilterBar
-        searchPlaceholder="이름 검색"
+        searchPlaceholder="이름 · 팀 검색"
         keyword={keyword}
         onKeyword={setKeyword}
         filters={PAGE_FILTERS}

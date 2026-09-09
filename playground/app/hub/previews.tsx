@@ -53,6 +53,7 @@ import { Button } from "@ds/ui/ui/button";
 // 스파이크(2026-09-07) — 버튼 6개 어휘는 이 파일이 아니라 FE 쪽 스토리 파일에서 그린다.
 // CSF 형식이지만 @storybook/* 를 안 쓰는 순수 객체라 새 의존성이 붙지 않는다.
 import * as buttonStories from "@ds/ui/ui/button.stories";
+import * as filterBarStories from "@ds/ui/ui/filter-bar.stories";
 import { Card, CardContent, CardDescription, CardTitle } from "@ds/ui/ui/card";
 import {
   Collapsible,
@@ -93,7 +94,6 @@ import { Calendar } from "@ds/ui/ui/calendar";
 import { Checkbox } from "@ds/ui/ui/checkbox";
 import { ErrorState } from "@ds/ui/ui/error-state";
 import { Field, FieldLabel } from "@ds/ui/ui/field";
-import { FilterBar, DATE_PRESETS, type FilterDef, type FilterValues } from "@ds/ui/ui/filter-bar";
 import { IconSelect } from "@ds/ui/ui/icon-select";
 import { Input } from "@ds/ui/ui/input";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@ds/ui/ui/input-group";
@@ -223,12 +223,6 @@ function DemoBreadcrumb() {
   );
 }
 
-// header-filter 데모 — FilterBar는 controlled라 상태 래퍼가 필요하다
-const DEMO_FILTERS: FilterDef[] = [
-  { name: "status", label: "상태", options: ["Pending", "Active", "Expired"], base: true },
-  { name: "product", label: "제품", options: ["Cloud", "Security", "NAS"], multi: true, base: true },
-  { name: "updated", label: "상태 갱신일", kind: "date", presets: DATE_PRESETS, base: true },
-];
 function RowsPerPageDemo() {
   const [v, setV] = React.useState(15);
   return (
@@ -236,21 +230,6 @@ function RowsPerPageDemo() {
       value={v}
       onChange={setV}
       summary={<>전체 247척 (<span className="text-destructive">●</span> 미입력 38척)</>}
-    />
-  );
-}
-
-function FilterBarDemo() {
-  const [keyword, setKeyword] = React.useState("");
-  const [values, setValues] = React.useState<FilterValues>({ status: "Pending", product: "Cloud, NAS" });
-  return (
-    <FilterBar
-      searchPlaceholder="계약 검색"
-      keyword={keyword}
-      onKeyword={setKeyword}
-      filters={DEMO_FILTERS}
-      values={values}
-      onChange={(n, v) => setValues((s) => ({ ...s, [n]: v }))}
     />
   );
 }
@@ -483,7 +462,8 @@ export const PREVIEWS: Record<string, Pv> = {
     className: BOX + " p-6",
     style: { width: 620 },
     hubOnly: true,
-    node: <FilterBarDemo />,
+    // 스토리 원문(ContractList — 세일즈 365 PRD 6.1) — 허브 카드와 Storybook이 같은 파일을 읽는다(2026-09-09)
+    node: filterBarStories.ContractList.render(),
   },
   "viz-line": {
     className: BOX + " p-6",
