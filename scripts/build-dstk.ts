@@ -258,6 +258,30 @@ if (existsSync(snapPath)) {
     const got = palette[CFAM[p[1]]]?.[p[2]]?.$value?.[CMODE[p[0]]]?.toUpperCase();
     if (got !== String(hexv).toUpperCase()) errs.push(`${CFAM[p[1]]}.${p[2]}.${CMODE[p[0]]}: snapshot ${hexv} ≠ palette ${got}`);
   }
+  // ── 틴트 게이트 — snapshot.tints(피그마 Tint 그룹) ↔ contrast-pairs tints.allowed 1:1,
+  //    값 = 시맨틱 base 해석값 × alpha(N/100) 3모드 전수. 코드엔 틴트 토큰이 없어(Tailwind /N 변형)
+  //    피그마만 RGBA를 따로 저장한다 — base가 바뀌면 여기서 드리프트가 잡힌다(2026-09-09).
+  {
+    const cpTint: any = existsSync(join(ROOT, "dstk/contrast-pairs.json")) ? readJson("dstk/contrast-pairs.json") : {};
+    const allowed: string[] = (cpTint.tints?.allowed ?? []).map((t: any) => String(t.class));
+    const tints: any[] = Array.isArray(snap.tints) ? snap.tints : [];
+    const have = tints.map((t) => String(t.class));
+    for (const c of allowed) if (!have.includes(c)) errs.push(`tint ${c}: contrast-pairs 허용 목록에 있으나 snapshot.tints에 없음`);
+    for (const t of tints) {
+      const cls = String(t.class);
+      if (!allowed.includes(cls)) errs.push(`tint ${cls}: snapshot.tints에 있으나 허용 목록 밖`);
+      const [base, n] = cls.split("/");
+      const alpha = Number(n) / 100;
+      if (t.name !== `Tint/${base}/${n}`) errs.push(`tint ${cls}: 변수 이름 ${t.name} ≠ Tint/${base}/${n}`);
+      if (!semantic[base]) { errs.push(`tint ${cls}: 시맨틱 토큰 ${base} 없음`); continue; }
+      for (const mode of THEME_MODES) {
+        const want = String(t[mode]?.hex ?? "").toUpperCase();
+        const got = (resolveToken(base, semantic[base], mode) || "").toUpperCase();
+        if (got !== want) errs.push(`tint ${cls}(${mode}): snapshot ${want} ≠ semantic ${base} ${got}`);
+        if (Math.abs(Number(t[mode]?.alpha) - alpha) > 1e-9) errs.push(`tint ${cls}(${mode}): alpha ${t[mode]?.alpha} ≠ ${alpha}`);
+      }
+    }
+  }
   if (errs.length) {
     throw new Error(`피그마 스냅샷 대조 실패 ${errs.length}건:\n  ` + errs.slice(0, 20).join("\n  "));
   }
@@ -368,6 +392,15 @@ if (existsSync(snapPath)) {
     const tokens = disp(entry.name);
     const note = entry.note ? ` — ${entry.note}` : "";
     md.push(`| ${entry.name}${note} | ${cell("light")} | ${cell("dark")} | ${cell("control")} | ${tokens.length ? tokens.join(" · ") : "(참조 전용)"} |`);
+  }
+  if (Array.isArray(snap.tints) && snap.tints.length) {
+    md.push("", "## Tint 그룹 (투명도 변형 — contrast-pairs tints.allowed 1:1)", "",
+      "코드엔 틴트 토큰이 없다 — Tailwind 투명도 변형(`bg-primary/5`)이 전부. 피그마만 모드별 RGBA로 저장하고 ds:build가 base × alpha 대조.", "",
+      "| Tint 변수 | 클래스 | Light | Dark | Control |", "|---|---|---|---|---|");
+    for (const t of snap.tints) {
+      const cell = (m: ThemeMode) => `${t[m].hex} @${Math.round(Number(t[m].alpha) * 100)}%`;
+      md.push(`| ${t.name} | \`bg-${t.class}\` | ${cell("light")} | ${cell("dark")} | ${cell("control")} |`);
+    }
   }
   md.push("", "## Theme 외 dstk 토큰 (상태 축·램프·비색상)", "", "| 토큰 | 참조 | 비고 |", "|---|---|---|");
   const covered = new Set(Object.values(T2D).flat().map((m) => m.t));

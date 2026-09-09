@@ -25,6 +25,25 @@
           </div>
         </div>
 
+        <h3>틴트(투명도 변형) 규칙</h3>
+        <div class="card">
+          <div class="card-body kv">
+            <div class="k">원리</div>
+            <div class="v">틴트 토큰은 없다. 시맨틱 색에 Tailwind 투명도 변형을 붙인 <span class="mono">bg-primary/5</span>가 전부다 — 렌더 시점에 바탕 위로 5% 합성되고, 모드(light · dark · control)는 시맨틱 색을 그대로 따른다. CSS 변수 <span class="mono">--tint-*</span>는 존재하지 않는다.</div>
+            <div class="k">허용 7종</div>
+            <div class="v"><span class="mono">primary/5</span> 선택 강조 칩 · primary-ghost hover<br>
+            <span class="mono">primary/10</span> 아바타 fallback 면<br>
+            <span class="mono">primary-foreground/10</span> bg-primary 면 위 아이콘 박스<br>
+            <span class="mono">destructive/5</span> 배너 표면(에러 · 취소 · 주의)<br>
+            <span class="mono">destructive/10</span> hover · focus 잉크(destructive-ghost · outline) · ErrorState 재시도 버튼<br>
+            <span class="mono">destructive/12</span> 진단 칩 에러 배경<br>
+            <span class="mono">success/12</span> 진단 칩 정상 배경<br><br>
+            원천 = <span class="mono">dstk/contrast-pairs.json → tints.allowed</span>. 생성 화면은 이 목록 밖 틴트를 쓰지 않는다(self-check 게이트). 컴포넌트 내부의 상태 틴트(hover 90 · disabled 50 · ring 20/40 등)는 @ds/ui 안에 이미 들어 있어 목록 대상이 아니다.</div>
+            <div class="k">피그마</div>
+            <div class="v">라이브러리 Theme 컬렉션의 <strong>Tint 그룹</strong>이 이 7종과 1:1이다(<span class="mono">Tint/primary/5</span> …). 피그마는 alias에 알파를 얹지 못해 값을 모드별 RGBA로 따로 저장하는데, <span class="mono">ds:build</span>가 스냅샷의 틴트 값 = 시맨틱 base × alpha 인지 3모드 전수 대조한다(불일치 = 빌드 실패). Dev Mode에서 변수를 클릭하면 코드 문법에 <span class="mono">bg-primary/5</span>가 그대로 나온다 — 그 클래스를 쓰면 된다. 컴포넌트 안의 hover · disabled 틴트는 변수 없이 페인트 불투명도로 남아 있다 — 코드에서 이미 컴포넌트가 가진 값이라 옮겨 적을 것이 없다.</div>
+          </div>
+        </div>
+
         <h3>왜 스톡 shadcn 설치로는 재현이 안 되나</h3>
         <div class="card">
           <div class="card-body kv">

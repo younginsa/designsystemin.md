@@ -2,7 +2,7 @@
 
 자동 생성 — `pnpm ds:build`가 `dstk/figma-theme-snapshot.json`에서 만든다. 손 편집 금지.
 피그마 원본: 「Theme × dstk 대조표」 노드 2807:24 (fileKey i5IhnacRAjg6NJdmtctfn2).
-마지막 업데이트: 2026-09-02
+마지막 업데이트: 2026-09-09
 
 | Theme 변수 | Light (Cloud) | Dark (SVM·NAS) | Control | dstk 토큰 |
 |---|---|---|---|---|
@@ -27,6 +27,20 @@
 | Chart/chart-3 | Day mode/SemanticBlue/600 #0F62FE | Day mode/SemanticBlue/600 #0F62FE | Day mode/SemanticBlue/600 #0F62FE | chart-3 |
 | Chart/chart-4 | Day mode/SemanticBlue/400 #78A9FF | Day mode/SemanticBlue/400 #78A9FF | Day mode/SemanticBlue/400 #78A9FF | chart-4 |
 | Chart/chart-5 | Day mode/SemanticBlue/200 #D0E2FF | Day mode/SemanticBlue/200 #D0E2FF | Day mode/SemanticBlue/200 #D0E2FF | chart-5 |
+
+## Tint 그룹 (투명도 변형 — contrast-pairs tints.allowed 1:1)
+
+코드엔 틴트 토큰이 없다 — Tailwind 투명도 변형(`bg-primary/5`)이 전부. 피그마만 모드별 RGBA로 저장하고 ds:build가 base × alpha 대조.
+
+| Tint 변수 | 클래스 | Light | Dark | Control |
+|---|---|---|---|---|
+| Tint/primary/5 | `bg-primary/5` | #4477F9 @5% | #348FF4 @5% | #348FF4 @5% |
+| Tint/primary/10 | `bg-primary/10` | #4477F9 @10% | #348FF4 @10% | #348FF4 @10% |
+| Tint/primary-foreground/10 | `bg-primary-foreground/10` | #FFFFFF @10% | #FFFFFF @10% | #15161A @10% |
+| Tint/destructive/5 | `bg-destructive/5` | #FF5B5B @5% | #FA454E @5% | #A50000 @5% |
+| Tint/destructive/10 | `bg-destructive/10` | #FF5B5B @10% | #FA454E @10% | #A50000 @10% |
+| Tint/destructive/12 | `bg-destructive/12` | #FF5B5B @12% | #FA454E @12% | #A50000 @12% |
+| Tint/success/12 | `bg-success/12` | #24A148 @12% | #24A148 @12% | #24A148 @12% |
 
 ## Theme 외 dstk 토큰 (상태 축·램프·비색상)
 
