@@ -10,6 +10,8 @@
 @theme inline {
   /* 서체 — Inter(라이브러리 정합), 한글은 시스템 폴백 */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", sans-serif;
+  /* 모노 — Roboto Mono(피그마 Desktop/mono_* 정합, 2026-09-10). font-mono 클래스가 이 변수를 쓴다 */
+  --font-mono: var(--font-roboto-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

@@ -1,6 +1,6 @@
 /* 자동 생성 — 손으로 편집 금지. 원천: dstk/palette.json + semantic.json (Theme 정렬) */
 
-/* commit 0f6c40e · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
+/* commit 2cb5c22 · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
 
 :root {
   --gray-10: #FBFBFB;
@@ -165,6 +165,15 @@
   --type-desktop-display-xs-size: 28px;
   --type-desktop-display-xs-line-height: 32px;
   --type-desktop-display-xs-weight: 700;
+  --type-desktop-mono-m-size: 12px;
+  --type-desktop-mono-m-line-height: 16px;
+  --type-desktop-mono-m-weight: 400;
+  --type-desktop-mono-body-size: 13px;
+  --type-desktop-mono-body-line-height: 20px;
+  --type-desktop-mono-body-weight: 400;
+  --type-desktop-mono-l-size: 14px;
+  --type-desktop-mono-l-line-height: 20px;
+  --type-desktop-mono-l-weight: 400;
   --type-2m-caption-size: 31px;
   --type-2m-body1-size: 34px;
   --type-2m-body2-size: 38px;

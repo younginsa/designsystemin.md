@@ -3,4 +3,6 @@
    없으면 시스템 sans(한글은 원래부터 시스템 폴백 — 앱과 같은 거동). */
 :root {
   --font-inter: "Inter", ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", sans-serif;
+  /* 모노 — 앱은 next/font(Roboto Mono)가 정의하는 --font-roboto-mono 를 쓴다. 로컬에 Roboto Mono 가 있으면 그것, 없으면 시스템 모노 */
+  --font-roboto-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }

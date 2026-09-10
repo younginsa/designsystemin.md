@@ -605,6 +605,7 @@ if (existsSync(join(ROOT, "playground", "public"))) {
     `body {\n  margin: 0;\n  background: var(--general-background);\n  color: var(--general-foreground);\n}`,
     block("@theme inline", [
       "  --font-sans: \"Inter\", system-ui, sans-serif;",
+      "  --font-mono: \"Roboto Mono\", ui-monospace, SFMono-Regular, Menlo, monospace; /* DS 모노 서체(2026-09-10) — 피그마 Desktop/mono_* 정합 */",
       "  --radius-sm: calc(var(--radius) - 4px);",
       "  --radius-md: calc(var(--radius) - 2px);",
       "  --radius-lg: var(--radius);",

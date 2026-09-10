@@ -1,4 +1,4 @@
-/* 자동 생성 — 손 편집 금지 · commit 0f6c40e · 2026-09-10 · 원천: dstk/*.json (git이 source of truth) */
+/* 자동 생성 — 손 편집 금지 · commit 2cb5c22 · 2026-09-10 · 원천: dstk/*.json (git이 source of truth) */
 
 /* typography — 피그마 Desktop 텍스트 스타일 실측. 무게는 역할별 대표값(피그마는 사이즈당 Regular~Bold 4종 제공) */
 
@@ -23,6 +23,12 @@
   --text-title-xl-line-height: 28px;
   --text-display-xs-size: 28px;
   --text-display-xs-line-height: 32px;
+  --text-mono-m-size: 12px;
+  --text-mono-m-line-height: 16px;
+  --text-mono-body-size: 13px;
+  --text-mono-body-line-height: 20px;
+  --text-mono-l-size: 14px;
+  --text-mono-l-line-height: 20px;
 
   --font-weight-regular: 400;
   --font-weight-medium: 500;
