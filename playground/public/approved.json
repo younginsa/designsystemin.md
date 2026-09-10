@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-03",
+  "updated": "2026-09-10",
   "approved": [
     "app-shell",
     "breadcrumb",
@@ -40,6 +40,7 @@
     "form-textarea",
     "header-filter",
     "icon-select",
+    "list-footer",
     "ov-dialog",
     "ov-menus",
     "ov-notif",

@@ -87,6 +87,7 @@ import * as statusBadgeStories from "@ds/ui/ui/status-badge.stories";
 import * as sidebarStories from "@ds/ui/ui/sidebar.stories";
 import * as breadcrumbStories from "@ds/ui/ui/breadcrumb.stories";
 import * as rowsPerPageStories from "@ds/ui/ui/rows-per-page.stories";
+import * as listFooterStories from "@ds/ui/ui/list-footer.stories";
 import * as timelineStories from "@ds/ui/ui/timeline.stories";
 import { Card, CardContent, CardDescription, CardTitle } from "@ds/ui/ui/card";
 import {
@@ -447,6 +448,8 @@ export const PREVIEWS: Record<string, Pv> = {
   "data-tabs": fromStories("data-tabs", tabsStories, { className: "flex flex-col items-start gap-4 " + BOX + " p-6", style: { width: 560 } }),
   "data-pagination": fromStories("data-pagination", paginationStories, { className: "flex items-center justify-center " + BOX, style: { width: 560, height: 110 } }),
   "rows-per-page": fromStories("rows-per-page", rowsPerPageStories, { className: "flex items-center justify-center " + BOX, style: { width: 560, height: 110 }, hubOnly: true }),
+  // 목록 푸터 — RowsPerPage + Pagination 한 행(첫 페이지 · 중간 · 단일 페이지), 2026-09-10 채택 55종째
+  "list-footer": fromStories("list-footer", listFooterStories, { className: "flex flex-col gap-6 " + BOX + " p-6", style: { width: 900 }, hubOnly: true }),
   "data-progress": fromStories("data-progress", progressStories, { className: "flex items-center gap-4 " + BOX + " px-10", style: { width: 560, height: 110 } }),
   "data-tree": fromStories("data-tree", collapsibleStories, { className: BOX + " p-4", style: { width: 400 } }),
   timeline: fromStories("timeline", timelineStories, { className: BOX + " p-6", style: { width: 400 }, captureId: "data-timeline" }),

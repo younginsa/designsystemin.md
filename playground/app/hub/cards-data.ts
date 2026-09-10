@@ -353,6 +353,11 @@ export const CARD_GROUPS: HubGroup[] = [
         "shadcn": "조합(DropdownMenu·Button)"
       },
       {
+        "slug": "list-footer",
+        "name": "목록 푸터 (행 수 · 전체 건수 · 페이지네이션)",
+        "shadcn": "조합(RowsPerPage·Pagination)"
+      },
+      {
         "slug": "heatmap",
         "name": "히트맵 그리드",
         "prio": "P2",

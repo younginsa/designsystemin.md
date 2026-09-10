@@ -57,6 +57,8 @@ function PaginationLink({
         buttonVariants({ variant: "ghost", size }),
         // 확정 스펙 — 선택: 테두리·배경 없이 텍스트 강조 / 비선택·Previous·Next: 흐린 텍스트
         isActive ? "font-extrabold" : "text-secondary-foreground",
+        // 양 끝 Previous/Next 는 aria-disabled — <a>라 disabled: 가 안 먹으므로 Button disabled 스펙(흐림 50%·클릭 차단)을 aria 로 재현(2026-09-10, ListFooter)
+        "aria-disabled:pointer-events-none aria-disabled:opacity-50",
         className
       )}
       {...props}
