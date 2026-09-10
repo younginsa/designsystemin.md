@@ -56,7 +56,7 @@ export const Variants = {
     <ItemGroup className="w-96 gap-2">
       <Item><ItemMedia variant="icon"><Monitor /></ItemMedia><ItemContent><ItemTitle>default · default</ItemTitle><ItemDescription>gap-4 p-4</ItemDescription></ItemContent></Item>
       <Item variant="outline"><ItemContent><ItemTitle>outline · default</ItemTitle><ItemDescription>border-border</ItemDescription></ItemContent></Item>
-      <Item variant="muted" size="sm"><ItemContent><ItemTitle>muted · sm</ItemTitle><ItemDescription>bg-muted/50 · gap-2.5 px-4 py-3</ItemDescription></ItemContent></Item>
+      <Item variant="muted" size="sm"><ItemContent><ItemTitle>muted · sm</ItemTitle><ItemDescription>bg-secondary · gap-2.5 px-4 py-3</ItemDescription></ItemContent></Item>
     </ItemGroup>
   ),
 }

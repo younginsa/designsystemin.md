@@ -172,7 +172,7 @@ function SearchBox({
                     <button
                       key={t}
                       type="button"
-                      className="rounded-sm bg-muted px-1.5 py-0.5 text-xs hover:bg-border"
+                      className="rounded-sm bg-muted px-1.5 py-0.5 text-xs hover:bg-accent"
                       onClick={() => commit(t)}
                     >
                       {t}

@@ -58,6 +58,12 @@
 - **Separator** — 섹션 구분. 여백으로 충분하면 쓰지 않는다.
 - **Alert** — 페이지 내 정적 안내·경고. 파괴 배너 표면 = `bg-destructive/5`
   (2026-09-02 개정 — /10은 hover·버튼 잉크로 이관).
+- **hover 색(2026-09-10 확정)** — 중립 면 위 hover = `accent` 하나(오버레이라 light·dark·control 공통).
+  색 있는 면은 자기 색의 90%(`primary/90`·`destructive/90`·`secondary/80`), destructive-ghost·outline은
+  `destructive/10`, primary-ghost는 `primary/5`. 표 행 상태 = hover `accent` · expanded `secondary` ·
+  selected `muted`(예약 — 두 앱 어디도 행 선택 미사용). `bg-muted/50`은 `secondary`로 교체 — 시스템에 없다.
+  컴포넌트 내부 틴트(hover 90·80, disabled 50, ring 50/20, border 40, progress 20)는 허용 목록 대상이 아니다 —
+  365 「04 프론트 연동」 틴트 규칙 표 참조.
 - **Skeleton** — 로딩 상태. 스피너보다 우선.
 
 import 경로는 `@ds/ui/ui/<컴포넌트>` 형식이다. 예: `import { Button } from "@ds/ui/ui/button"`.

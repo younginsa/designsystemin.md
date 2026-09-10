@@ -22,11 +22,12 @@ const buttonVariants = cva(
         "primary-ghost":
           "text-primary hover:bg-primary/5 hover:text-primary",
         outline:
-          "border bg-card hover:bg-accent hover:text-accent-foreground dark:border-border dark:bg-input/30 dark:hover:bg-input/50",
+          "border bg-card hover:bg-accent hover:text-accent-foreground dark:border-border dark:bg-input/30",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+          // hover = accent 하나(2026-09-10 확정 — dark 전용 /50 변형 제거, accent 는 모드별 알파를 가진 오버레이)
+          "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

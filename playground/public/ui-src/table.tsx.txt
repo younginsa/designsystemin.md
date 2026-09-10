@@ -33,7 +33,8 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:border-b bg-muted/50", className)}
+      // bg-secondary — 종전 bg-muted/50(틴트)과 같은 색을 불투명 토큰으로(2026-09-10 확정: 틴트는 시스템에서 제거)
+      className={cn("[&_tr]:border-b bg-secondary", className)}
       {...props}
     />
   )
@@ -54,7 +55,7 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
     <tfoot
       data-slot="table-footer"
       className={cn(
-        "border-t bg-muted/50 font-medium [&>tr]:last:border-b-0",
+        "border-t bg-secondary font-medium [&>tr]:last:border-b-0",
         className
       )}
       {...props}
@@ -70,7 +71,8 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "border-b transition-colors has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted",
+        // 행 상태(2026-09-10 확정): hover = 사용처가 accent 명시 · expanded = secondary · selected = muted(예약 — 현재 미사용)
+        "border-b transition-colors has-aria-expanded:bg-secondary data-[state=selected]:bg-muted",
         className
       )}
       {...props}
