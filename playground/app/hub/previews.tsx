@@ -84,6 +84,10 @@ import * as emptyStories from "@ds/ui/ui/empty.stories";
 import * as skeletonStories from "@ds/ui/ui/skeleton.stories";
 import * as errorConsoleStories from "@ds/ui/ui/error-console.stories";
 import * as statusBadgeStories from "@ds/ui/ui/status-badge.stories";
+import * as sidebarStories from "@ds/ui/ui/sidebar.stories";
+import * as breadcrumbStories from "@ds/ui/ui/breadcrumb.stories";
+import * as rowsPerPageStories from "@ds/ui/ui/rows-per-page.stories";
+import * as timelineStories from "@ds/ui/ui/timeline.stories";
 import { Card, CardContent, CardDescription, CardTitle } from "@ds/ui/ui/card";
 import {
   Collapsible,
@@ -320,50 +324,9 @@ const BTN_FRAME: Omit<Pv, "node"> = { className: "flex items-center justify-cent
 /* ── 레지스트리 ────────────────────────────────────────────────────── */
 
 export const PREVIEWS: Record<string, Pv> = {
-  "app-shell": {
-    className: "w-fit " + BOX,
-    node: (
-      <SidebarProvider className="min-h-0 w-fit">
-        <div className="flex" style={{ width: 960, height: 540 }}>
-          <Sidebar collapsible="none" className="border-r border-border">
-            <SidebarHeader>
-              <div className="px-2 py-1 text-sm font-semibold">HiNAS 365</div>
-            </SidebarHeader>
-            <SidebarContent>
-              <NavGroups />
-            </SidebarContent>
-          </Sidebar>
-          <SidebarInset className="min-h-0">
-            <header className="flex h-12 shrink-0 items-center gap-2 border-b border-border px-4">
-              <SidebarTrigger />
-              <Separator orientation="vertical" className="mr-2 h-4" />
-              <DemoBreadcrumb />
-            </header>
-            <div className="flex flex-1 flex-col gap-4 p-4">
-              <div className="grid grid-cols-3 gap-4">
-                <div className="aspect-video rounded-lg bg-muted" />
-                <div className="aspect-video rounded-lg bg-muted" />
-                <div className="aspect-video rounded-lg bg-muted" />
-              </div>
-              <div className="min-h-0 flex-1 rounded-lg bg-muted" />
-            </div>
-          </SidebarInset>
-        </div>
-      </SidebarProvider>
-    ),
-  },
-  "sidebar-nav": {
-    className: "w-fit " + BOX,
-    node: (
-      <SidebarProvider className="min-h-0 w-fit">
-        <Sidebar collapsible="none" style={{ height: 480 }}>
-          <SidebarContent>
-            <NavGroups />
-          </SidebarContent>
-        </Sidebar>
-      </SidebarProvider>
-    ),
-  },
+  // 배치 6 — app-shell · sidebar-nav · breadcrumb · rows-per-page · timeline 은 스토리 원문(2026-09-10)
+  "app-shell": fromStories("app-shell", sidebarStories, { className: "w-fit " + BOX }),
+  "sidebar-nav": fromStories("sidebar-nav", sidebarStories, { className: "w-fit " + BOX }),
   "page-header": {
     className: "flex items-center justify-between " + BOX + " px-6",
     style: { width: 960, height: 76 },
@@ -388,11 +351,7 @@ export const PREVIEWS: Record<string, Pv> = {
       </>
     ),
   },
-  breadcrumb: {
-    className: "flex items-center " + BOX + " px-6",
-    style: { width: 640, height: 56 },
-    node: <DemoBreadcrumb />,
-  },
+  breadcrumb: fromStories("breadcrumb", breadcrumbStories, { className: "flex items-center " + BOX + " px-6", style: { width: 640, height: 56 } }),
   "icon-select": fromStories("icon-select", iconSelectStories, { className: "flex items-center justify-center " + BOX, style: strip, hubOnly: true }),
 
   /* ── 버튼 ── */
@@ -487,35 +446,10 @@ export const PREVIEWS: Record<string, Pv> = {
   "data-accordion": fromStories("data-accordion", accordionStories, { className: BOX + " px-6 py-2", style: { width: 560 } }),
   "data-tabs": fromStories("data-tabs", tabsStories, { className: "flex flex-col items-start gap-4 " + BOX + " p-6", style: { width: 560 } }),
   "data-pagination": fromStories("data-pagination", paginationStories, { className: "flex items-center justify-center " + BOX, style: { width: 560, height: 110 } }),
-  "rows-per-page": {
-    className: "flex items-center justify-center " + BOX,
-    style: { width: 560, height: 110 },
-    hubOnly: true,
-    node: <RowsPerPageDemo />,
-  },
+  "rows-per-page": fromStories("rows-per-page", rowsPerPageStories, { className: "flex items-center justify-center " + BOX, style: { width: 560, height: 110 }, hubOnly: true }),
   "data-progress": fromStories("data-progress", progressStories, { className: "flex items-center gap-4 " + BOX + " px-10", style: { width: 560, height: 110 } }),
   "data-tree": fromStories("data-tree", collapsibleStories, { className: BOX + " p-4", style: { width: 400 } }),
-  timeline: {
-    className: BOX + " p-6",
-    style: { width: 400 },
-    captureId: "data-timeline",
-    node: (
-      <Timeline>
-        <TimelineItem status="error">
-          <TimelineTitle>SYSTEM ROLLBACK FAILED</TimelineTitle>
-          <TimelineMeta>20일 20시간 전</TimelineMeta>
-        </TimelineItem>
-        <TimelineItem status="error">
-          <TimelineTitle>SYSTEM ROLLING BACK</TimelineTitle>
-          <TimelineMeta>20일 20시간 전 · 소요 1분 37초</TimelineMeta>
-        </TimelineItem>
-        <TimelineItem>
-          <TimelineTitle>SYSTEM UPDATING</TimelineTitle>
-          <TimelineMeta>20일 20시간 전 · 소요 3분 4초</TimelineMeta>
-        </TimelineItem>
-      </Timeline>
-    ),
-  },
+  timeline: fromStories("timeline", timelineStories, { className: BOX + " p-6", style: { width: 400 }, captureId: "data-timeline" }),
   stepper: {
     className: BOX + " p-6",
     style: { width: 720 },
