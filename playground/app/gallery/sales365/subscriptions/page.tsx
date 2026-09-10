@@ -34,6 +34,7 @@ import {
 } from "@ds/ui/ui/filter-bar";
 // 상세 조건 매처(2026-09-08) — 여섯 목록 공용
 import { passDate, passDateSpan, passSelect } from "../_filter";
+import { contractName, itemFromPackage } from "../../_detail/contract-name";
 import { ErrorState } from "@ds/ui/ui/error-state";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import { DEFAULT_STATES, StatePreview } from "@ds/ui/ui/state-preview";
@@ -51,6 +52,9 @@ import {
 } from "@ds/ui/ui/rows-per-page";
 
 const BASE = "/gallery/sales365";
+// 계약명 조립 규칙(2026-09-09) — 샘플은 패키지 + 척수로 적는다
+const cn = (date: string, customer: string, pkg: string, count: number) =>
+  contractName(date, customer, [itemFromPackage(pkg, count)]);
 
 /* ---------------------------------------------------------------- 날짜 유틸 (UTC 고정) */
 
@@ -91,26 +95,26 @@ type Row = {
 
 // 와이어프레임 ROWS 이식 — Hull 1001 다섯 건은 S7 구독 탭과 같은 데이터
 const ROWS: Row[] = [
-  { id: 1, vessel: { hull: "Hull 1006", name: "MV FRONTIER" }, product: "Control", contract: { id: "C-2025-008", name: "2025-04-18-동보선사-Smart Standard-2척" }, item: "C-2025-008-01", start: "2024-09-05", termMonths: 24, adjDays: 0, early: null, pauses: [], cancelled: false },
-  { id: 2, vessel: { hull: "Hull 1008", name: "MV ATLAS" }, product: "SVM", contract: { id: "C-2023-071", name: "2023-09-15-대양해운-Safety Around-4척" }, item: "C-2023-071-01", start: "2023-10-01", termMonths: 36, adjDays: 0, early: null, pauses: [], cancelled: false },
-  { id: 3, vessel: { hull: "Hull 1007", name: "MV HORIZON" }, product: "Cloud", contract: { id: "C-2024-016", name: "2024-01-20-대양해운-Cloud-2척" }, item: "C-2024-016-02", start: "2024-10-15", termMonths: 24, adjDays: 0, early: null, pauses: [], cancelled: false },
+  { id: 1, vessel: { hull: "Hull 1006", name: "MV FRONTIER" }, product: "Control", contract: { id: "C-2025-008", name: cn("2025-04-18", "동보선사", "Smart Standard", 2) }, item: "C-2025-008-01", start: "2024-09-05", termMonths: 24, adjDays: 0, early: null, pauses: [], cancelled: false },
+  { id: 2, vessel: { hull: "Hull 1008", name: "MV ATLAS" }, product: "SVM", contract: { id: "C-2023-071", name: cn("2023-09-15", "대양해운", "Safety Around", 4) }, item: "C-2023-071-01", start: "2023-10-01", termMonths: 36, adjDays: 0, early: null, pauses: [], cancelled: false },
+  { id: 3, vessel: { hull: "Hull 1007", name: "MV HORIZON" }, product: "Cloud", contract: { id: "C-2024-016", name: cn("2024-01-20", "대양해운", "Cloud", 2) }, item: "C-2024-016-02", start: "2024-10-15", termMonths: 24, adjDays: 0, early: null, pauses: [], cancelled: false },
   // 중단 중 + 만료 임박 — 열린 중단은 재개 시 연장 여부에 따라 만료일이 밀릴 수 있다
-  { id: 4, vessel: { hull: "Hull 1002", name: "MV PIONEER" }, product: "Navigation", contract: { id: "C-2024-033", name: "2024-10-01-우진해운-Safety Forward-3척" }, item: "C-2024-033-01", start: "2024-10-20", termMonths: 24, adjDays: 0, early: null, pauses: [{ from: "2026-06-01", to: null }], cancelled: false },
-  { id: 5, vessel: { hull: "Hull 1009", name: null }, product: "Navigation", contract: { id: "C-2024-044", name: "2024-10-20-우진해운-Safety Forward-2척" }, item: "C-2024-044-01", start: "2024-11-14", termMonths: 24, adjDays: 0, early: null, pauses: [], cancelled: false },
+  { id: 4, vessel: { hull: "Hull 1002", name: "MV PIONEER" }, product: "Navigation", contract: { id: "C-2024-033", name: cn("2024-10-01", "우진해운", "Safety Forward", 3) }, item: "C-2024-033-01", start: "2024-10-20", termMonths: 24, adjDays: 0, early: null, pauses: [{ from: "2026-06-01", to: null }], cancelled: false },
+  { id: 5, vessel: { hull: "Hull 1009", name: null }, product: "Navigation", contract: { id: "C-2024-044", name: cn("2024-10-20", "우진해운", "Safety Forward", 2) }, item: "C-2024-044-01", start: "2024-11-14", termMonths: 24, adjDays: 0, early: null, pauses: [], cancelled: false },
   // 이미 만료 · 갱신 계약 없음 — 갱신 영업의 핵심 대상
-  { id: 6, vessel: { hull: "Hull 1010", name: "MV VOYAGER" }, product: "Control", contract: { id: "C-2022-019", name: "2022-11-10-동보선사-Smart Standard-1척" }, item: "C-2022-019-01", start: "2024-08-01", termMonths: 24, adjDays: 0, early: null, pauses: [], cancelled: false },
-  { id: 7, vessel: { hull: "Hull 1001", name: "MV EXAMPLE" }, product: "Control", contract: { id: "C-2026-001", name: "2026-01-15-대양해운-Enterprise-5척" }, item: "C-2026-001-01", start: "2026-07-01", termMonths: 36, adjDays: 65, early: null, pauses: [{ from: "2027-01-10", to: "2027-03-01" }], cancelled: false },
+  { id: 6, vessel: { hull: "Hull 1010", name: "MV VOYAGER" }, product: "Control", contract: { id: "C-2022-019", name: cn("2022-11-10", "동보선사", "Smart Standard", 1) }, item: "C-2022-019-01", start: "2024-08-01", termMonths: 24, adjDays: 0, early: null, pauses: [], cancelled: false },
+  { id: 7, vessel: { hull: "Hull 1001", name: "MV EXAMPLE" }, product: "Control", contract: { id: "C-2026-001", name: cn("2026-01-15", "대양해운", "Enterprise", 5) }, item: "C-2026-001-01", start: "2026-07-01", termMonths: 36, adjDays: 65, early: null, pauses: [{ from: "2027-01-10", to: "2027-03-01" }], cancelled: false },
   // 시작일 미정 → 만료일 미정 — 만료 임박이 아니라 정체된 건
-  { id: 8, vessel: { hull: "Hull 1001", name: "MV EXAMPLE" }, product: "SVM", contract: { id: "C-2026-001", name: "2026-01-15-대양해운-Enterprise-5척" }, item: "C-2026-001-01", start: null, termMonths: 12, adjDays: 0, early: null, pauses: [], cancelled: false },
-  { id: 9, vessel: { hull: "Hull 1001", name: "MV EXAMPLE" }, product: "Navigation", contract: { id: "C-2025-004", name: "2025-02-20-대양해운-Safety Forward-1척" }, item: "C-2025-004-01", start: "2025-03-01", termMonths: 24, adjDays: 0, early: null, pauses: [{ from: "2026-08-01", to: null }], cancelled: false },
+  { id: 8, vessel: { hull: "Hull 1001", name: "MV EXAMPLE" }, product: "SVM", contract: { id: "C-2026-001", name: cn("2026-01-15", "대양해운", "Enterprise", 5) }, item: "C-2026-001-01", start: null, termMonths: 12, adjDays: 0, early: null, pauses: [], cancelled: false },
+  { id: 9, vessel: { hull: "Hull 1001", name: "MV EXAMPLE" }, product: "Navigation", contract: { id: "C-2025-004", name: cn("2025-02-20", "대양해운", "Safety Forward", 1) }, item: "C-2025-004-01", start: "2025-03-01", termMonths: 24, adjDays: 0, early: null, pauses: [{ from: "2026-08-01", to: null }], cancelled: false },
   // 조기 종료 — 만료일이 사용자 지정 고정값
-  { id: 10, vessel: { hull: "Hull 1001", name: "MV EXAMPLE" }, product: "Cloud", contract: { id: "C-2024-016", name: "2024-01-20-대양해운-Cloud-2척" }, item: "C-2024-016-01", start: "2024-02-01", termMonths: 36, adjDays: 0, early: { end: "2026-05-31", label: "선박 매각" }, pauses: [], cancelled: false },
-  { id: 11, vessel: { hull: "Hull 1001", name: "MV EXAMPLE" }, product: "Shield", contract: { id: "C-2023-020", name: "2023-02-15-대양해운-Shield-2척" }, item: "C-2023-020-01", start: "2024-03-01", termMonths: 24, adjDays: 0, early: null, pauses: [], cancelled: false },
-  { id: 12, vessel: { hull: "Hull 1005", name: "MV SEABIRD" }, product: "Control", contract: { id: "C-2025-012", name: "2025-01-05-한성해운-Smart Standard-2척" }, item: "C-2025-012-01", start: "2025-01-10", termMonths: 24, adjDays: 0, early: null, pauses: [], cancelled: false },
+  { id: 10, vessel: { hull: "Hull 1001", name: "MV EXAMPLE" }, product: "Cloud", contract: { id: "C-2024-016", name: cn("2024-01-20", "대양해운", "Cloud", 2) }, item: "C-2024-016-01", start: "2024-02-01", termMonths: 36, adjDays: 0, early: { end: "2026-05-31", label: "선박 매각" }, pauses: [], cancelled: false },
+  { id: 11, vessel: { hull: "Hull 1001", name: "MV EXAMPLE" }, product: "Shield", contract: { id: "C-2023-020", name: cn("2023-02-15", "대양해운", "Shield", 2) }, item: "C-2023-020-01", start: "2024-03-01", termMonths: 24, adjDays: 0, early: null, pauses: [], cancelled: false },
+  { id: 12, vessel: { hull: "Hull 1005", name: "MV SEABIRD" }, product: "Control", contract: { id: "C-2025-012", name: cn("2025-01-05", "한성해운", "Smart Standard", 2) }, item: "C-2025-012-01", start: "2025-01-10", termMonths: 24, adjDays: 0, early: null, pauses: [], cancelled: false },
   // 시작일 미도래 → 예정
-  { id: 13, vessel: { hull: "Hull 1003", name: null }, product: "Control", contract: { id: "C-2026-001", name: "2026-01-15-대양해운-Enterprise-5척" }, item: "C-2026-001-01", start: "2026-12-01", termMonths: 36, adjDays: 0, early: null, pauses: [], cancelled: false },
+  { id: 13, vessel: { hull: "Hull 1003", name: null }, product: "Control", contract: { id: "C-2026-001", name: cn("2026-01-15", "대양해운", "Enterprise", 5) }, item: "C-2026-001-01", start: "2026-12-01", termMonths: 36, adjDays: 0, early: null, pauses: [], cancelled: false },
   // 취소 — 기본 숨김(상태 필터 기본값에서 제외)
-  { id: 14, vessel: { hull: "Hull 1004", name: null }, product: "SVM", contract: { id: "C-2026-001", name: "2026-01-15-대양해운-Enterprise-5척" }, item: "C-2026-001-03", start: "2026-05-01", termMonths: 36, adjDays: 0, early: null, pauses: [], cancelled: true },
+  { id: 14, vessel: { hull: "Hull 1004", name: null }, product: "SVM", contract: { id: "C-2026-001", name: cn("2026-01-15", "대양해운", "Enterprise", 5) }, item: "C-2026-001-03", start: "2026-05-01", termMonths: 36, adjDays: 0, early: null, pauses: [], cancelled: true },
 ];
 
 /* ---------------------------------------------------------------- 조회 시점 계산 */
@@ -324,7 +328,12 @@ export default function SubscriptionListPage() {
                       {r.vessel.name ?? "선명 미입력"}
                     </div>
                   </TableCell>
-                  <TableCell>{r.product}</TableCell>
+                  {/* 제품 = 회색 배지 — 계약·계정·유저 목록의 상품 열과 같은 문법(2026-09-09 피그마 코멘트) */}
+                  <TableCell>
+                    <Badge variant="secondary" className="font-normal">
+                      {r.product}
+                    </Badge>
+                  </TableCell>
                   <TableCell>
                     {expiry ? (
                       <>

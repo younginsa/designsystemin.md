@@ -12,8 +12,8 @@
 // - 내보내기는 목록 공통 요소 규칙(CSV/XLSX 드롭다운)으로 통일 — 와이어프레임은 플레인 버튼
 //
 // 2026-09-07 디자이너 확정 3건
-// ① 계약명은 자동 생성(2026-09-09 개정 — 계약일-고객-패키지-N척, 항목마다 이어 붙음, _detail/contract-name).
-//    사람이 입력하지 않으므로 글자 수 제한은 없고 100자 안팎까지 길어진다. 목록 셀은 max-w-xs + 2줄까지,
+// ① 계약명은 자동 생성(2026-09-09 개정 — "{계약일} {고객} {제품 이행단축, …} N척 / …", _detail/contract-name).
+//    사람이 입력하지 않으므로 글자 수 제한은 없고 항목이 늘면 100자를 훌쩍 넘는다. 목록 셀은 max-w-xs + 2줄까지,
 //    넘치면 말줄임(line-clamp-2). 전체 이름은 계약 상세가 답한다. (종전 40자 입력 제한은 폐기)
 // ② 취소 여부 = 취소된 행만 「취소됨」 표기 · 정상은 빈 칸(도트도 없음).
 //    9건 중 8건이 "정상"을 반복하던 노이즈 제거 — 예외만 눈에 띄게. 납품 목록도 같은 문법.
@@ -70,8 +70,8 @@ import { BASE_NOW, passDate, passSelect, passText } from "../_filter";
 
 // 사람 요소 잠금(2026-09-04): 담당 = 프로필(이니셜) + 이름 — _detail/person 공유
 import { Person } from "../../_detail/person";
-// 계약명 자동 생성 규칙(2026-09-09) — 생성 폼·상세와 같은 부품
-import { contractName, type ContractItemSpec } from "../../_detail/contract-name";
+// 계약명 자동 생성 규칙(2026-09-09) — 생성 폼·상세와 같은 부품. 샘플은 패키지 + 척수를 적고 제품별 이행 종류는 기본값
+import { contractName, itemFromPackage } from "../../_detail/contract-name";
 
 const BASE = "/gallery/sales365";
 
@@ -88,12 +88,15 @@ type Row = {
   ctype: "신조" | "개조";
   date: string;
   owner: string;
-  /** 계약 항목별 패키지·척수 — 계약명의 원천 */
-  items: ContractItemSpec[];
+  /** 계약 항목별 패키지·척수 — 계약명의 원천(제품별 이행 종류는 itemFromPackage 기본값) */
+  items: { pkg: string; count: number }[];
   vessels: { valid: number; total: number };
 };
 /** 행 조립 — name은 항상 규칙에서 나온다(손으로 적지 않는다) */
-const row = (r: Omit<Row, "name">): Row => ({ ...r, name: contractName(r.date, r.customer, r.items) });
+const row = (r: Omit<Row, "name">): Row => ({
+  ...r,
+  name: contractName(r.date, r.customer, r.items.map((i) => itemFromPackage(i.pkg, i.count))),
+});
 
 const CUSTOMERS = [
   "대양해운",
@@ -111,12 +114,12 @@ const OWNERS = ["홍길동", "김담당", "이대리"];
 const PACKAGES = ["Enterprise", "Smart Standard", "Safety Forward", "Safety Around", "Cloud"];
 
 // 대표 행 — 이름 길이 경계와 취소 건을 손으로 박아 둔다.
-// · 항목 4개(C-2026-047) = 100자 안팎으로 가장 긴 이름 → 2줄을 넘겨 말줄임되는 케이스
-// · 항목 2개(C-2026-041) = 2줄에 꽉 차되 잘리지 않는 케이스
+// · 항목 2개(C-2026-047, Enterprise 3제품 + Safety Forward 2제품) = 100자를 넘기는 가장 긴 이름 → 2줄을 넘겨 말줄임
+// · 항목 2개(C-2026-041, 2제품씩) = 2줄 안에 드는 케이스
 // · 취소 6건 — 기본 필터가 「정상」이라 칩을 「취소됨」으로 바꿔야 보인다
 const FEATURED: Row[] = [
-  // 항목 4개 — 말줄임 확인용(가장 긴 이름)
-  row({ id: "C-2026-047", cancelled: false, cancelReason: null, customer: "서해해운", ctype: "신조", date: "2026-08-20", owner: "홍길동", items: [{ pkg: "Enterprise", count: 3 }, { pkg: "Smart Standard", count: 2 }, { pkg: "Safety Forward", count: 1 }, { pkg: "Safety Around", count: 1 }], vessels: { valid: 7, total: 7 } }),
+  // 항목 2개 — 말줄임 확인용(가장 긴 이름)
+  row({ id: "C-2026-047", cancelled: false, cancelReason: null, customer: "서해해운", ctype: "신조", date: "2026-08-20", owner: "홍길동", items: [{ pkg: "Enterprise", count: 4 }, { pkg: "Safety Forward", count: 3 }], vessels: { valid: 7, total: 7 } }),
   row({ id: "C-2026-046", cancelled: false, cancelReason: null, customer: "대양해운", ctype: "신조", date: "2026-08-05", owner: "김담당", items: [{ pkg: "Smart Standard", count: 12 }], vessels: { valid: 12, total: 12 } }),
   row({ id: "C-2026-045", cancelled: false, cancelReason: null, customer: "신광해운", ctype: "개조", date: "2026-07-28", owner: "이대리", items: [{ pkg: "Enterprise", count: 9 }], vessels: { valid: 9, total: 9 } }),
   row({ id: "C-2026-043", cancelled: false, cancelReason: null, customer: "청해선사", ctype: "신조", date: "2026-06-30", owner: "홍길동", items: [{ pkg: "Enterprise", count: 13 }], vessels: { valid: 13, total: 13 } }),
@@ -128,7 +131,7 @@ const FEATURED: Row[] = [
   row({ id: "C-2026-031", cancelled: false, cancelReason: null, customer: "대양해운", ctype: "신조", date: "2026-05-10", owner: "홍길동", items: [{ pkg: "Cloud", count: 2 }], vessels: { valid: 2, total: 2 } }),
   row({ id: "C-2026-024", cancelled: false, cancelReason: null, customer: "청해선사", ctype: "신조", date: "2026-04-07", owner: "이대리", items: [{ pkg: "Smart Standard", count: 6 }], vessels: { valid: 6, total: 6 } }),
   row({ id: "C-2026-017", cancelled: false, cancelReason: null, customer: "한성해운", ctype: "신조", date: "2026-03-01", owner: "김담당", items: [{ pkg: "Safety Around", count: 3 }], vessels: { valid: 3, total: 3 } }),
-  // C-2026-001 — 계약 상세·계정 상세·유저 상세·구독·납품 상세가 같은 이름을 쓴다(2026-01-15-대양해운-Enterprise-5척)
+  // C-2026-001 — 계약 상세·계정 상세·유저 상세·구독·납품 상세가 같은 이름을 쓴다(2026-01-15 대양해운 Control 신규 납품·구독, SVM 신규 납품·구독, Cloud 구독 5척)
   row({ id: "C-2026-001", cancelled: false, cancelReason: null, customer: "대양해운", ctype: "신조", date: "2026-01-15", owner: "홍길동", items: [{ pkg: "Enterprise", count: 5 }], vessels: { valid: 4, total: 5 } }),
   row({ id: "C-2025-031", cancelled: false, cancelReason: null, customer: "동보선사", ctype: "개조", date: "2025-11-03", owner: "이대리", items: [{ pkg: "Smart Standard", count: 3 }], vessels: { valid: 3, total: 3 } }),
   row({ id: "C-2025-008", cancelled: false, cancelReason: null, customer: "동보선사", ctype: "신조", date: "2025-04-18", owner: "이대리", items: [{ pkg: "Smart Standard", count: 2 }], vessels: { valid: 2, total: 2 } }),

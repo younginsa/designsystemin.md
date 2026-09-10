@@ -46,8 +46,10 @@ import { Textarea } from "@ds/ui/ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
 import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
-// 납품 유형 표기 잠금(2026-09-07) — 4곳 공유
+// 이행 종류 표기 잠금(2026-09-07 · 5종 2026-09-09) — 4곳 공유
 import { DeliveryType } from "../../../_detail/delivery-type";
+// 계약 항목명 조립 규칙(2026-09-09)
+import { itemFromPackage, itemName } from "../../../_detail/contract-name";
 // 미입력 표기 잠금 — 공용 부품(2026-09-08). 상세는 값을 채우는 면이라 미입력 표기
 import { MissingMark } from "../../../_detail/missing-mark";
 // 사람 요소 잠금(2026-09-04): 댓글 작성자 = DS Avatar sm(이니셜) — _detail/person 공유
@@ -74,19 +76,20 @@ function SpecPanel({ title, rows }: { title: string; rows: [string, React.ReactN
 }
 
 // 참여 계약 (3) — 레일 패널 + 계약 이력 표가 같은 원천을 본다
+// 계약 항목명은 조립 규칙(2026-09-09): "{제품 이행단축}, … N척"
 const CONTRACT_HISTORY: { contract: string; item: string; cancelled: boolean; note?: string }[] = [
-  { contract: "C-2026-001 대양해운", item: "Control + SVM 구독 5척", cancelled: false },
-  { contract: "C-2026-017 서해해운", item: "Navi 3척", cancelled: true, note: "취소 2026-04-01 · 발주처 사양 변경" },
-  { contract: "C-2025-003 대양해운", item: "Control 3척", cancelled: false },
+  { contract: "C-2026-001 대양해운", item: itemName(itemFromPackage("Enterprise", 5)), cancelled: false },
+  { contract: "C-2026-017 서해해운", item: itemName(itemFromPackage("Safety Forward", 3)), cancelled: true, note: "취소 2026-04-01 · 발주처 사양 변경" },
+  { contract: "C-2025-003 대양해운", item: itemName(itemFromPackage("Smart Standard", 3)), cancelled: false },
 ];
 
 // 납품 제품 (5)
 const DELIVERIES: { product: string; delivery: string; contract: string; slot: string; dueOn: string | null; commissioningOn: string | null }[] = [
-  { product: "Control", delivery: "납품 + 구독", contract: "C-2026-001", slot: "C-2026-001-01 · 1호선 슬롯", dueOn: "2027-03-01", commissioningOn: "2027-05-01" },
-  { product: "SVM", delivery: "납품 + 구독", contract: "C-2026-001", slot: "C-2026-001-01 · 1호선 슬롯", dueOn: "2027-03-01", commissioningOn: null },
-  { product: "Cloud", delivery: "구독", contract: "C-2026-001", slot: "C-2026-001-01 · 1호선 슬롯", dueOn: null, commissioningOn: null },
-  { product: "Navigation", delivery: "납품", contract: "C-2026-017", slot: "C-2026-017-01 · 2호선 슬롯", dueOn: "2026-05-01", commissioningOn: null },
-  { product: "Control", delivery: "구독", contract: "C-2025-003", slot: "C-2025-003-01 · 1호선 슬롯", dueOn: "2025-10-01", commissioningOn: "2025-10-20" },
+  { product: "Control", delivery: "제품 신규 납부 + 구독", contract: "C-2026-001", slot: "C-2026-001-01 · 1호선 슬롯", dueOn: "2027-03-01", commissioningOn: "2027-05-01" },
+  { product: "SVM", delivery: "제품 신규 납부 + 구독", contract: "C-2026-001", slot: "C-2026-001-01 · 1호선 슬롯", dueOn: "2027-03-01", commissioningOn: null },
+  { product: "Cloud", delivery: "구독 갱신·신규 전환", contract: "C-2026-001", slot: "C-2026-001-01 · 1호선 슬롯", dueOn: null, commissioningOn: null },
+  { product: "Navigation", delivery: "제품 신규 납부", contract: "C-2026-017", slot: "C-2026-017-01 · 2호선 슬롯", dueOn: "2026-05-01", commissioningOn: null },
+  { product: "Control", delivery: "구독 갱신·신규 전환", contract: "C-2025-003", slot: "C-2025-003-01 · 1호선 슬롯", dueOn: "2025-10-01", commissioningOn: "2025-10-20" },
 ];
 
 // 섹션 설명 — [i] 툴팁 원문(와이어프레임)
@@ -338,7 +341,7 @@ export default function Sales365VesselDetailPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>제품</TableHead>
-                    <TableHead>납품 유형</TableHead>
+                    <TableHead>이행 종류</TableHead>
                     <TableHead>계약 · 계약 항목</TableHead>
                     <TableHead>납품 예정일</TableHead>
                     <TableHead>커미셔닝 예정일</TableHead>
@@ -347,15 +350,13 @@ export default function Sales365VesselDetailPage() {
                 <TableBody>
                   {DELIVERIES.map((r, i) => (
                     <TableRow key={r.product + i}>
+                      {/* 제품 = 회색 배지(다른 목록의 상품 열과 같은 문법, 2026-09-09) — 배지 자체가 납품 상세 링크 */}
                       <TableCell>
-                        <Link
-                          href={`${BASE}/deliveries/detail`}
-                          className="font-medium text-primary hover:underline"
-                        >
-                          {r.product}
-                        </Link>
+                        <Badge variant="secondary" className="font-normal" asChild>
+                          <Link href={`${BASE}/deliveries/detail`}>{r.product}</Link>
+                        </Badge>
                       </TableCell>
-                      {/* 납품 유형 — 목록과 같은 원자 칩 부품(2026-09-07) */}
+                      {/* 이행 종류 — 목록과 같은 원자 칩 부품(2026-09-07 · 5종 2026-09-09) */}
                       <TableCell>
                         <DeliveryType value={r.delivery} />
                       </TableCell>

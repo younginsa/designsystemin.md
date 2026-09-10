@@ -66,15 +66,15 @@ import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
 import { Person, PersonAvatar } from "../../../_detail/person";
 // 미입력 표기 잠금(2026-09-07) — 슬롯 금액 미입력도 같은 부품
 import { MissingMark } from "../../../_detail/missing-mark";
-// 계약명 자동 생성 규칙(2026-09-09) — 목록·생성 폼과 같은 부품. 수정 모달에서도 손으로 못 고친다
-import { contractName } from "../../../_detail/contract-name";
+// 계약명·항목명 자동 생성 규칙(2026-09-09 유현수 공유) — 목록·생성 폼과 같은 부품. 수정 모달에서도 손으로 못 고친다
+import { contractName, itemFromPackage, itemName } from "../../../_detail/contract-name";
 
 const BASE = "/gallery/sales365";
 
 const CONTRACT = {
   id: "C-2026-001",
-  // 계약일-고객-패키지-N척 — 목록·계정 상세·유저 상세·구독·납품 상세가 같은 문자열을 쓴다
-  name: contractName("2026-01-15", "대양해운", [{ pkg: "Enterprise", count: 5 }]),
+  // "{계약일} {고객} {제품 이행단축, …} N척" — 목록·계정 상세·유저 상세·구독·납품 상세가 같은 문자열을 쓴다
+  name: contractName("2026-01-15", "대양해운", [itemFromPackage("Enterprise", 5)]),
   customer: "대양해운",
   ctype: "신조",
   date: "2026-01-15",
@@ -87,7 +87,8 @@ const CONTRACT = {
 const ITEM = {
   code: "C-2026-001-01",
   pkg: "Enterprise",
-  name: "Control + SVM 구독 5척",
+  // 계약 항목명도 조립 규칙(2026-09-09): "{제품 이행단축}, … N척"
+  name: itemName(itemFromPackage("Enterprise", 5)),
   assigned: 4,
   total: 5,
   // 구독 조건 — 헤더 행 + Optimization 열 신설(2026-09-08 리뷰 반영, 와이어프레임 대조)
@@ -313,7 +314,11 @@ const AUDIT: AuditEntry[] = [
     actor: "김민준",
     fields: [
       // 계약명은 자동 생성이라 직접 고칠 수 없다 — 항목 패키지가 바뀌면 이름이 따라 바뀐 것으로 기록된다(2026-09-09)
-      { label: "계약명", from: "2026-01-15-대양해운-Safety Forward-5척", to: "2026-01-15-대양해운-Enterprise-5척" },
+      {
+        label: "계약명",
+        from: contractName("2026-01-15", "대양해운", [itemFromPackage("Safety Forward", 5)]),
+        to: contractName("2026-01-15", "대양해운", [itemFromPackage("Enterprise", 5)]),
+      },
     ],
   },
   {

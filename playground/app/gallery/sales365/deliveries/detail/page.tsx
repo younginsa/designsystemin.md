@@ -53,13 +53,16 @@ import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
 import { DeliveryType } from "../../../_detail/delivery-type";
 // 사람 요소 잠금(2026-09-04): 댓글 작성자 = DS Avatar sm(이니셜) — _detail/person 공유
 import { PersonAvatar } from "../../../_detail/person";
+// 계약명·항목명 조립 규칙(2026-09-09) — 계약 상세와 같은 문자열
+import { contractName, itemFromPackage, itemName } from "../../../_detail/contract-name";
 
 const BASE = "/gallery/sales365";
 
 // 계약 정보 체인 — 계약 → 계약 항목 → 슬롯 → 호선
+const ITEM_SPEC = itemFromPackage("Enterprise", 5);
 const CHAIN: { label: string; value: string; link: string }[] = [
-  { label: "계약", value: "C-2026-001 · 2026-01-15-대양해운-Enterprise-5척", link: `${BASE}/contracts/detail` },
-  { label: "계약 항목", value: "C-2026-001-01 · Control + SVM 구독 5척", link: `${BASE}/contracts/detail` },
+  { label: "계약", value: `C-2026-001 · ${contractName("2026-01-15", "대양해운", [ITEM_SPEC])}`, link: `${BASE}/contracts/detail` },
+  { label: "계약 항목", value: `C-2026-001-01 · ${itemName(ITEM_SPEC)}`, link: `${BASE}/contracts/detail` },
   { label: "슬롯", value: "1호선 슬롯 · USD 1,200,000", link: `${BASE}/contracts/detail` },
   { label: "호선", value: "Hull 1001 · MV EXAMPLE", link: `${BASE}/vessels/detail` },
 ];
@@ -113,7 +116,7 @@ export default function Sales365DeliveryDetailPage() {
   return (
     // Jira 문법: 콘텐츠 컬럼은 풀스크린에서도 max-width 캡(계약 상세와 동일 1280)
     <div className="mx-auto w-full max-w-7xl space-y-6">
-      {/* ── 페이지 헤더 — 타이틀 단독, 메타(계약 항목·납품 유형)는 우측 Details 패널 소유 ── */}
+      {/* ── 페이지 헤더 — 타이틀 단독, 메타(계약 항목·이행 종류)는 우측 Details 패널 소유 ── */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <h1 className="text-lg font-bold">Hull 1001 · Control</h1>
         <div className="flex items-center gap-2">
@@ -336,9 +339,9 @@ export default function Sales365DeliveryDetailPage() {
                 </div>
                 {/* 배지 행이라 items-center — baseline이면 칩이 라벨보다 내려앉는다 */}
                 <div className="flex items-center">
-                  <dt className="w-32 shrink-0 text-secondary-foreground">납품 유형</dt>
+                  <dt className="w-32 shrink-0 text-secondary-foreground">이행 종류</dt>
                   <dd>
-                    <DeliveryType value="납품 + 구독" />
+                    <DeliveryType value="제품 신규 납부 + 구독" />
                   </dd>
                 </div>
                 <div className="flex items-baseline">

@@ -32,8 +32,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui
 // 빈 값 규칙(2026-09-08 디자이너 확정): 목록 표의 빈 칸은 전부 흐린 대시(—) — 「미입력」 표기는
 // 상세·모달(값을 채우는 면)에서만 쓴다. 종전 MissingMark(2026-09-07)는 이 목록에서 뺐다.
 const EMPTY = <span className="text-muted-foreground">—</span>;
-// 납품 유형 표기 잠금(2026-09-07) — 4곳 공유
-import { DeliveryType } from "../../_detail/delivery-type";
+// 이행 종류 표기 잠금(2026-09-07 · 5종 2026-09-09) — 4곳 공유. 옵션 배열도 같은 원천
+import { DELIVERY_KINDS, DeliveryType } from "../../_detail/delivery-type";
 import {
   Table,
   TableBody,
@@ -81,14 +81,14 @@ const DRAWING_SETS: DrawingKind[][] = [
 ];
 
 const ROWS: Row[] = [
-  { id: "D-001", name: "Hull 1001 · Control", product: "Control", hull: "Hull 1001", delivery: "납품 + 구독", contract: "C-2026-001", dueOn: "2027-03-01", commissioningOn: "2027-05-01", drawings: ["승인", "작업", "최종"], cancelled: false },
-  { id: "D-002", name: "Hull 1001 · SVM", product: "SVM", hull: "Hull 1001", delivery: "납품 + 구독", contract: "C-2026-001", dueOn: "2027-03-01", commissioningOn: null, drawings: ["승인"], cancelled: false },
-  { id: "D-003", name: "Hull 1002 · Control", product: "Control", hull: "Hull 1002", delivery: "납품 + 구독", contract: "C-2026-001", dueOn: "2027-06-01", commissioningOn: null, drawings: [], cancelled: false },
-  { id: "D-004", name: "Hull 1002 · SVM", product: "SVM", hull: "Hull 1002", delivery: "납품 + 구독", contract: "C-2026-001", dueOn: null, commissioningOn: null, drawings: [], cancelled: false },
-  { id: "D-005", name: "HN-2025-001 · SVM", product: "SVM", hull: "HN-2025-001", delivery: "납품", contract: "C-2026-017", dueOn: "2026-02-01", commissioningOn: "2026-03-01", drawings: ["승인", "작업"], cancelled: false },
-  { id: "D-006", name: "HN-2025-002 · SVM", product: "SVM", hull: "HN-2025-002", delivery: "납품", contract: "C-2026-017", dueOn: "2026-05-01", commissioningOn: null, drawings: [], cancelled: false },
-  { id: "D-007", name: "2001 · Control", product: "Control", hull: "2001", delivery: "구독", contract: "C-2025-003", dueOn: "2025-10-01", commissioningOn: "2025-10-20", drawings: ["승인"], cancelled: false },
-  { id: "D-008", name: "Hull 1004 · Control", product: "Control", hull: "Hull 1004", delivery: "납품 + 구독", contract: "C-2026-001", dueOn: null, commissioningOn: null, drawings: [], cancelled: true },
+  { id: "D-001", name: "Hull 1001 · Control", product: "Control", hull: "Hull 1001", delivery: "제품 신규 납부 + 구독", contract: "C-2026-001", dueOn: "2027-03-01", commissioningOn: "2027-05-01", drawings: ["승인", "작업", "최종"], cancelled: false },
+  { id: "D-002", name: "Hull 1001 · SVM", product: "SVM", hull: "Hull 1001", delivery: "제품 신규 납부 + 구독", contract: "C-2026-001", dueOn: "2027-03-01", commissioningOn: null, drawings: ["승인"], cancelled: false },
+  { id: "D-003", name: "Hull 1002 · Control", product: "Control", hull: "Hull 1002", delivery: "제품 신규 납부 + 구독", contract: "C-2026-001", dueOn: "2027-06-01", commissioningOn: null, drawings: [], cancelled: false },
+  { id: "D-004", name: "Hull 1002 · SVM", product: "SVM", hull: "Hull 1002", delivery: "제품 신규 납부 + 구독", contract: "C-2026-001", dueOn: null, commissioningOn: null, drawings: [], cancelled: false },
+  { id: "D-005", name: "HN-2025-001 · SVM", product: "SVM", hull: "HN-2025-001", delivery: "제품 신규 납부", contract: "C-2026-017", dueOn: "2026-02-01", commissioningOn: "2026-03-01", drawings: ["승인", "작업"], cancelled: false },
+  { id: "D-006", name: "HN-2025-002 · SVM", product: "SVM", hull: "HN-2025-002", delivery: "제품 신규 납부", contract: "C-2026-017", dueOn: "2026-05-01", commissioningOn: null, drawings: [], cancelled: false },
+  { id: "D-007", name: "2001 · Control", product: "Control", hull: "2001", delivery: "구독 갱신·신규 전환", contract: "C-2025-003", dueOn: "2025-10-01", commissioningOn: "2025-10-20", drawings: ["승인"], cancelled: false },
+  { id: "D-008", name: "Hull 1004 · Control", product: "Control", hull: "Hull 1004", delivery: "제품 신규 납부 + 구독", contract: "C-2026-001", dueOn: null, commissioningOn: null, drawings: [], cancelled: true },
 ];
 
 // 무한 스크롤 볼륨(2026-09-07) — 종전엔 행 8개인데 푸터만 "총 23건"이라 숫자가 거짓말이었다.
@@ -99,7 +99,8 @@ const HULLS = [
   "2001", "2002", "HN-2026-104", "HN-2026-118",
 ];
 const PRODUCTS = ["Control", "SVM", "Navigation", "Cloud"];
-const DTYPES = ["납품", "납품 + 구독", "구독", "1회성 업데이트"];
+// 이행 종류 5종(2026-09-09 피그마 코멘트) — DeliveryType 배지·필터 옵션·계약 생성 폼이 같은 배열
+const DTYPES: string[] = [...DELIVERY_KINDS];
 const CONTRACT_IDS = ["C-2026-001", "C-2026-017", "C-2025-003", "C-2026-043", "C-2026-046"];
 
 const FILLER: Row[] = Array.from({ length: HULLS.length * PRODUCTS.length }, (_, i): Row => {
@@ -134,7 +135,7 @@ const PAGE_FILTERS: FilterDef[] = [
   { name: "productName", label: "납품 제품 이름", kind: "text", operators: OPS_TEXT, placeholder: "납품 제품 이름" },
   { name: "product", label: "제품", options: PRODUCTS, multi: true, operators: OPS_SELECT },
   { name: "vessel", label: "호선", options: HULLS, multi: true, operators: OPS_SELECT },
-  { name: "dtype", label: "납품 유형", options: DTYPES, multi: true, operators: OPS_SELECT },
+  { name: "dtype", label: "이행 종류", options: DTYPES, multi: true, operators: OPS_SELECT },
   { name: "contract", label: "계약", options: CONTRACT_IDS, multi: true, operators: OPS_SELECT },
   { name: "dueOn", label: "납품 예정일", kind: "date", operators: OPS_DATE, now: BASE_NOW },
   { name: "commissioningOn", label: "커미셔닝 예정일", kind: "date", operators: OPS_DATE, now: BASE_NOW },
@@ -325,7 +326,7 @@ export default function Sales365DeliveriesPage() {
                 <TableHead>납품 제품 이름</TableHead>
                 <TableHead>제품</TableHead>
                 <TableHead>호선</TableHead>
-                <TableHead>납품 유형</TableHead>
+                <TableHead>이행 종류</TableHead>
                 <TableHead>계약</TableHead>
                 <TableHead>
                   <button type="button" className="inline-flex items-center gap-1 rounded-sm px-1 py-0.5 hover:bg-accent" onClick={() => setSortAsc((a) => !a)}>
@@ -361,9 +362,14 @@ export default function Sales365DeliveriesPage() {
                       {r.name}
                     </Link>
                   </TableCell>
-                  <TableCell>{r.product}</TableCell>
+                  {/* 제품 = 회색 배지 — 계약·계정·유저 목록의 상품 열과 같은 문법(2026-09-09 피그마 코멘트) */}
+                  <TableCell>
+                    <Badge variant="secondary" className="font-normal">
+                      {r.product}
+                    </Badge>
+                  </TableCell>
                   <TableCell className="font-mono text-sm">{r.hull}</TableCell>
-                  {/* 납품 유형 — 원자 칩 조합(2026-09-07). "납품 + 구독"은 칩 두 개로 갈린다 */}
+                  {/* 이행 종류 — 원자 칩 조합(2026-09-07 · 5종 2026-09-09). "제품 신규 납부 + 구독"은 칩 두 개로 갈린다 */}
                   <TableCell>
                     <DeliveryType value={r.delivery} />
                   </TableCell>

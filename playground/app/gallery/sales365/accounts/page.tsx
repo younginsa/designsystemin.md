@@ -66,7 +66,6 @@ import { BASE_NOW, passDate, passSelect, passText } from "../_filter";
 
 // 사람 요소 잠금(2026-09-04): 담당자(내부 유저) = 프로필(이니셜) + 이름 — _detail/person 공유
 import { Person } from "../../_detail/person";
-import { Textarea } from "@ds/ui/ui/textarea";
 
 const BASE = "/gallery/sales365";
 
@@ -320,10 +319,7 @@ export default function Sales365AccountsPage() {
                 </Select>
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="a-memo">메모</Label>
-              <Textarea id="a-memo" />
-            </div>
+            {/* 메모 필드 제거(2026-09-09 디자이너 확정) — 계정 상세 KV에서도 함께 뺐다 */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label>담당자</Label>

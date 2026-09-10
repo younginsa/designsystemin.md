@@ -65,6 +65,16 @@ import * as toggleGroupStories from "@ds/ui/ui/toggle-group.stories";
 import * as inputGroupStories from "@ds/ui/ui/input-group.stories";
 import * as calendarStories from "@ds/ui/ui/calendar.stories";
 import * as iconSelectStories from "@ds/ui/ui/icon-select.stories";
+import * as badgeStories from "@ds/ui/ui/badge.stories";
+import * as tableStories from "@ds/ui/ui/table.stories";
+import * as paginationStories from "@ds/ui/ui/pagination.stories";
+import * as progressStories from "@ds/ui/ui/progress.stories";
+import * as cardStories from "@ds/ui/ui/card.stories";
+import * as itemStories from "@ds/ui/ui/item.stories";
+import * as accordionStories from "@ds/ui/ui/accordion.stories";
+import * as collapsibleStories from "@ds/ui/ui/collapsible.stories";
+import * as tabsStories from "@ds/ui/ui/tabs.stories";
+import * as chartStories from "@ds/ui/ui/chart.stories";
 import { Card, CardContent, CardDescription, CardTitle } from "@ds/ui/ui/card";
 import {
   Collapsible,
@@ -461,32 +471,8 @@ export const PREVIEWS: Record<string, Pv> = {
     // 스토리 원문(ContractList — 세일즈 365 PRD 6.1) — 허브 카드와 Storybook이 같은 파일을 읽는다(2026-09-09)
     node: filterBarStories.ContractList.render(),
   },
-  "viz-line": {
-    className: BOX + " p-6",
-    style: { width: 640 },
-    node: (
-      <ChartContainer config={lineConfig} className="h-56 w-full">
-        <LineChart data={lineData} margin={{ left: 12, right: 12 }}>
-          <CartesianGrid vertical={false} />
-          <XAxis dataKey="d" tickLine={false} axisLine={false} tickMargin={8} />
-          <Line dataKey="v" type="monotone" stroke="var(--foreground)" strokeWidth={2} dot={false} />
-        </LineChart>
-      </ChartContainer>
-    ),
-  },
-  "viz-donut": {
-    className: BOX + " p-6",
-    style: { width: 560 },
-    node: (
-      <ChartContainer config={pieConfig} className="mx-auto h-56 w-full">
-        <PieChart>
-          <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={55} outerRadius={85}>
-            {pieData.map((e) => (<Cell key={e.name} fill={e.fill} />))}
-          </Pie>
-        </PieChart>
-      </ChartContainer>
-    ),
-  },
+  "viz-line": fromStories("viz-line", chartStories, { className: BOX + " p-6", style: { width: 640 } }),
+  "viz-donut": fromStories("viz-donut", chartStories, { className: BOX + " p-6", style: { width: 560 } }),
 
   /* ── 폼 ── */
   // form-* 카드 — 스토리 원문(input · textarea · checkbox · radio-group · switch · select · command .stories) 을 읽는다(2026-09-09 배치 1)
@@ -542,254 +528,26 @@ export const PREVIEWS: Record<string, Pv> = {
 
   /* ── 데이터 표시 ── */
   // 셀 변형·정렬 헤더 흡수(2026-09-03) — 정렬 버튼 헤더 + 링크 셀·2줄 셀·행 액션을 한 표로
-  "data-table": {
-    className: BOX + " p-6",
-    style: { width: 640 },
-    node: (
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>
-              <Button variant="ghost" size="sm" className="-ml-2">호선명 <ArrowUpDown /></Button>
-            </TableHead>
-            <TableHead>제품</TableHead>
-            <TableHead>
-              <Button variant="ghost" size="sm" className="-ml-2">생성일 <ArrowUpDown /></Button>
-            </TableHead>
-            <TableHead className="text-right">액션</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell><a href="#" className="text-primary underline underline-offset-4">SVM_BUSAN_1</a></TableCell>
-            <TableCell><Badge variant="secondary">SVM</Badge></TableCell>
-            <TableCell className="text-muted-foreground">2026-07-27</TableCell>
-            <TableCell className="text-right">
-              <Button variant="ghost" size="icon" aria-label="편집"><Pencil /></Button>
-              <Button variant="ghost" size="icon" aria-label="삭제"><Trash2 /></Button>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>
-              <div>CONTROL_TEST</div>
-              <div className="text-xs text-muted-foreground">REAL_FINAL_TEST_1</div>
-            </TableCell>
-            <TableCell><Badge variant="secondary">CONTROL</Badge></TableCell>
-            <TableCell className="text-muted-foreground">2026-07-23</TableCell>
-            <TableCell className="text-right text-muted-foreground">—</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    ),
-  },
-  "data-kv": {
-    className: BOX + " p-4",
-    style: { width: 560 },
-    node: (
-      <ItemGroup>
-        <Item size="sm"><ItemContent><ItemDescription>IMO</ItemDescription><ItemTitle>9876543</ItemTitle></ItemContent></Item>
-        <Item size="sm"><ItemContent><ItemDescription>호선명</ItemDescription><ItemTitle>SVM_BUSAN_1</ItemTitle></ItemContent></Item>
-        <Item size="sm"><ItemContent><ItemDescription>Yard</ItemDescription><ItemTitle>HMD</ItemTitle></ItemContent></Item>
-      </ItemGroup>
-    ),
-  },
-  "data-status": {
-    className: "flex items-center justify-center gap-3 " + BOX,
-    style: strip,
-    node: (
-      <>
-        <Badge variant="secondary"><span className="size-1.5 rounded-full bg-success"></span> 정상</Badge>
-        <Badge variant="secondary"><span className="size-1.5 rounded-full bg-destructive"></span> 이상</Badge>
-        <Badge variant="outline">CAUTION</Badge>
-        <Badge variant="outline">COMPLETED</Badge>
-        <span className="flex items-center gap-1.5 text-sm text-muted-foreground"><span className="size-2 rounded-full bg-success"></span> Ready</span>
-      </>
-    ),
-  },
+  "data-table": fromStories("data-table", tableStories, { className: BOX + " p-6", style: { width: 640 } }),
+  "data-kv": fromStories("data-kv", itemStories, { className: BOX + " p-4", style: { width: 560 } }),
+  "data-status": fromStories("data-status", badgeStories, { className: "flex items-center justify-center gap-3 " + BOX, style: strip }),
   // 사용방식 3가지 병합(2026-09-03) — ① 일반 칩 ② 버전 칩(mono) ③ 역할 태그(제거 X)
-  "data-badge": {
-    className: "flex flex-wrap items-center justify-center gap-3 " + BOX + " px-6 py-4",
-    style: { width: 640 },
-    node: (
-      <>
-        <Badge>NAVIGATION</Badge>
-        <Badge variant="secondary">SVM</Badge>
-        <Badge variant="outline">CONTROL</Badge>
-        <Badge variant="destructive">HIGH 9</Badge>
-        <Badge variant="secondary" className="rounded-full">34</Badge>
-        <Badge variant="outline" className="font-mono">v3.5.0-test.15</Badge>
-        <ArrowRight className="size-4 text-muted-foreground" />
-        <Badge variant="outline" className="font-mono">v4.0.0-update.1</Badge>
-        <Badge variant="secondary">avikus <X className="size-3" /></Badge>
-        <Badge variant="outline">+ 역할 추가</Badge>
-      </>
-    ),
-  },
-  "data-matrix": {
-    className: BOX + " p-6",
-    style: { width: 640 },
-    node: (
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>COMMON</TableHead><TableHead>NAVIGATION</TableHead><TableHead>SVM</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell className="font-mono text-xs">v4.0.0</TableCell>
-            <TableCell><Badge variant="outline" className="font-mono">v3.5.3 ★</Badge></TableCell>
-            <TableCell><Button variant="ghost" size="icon" aria-label="추가"><Plus /></Button></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-mono text-xs">v3.5.0</TableCell>
-            <TableCell><Badge variant="outline" className="font-mono">v3.5.0 ★</Badge></TableCell>
-            <TableCell><Badge variant="outline" className="font-mono">v1.2.0</Badge></TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    ),
-  },
-  "data-perm": {
-    className: BOX + " p-6",
-    style: { width: 640 },
-    node: (
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Permission</TableHead>
-            <TableHead className="text-center">qa</TableHead>
-            <TableHead className="text-center">dev</TableHead>
-            <TableHead className="text-center">admin</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell className="font-mono text-xs">account:read</TableCell>
-            <TableCell className="text-center"><Checkbox /></TableCell>
-            <TableCell className="text-center"><Checkbox defaultChecked /></TableCell>
-            <TableCell className="text-center"><Checkbox defaultChecked /></TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell className="font-mono text-xs">account:update</TableCell>
-            <TableCell className="text-center"><Checkbox /></TableCell>
-            <TableCell className="text-center"><Checkbox /></TableCell>
-            <TableCell className="text-center"><Checkbox defaultChecked /></TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    ),
-  },
-  "data-stat": {
-    className: "grid grid-cols-2 gap-4 " + BOX + " p-6",
-    style: { width: 640 },
-    node: (
-      <>
-        <Card className="py-4">
-          <CardContent className="px-4">
-            <CardDescription>운영 호선</CardDescription>
-            <CardTitle className="text-3xl font-mono">48</CardTitle>
-          </CardContent>
-        </Card>
-        <Card className="py-4">
-          <CardContent className="px-4">
-            <CardDescription>업데이트 진행</CardDescription>
-            <CardTitle className="text-3xl font-mono">6</CardTitle>
-          </CardContent>
-        </Card>
-      </>
-    ),
-  },
-  "data-accordion": {
-    className: BOX + " px-6 py-2",
-    style: { width: 560 },
-    node: (
-      <Accordion type="single" collapsible defaultValue="sys">
-        <AccordionItem value="cam">
-          <AccordionTrigger>CAMERA</AccordionTrigger>
-          <AccordionContent>카메라 진단 상세</AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="sys">
-          <AccordionTrigger>SYSTEM</AccordionTrigger>
-          <AccordionContent className="text-muted-foreground">CPU 9.2% · Memory 25.0%</AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    ),
-  },
-  "data-tabs": {
-    className: "flex flex-col items-start gap-4 " + BOX + " p-6",
-    style: { width: 560 },
-    node: (
-      <>
-        <Tabs defaultValue="common">
-          <TabsList>
-            <TabsTrigger value="common">COMMON</TabsTrigger>
-            <TabsTrigger value="nav">NAVIGATION</TabsTrigger>
-            <TabsTrigger value="svm">SVM</TabsTrigger>
-          </TabsList>
-        </Tabs>
-        <ToggleGroup type="single" defaultValue="user" variant="outline" size="sm">
-          <ToggleGroupItem value="user">사용자용</ToggleGroupItem>
-          <ToggleGroupItem value="dev">개발자용</ToggleGroupItem>
-        </ToggleGroup>
-      </>
-    ),
-  },
-  "data-pagination": {
-    className: "flex items-center justify-center " + BOX,
-    style: { width: 560, height: 110 },
-    node: (
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem><PaginationPrevious href="#" /></PaginationItem>
-          <PaginationItem><PaginationLink href="#" isActive>1</PaginationLink></PaginationItem>
-          <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
-          <PaginationItem><PaginationEllipsis /></PaginationItem>
-          <PaginationItem><PaginationLink href="#">7</PaginationLink></PaginationItem>
-          <PaginationItem><PaginationNext href="#" /></PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    ),
-  },
+  // 배치 3 — data-* · viz-* 카드는 badge · table · pagination · progress · card · item · accordion · collapsible · tabs · chart .stories 원문(2026-09-10)
+  "data-badge": fromStories("data-badge", badgeStories, { className: "flex flex-wrap items-center justify-center gap-3 " + BOX + " px-6 py-4", style: { width: 640 } }),
+  "data-matrix": fromStories("data-matrix", tableStories, { className: BOX + " p-6", style: { width: 640 } }),
+  "data-perm": fromStories("data-perm", tableStories, { className: BOX + " p-6", style: { width: 640 } }),
+  "data-stat": fromStories("data-stat", cardStories, { className: "grid grid-cols-2 gap-4 " + BOX + " p-6", style: { width: 640 } }),
+  "data-accordion": fromStories("data-accordion", accordionStories, { className: BOX + " px-6 py-2", style: { width: 560 } }),
+  "data-tabs": fromStories("data-tabs", tabsStories, { className: "flex flex-col items-start gap-4 " + BOX + " p-6", style: { width: 560 } }),
+  "data-pagination": fromStories("data-pagination", paginationStories, { className: "flex items-center justify-center " + BOX, style: { width: 560, height: 110 } }),
   "rows-per-page": {
     className: "flex items-center justify-center " + BOX,
     style: { width: 560, height: 110 },
     hubOnly: true,
     node: <RowsPerPageDemo />,
   },
-  "data-progress": {
-    className: "flex items-center gap-4 " + BOX + " px-10",
-    style: { width: 560, height: 110 },
-    node: (
-      <>
-        <Progress value={62} className="flex-1" />
-        <span className="font-mono text-sm text-muted-foreground">62%</span>
-        <Spinner className="text-muted-foreground" />
-      </>
-    ),
-  },
-  "data-tree": {
-    className: BOX + " p-4",
-    style: { width: 400 },
-    node: (
-      <>
-        <Collapsible defaultOpen>
-          <CollapsibleTrigger className="flex w-full items-center gap-1 rounded-md px-2 py-1.5 text-sm font-medium hover:bg-accent">
-            <ChevronDown className="size-4" /> v4.0 <Badge variant="secondary" className="ml-auto rounded-full">9</Badge>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="ml-4 border-l border-border pl-3">
-            <div className="rounded-md bg-accent px-2 py-1.5 font-mono text-xs">v4.0.0-test.96</div>
-            <div className="px-2 py-1.5 font-mono text-xs text-muted-foreground">v4.0.0-test.95</div>
-          </CollapsibleContent>
-        </Collapsible>
-        <Collapsible>
-          <CollapsibleTrigger className="flex w-full items-center gap-1 rounded-md px-2 py-1.5 text-sm font-medium hover:bg-accent">
-            <ChevronRight className="size-4" /> v1.0 <Badge variant="secondary" className="ml-auto rounded-full">1</Badge>
-          </CollapsibleTrigger>
-        </Collapsible>
-      </>
-    ),
-  },
+  "data-progress": fromStories("data-progress", progressStories, { className: "flex items-center gap-4 " + BOX + " px-10", style: { width: 560, height: 110 } }),
+  "data-tree": fromStories("data-tree", collapsibleStories, { className: BOX + " p-4", style: { width: 400 } }),
   timeline: {
     className: BOX + " p-6",
     style: { width: 400 },
@@ -825,30 +583,7 @@ export const PREVIEWS: Record<string, Pv> = {
       </Stepper>
     ),
   },
-  "data-listrow": {
-    className: BOX + " p-4",
-    style: { width: 480 },
-    node: (
-      <ItemGroup className="gap-2">
-        <Item variant="outline" size="sm">
-          <ItemMedia><Monitor className="size-4" /></ItemMedia>
-          <ItemContent><ItemTitle>Remote Support</ItemTitle></ItemContent>
-          <ChevronRight className="size-4 text-muted-foreground" />
-        </Item>
-        <Item variant="outline" size="sm">
-          <ItemMedia><Boxes className="size-4" /></ItemMedia>
-          <ItemContent><ItemTitle>Docker Image List</ItemTitle></ItemContent>
-          <Badge variant="secondary" className="rounded-full">34</Badge>
-          <ChevronRight className="size-4 text-muted-foreground" />
-        </Item>
-        <Item variant="outline" size="sm">
-          <ItemMedia><Database className="size-4" /></ItemMedia>
-          <ItemContent><ItemTitle>Storage Data List</ItemTitle></ItemContent>
-          <ChevronRight className="size-4 text-muted-foreground" />
-        </Item>
-      </ItemGroup>
-    ),
-  },
+  "data-listrow": fromStories("data-listrow", itemStories, { className: BOX + " p-4", style: { width: 480 } }),
 
   /* ── 오버레이 — 실물 렌더는 격리가 필요해 프리뷰 라우트를 iframe으로 담는다
         (포털·z-index가 카드 그리드를 침범하지 않게) ── */

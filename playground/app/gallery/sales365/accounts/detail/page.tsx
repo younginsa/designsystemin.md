@@ -51,8 +51,12 @@ import { Textarea } from "@ds/ui/ui/textarea";
 import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
 // 사람 요소 잠금(2026-09-04): 댓글 작성자 = DS Avatar sm(이니셜) — _detail/person 공유
 import { PersonAvatar } from "../../../_detail/person";
+// 계약명 조립 규칙(2026-09-09) — 샘플은 패키지 + 척수로 적는다
+import { contractName, itemFromPackage } from "../../../_detail/contract-name";
 
 const BASE = "/gallery/sales365";
+const cn = (date: string, customer: string, pkg: string, count: number) =>
+  contractName(date, customer, [itemFromPackage(pkg, count)]);
 
 const ACCOUNT = {
   name: "대양해운",
@@ -60,7 +64,7 @@ const ACCOUNT = {
   country: "대한민국",
   brn: "123-45-67890",
   tier: "Tier 1",
-  memo: "—",
+  // 메모 필드 제거(2026-09-09 디자이너 확정) — 등록 모달과 함께
   vessels: 8,
 };
 
@@ -70,9 +74,9 @@ const MANAGERS = [
 ];
 
 const CONTRACTS = [
-  { code: "C-2026-001", name: "2026-01-15-대양해운-Enterprise-5척", shipType: "Container", product: "Enterprise", date: "2026-01-15" },
-  { code: "C-2026-031", name: "2026-05-10-대양해운-Cloud-2척", shipType: "Container", product: "Cloud", date: "2026-05-10" },
-  { code: "C-2024-019", name: "2024-02-28-대양해운-Safety Around-3척", shipType: "Bulk Carrier", product: "Safety Around", date: "2024-02-28" },
+  { code: "C-2026-001", name: cn("2026-01-15", "대양해운", "Enterprise", 5), shipType: "Container", product: "Enterprise", date: "2026-01-15" },
+  { code: "C-2026-031", name: cn("2026-05-10", "대양해운", "Cloud", 2), shipType: "Container", product: "Cloud", date: "2026-05-10" },
+  { code: "C-2024-019", name: cn("2024-02-28", "대양해운", "Safety Around", 3), shipType: "Bulk Carrier", product: "Safety Around", date: "2024-02-28" },
 ];
 
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
@@ -305,10 +309,6 @@ export default function Sales365AccountDetailPage() {
                 <div className="flex items-baseline">
                   <dt className="w-28 shrink-0 text-secondary-foreground">티어</dt>
                   <dd>{ACCOUNT.tier}</dd>
-                </div>
-                <div className="flex items-baseline">
-                  <dt className="w-28 shrink-0 text-secondary-foreground">메모</dt>
-                  <dd className="text-muted-foreground">{ACCOUNT.memo}</dd>
                 </div>
               </dl>
             </section>

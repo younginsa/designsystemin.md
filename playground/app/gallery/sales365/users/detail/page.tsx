@@ -53,8 +53,12 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui
 import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
 // 사람 요소 잠금(2026-09-04): 헤더 유저 = DS Avatar default(32) + 이름 · 댓글 작성자 = sm — _detail/person 공유
 import { PersonAvatar } from "../../../_detail/person";
+// 계약명 조립 규칙(2026-09-09) — 샘플은 패키지 + 척수로 적는다
+import { contractName, itemFromPackage } from "../../../_detail/contract-name";
 
 const BASE = "/gallery/sales365";
+const cn = (date: string, customer: string, pkg: string, count: number) =>
+  contractName(date, customer, [itemFromPackage(pkg, count)]);
 
 const USER = {
   name: "김민준",
@@ -64,9 +68,9 @@ const USER = {
 };
 
 const CONTRACTS = [
-  { code: "C-2026-044", name: "2026-07-20-우진해운-Safety Forward-2척", shipType: "Container", product: "Safety Forward", date: "2026-07-20" },
-  { code: "C-2026-031", name: "2026-05-10-대양해운-Cloud-2척", shipType: "Container", product: "Cloud", date: "2026-05-10" },
-  { code: "C-2026-001", name: "2026-01-15-대양해운-Enterprise-5척", shipType: "Container", product: "Enterprise", date: "2026-01-15" },
+  { code: "C-2026-044", name: cn("2026-07-20", "우진해운", "Safety Forward", 2), shipType: "Container", product: "Safety Forward", date: "2026-07-20" },
+  { code: "C-2026-031", name: cn("2026-05-10", "대양해운", "Cloud", 2), shipType: "Container", product: "Cloud", date: "2026-05-10" },
+  { code: "C-2026-001", name: cn("2026-01-15", "대양해운", "Enterprise", 5), shipType: "Container", product: "Enterprise", date: "2026-01-15" },
 ];
 
 const CONTRACT_NOTE = "계약 담당은 기술영업·영업 팀 유저만 맡습니다.";

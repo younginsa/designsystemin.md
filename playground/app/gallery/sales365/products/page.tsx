@@ -153,7 +153,7 @@ export default function Sales365ProductsPage() {
             <div>
               <h2 className="text-sm font-medium text-secondary-foreground">패키지</h2>
               <p className="text-xs text-secondary-foreground">
-                제품과 납품 유형을 묶은 판매 단위입니다. 계약 항목을 만들 때 고르면 구성이 그대로
+                제품과 이행 종류를 묶은 판매 단위입니다. 계약 항목을 만들 때 고르면 구성이 그대로
                 채워지고, 계약 항목에는 패키지 코드만 남습니다
               </p>
             </div>

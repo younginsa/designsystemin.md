@@ -7,7 +7,7 @@
 // - ① 기본 계약 정보(4필드 필수 — 고객·유형·계약일·담당자) → 전부 채워지면 [+ 계약 항목 추가] 활성
 //   계약명은 입력이 아니라 자동 생성(2026-09-09 확정: 계약일-고객-패키지-N척, 항목마다 이어 붙음) · 계약서 시리얼 넘버는 선택
 // - ② 계약 항목 블록(반복 가능): 제품 타입 라디오 2행 5선택 → 선택 시
-//   「선택된 제품 및 납품 유형」 패널이 라디오 아래 임베드 등장 →
+//   「선택된 제품 및 이행 종류」 패널이 라디오 아래 임베드 등장(이행 종류 5종, 2026-09-09) →
 //   슬롯 수 드롭다운 → N개 슬롯 콤보박스 행 등장
 // - ③ 슬롯 콤보박스: 기존 등록 호선 검색 포함(Command) · 빈 상태 "생성된 호선 없음" ·
 //   푸터 [+ 새 호선 추가] → 호선 생성 모달(개별 입력/시리즈 생성 탭 — 구 ③단계 이식)
@@ -67,8 +67,13 @@ import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 
 // 사람 요소 잠금(2026-09-04): 담당자 picker 항목 = 프로필(이니셜) + 이름 — _detail/person 공유
 import { Person } from "../../../_detail/person";
-// 계약명 자동 생성 규칙(2026-09-09) — 목록·상세와 같은 부품
-import { contractName } from "../../../_detail/contract-name";
+// 계약명 자동 생성 규칙(2026-09-09 유현수 공유) — 목록·상세와 같은 부품. 패키지 구성·이행 종류도 여기서
+import {
+  contractName,
+  defaultDelivery,
+  DELIVERY_KINDS,
+  PKG_COMPOSITION,
+} from "../../../_detail/contract-name";
 
 const BASE = "/gallery/sales365";
 
@@ -79,15 +84,7 @@ const OWNERS = ["홍길동", "김담당", "이대리"];
 
 // 제품 타입 5선택(패키지 4종 + 직접 선택) — 2행 라디오
 const PKG_OPTIONS = ["Enterprise", "Smart Standard", "Safety Forward", "Safety Around", "직접 선택"];
-// 패키지 구성(제품 목록 매트릭스와 동일)
-const PKG_COMPOSITION: Record<string, string[]> = {
-  Enterprise: ["Control", "SVM", "Cloud"],
-  "Smart Standard": ["Control", "Cloud"],
-  "Safety Forward": ["Navigation", "Cloud"],
-  "Safety Around": ["Navigation", "SVM", "Cloud"],
-  "직접 선택": ["Control", "Navigation", "SVM", "Cloud"],
-};
-const DELIVERY_TYPES = ["납품", "납품 + 구독", "구독"];
+// 패키지 구성·이행 종류 5종은 _detail/contract-name 공용(2026-09-09) — 계약명 조립 규칙과 같은 원천
 
 // 기존 등록 호선 — 슬롯 콤보박스 후보(검색 포함). 모달에서 만든 호선이 뒤에 추가된다
 const EXISTING_VESSELS = [
@@ -115,6 +112,8 @@ type Item = {
   id: number;
   pkg: string | null;
   slotCount: number;
+  /** 제품별 이행 종류(2026-09-09) — 계약명 조립의 원천. 미선택 제품은 defaultDelivery */
+  deliveries?: Record<string, string>;
   /** 슬롯 수 직접 입력 모드(2026-09-01 확정) */
   custom?: boolean;
   assigns: (string | null)[];
@@ -348,7 +347,15 @@ export default function Sales365ContractCreatePage() {
                     {contractName(
                       date,
                       customer,
-                      items.filter((i) => i.pkg).map((i) => ({ pkg: i.pkg as string, count: i.slotCount })),
+                      items
+                        .filter((i) => i.pkg)
+                        .map((i) => ({
+                          groups: (PKG_COMPOSITION[i.pkg as string] ?? []).map((product) => ({
+                            product,
+                            delivery: i.deliveries?.[product] ?? defaultDelivery(product),
+                          })),
+                          count: i.slotCount,
+                        })),
                     )}
                   </p>
                 ) : (
@@ -494,11 +501,11 @@ export default function Sales365ContractCreatePage() {
                 </RadioGroup>
               </div>
 
-              {/* 선택된 제품 및 납품 유형 — 제품 타입 선택 시 임베드 등장 */}
+              {/* 선택된 제품 및 이행 종류 — 제품 타입 선택 시 임베드 등장. 이행 종류 선택이 계약명에 바로 반영된다 */}
               {it.pkg && (
                 <div className="mt-6 space-y-2">
                   <div className="flex items-center gap-2">
-                    <Label>선택된 제품 및 납품 유형</Label>
+                    <Label>선택된 제품 및 이행 종류</Label>
                     <Badge variant="outline" className="border-primary text-primary">
                       {it.pkg}
                     </Badge>
@@ -508,7 +515,7 @@ export default function Sales365ContractCreatePage() {
                       <TableHeader>
                         <TableRow>
                           <TableHead className="w-36">제품</TableHead>
-                          <TableHead className="w-44">납품 유형</TableHead>
+                          <TableHead className="w-44">이행 종류</TableHead>
                           <TableHead>구독 기간</TableHead>
                         </TableRow>
                       </TableHeader>
@@ -517,12 +524,17 @@ export default function Sales365ContractCreatePage() {
                           <TableRow key={product}>
                             <TableCell className="font-medium">{product}</TableCell>
                             <TableCell>
-                              <Select defaultValue="납품">
+                              <Select
+                                value={it.deliveries?.[product] ?? defaultDelivery(product)}
+                                onValueChange={(v) =>
+                                  patchItem(it.id, { deliveries: { ...(it.deliveries ?? {}), [product]: v } })
+                                }
+                              >
                                 <SelectTrigger size="sm" className="w-full">
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  {DELIVERY_TYPES.map((d) => (
+                                  {DELIVERY_KINDS.map((d) => (
                                     <SelectItem key={d} value={d}>
                                       {d}
                                     </SelectItem>
