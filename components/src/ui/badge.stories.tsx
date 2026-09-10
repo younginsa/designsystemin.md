@@ -33,18 +33,7 @@ export const Variants = {
   ),
 }
 
-export const Status = {
-  parameters: { vocab: "data-status" },
-  render: () => (
-    <>
-      <Badge variant="secondary"><span className="size-1.5 rounded-full bg-success"></span> 정상</Badge>
-      <Badge variant="secondary"><span className="size-1.5 rounded-full bg-destructive"></span> 이상</Badge>
-      <Badge variant="outline">CAUTION</Badge>
-      <Badge variant="outline">COMPLETED</Badge>
-      <span className="flex items-center gap-1.5 text-sm text-muted-foreground"><span className="size-2 rounded-full bg-success"></span> Ready</span>
-    </>
-  ),
-}
+// 상태 필 · 도트는 status-badge.stories 로 이관(2026-09-10) — Badge 는 일반 라벨 · 개수 · 버전 · 역할 태그 전용
 
 export const AllVariants = {
   render: () => (
@@ -59,4 +48,4 @@ export const AllVariants = {
   ),
 }
 
-export const __namedExportsOrder = ["Variants", "Status", "AllVariants"]
+export const __namedExportsOrder = ["Variants", "AllVariants"]

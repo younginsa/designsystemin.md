@@ -78,6 +78,12 @@ import * as chartStories from "@ds/ui/ui/chart.stories";
 import * as popoverStories from "@ds/ui/ui/popover.stories";
 import * as tooltipStories from "@ds/ui/ui/tooltip.stories";
 import * as sonnerStories from "@ds/ui/ui/sonner.stories";
+import * as alertStories from "@ds/ui/ui/alert.stories";
+import * as errorStateStories from "@ds/ui/ui/error-state.stories";
+import * as emptyStories from "@ds/ui/ui/empty.stories";
+import * as skeletonStories from "@ds/ui/ui/skeleton.stories";
+import * as errorConsoleStories from "@ds/ui/ui/error-console.stories";
+import * as statusBadgeStories from "@ds/ui/ui/status-badge.stories";
 import { Card, CardContent, CardDescription, CardTitle } from "@ds/ui/ui/card";
 import {
   Collapsible,
@@ -399,74 +405,12 @@ export const PREVIEWS: Record<string, Pv> = {
   "btn-icon": fromStories("btn-icon", buttonStories, BTN_FRAME),
   "btn-dashed": fromStories("btn-dashed", buttonStories, BTN_FRAME),
   /* ── 피드백(인라인)·시각화 ── */
-  "fb-banner": {
-    className: "flex flex-col gap-3 " + BOX + " p-6",
-    style: { width: 640 },
-    node: (
-      <>
-        <Alert>
-          <CheckCircle2 />
-          <AlertTitle>업데이트 완료</AlertTitle>
-          <AlertDescription>common v4.0.0 적용이 끝났습니다.</AlertDescription>
-        </Alert>
-        <Alert variant="destructive">
-          <AlertTriangle />
-          <AlertTitle>업데이트 실패</AlertTitle>
-          <AlertDescription>Agent 로그를 확인해 주세요.</AlertDescription>
-        </Alert>
-        {/* 사용방식 ② 상시 정적 안내(info) — 구 「안내 노트」 병합(2026-09-03) */}
-        <Alert>
-          <Info className="size-4" />
-          <AlertTitle>안내</AlertTitle>
-          <AlertDescription>별 아이콘을 눌러 권장 버전을 설정할 수 있습니다. 모든 변경사항은 즉시 반영됩니다.</AlertDescription>
-        </Alert>
-      </>
-    ),
-  },
-  "fb-empty": {
-    className: BOX + " p-4",
-    style: { width: 560 },
-    node: (
-      <Empty className="py-8">
-        <EmptyHeader>
-          <EmptyMedia variant="icon"><Inbox /></EmptyMedia>
-          <EmptyTitle>등록된 메모가 없습니다</EmptyTitle>
-          <EmptyDescription>새 메모를 추가하면 여기에 표시됩니다.</EmptyDescription>
-        </EmptyHeader>
-        <Button variant="outline" size="sm"><Plus /> 새 메모</Button>
-      </Empty>
-    ),
-  },
-  "error-state": {
-    className: BOX + " p-6",
-    style: { width: 720 },
-    hubOnly: true,
-    node: (
-      <ErrorState
-        title="계약 목록을 불러오지 못했습니다"
-        description="서버 응답이 지연되고 있습니다. 잠시 후 다시 시도해 주세요."
-        onRetry={() => {}}
-      />
-    ),
-  },
-  "fb-console": {
-    className: BOX + " p-6",
-    style: { width: 640 },
-    node: (
-      <div className="relative rounded-lg bg-foreground p-4 font-mono text-xs text-background">
-        <Button variant="ghost" size="icon" className="absolute right-2 top-2 size-6 text-background hover:bg-background/20" aria-label="복사"><Copy /></Button>
-        <div>[2026-07-28 15:23:01] update requested (id: 7b74)</div>
-        <div>[2026-07-28 15:23:04] pulling image hidom-2.0-backend:v3.5.0</div>
-        <div className="text-destructive">[2026-07-28 15:24:12] ERROR: agent unreachable</div>
-      </div>
-    ),
-  },
-  skeleton: {
-    className: BOX + " p-6",
-    style: { width: 640 },
-    hubOnly: true,
-    node: <TableSkeleton rows={3} />,
-  },
+  // 배치 5 — 피드백 카드는 alert · error-state · empty · skeleton · error-console .stories 원문(2026-09-10)
+  "fb-banner": fromStories("fb-banner", alertStories, { className: "flex flex-col gap-3 " + BOX + " p-6", style: { width: 640 } }),
+  "fb-empty": fromStories("fb-empty", emptyStories, { className: BOX + " p-4", style: { width: 560 } }),
+  "error-state": fromStories("error-state", errorStateStories, { className: BOX + " p-6", style: { width: 720 }, hubOnly: true }),
+  "fb-console": fromStories("fb-console", errorConsoleStories, { className: BOX + " p-6", style: { width: 640 } }),
+  skeleton: fromStories("skeleton", skeletonStories, { className: BOX + " p-6", style: { width: 640 }, hubOnly: true }),
   "header-filter": {
     className: BOX + " p-6",
     style: { width: 620 },
@@ -533,7 +477,7 @@ export const PREVIEWS: Record<string, Pv> = {
   // 셀 변형·정렬 헤더 흡수(2026-09-03) — 정렬 버튼 헤더 + 링크 셀·2줄 셀·행 액션을 한 표로
   "data-table": fromStories("data-table", tableStories, { className: BOX + " p-6", style: { width: 640 } }),
   "data-kv": fromStories("data-kv", itemStories, { className: BOX + " p-4", style: { width: 560 } }),
-  "data-status": fromStories("data-status", badgeStories, { className: "flex items-center justify-center gap-3 " + BOX, style: strip }),
+  "data-status": fromStories("data-status", statusBadgeStories, { className: "flex items-center justify-center gap-3 " + BOX, style: strip }),
   // 사용방식 3가지 병합(2026-09-03) — ① 일반 칩 ② 버전 칩(mono) ③ 역할 태그(제거 X)
   // 배치 3 — data-* · viz-* 카드는 badge · table · pagination · progress · card · item · accordion · collapsible · tabs · chart .stories 원문(2026-09-10)
   "data-badge": fromStories("data-badge", badgeStories, { className: "flex flex-wrap items-center justify-center gap-3 " + BOX + " px-6 py-4", style: { width: 640 } }),

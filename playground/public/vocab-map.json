@@ -21,7 +21,7 @@
     "data-perm": { "name": "권한 매트릭스", "files": ["table", "checkbox"] },
     "data-progress": { "name": "진행률 바", "files": ["progress"] },
     "data-stat": { "name": "스탯 · 퍼널 · 랭킹", "files": ["card"] },
-    "data-status": { "name": "상태 필 · 도트", "files": ["badge"] },
+    "data-status": { "name": "상태 필 · 도트", "files": ["status-badge", "badge"] },
     "data-table": { "name": "테이블 (셀 변형 · 정렬 헤더 포함)", "files": ["table"] },
     "data-tabs": { "name": "탭 3종", "files": ["tabs", "toggle-group"] },
     "data-tree": { "name": "트리 목록", "files": ["collapsible"] },
