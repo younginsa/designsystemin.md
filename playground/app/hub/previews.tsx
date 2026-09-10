@@ -75,6 +75,9 @@ import * as accordionStories from "@ds/ui/ui/accordion.stories";
 import * as collapsibleStories from "@ds/ui/ui/collapsible.stories";
 import * as tabsStories from "@ds/ui/ui/tabs.stories";
 import * as chartStories from "@ds/ui/ui/chart.stories";
+import * as popoverStories from "@ds/ui/ui/popover.stories";
+import * as tooltipStories from "@ds/ui/ui/tooltip.stories";
+import * as sonnerStories from "@ds/ui/ui/sonner.stories";
 import { Card, CardContent, CardDescription, CardTitle } from "@ds/ui/ui/card";
 import {
   Collapsible,
@@ -602,48 +605,10 @@ export const PREVIEWS: Record<string, Pv> = {
     hubOnly: true,
     node: <RouteFrame src="/shadcn-preview/version-filter-chip/" w={480} h={520} />,
   },
-  "ov-popover": {
-    className: "flex items-start justify-center gap-2 " + BOX + " p-6",
-    style: { width: 400 },
-    hubOnly: true,
-    node: (
-      // 정적 조립 — Popover 실물은 포털이라 카드 안에 가둘 수 없다. PopoverContent와 같은 클래스.
-      <div className="flex flex-col items-center gap-2">
-        <Button variant="outline" size="sm">KST +9 <ChevronDown /></Button>
-        <div className="w-56 rounded-md border bg-popover p-4 text-popover-foreground shadow-md">
-          <div className="text-sm font-medium">타임존</div>
-          <div className="mt-2 rounded-md bg-accent px-2 py-1.5 text-sm">KST +9 · 2026-07-30</div>
-          <div className="px-2 py-1.5 text-sm text-muted-foreground">UTC +0 · 2026-07-30</div>
-        </div>
-      </div>
-    ),
-  },
-  "ov-toast": {
-    className: "flex items-center justify-center " + BOX,
-    style: { width: 560, height: 140 },
-    hubOnly: true,
-    node: (
-      // 정적 조립 — Sonner 토스트 룩(뷰포트 고정이라 카드 안 실물 불가)
-      <div className="w-80 rounded-lg border border-border bg-popover px-4 py-3 text-popover-foreground shadow-lg">
-        <div className="text-sm font-medium">업데이트가 시작되었습니다</div>
-        <div className="text-sm text-muted-foreground">SVM_BUSAN_1 · common v4.0.0</div>
-      </div>
-    ),
-  },
-  "ov-tooltip": {
-    className: "flex flex-col items-center justify-center gap-2 " + BOX,
-    style: { width: 560, height: 140 },
-    hubOnly: true,
-    node: (
-      // 정적 조립 — TooltipContent와 같은 표면(bg-foreground류는 shadcn v4 primary 계열)
-      <>
-        <Info className="size-4 text-muted-foreground" />
-        <div className="w-fit rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground">
-          권장 버전은 별표(★)로 표시됩니다
-        </div>
-      </>
-    ),
-  },
+  // 배치 4 — 포털형은 iframe 유지, 정적 조립 3장(popover · tooltip · toast)은 스토리 Static 원문(2026-09-10)
+  "ov-popover": fromStories("ov-popover", popoverStories, { className: "flex items-start justify-center gap-2 " + BOX + " p-6", style: { width: 400 }, hubOnly: true }),
+  "ov-toast": fromStories("ov-toast", sonnerStories, { className: "flex items-center justify-center " + BOX, style: { width: 560, height: 140 }, hubOnly: true }),
+  "ov-tooltip": fromStories("ov-tooltip", tooltipStories, { className: "flex flex-col items-center justify-center gap-2 " + BOX, style: { width: 560, height: 140 }, hubOnly: true }),
 };
 
 /* 캡처 페이지 전용 — 카드 슬러그가 아니지만 기존 캡처 대상이던 섹션 */
