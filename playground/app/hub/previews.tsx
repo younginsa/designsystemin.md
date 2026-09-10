@@ -61,6 +61,10 @@ import * as radioGroupStories from "@ds/ui/ui/radio-group.stories";
 import * as switchStories from "@ds/ui/ui/switch.stories";
 import * as selectStories from "@ds/ui/ui/select.stories";
 import * as commandStories from "@ds/ui/ui/command.stories";
+import * as toggleGroupStories from "@ds/ui/ui/toggle-group.stories";
+import * as inputGroupStories from "@ds/ui/ui/input-group.stories";
+import * as calendarStories from "@ds/ui/ui/calendar.stories";
+import * as iconSelectStories from "@ds/ui/ui/icon-select.stories";
 import { Card, CardContent, CardDescription, CardTitle } from "@ds/ui/ui/card";
 import {
   Collapsible,
@@ -370,22 +374,7 @@ export const PREVIEWS: Record<string, Pv> = {
     style: { width: 640, height: 56 },
     node: <DemoBreadcrumb />,
   },
-  "icon-select": {
-    className: "flex items-center justify-center " + BOX,
-    style: strip,
-    hubOnly: true,
-    node: (
-      <IconSelect
-        icon={Globe}
-        value="kst"
-        sub="2026-07-30"
-        items={[
-          { value: "kst", label: "KST +9" },
-          { value: "utc", label: "UTC +0" },
-        ]}
-      />
-    ),
-  },
+  "icon-select": fromStories("icon-select", iconSelectStories, { className: "flex items-center justify-center " + BOX, style: strip, hubOnly: true }),
 
   /* ── 버튼 ── */
   /* 버튼 6종 — 스파이크(2026-09-07): 여기서 직접 그리지 않고 button.stories.tsx 를 읽는다.
@@ -503,18 +492,7 @@ export const PREVIEWS: Record<string, Pv> = {
   // form-* 카드 — 스토리 원문(input · textarea · checkbox · radio-group · switch · select · command .stories) 을 읽는다(2026-09-09 배치 1)
   "form-text": fromStories("form-text", inputStories, { className: "flex items-center " + BOX + " px-10", style: { width: 560, height: 150 } }),
   "form-number": fromStories("form-number", inputStories, { className: "flex items-center gap-4 " + BOX + " px-10", style: { width: 560, height: 150 } }),
-  "form-search": {
-    className: "flex items-center " + BOX + " px-10",
-    style: { width: 560, height: 120 },
-    node: (
-      <InputGroup>
-        <InputGroupAddon>
-          <Search />
-        </InputGroupAddon>
-        <InputGroupInput placeholder="키워드 검색" />
-      </InputGroup>
-    ),
-  },
+  "form-search": fromStories("form-search", inputGroupStories, { className: "flex items-center " + BOX + " px-10", style: { width: 560, height: 120 } }),
   "form-textarea": fromStories("form-textarea", textareaStories, { className: "flex items-center " + BOX + " px-10", style: { width: 560, height: 190 } }),
   // 두 파일을 합쳐 읽는 카드 — select(셀렉트) + command(콤보박스 트리거)
   "form-select": {
@@ -555,46 +533,12 @@ export const PREVIEWS: Record<string, Pv> = {
       </RadioGroup>
     ),
   },
-  "form-segment": {
-    className: "flex items-center justify-center " + BOX,
-    style: { width: 560, height: 120 },
-    node: (
-      <ToggleGroup type="single" defaultValue="all" variant="outline">
-        <ToggleGroupItem value="all">전체</ToggleGroupItem>
-        <ToggleGroupItem value="installed">설치됨</ToggleGroupItem>
-        <ToggleGroupItem value="not">미설치</ToggleGroupItem>
-      </ToggleGroup>
-    ),
-  },
+  // 배치 2 — toggle-group · input-group · calendar · icon-select 스토리 원문(2026-09-10)
+  "form-segment": fromStories("form-segment", toggleGroupStories, { className: "flex items-center justify-center " + BOX, style: { width: 560, height: 120 } }),
   "form-tags": fromStories("form-tags", inputStories, { className: "flex items-center " + BOX + " px-10", style: { width: 560, height: 130 } }),
-  "form-daterange": {
-    className: "flex w-fit items-center justify-center " + BOX + " p-4",
-    node: (
-      <Calendar
-        mode="range"
-        numberOfMonths={1}
-        defaultMonth={new Date(2026, 6, 1)}
-        selected={{ from: new Date(2026, 6, 7), to: new Date(2026, 6, 21) }}
-      />
-    ),
-  },
+  "form-daterange": fromStories("form-daterange", calendarStories, { className: "flex w-fit items-center justify-center " + BOX + " p-4" }),
   "form-file": fromStories("form-file", inputStories, { className: "flex items-center " + BOX + " px-10", style: { width: 560, height: 150 } }),
-  "form-chipgrid": {
-    className: "flex items-center justify-center " + BOX + " p-6",
-    style: { width: 560, height: 200 },
-    node: (
-      <ToggleGroup type="multiple" defaultValue={["v350", "v342"]} variant="outline" className="grid grid-cols-4 gap-2">
-        <ToggleGroupItem value="v350" className="font-mono text-xs">v3.5.0</ToggleGroupItem>
-        <ToggleGroupItem value="v342" className="font-mono text-xs">v3.4.2</ToggleGroupItem>
-        <ToggleGroupItem value="v341" className="font-mono text-xs">v3.4.1</ToggleGroupItem>
-        <ToggleGroupItem value="v331" className="font-mono text-xs">v3.3.1</ToggleGroupItem>
-        <ToggleGroupItem value="v330" className="font-mono text-xs">v3.3.0</ToggleGroupItem>
-        <ToggleGroupItem value="v320" className="font-mono text-xs">v3.2.0</ToggleGroupItem>
-        <ToggleGroupItem value="v312" className="font-mono text-xs">v3.1.2</ToggleGroupItem>
-        <ToggleGroupItem value="v360" className="font-mono text-xs">v3.6.0</ToggleGroupItem>
-      </ToggleGroup>
-    ),
-  },
+  "form-chipgrid": fromStories("form-chipgrid", toggleGroupStories, { className: "flex items-center justify-center " + BOX + " p-6", style: { width: 560, height: 200 } }),
 
   /* ── 데이터 표시 ── */
   // 셀 변형·정렬 헤더 흡수(2026-09-03) — 정렬 버튼 헤더 + 링크 셀·2줄 셀·행 액션을 한 표로
