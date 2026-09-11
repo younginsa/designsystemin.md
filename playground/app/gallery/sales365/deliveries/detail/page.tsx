@@ -76,10 +76,17 @@ const DRAWINGS: { type: string; name: string; version: string; date: string; his
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
 
 // 변경 이력 — 와이어프레임 AUDIT 이식(예정일·도면 관리 이력)
+// 병합 변경 이력(2026-09-10): domain = 이 페이지 섹션(일정 · 도면 · 납품 제품 정보).
+// 도면 항목은 DRAWINGS의 이전 버전(승인 v1 07-01 · v2 09-05, 작업 v1 08-20)과 맞춘다
+const AUDIT_DOMAINS = ["일정", "도면", "납품 제품 정보"];
 const AUDIT: AuditEntry[] = [
+  { at: "2026-09-05 10:12", domain: "도면", action: "도면 새 버전 업로드", tone: "add", actor: "김민준", lines: ["승인도면 v2", "General Arrangement Plan"] },
+  { at: "2026-08-20 15:40", domain: "도면", action: "도면 등록", tone: "add", actor: "이수진", lines: ["작업도면 v1", "Installation Drawing"] },
   {
     at: "2026-08-18 17:26",
-    action: "U",
+    domain: "일정",
+    action: "예정일 수정",
+    tone: "modify",
     actor: "최다혜",
     fields: [
       { label: "납품 예정일", from: "2026-02-10", to: "2026-02-24" },
@@ -88,14 +95,20 @@ const AUDIT: AuditEntry[] = [
   },
   {
     at: "2026-08-02 10:41",
-    action: "U",
+    domain: "일정",
+    action: "예정일 수정",
+    tone: "modify",
     actor: "최다혜",
     fields: [{ label: "커미셔닝 예정일", from: "— (미입력)", to: "2026-03-01" }],
   },
+  { at: "2026-07-01 09:30", domain: "도면", action: "도면 등록", tone: "add", actor: "김민준", lines: ["승인도면 v1", "General Arrangement Plan"] },
   {
     at: "2026-01-08 11:20",
-    action: "C",
+    domain: "납품 제품 정보",
+    action: "납품 제품 생성",
+    tone: "create",
     actor: "김민준",
+    badge: "공통 컬럼",
     fields: [
       { label: "납품 제품 이름", from: null, to: "Hull 1001 · Control" },
       { label: "배정 호선", from: null, to: "Hull 1001 (MV EXAMPLE)" },
@@ -108,6 +121,8 @@ export default function Sales365DeliveryDetailPage() {
   const [cancelled, setCancelled] = React.useState(false);
   const [scheduleOpen, setScheduleOpen] = React.useState(false);
   const [drawingOpen, setDrawingOpen] = React.useState(false);
+  // 도면 등록 첨부 — 고른 파일 이름(시각 스펙: 업로드는 하지 않는다). 모달을 닫으면 비운다
+  const [drawingFile, setDrawingFile] = React.useState<string | null>(null);
   const [comments, setComments] = React.useState([
     { author: "이수진", time: "2026-08-19 10:12", text: "일정 변경 사유와 현장 이슈를 남깁니다" },
   ]);
@@ -285,14 +300,15 @@ export default function Sales365DeliveryDetailPage() {
                 </TabsContent>
 
                 <TabsContent value="audit" className="mt-3">
-                  <AuditLog subject="납품 제품 · Hull 1001 · Control" entries={AUDIT} />
+                  <AuditLog subject="납품 제품 · Hull 1001 · Control" entries={AUDIT} domains={AUDIT_DOMAINS} />
                 </TabsContent>
               </Tabs>
             </section>
           </div>
 
           {/* ══ 우측 Details 패널 — Jira 문법: 개요 KV가 스크롤 내내 고정 ══ */}
-          <aside className="sticky top-6 w-80 shrink-0 space-y-4 self-start">
+          {/* top-22 = 셸 상단바 h-16(64px) + 24px 여백 — top-6은 상단바 아래로 숨었다(2026-09-10, 상세 5종 공통) */}
+          <aside className="sticky top-22 w-80 shrink-0 space-y-4 self-start">
             {/* 일정 — 이 엔티티의 편집 가능 필드. 수정 = 저강조 ghost(4개 상세 페이지 공통) */}
             <section className="rounded-lg border bg-card p-5">
               <div className="flex items-center justify-between">
@@ -404,7 +420,13 @@ export default function Sales365DeliveryDetailPage() {
       </Dialog>
 
       {/* ── 도면 등록 모달 ── */}
-      <Dialog open={drawingOpen} onOpenChange={setDrawingOpen}>
+      <Dialog
+        open={drawingOpen}
+        onOpenChange={(o) => {
+          setDrawingOpen(o);
+          if (!o) setDrawingFile(null);
+        }}
+      >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>도면 등록</DialogTitle>
@@ -432,10 +454,26 @@ export default function Sales365DeliveryDetailPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>파일 첨부</Label>
-              <div className="flex items-center justify-center gap-2 rounded-md border border-dashed p-6 text-sm text-secondary-foreground">
-                <Paperclip className="size-4" /> 파일을 클릭하거나 드래그하여 업로드
-              </div>
+              <Label htmlFor="d-file">파일 첨부</Label>
+              {/* 점선 영역 = label + 숨긴 file input(2026-09-10 디자이너 확정) — 클릭하면 OS 파일 선택창이 열린다.
+                  고른 파일 이름이 안내 문구 자리에 온다. 드래그는 시각 스펙만(핸들러 없음) */}
+              <label
+                htmlFor="d-file"
+                className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed p-6 text-sm text-secondary-foreground hover:bg-accent"
+              >
+                <Paperclip className="size-4" />
+                {drawingFile ? (
+                  <span className="truncate text-foreground">{drawingFile}</span>
+                ) : (
+                  "파일을 클릭하거나 드래그하여 업로드"
+                )}
+                <input
+                  id="d-file"
+                  type="file"
+                  className="sr-only"
+                  onChange={(e) => setDrawingFile(e.target.files?.[0]?.name ?? null)}
+                />
+              </label>
             </div>
             <div className="space-y-2">
               <Label htmlFor="d-memo">메모 (선택)</Label>

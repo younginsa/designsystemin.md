@@ -82,23 +82,37 @@ const CONTRACTS = [
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
 
 // 변경 이력 — 와이어프레임 AUDIT 이식
+// 병합 변경 이력(2026-09-10): domain = 이 페이지 섹션(계정 정보 · 담당자 · 계약).
+// 담당자·계약 항목은 이 화면의 MANAGERS·CONTRACTS와 맞춘다
+const AUDIT_DOMAINS = ["계정 정보", "담당자", "계약"];
 const AUDIT: AuditEntry[] = [
+  { at: "2026-06-02 14:10", domain: "담당자", action: "담당자 추가", tone: "add", actor: "김영업", lines: ["이영희 · 기술팀 / 차장", "010-9876-5432 · yhlee@shipping.com"] },
   {
     at: "2026-05-14 15:02",
-    action: "U",
+    domain: "계정 정보",
+    action: "계정 정보 수정",
+    tone: "modify",
     actor: "한소영",
     fields: [{ label: "계정 이름", from: "대양해운(주)", to: "대양해운" }],
   },
+  { at: "2026-05-10 11:00", domain: "계약", action: "계약 등록", tone: "add", actor: "홍길동", lines: [`C-2026-031 · ${cn("2026-05-10", "대양해운", "Cloud", 2)}`] },
+  { at: "2026-01-15 10:00", domain: "계약", action: "계약 등록", tone: "add", actor: "김민준", lines: [`C-2026-001 · ${cn("2026-01-15", "대양해운", "Enterprise", 5)}`] },
   {
     at: "2025-09-03 11:37",
-    action: "U",
+    domain: "계정 정보",
+    action: "계정 정보 수정",
+    tone: "modify",
     actor: "한소영",
     fields: [{ label: "국가", from: "대한민국", to: "싱가포르" }],
   },
+  { at: "2024-03-01 10:20", domain: "담당자", action: "담당자 추가", tone: "add", actor: "김영업", lines: ["김철수 · 구매팀 / 부장", "010-1234-5678 · cskim@shipping.com"] },
   {
     at: "2024-02-01 09:00",
-    action: "C",
+    domain: "계정 정보",
+    action: "계정 생성",
+    tone: "create",
     actor: "한소영",
+    badge: "공통 컬럼",
     fields: [{ label: "계정명", from: null, to: "대양해운" }],
   },
 ];
@@ -175,21 +189,23 @@ export default function Sales365AccountDetailPage() {
                   </Link>
                 </Button>
               </div>
-              <Table className="bg-card">
+              {/* 가로 스크롤 없이 컬럼 폭에 맞춘다(2026-09-10 확정): table-fixed + 좁은 열 폭 선언, 계약명이 나머지를 받아
+                  줄바꿈(말줄임 없음). 유저 상세 담당 계약 표와 같은 문법 */}
+              <Table className="table-fixed bg-card">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>코드</TableHead>
+                    <TableHead className="w-32">코드</TableHead>
                     <TableHead>계약명</TableHead>
-                    <TableHead>선종</TableHead>
-                    <TableHead>상품</TableHead>
-                    <TableHead>계약일</TableHead>
+                    <TableHead className="w-32">선종</TableHead>
+                    <TableHead className="w-40">상품</TableHead>
+                    <TableHead className="w-32">계약일</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {CONTRACTS.map((c) => (
                     <TableRow key={c.code}>
                       <TableCell className="font-mono text-sm">{c.code}</TableCell>
-                      <TableCell>
+                      <TableCell className="whitespace-normal">
                         <Link
                           href={`${BASE}/contracts/detail`}
                           className="font-medium text-primary hover:underline"
@@ -262,14 +278,15 @@ export default function Sales365AccountDetailPage() {
                 </TabsContent>
 
                 <TabsContent value="audit" className="mt-3">
-                  <AuditLog subject="계정 · 대양해운" entries={AUDIT} />
+                  <AuditLog subject="계정 · 대양해운" entries={AUDIT} domains={AUDIT_DOMAINS} />
                 </TabsContent>
               </Tabs>
             </section>
           </div>
 
           {/* ══ 우측 Details 패널 — Jira 문법: 개요 KV가 스크롤 내내 고정 ══ */}
-          <aside className="sticky top-6 w-80 shrink-0 space-y-4 self-start">
+          {/* top-22 = 셸 상단바 h-16(64px) + 24px 여백 — top-6은 상단바 아래로 숨었다(2026-09-10, 상세 5종 공통) */}
+          <aside className="sticky top-22 w-80 shrink-0 space-y-4 self-start">
             <section className="rounded-lg border bg-card p-5">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">계정 정보</h2>

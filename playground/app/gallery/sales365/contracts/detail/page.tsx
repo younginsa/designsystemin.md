@@ -18,7 +18,6 @@ import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
 import { Download, Info, MoreHorizontal, Pencil, Plus, Search, Trash2, Upload, X } from "lucide-react";
 
-import { Alert, AlertDescription } from "@ds/ui/ui/alert";
 import { Badge } from "@ds/ui/ui/badge";
 import {
   DropdownMenu,
@@ -288,45 +287,45 @@ function MoneyList({
   );
 }
 
-// 변경 이력 — 와이어프레임 AUDIT 이식(대상 테이블 + 대상 ID 축)
+// 변경 이력 — 와이어프레임 탭별 이력 카드 5개(개요·계약 항목·배정 호선·문서·청구)를 한 이력으로 병합(2026-09-10 확정).
+// 각 항목의 domain이 어느 섹션의 변경인지 말한다. 일시·대상은 이 화면의 데이터(C-2026-001 · 슬롯 1~5 · 문서 2 · 청구 2)에 맞췄다.
+const AUDIT_DOMAINS = ["개요", "계약 항목", "배정 호선", "문서", "청구"];
 const AUDIT: AuditEntry[] = [
-  {
-    at: "2026-08-20 14:32",
-    action: "U",
-    actor: "김민준",
-    fields: [
-      { label: "가격", from: "USD 1,200,000", to: "USD 1,350,000" },
-      { label: "고객 계정", from: "대양해운", to: "대양해운 싱가포르" },
-    ],
-  },
-  {
-    at: "2026-06-11 09:05",
-    action: "U",
-    actor: "이수진",
-    fields: [
-      { label: "취소 여부", from: "정상", to: "취소됨" },
-      { label: "취소 사유", from: "—", to: "발주처 사양 변경" },
-    ],
-  },
+  { at: "2026-09-10 09:40", domain: "청구", action: "청구서 발행", tone: "add", actor: "이수진", lines: ["2026-09-10 발행 · USD 600,000", "대상 4건 · Hull 1001 Navigation 외 3건"] },
+  { at: "2026-08-22 15:10", domain: "청구", action: "청구서 수정", tone: "modify", actor: "이수진", lines: ["2026-03-20 발행"], fields: [{ label: "청구 금액", from: "USD 400,000", to: "USD 450,000" }] },
+  { at: "2026-08-20 14:32", domain: "배정 호선", action: "슬롯 제품별 금액 수정", tone: "modify", actor: "김민준", lines: ["C-2026-001-01 1번 · Hull 1001 · MV EXAMPLE"], fields: [{ label: "제품별 금액", from: "Control USD 22,000 /월 · SVM 미입력 · Control 무상 없음", to: "Control USD 20,000 /월 · SVM USD 15,000 /월 · Control 무상 3개월" }] },
+  { at: "2026-08-20 11:05", domain: "개요", action: "계약 정보 수정", tone: "modify", actor: "김민준", fields: [{ label: "계약일", from: "2026-01-10", to: "2026-01-15" }] },
+  { at: "2026-08-19 16:40", domain: "계약 항목", action: "계약 항목 취소", tone: "remove", actor: "이수영", lines: ["C-2026-001-02"], reason: "발주처 사양 변경" },
+  { at: "2026-08-18 09:15", domain: "개요", action: "계약 정보 수정", tone: "modify", actor: "이수영", fields: [{ label: "담당", from: "김민준", to: "홍길동" }] },
+  { at: "2026-08-15 13:05", domain: "배정 호선", action: "호선 배정", tone: "add", actor: "박지훈", lines: ["C-2026-001-01 3번 ← Hull 1003", "구독 시작일 · Control 2027-05-01 · SVM 미정"] },
+  { at: "2026-08-11 11:02", domain: "청구", action: "청구서 삭제", tone: "remove", actor: "김민준", lines: ["2026-08-10 발행 · 금액 미입력", "대상 2건 · Hull 1003 Navigation 외 1건"] },
+  { at: "2026-08-10 09:40", domain: "배정 호선", action: "슬롯 삭제", tone: "remove", actor: "김민준", lines: ["C-2026-001-01 6번"] },
+  { at: "2026-08-05 14:25", domain: "개요", action: "계약 정보 수정", tone: "modify", actor: "김민준", fields: [{ label: "계약서 시리얼 넘버", from: "미입력", to: "SN-2026-0115-01" }] },
+  // 계약명은 자동 생성이라 직접 고칠 수 없다 — 항목 패키지가 바뀌면 이름이 따라 바뀐 것으로 기록된다(2026-09-09)
   {
     at: "2026-04-02 13:11",
-    action: "U",
+    domain: "계약 항목",
+    action: "계약 항목 수정",
+    tone: "modify",
     actor: "김민준",
+    lines: ["C-2026-001-01 · 패키지 Safety Forward → Enterprise"],
     fields: [
-      // 계약명은 자동 생성이라 직접 고칠 수 없다 — 항목 패키지가 바뀌면 이름이 따라 바뀐 것으로 기록된다(2026-09-09)
       {
         label: "계약명",
         from: contractName("2026-01-15", "대양해운", [itemFromPackage("Safety Forward", 5)]),
         to: contractName("2026-01-15", "대양해운", [itemFromPackage("Enterprise", 5)]),
       },
     ],
+    cross: "계약명은 계약 내용에서 조립되므로 항목이 바뀌면 함께 바뀝니다",
   },
-  {
-    at: "2026-01-08 11:20",
-    action: "C",
-    actor: "김민준",
-    fields: [{ label: "계약 코드", from: null, to: "C-2026-001" }],
-  },
+  { at: "2026-04-01 17:12", domain: "배정 호선", action: "슬롯 취소", tone: "remove", actor: "이수영", lines: ["C-2026-001-01 5번 · Hull 1004"], reason: "발주처 사양 변경" },
+  { at: "2026-02-03 14:20", domain: "문서", action: "문서 새 버전 업로드", tone: "add", actor: "김민준", lines: ["계약서 v2", "contract_C-2026-001_v2.pdf"] },
+  { at: "2026-01-20 09:30", domain: "문서", action: "문서 삭제", tone: "remove", actor: "이수진", lines: ["견적서(구) v1", "quote_KMTC_draft.pdf"] },
+  { at: "2026-01-16 10:10", domain: "문서", action: "문서 등록", tone: "add", actor: "김민준", lines: ["계약서 v1", "contract_C-2026-001_v1.pdf"] },
+  { at: "2026-01-15 10:05", domain: "배정 호선", action: "슬롯 추가", tone: "add", actor: "김민준", lines: ["C-2026-001-01 5번"] },
+  { at: "2026-01-15 10:05", domain: "계약 항목", action: "계약 항목 추가", tone: "add", actor: "김민준", lines: ["C-2026-001-01 · Safety Forward · 5척"] },
+  { at: "2026-01-15 10:03", domain: "계약 항목", action: "계약 항목 추가", tone: "add", actor: "김민준", lines: ["C-2026-001-02 · Safety Forward · 2척"] },
+  { at: "2026-01-15 10:00", domain: "개요", action: "계약 생성", tone: "create", actor: "김민준", badge: "공통 컬럼", lines: ["C-2026-001"] },
 ];
 
 export default function Sales365ContractDetailPage() {
@@ -666,20 +665,25 @@ export default function Sales365ContractDetailPage() {
             {/* ══ 청구 (2026-09-08 신설) ══ */}
             <section id="invoices" className="scroll-mt-24 space-y-3">
               <div className="flex items-center justify-between">
-                <h2 className="text-sm font-medium text-secondary-foreground">청구서 ({INVOICES.length})</h2>
+                {/* 섹션 설명은 [i] 툴팁 — 계약 항목·배정 호선과 같은 문법(2026-09-10, 종전 Alert 폐기). 금액 ≠ 대상 합, 와이어프레임 1.2.5.1 */}
+                <div className="flex items-center gap-1.5">
+                  <h2 className="text-sm font-medium text-secondary-foreground">청구서 ({INVOICES.length})</h2>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button type="button" aria-label="청구서 설명">
+                        <Info className="size-4 text-secondary-foreground" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <span className="font-medium">청구 금액은 대상 가격의 합이 아닙니다.</span> 계약금 30%처럼 한 대상을
+                      나눠 청구하므로 금액은 청구서가 따로 담고, 대상은 그 청구서가 어느 가격 행을 덮는지만 가리킵니다.
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
                 <Button variant="outline" size="sm">
                   <Plus className="size-4" /> 청구서 발행
                 </Button>
               </div>
-              {/* 금액 ≠ 대상 합 — 와이어프레임 1.2.5.1 */}
-              <Alert>
-                <Info className="size-4" />
-                <AlertDescription>
-                  <span className="font-medium text-foreground">청구 금액은 대상 가격의 합이 아닙니다.</span>{" "}
-                  계약금 30%처럼 한 대상을 나눠 청구하므로 금액은 청구서가 따로 담고, 대상은 그 청구서가 어느
-                  가격 행을 덮는지만 가리킵니다.
-                </AlertDescription>
-              </Alert>
               <div className="divide-y rounded-md border bg-card">
                 {INVOICES.map((inv) => (
                   <div key={inv.at} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
@@ -774,14 +778,15 @@ export default function Sales365ContractDetailPage() {
                 </TabsContent>
 
                 <TabsContent value="audit" className="mt-3">
-                  <AuditLog subject="계약 · C-2026-001" entries={AUDIT} />
+                  <AuditLog subject="계약 · C-2026-001" entries={AUDIT} domains={AUDIT_DOMAINS} />
                 </TabsContent>
               </Tabs>
             </section>
           </div>
 
           {/* ══ 우측 Details 패널 — Jira 문법: 개요 KV가 스크롤 내내 고정 ══ */}
-          <aside className="sticky top-6 w-80 shrink-0 space-y-4 self-start">
+          {/* top-22 = 셸 상단바 h-16(64px) + 24px 여백 — top-6은 상단바 아래로 숨었다(2026-09-10, 상세 5종 공통) */}
+          <aside className="sticky top-22 w-80 shrink-0 space-y-4 self-start">
             <section className="rounded-lg border bg-card p-5">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">계약 정보</h2>

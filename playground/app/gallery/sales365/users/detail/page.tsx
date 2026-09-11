@@ -78,17 +78,28 @@ const CONTRACT_NOTE = "계약 담당은 기술영업·영업 팀 유저만 맡�
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
 
 // 변경 이력 — 유저 마스터(팀 이동·생성)
+// 병합 변경 이력(2026-09-10): domain = 이 페이지 섹션(유저 정보 · 담당 계약). 담당 계약 항목은 이 화면의 CONTRACTS와 맞춘다
+const AUDIT_DOMAINS = ["유저 정보", "담당 계약"];
 const AUDIT: AuditEntry[] = [
+  { at: "2026-07-20 11:30", domain: "담당 계약", action: "담당 계약 배정", tone: "add", actor: "한소영", lines: [`C-2026-044 · ${cn("2026-07-20", "우진해운", "Safety Forward", 2)}`] },
+  { at: "2026-05-10 11:05", domain: "담당 계약", action: "담당 계약 배정", tone: "add", actor: "한소영", lines: [`C-2026-031 · ${cn("2026-05-10", "대양해운", "Cloud", 2)}`] },
   {
     at: "2026-03-04 09:12",
-    action: "U",
+    domain: "유저 정보",
+    action: "유저 정보 수정",
+    tone: "modify",
     actor: "한소영",
     fields: [{ label: "팀", from: "기술영업", to: "영업" }],
   },
+  { at: "2026-01-15 10:05", domain: "담당 계약", action: "담당 계약 배정", tone: "add", actor: "한소영", lines: [`C-2026-001 · ${cn("2026-01-15", "대양해운", "Enterprise", 5)}`] },
+  { at: "2025-12-01 09:40", domain: "유저 정보", action: "유저 정보 수정", tone: "modify", actor: "한소영", fields: [{ label: "이메일", from: "mj.kim@hinas.co", to: "mj.kim@company.com" }] },
   {
     at: "2023-02-01 10:00",
-    action: "C",
+    domain: "유저 정보",
+    action: "유저 생성",
+    tone: "create",
     actor: "한소영",
+    badge: "공통 컬럼",
     fields: [
       { label: "이름", from: null, to: "김민준" },
       { label: "이메일", from: null, to: "mj.kim@company.com" },
@@ -193,21 +204,23 @@ export default function Sales365UserDetailPage() {
                   <TooltipContent className="max-w-xs">{CONTRACT_NOTE}</TooltipContent>
                 </Tooltip>
               </div>
-              <Table className="bg-card">
+              {/* 가로 스크롤 없이 컬럼 폭에 맞춘다(2026-09-10 확정): table-fixed + 좁은 열 폭 선언, 계약명이 나머지를 받아
+                  줄바꿈(말줄임 없음). 자동 생성 계약명이 길어 nowrap 기본값으로는 표가 컬럼 밖으로 넘쳤다 */}
+              <Table className="table-fixed bg-card">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>코드</TableHead>
+                    <TableHead className="w-32">코드</TableHead>
                     <TableHead>계약명</TableHead>
-                    <TableHead>선종</TableHead>
-                    <TableHead>상품</TableHead>
-                    <TableHead>계약일</TableHead>
+                    <TableHead className="w-32">선종</TableHead>
+                    <TableHead className="w-40">상품</TableHead>
+                    <TableHead className="w-32">계약일</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {CONTRACTS.map((c) => (
                     <TableRow key={c.code}>
                       <TableCell className="font-mono text-sm">{c.code}</TableCell>
-                      <TableCell>
+                      <TableCell className="whitespace-normal">
                         <Link
                           href={`${BASE}/contracts/detail`}
                           className="font-medium text-primary hover:underline"
@@ -283,14 +296,15 @@ export default function Sales365UserDetailPage() {
                 </TabsContent>
 
                 <TabsContent value="audit" className="mt-3">
-                  <AuditLog subject="유저 · 김민준" entries={AUDIT} />
+                  <AuditLog subject="유저 · 김민준" entries={AUDIT} domains={AUDIT_DOMAINS} />
                 </TabsContent>
               </Tabs>
             </section>
           </div>
 
           {/* ══ 우측 Details 패널 — Jira 문법: 개요 KV가 스크롤 내내 고정 ══ */}
-          <aside className="sticky top-6 w-80 shrink-0 space-y-4 self-start">
+          {/* top-22 = 셸 상단바 h-16(64px) + 24px 여백 — top-6은 상단바 아래로 숨었다(2026-09-10, 상세 5종 공통) */}
+          <aside className="sticky top-22 w-80 shrink-0 space-y-4 self-start">
             <section className="rounded-lg border bg-card p-5">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">유저 정보</h2>

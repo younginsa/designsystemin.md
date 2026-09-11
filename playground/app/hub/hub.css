@@ -338,13 +338,15 @@
     background-image: radial-gradient(#d9d9d9 1px, transparent 1px); background-size: 8px 8px;
     align-items: center; justify-content: center; }
   .comp:hover .hovercut.ready { display: flex; }
-  /* 실물 컷(livecut) — 클릭 = 실물 팝업(iframe). 잠금 무관(공개 실물).
+  /* 실물 컷(livecut) — 클릭 = 실물 팝업(iframe). 잠금 해제 후에만(2026-09-11 — 종전 '잠금 무관' 폐기.
+     hover·클릭·프리로드 모두 HubApp 이 unlocked 로 막고, 잠긴 동안은 커서도 기본).
      hover 미리보기는 제자리 오버레이가 아니라 커서 추종 플로팅(.hoverfly, 2026-09-04) —
      여기서는 투명 hover·클릭 영역만 남긴다(라우트 원천 = data-live, hover·클릭 공용).
      width·height auto 명시 = .cut 공통 규칙(280px·:empty 90px·'잠김' 라벨) 누수 차단 —
      구 제자리 오버레이가 280×90 조각 + 잠김 글자로 깨져 보이던 원인 */
   .comp-vis .livecut, .bp-wire .livecut { display: block; position: absolute; inset: 0; margin: 0;
-    width: auto; height: auto; border: 0; background: none; cursor: pointer; z-index: 2; }
+    width: auto; height: auto; border: 0; background: none; cursor: default; z-index: 2; }
+  .hub-root[data-unlocked] .comp-vis .livecut, .hub-root[data-unlocked] .bp-wire .livecut { cursor: pointer; }
   .comp-vis .livecut::after, .bp-wire .livecut::after { content: none; }
   /* 템플릿 카드의 암호화 컷(hovercut)도 같은 동작 — 제자리 표시 대신 플로팅.
      01·02 카드(컴포넌트 채택·365 DS)의 hovercut 제자리 표시는 불변 */

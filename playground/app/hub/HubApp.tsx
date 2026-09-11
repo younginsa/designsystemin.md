@@ -120,13 +120,14 @@ export default function HubApp({ fragments, hist, shotNames }: {
     });
   }, [dsnavSec, doc, sel]);
 
-  /* 템플릿 패널이 열리면 hover 미리보기 iframe을 미리 로드 — 첫 hover 지연 제거 */
+  /* 템플릿 패널이 열리면 hover 미리보기 iframe을 미리 로드 — 첫 hover 지연 제거.
+     잠금 해제 후에만(2026-09-11 — 실물 미리보기도 시각 자료 잠금 뒤로. 잠긴 상태에선 gallery iframe 을 싣지 않는다) */
   React.useEffect(() => {
-    if (doc !== "d365" || panel.title !== "페이지 템플릿") return;
+    if (!unlocked || doc !== "d365" || panel.title !== "페이지 템플릿") return;
     const slugs = Array.from(document.querySelectorAll<HTMLElement>(".tpl .livecut[data-live]")).map((el) => el.dataset.live!);
     setLiveSeen((prev) => (slugs.every((s) => prev.includes(s)) ? prev : Array.from(new Set([...prev, ...slugs]))));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [doc, sel]);
+  }, [doc, sel, unlocked]);
 
   /* 문서 레벨 리스너 — rowlink 스택 · 라이트박스 · 365 탭 점프 · Escape · 커서 추종 미리보기 */
   React.useEffect(() => {
@@ -140,7 +141,8 @@ export default function HubApp({ fragments, hist, shotNames }: {
       const el = (t && t.closest ? t.closest(".tpl .livecut, .tpl .hovercut.ready") : null) as HTMLElement | null;
       const live = el ? el.dataset.live || "" : "";
       const src = el && !live && el.dataset.shot ? urls[el.dataset.shot] || "" : "";
-      if (!el || (!live && !src)) { hideFly(); return; }
+      // 실물 미리보기(livecut)도 잠금 해제 후에만(2026-09-11) — 암호화 컷(hovercut)은 urls 가 비어 있어 원래 안 뜬다
+      if (!el || (!live && !src) || (live && !unlocked)) { hideFly(); return; }
       const sig = live ? "live:" + live : src + "|" + (el.dataset.crop || "");
       if (sig !== flySig) {
         flySig = sig;
@@ -165,7 +167,7 @@ export default function HubApp({ fragments, hist, shotNames }: {
       const open365 = t.closest("#dsnav-open-365");
       if (open365) { e.preventDefault(); switchDoc("d365"); return; }
       const lc = t.closest(".livecut") as HTMLElement | null;
-      if (lc && lc.dataset.live) { hideFly(); setLive(lc.dataset.live); return; }
+      if (lc && lc.dataset.live) { if (!unlocked) return; hideFly(); setLive(lc.dataset.live); return; } // 클릭 = 실물 팝업, 잠금 해제 후에만(2026-09-11)
       const r = t.closest(".rowlink") as HTMLElement | null;
       if (r) {
         setStack({
@@ -191,7 +193,7 @@ export default function HubApp({ fragments, hist, shotNames }: {
       window.removeEventListener("scroll", onScroll, true); window.removeEventListener("blur", onLeave);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [urls]);
+  }, [urls, unlocked]);
 
   const jumpToCard = (slug: string) => {
     document.querySelector(`#doc-365 [data-comp="${slug}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -206,7 +208,7 @@ export default function HubApp({ fragments, hist, shotNames }: {
     (isDsnav ? " dsnav-visual" : "");
 
   return (
-    <div className="hub-root">
+    <div className="hub-root" data-unlocked={unlocked ? "" : undefined}>
       <div className="nav">
         <span className={"item" + (doc === "hinas" ? " on" : "")} onClick={() => switchDoc("hinas")}>HINAS DS</span>
         <span className={"item" + (doc === "d365" ? " on" : "")} onClick={() => switchDoc("d365")}>365</span>

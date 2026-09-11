@@ -269,14 +269,15 @@ export default function Sales365DeliveriesPage() {
               <span className="text-sm text-secondary-foreground">
                 {checked.length}건 선택됨
               </span>
-              <Button variant="outline" disabled={checked.length === 0}>
-                <CalendarDays className="size-4" /> 예정일 일괄 수정
-              </Button>
+              {/* 선택 해제 = 선택 건수 바로 옆, secondary(연회색 면 + 회색 글자) — ghost 검정 글자는 CTA보다 튀었다(2026-09-10 피그마 코멘트) */}
               {checked.length > 0 && (
-                <Button variant="ghost" onClick={() => setChecked([])}>
+                <Button variant="secondary" onClick={() => setChecked([])}>
                   선택 해제
                 </Button>
               )}
+              <Button variant="outline" disabled={checked.length === 0}>
+                <CalendarDays className="size-4" /> 예정일 일괄 수정
+              </Button>
             </>
           ) : undefined
         }

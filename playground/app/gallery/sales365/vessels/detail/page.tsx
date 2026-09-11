@@ -101,10 +101,16 @@ const DELIVERY_NOTE =
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
 
 // 변경 이력 — 와이어프레임 AUDIT 이식(계약 호선은 마스터성 데이터 — cross 부연)
+// 병합 변경 이력(2026-09-10): domain = 이 페이지 섹션(호선 정보 · 구독 · 계약 이력 · 납품 제품).
+// 항목은 이 화면 데이터와 맞춘다 — C-2026-001 1번 슬롯 배정, C-2026-017 슬롯 취소(2026-04-01), 구독 탭의 중단·조기 종료
+const AUDIT_DOMAINS = ["호선 정보", "구독", "계약 이력", "납품 제품"];
 const AUDIT: AuditEntry[] = [
+  { at: "2026-08-01 09:00", domain: "구독", action: "구독 중단", tone: "modify", actor: "이수진", lines: ["Navigation · C-2025-004-01", "중단 시작 2026-08-01 · 재개 시 연장 여부 선택"] },
   {
     at: "2026-07-30 16:44",
-    action: "U",
+    domain: "호선 정보",
+    action: "호선 정보 수정",
+    tone: "modify",
     actor: "박준혁",
     cross:
       "이 호선을 참조하는 계약 3건에 함께 반영됩니다 — 계약 호선은 여러 계약이 참조하는 마스터성 데이터라 한 번의 수정이 계약 경계를 넘어 보입니다",
@@ -113,16 +119,26 @@ const AUDIT: AuditEntry[] = [
       { label: "인도 예정일", from: "2027-05-01", to: "2027-07-15" },
     ],
   },
+  { at: "2026-07-15 11:20", domain: "납품 제품", action: "예정일 수정", tone: "modify", actor: "최다혜", lines: ["Control · C-2026-001-01"], fields: [{ label: "납품 예정일", from: "2027-02-01", to: "2027-03-01" }] },
+  { at: "2026-05-31 17:00", domain: "구독", action: "조기 종료", tone: "remove", actor: "이수진", lines: ["Cloud · C-2024-016-01", "만료일 2027-01-31 → 2026-05-31"], reason: "선박 매각" },
+  { at: "2026-04-01 17:12", domain: "계약 이력", action: "슬롯 취소", tone: "remove", actor: "이수영", lines: ["C-2026-017-01 2번 · 서해해운"], reason: "발주처 사양 변경" },
   {
     at: "2026-03-02 10:12",
-    action: "U",
+    domain: "호선 정보",
+    action: "호선 정보 수정",
+    tone: "modify",
     actor: "박준혁",
     fields: [{ label: "주선급", from: "KR 한국선급", to: "DNV" }],
   },
+  { at: "2026-01-20 10:30", domain: "납품 제품", action: "납품 제품 자동 생성", tone: "add", actor: "김민준", lines: ["Control · SVM · Cloud (C-2026-001-01)", "호선 배정 시 자동 생성 — 직접 만들거나 지울 수 없다"] },
+  { at: "2026-01-20 10:30", domain: "계약 이력", action: "호선 배정", tone: "add", actor: "김민준", lines: ["C-2026-001-01 1번 ← Hull 1001"] },
   {
     at: "2025-11-19 13:58",
-    action: "C",
+    domain: "호선 정보",
+    action: "호선 생성",
+    tone: "create",
     actor: "최다혜",
+    badge: "공통 컬럼",
     fields: [{ label: "Hull Number", from: null, to: "Hull 1001" }],
   },
 ];
@@ -275,12 +291,14 @@ export default function Sales365VesselDetailPage() {
                   </DropdownMenu>
                 ))}
               </div>
-              <Table className="bg-card">
+              {/* 가로 스크롤 없이 컬럼 폭에 맞춘다(2026-09-10 확정): table-fixed + 좁은 열 폭 선언, 계약 항목이 나머지를 받아
+                  줄바꿈(말줄임 없음). 유저·계정 상세의 계약 표와 같은 문법 */}
+              <Table className="table-fixed bg-card">
                 <TableHeader>
                   <TableRow>
-                    <TableHead>계약</TableHead>
+                    <TableHead className="w-48">계약</TableHead>
                     <TableHead>계약 항목</TableHead>
-                    <TableHead>상태</TableHead>
+                    <TableHead className="w-44">상태</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -294,7 +312,7 @@ export default function Sales365VesselDetailPage() {
                           {r.contract} <ArrowUpRight className="size-3" />
                         </Link>
                       </TableCell>
-                      <TableCell>{r.item}</TableCell>
+                      <TableCell className="whitespace-normal">{r.item}</TableCell>
                       <TableCell>
                         {r.cancelled ? (
                           <>
@@ -430,14 +448,15 @@ export default function Sales365VesselDetailPage() {
                 </TabsContent>
 
                 <TabsContent value="audit" className="mt-3">
-                  <AuditLog subject="계약 호선 · Hull 1001" entries={AUDIT} />
+                  <AuditLog subject="계약 호선 · Hull 1001" entries={AUDIT} domains={AUDIT_DOMAINS} />
                 </TabsContent>
               </Tabs>
             </section>
           </div>
 
           {/* ══ 우측 Details 패널 — Jira 문법: 개요 KV가 스크롤 내내 고정 ══ */}
-          <aside className="sticky top-6 w-80 shrink-0 space-y-4 self-start">
+          {/* top-22 = 셸 상단바 h-16(64px) + 24px 여백 — top-6은 상단바 아래로 숨었다(2026-09-10, 상세 5종 공통) */}
+          <aside className="sticky top-22 w-80 shrink-0 space-y-4 self-start">
             {/* 호선 정보 — 식별자·당사자·기본 정보 합본(와이어프레임 3카드 → 1패널). 수정 = 저강조 ghost */}
             <section className="rounded-lg border bg-card p-5">
               <div className="flex items-center justify-between">
