@@ -16,7 +16,9 @@
 // - [+ 필터 추가] = 2열 팝오버(2026-09-04, 이미지 레퍼런스: 목록 옆에 패널이 붙는 구조):
 //   좌 필터 목록(클릭 = 선택, 목록은 계속 보임) → 우 그 필터의 값 패널 → [적용]에야 칩이 생긴다.
 //   [취소]·바깥 클릭이면 칩 없음. complex(모달 위임)만 예외 — 고르면 칩 추가 + 모달 오픈
-// - 칩은 최대 2줄까지 자동 줄바꿈
+// - 칩 행은 한 줄 고정(2026-09-09 디자이너 확정 — 종전 "최대 2줄 자동 줄바꿈" 폐기): 칩은 남은 폭까지 늘어나고,
+//   행이 모자라면 값이 말줄임(…)된다. 넓은 칩부터 줄어들고 검색창·[+ 필터 추가]·[필터초기화]·우측 액션은 줄지 않는다.
+//   전체 값은 title(hover)과 패널이 보여준다
 // - 정렬은 이 바에 없다 — 테이블 컬럼 헤더가 전담
 // - 상세 조건(2026-09-08, 필터 스펙 표 '상세 조건' 열 · 레퍼런스 Lemon Squeezy 테이블 필터):
 //   FilterDef.operators 를 주면 패널 상단에 연산자 라디오, 값은 "<op> <value>" 문자열로 저장,
@@ -159,11 +161,11 @@ function FilterBar({
   }
 
   return (
-    <div className="flex flex-wrap items-start justify-between gap-2">
-      {/* 좌: 검색 + 필터 칩 + 필터 추가 (최대 2줄 흐름) */}
-      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+    <div className="flex items-start justify-between gap-2">
+      {/* 좌: 검색 + 필터 칩 + 필터 추가 — 한 줄 고정, 칩이 남은 폭을 쓰고 넘치면 값 말줄임(2026-09-09) */}
+      <div className="flex min-w-0 flex-1 flex-nowrap items-center gap-2">
         {searchSlot ?? (
-          <InputGroup variant="filled" className="w-64">
+          <InputGroup variant="filled" className="w-64 shrink-0">
             <InputGroupAddon>
               <Search />
             </InputGroupAddon>
@@ -216,7 +218,7 @@ function FilterBar({
             }}
           >
             <PopoverTrigger asChild>
-              <Button variant="ghost" size="sm" className="text-secondary-foreground">
+              <Button variant="ghost" size="sm" className="shrink-0 text-secondary-foreground">
                 <Plus className="size-4" /> 필터 추가
               </Button>
             </PopoverTrigger>
@@ -282,7 +284,7 @@ function FilterBar({
         )}
 
         {hasCondition && (
-          <Button variant="destructive-ghost" size="sm" onClick={clearAll}>
+          <Button variant="destructive-ghost" size="sm" className="shrink-0" onClick={clearAll}>
             {/* 파괴 보조 액션 프리셋(CTA ④) — 아이콘은 같은 빨강의 60% */}
             <RotateCcw className="size-4 opacity-60" /> 필터초기화
           </Button>
@@ -290,7 +292,7 @@ function FilterBar({
       </div>
 
       {/* 우: 페이지별 액션(내보내기·CTA) */}
-      {actions && <div className="flex items-center gap-2">{actions}</div>}
+      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
     </div>
   )
 }
@@ -322,15 +324,21 @@ function FilterChip({
 
   const label = (
     <>
-      <span>{def.label}</span>
-      {active && <span className="font-medium">· {value}</span>}
+      <span className="shrink-0">{def.label}</span>
+      {/* 값은 남은 폭까지 늘어나고 행이 모자라면 말줄임(2026-09-09 디자이너 확정 — 고정 상한 없음).
+          전체 값은 title(hover)과 패널이 보여준다 */}
+      {active && (
+        <span className="truncate font-medium" title={value}>
+          · {value}
+        </span>
+      )}
       {/* 꺾쇠는 ✕가 없는 기본 필터에만 — 추가 필터는 ✕가 패널 어포던스를 대신한다 */}
       {!removable && <ChevronDown className="size-3.5" />}
     </>
   )
   const triggerCls =
     // 칩 높이는 래퍼(h-9, 보더 포함 36px = 검색창 InputGroup과 동일)가 쥔다 — 2026-08-26 확정
-    "inline-flex h-full items-center gap-1 px-2.5 text-sm " +
+    "inline-flex h-full min-w-0 items-center gap-1 px-2.5 text-sm " +
     (removable ? "rounded-l-md " : "rounded-md ") +
     (active ? "text-primary" : "text-foreground group-hover:text-accent-foreground")
 
@@ -340,7 +348,7 @@ function FilterChip({
     // hover = 표준 hover 잉크(accent), 비활성만 — 활성은 primary×accent 미선언이라 보류.
     <span
       className={
-        "group inline-flex h-9 items-center rounded-md border bg-muted " +
+        "group inline-flex h-9 min-w-0 items-center rounded-md border bg-muted " +
         (active ? "border-primary" : "border-transparent hover:bg-accent")
       }
     >
@@ -394,7 +402,7 @@ function FilterChip({
           type="button"
           aria-label={`${def.label} 필터 제거`}
           className={
-            "flex h-full items-center rounded-r-md pr-2 " +
+            "flex h-full shrink-0 items-center rounded-r-md pr-2 " +
             (active ? "text-primary" : "text-secondary-foreground")
           }
           onClick={onRemove}
