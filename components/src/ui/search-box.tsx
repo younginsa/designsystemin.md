@@ -26,6 +26,7 @@ function SearchBox({
   candidates,
   recentInitial = [],
   quick = [],
+  defaultOpen = false,
 }: {
   placeholder: string
   value: string
@@ -36,8 +37,10 @@ function SearchBox({
   recentInitial?: string[]
   /** 빠른검색 = 최다 검색 항목(최대 5) */
   quick?: string[]
+  /** 미리보기 전용 — 패널을 처음부터 연 채로 렌더(스토리·피그마 state=search-open 정합, 2026-09-11). 제품 화면에서는 쓰지 않는다 */
+  defaultOpen?: boolean
 }) {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(defaultOpen)
   const [recent, setRecent] = React.useState(recentInitial.slice(0, 3))
   const anchorRef = React.useRef<HTMLDivElement>(null)
 
