@@ -55,14 +55,10 @@ export const Typing = {
   render: () => <Demo initial="SVM" />,
 }
 
-/** 기록 없음 — 최근 검색·빠른검색 둘 다 없을 때(2026-09-11). 종전엔 빈 흰 패널 */
-export const Empty = {
-  render: () => <Demo recent={[]} quick={[]} open />,
-}
-
-/** 결과 없음 — 입력 중 후보 0건. 자유 검색어는 그대로 유효(종전엔 최근 검색으로 되돌아가 매칭처럼 보였다) */
+/** 결과 없음 — 입력 중 후보 0건, 한 줄(2026-09-11 확정). 자유 검색어는 그대로 유효(종전엔 최근 검색으로 되돌아가 매칭처럼 보였다).
+ *  기록 없음(최근·빠른검색 둘 다 없음)은 별도 상태가 아니다 — 보여줄 게 없으면 패널이 안 열린다 */
 export const NoMatch = {
   render: () => <Demo initial="zzz" open />,
 }
 
-export const __namedExportsOrder = ["Default", "Typing", "Empty", "NoMatch"]
+export const __namedExportsOrder = ["Default", "Typing", "NoMatch"]
