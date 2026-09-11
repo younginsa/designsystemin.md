@@ -19,6 +19,19 @@ import { Popover, PopoverAnchor, PopoverContent } from "./popover"
 
 export type SearchSuggestion = { label: string; sub?: string }
 
+/** 패널 빈 상태 한 줄 — 목록 행과 같은 패딩·아이콘 자리, 글자만 연하게(Empty 프리셋은 섹션 규모라 256px 패널엔 과함, 2026-09-11) */
+function PanelEmpty({ title, caption }: { title: string; caption: string }) {
+  return (
+    <div className="flex items-start gap-2 px-2 py-1.5 text-sm text-secondary-foreground">
+      <Search className="mt-0.5 size-3.5 shrink-0 text-input" />
+      <div className="min-w-0">
+        <p className="truncate">{title}</p>
+        <p className="text-xs">{caption}</p>
+      </div>
+    </div>
+  )
+}
+
 function SearchBox({
   placeholder,
   value,
@@ -132,6 +145,12 @@ function SearchBox({
               </button>
             ))}
           </div>
+        ) : q ? (
+          // ── 결과 없음(입력 중 후보 0) — 종전엔 최근 검색으로 되돌아가 매칭처럼 보였다. 자유 검색어는 그대로 유효(2026-09-11) ──
+          <PanelEmpty title={`'${value.trim()}'에 맞는 후보가 없습니다`} caption="입력한 검색어로는 계속 검색됩니다" />
+        ) : recent.length === 0 && quick.length === 0 ? (
+          // ── 기록 없음(최근 검색·빠른검색 둘 다 없음) — 종전엔 빈 흰 패널만 떴다(2026-09-11) ──
+          <PanelEmpty title="검색 기록이 없습니다" caption="검색어를 입력하면 후보가 나타납니다" />
         ) : (
           <div className="space-y-3">
             {recent.length > 0 && (
