@@ -24,7 +24,8 @@ const buttonVariants = cva(
         outline:
           "border bg-card hover:bg-accent hover:text-accent-foreground dark:border-border dark:bg-input/30",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          // hover = accent + accent-foreground(2026-09-10 — ghost·outline 과 같은 중립 면 문법에 편입. 종전 secondary/80 은 light Δ1 · dark Δ2 로 사실상 안 보였다)
+          "bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground",
         ghost:
           // hover = accent 하나(2026-09-10 확정 — dark 전용 /50 변형 제거, accent 는 모드별 알파를 가진 오버레이)
           "hover:bg-accent hover:text-accent-foreground",

@@ -14,12 +14,10 @@ function Demo({
   total,
   unit,
   initialPage = 1,
-  summary,
 }: {
   total: number
   unit?: string
   initialPage?: number
-  summary?: React.ReactNode
 }) {
   const [pageSize, setPageSize] = React.useState(15)
   const [page, setPage] = React.useState(initialPage)
@@ -29,7 +27,6 @@ function Demo({
       onPageSizeChange={setPageSize}
       total={total}
       unit={unit}
-      summary={summary}
       page={page}
       onPageChange={setPage}
     />
@@ -42,16 +39,10 @@ export const Default = {
   render: () => <Demo total={247} unit="척" />,
 }
 
-/** 중간 페이지 — 양쪽 … 노출, 보조 카운트 괄호 병기 */
+/** 중간 페이지 — 양쪽 … 노출 */
 export const Middle = {
   parameters: { vocab: "list-footer" },
-  render: () => (
-    <Demo
-      total={247}
-      initialPage={5}
-      summary={<>전체 247척 (<span className="text-destructive">●</span> 미입력 38척)</>}
-    />
-  ),
+  render: () => <Demo total={247} unit="척" initialPage={5} />,
 }
 
 /** 단일 페이지 — 페이지네이션 생략, 건수만 */

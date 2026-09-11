@@ -30,7 +30,7 @@ export function RowsPerPage({
 }: {
   value: number;
   onChange: (n: number) => void;
-  /** 구분선 오른쪽 전체 건수 표기 — 예: "전체 143척". 경고 도트 등 리치 표기는 노드로 */
+  /** 구분선 오른쪽 전체 건수 표기 — 예: "전체 143척"(보조 카운트 병기 규칙은 2026-09-10 폐기 — 건수 하나만) */
   summary: React.ReactNode;
   options?: number[];
 }) {

@@ -59,7 +59,9 @@
 - **Alert** — 페이지 내 정적 안내·경고. 파괴 배너 표면 = `bg-destructive/5`
   (2026-09-02 개정 — /10은 hover·버튼 잉크로 이관).
 - **hover 색(2026-09-10 확정)** — 중립 면 위 hover = `accent` 하나(오버레이라 light·dark·control 공통).
-  색 있는 면은 자기 색의 90%(`primary/90`·`destructive/90`·`secondary/80`), destructive-ghost·outline은
+  ghost·outline·**secondary 버튼**(secondary도 중립 면 — 종전 `secondary/80`은 light Δ1·dark Δ2로 안 보여 폐기) 모두 여기 —
+  배경 `accent` + 글자 `accent-foreground`, 세 변형 동일 문법.
+  색 있는 면은 자기 색의 90%(`primary/90`·`destructive/90`), destructive-ghost·outline은
   `destructive/10`, primary-ghost는 `primary/5`. 표 행 상태 = hover `accent` · expanded `secondary` ·
   selected `muted`(예약 — 두 앱 어디도 행 선택 미사용). `bg-muted/50`은 `secondary`로 교체 — 시스템에 없다.
   컴포넌트 내부 틴트(hover 90·80, disabled 50, ring 50/20, border 40, progress 20)는 허용 목록 대상이 아니다 —
@@ -84,8 +86,6 @@ import 경로는 `@ds/ui/ui/<컴포넌트>` 형식이다. 예: `import { Button 
   (`RowsPerPage`) + 우측 Pagination 한 행. 페이지네이션이 없어도(단일 페이지) 건수는 남는다.
   **건수는 푸터가 소유한다** — 제목 아래 부제로 "총 N건"을 표기하는 문법은 폐기.
   RowsPerPage·Pagination 을 페이지에서 직접 나열하는 손 조합은 금지.
-- **푸터 보조 카운트는 괄호** — `전체 247척 (● 미입력 38척)`. 구분점(·) 중복 금지:
-  경고 도트가 있는 보조 카운트를 ·로 이으면 구분점이 겹쳐 읽힌다.
 - **페이지 헤더 행**: 단일 줄 제목이면 `items-center`. 실제 부제(설명 텍스트)가 있을
   때만 `items-start`.
 - **목록 액션**(내보내기·등록 CTA)은 **FilterBar `actions` 슬롯**(툴바 우측)에 둔다 —

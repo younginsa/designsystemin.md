@@ -17,7 +17,7 @@ function Demo({ summary }: { summary: React.ReactNode }) {
 
 export const Default = {
   parameters: { vocab: "rows-per-page" },
-  render: () => <Demo summary={<>전체 247척 (<span className="text-destructive">●</span> 미입력 38척)</>} />,
+  render: () => <Demo summary="전체 247척" />,
 }
 
 export const Plain = {

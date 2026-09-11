@@ -8,7 +8,7 @@
 // - 단일 페이지(pageCount ≤ 1)면 페이지네이션 생략 — 건수는 남는다(건수는 푸터가 소유, design.md).
 // - 행 수 변경 시 1페이지로 리셋한다(RowsPerPage 규칙) — 소비자가 따로 할 필요 없음.
 // - pageCount 생략 시 total ÷ pageSize 로 계산. 서버 페이징이면 pageCount 를 직접 넘긴다.
-// - summary 생략 시 `전체 {total}{unit}`(천 단위 구분). 경고 도트 병기 등 리치 표기는 summary 노드로.
+// - summary 생략 시 `전체 {total}{unit}`(천 단위 구분). 보조 카운트 병기(● 미입력 N) 규칙은 2026-09-10 폐기 — 건수 하나만.
 
 import * as React from "react";
 
@@ -34,7 +34,7 @@ export type ListFooterProps = {
   total: number;
   /** 건수 단위 — 예: "척" · "건"(기본) · "개" */
   unit?: string;
-  /** 구분선 오른쪽 전체 건수 표기를 직접 지정 — 예: <>전체 247척 (<span className="text-destructive">●</span> 미입력 38척)</> */
+  /** 구분선 오른쪽 전체 건수 표기를 직접 지정(단위가 문장에 안 맞을 때) — 예: "검색 결과 12건". 보조 카운트 병기 규칙은 폐기(2026-09-10) */
   summary?: React.ReactNode;
   /** 현재 페이지(1부터, controlled) */
   page: number;

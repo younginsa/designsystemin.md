@@ -258,17 +258,6 @@ function DemoBreadcrumb() {
   );
 }
 
-function RowsPerPageDemo() {
-  const [v, setV] = React.useState(15);
-  return (
-    <RowsPerPage
-      value={v}
-      onChange={setV}
-      summary={<>전체 247척 (<span className="text-destructive">●</span> 미입력 38척)</>}
-    />
-  );
-}
-
 /* ── 레지스트리 타입 ───────────────────────────────────────────────── */
 
 export type Pv = {
