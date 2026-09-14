@@ -781,6 +781,55 @@ function DateRangePanel({
   )
 }
 
+/* ── 행 매처 — 목록 행을 칩 값으로 거르는 공용 함수(2026-09-14 승격, 종전 갤러리 _detail/filter-match.ts).
+ * 값 문법은 파일 머리 주석의 "<op> <value>". 두 앱의 목록 9면 + AuditLog 가 같은 규칙을 쓴다 — 요소 잠금.
+ * - passText   = parseFilterValue + matchText(is · is not · contains · does not contain). 값 없음 = 통과, 셀 null 은 빈 문자열
+ * - passSelect = 값을 ", " 로 나눠 is(하나라도 포함) / is not(하나도 포함 안 함). 셀이 배열(선급)이면 원소 단위
+ * - passDate   = resolveDateRange 로 from~to 판정. 조건이 있는데 셀이 비면(미입력) 탈락. 셀은 "YYYY-MM-DD"
+ * - passDateSpan = 기간 셀(시작~끝)이 조건 기간과 겹치는지(구독 유효 기간). 시작 없음 = 탈락, 끝 없음 = 열린 기간
+ * now 기본값은 실제 시계 — 화면 기준일(목데이터)을 쓰는 시안은 now 를 넘긴다 */
+const ymdOf = (d: Date) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`
+
+function passText(chip: string | undefined, cell: string | null | undefined): boolean {
+  const { op, value } = parseFilterValue(chip)
+  const v = value.trim()
+  if (!v) return true
+  return matchText(op, cell ?? "", v)
+}
+
+function passSelect(
+  chip: string | undefined,
+  cell: string | null | undefined | readonly string[],
+): boolean {
+  const { op, value } = parseFilterValue(chip)
+  if (!value) return true
+  const wanted = value.split(", ")
+  const cells: string[] = typeof cell === "string" || cell == null ? [cell ?? ""] : [...cell]
+  const hit = cells.some((c) => wanted.includes(c))
+  return op === "is not" ? !hit : hit
+}
+
+function passDate(chip: string | undefined, cell: string | null | undefined, now: Date = new Date()): boolean {
+  if (!chip) return true
+  const r = resolveDateRange(chip, now)
+  if (!r) return true
+  if (!cell) return false
+  return cell >= ymdOf(r.from) && cell <= ymdOf(r.to)
+}
+
+function passDateSpan(
+  chip: string | undefined,
+  start: string | null | undefined,
+  end: string | null | undefined,
+  now: Date = new Date(),
+): boolean {
+  if (!chip) return true
+  const r = resolveDateRange(chip, now)
+  if (!r) return true
+  if (!start) return false
+  return start <= ymdOf(r.to) && (end ?? "9999-12-31") >= ymdOf(r.from)
+}
+
 export {
   FilterBar,
   FilterChip,
@@ -793,4 +842,8 @@ export {
   OPS_DATE,
   parseFilterValue,
   matchText,
+  passText,
+  passSelect,
+  passDate,
+  passDateSpan,
 }

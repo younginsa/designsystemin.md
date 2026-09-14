@@ -9,15 +9,17 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
+        // hover 는 인터랙티브 Badge(a · button 렌더)에만 — 종전 [a&] 는 앵커 한정이라 button 칩(감사 로그 분류)이 손으로 hover 를 달았다(2026-09-14 확장)
+        default: "bg-primary text-primary-foreground [:is(a,button)&]:hover:bg-primary/90",
         secondary:
-          "bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
+          // hover = accent(중립 면 규칙, Button secondary 와 동일 — 종전 secondary/90 은 흰 면 위에서 안 보였다. 2026-09-14)
+          "bg-secondary text-secondary-foreground [:is(a,button)&]:hover:bg-accent [:is(a,button)&]:hover:text-accent-foreground",
         destructive:
-          "bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90",
+          "bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [:is(a,button)&]:hover:bg-destructive/90",
         outline:
-          "border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
-        ghost: "[a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 [a&]:hover:underline",
+          "border-border text-foreground [:is(a,button)&]:hover:bg-accent [:is(a,button)&]:hover:text-accent-foreground",
+        ghost: "[:is(a,button)&]:hover:bg-accent [:is(a,button)&]:hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 [:is(a,button)&]:hover:underline",
       },
     },
     defaultVariants: {
