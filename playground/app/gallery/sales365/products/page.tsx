@@ -16,6 +16,7 @@ import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import { Check, Info } from "lucide-react";
 
 import { Badge } from "@ds/ui/ui/badge";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@ds/ui/ui/empty";
 import { ErrorState } from "@ds/ui/ui/error-state";
 import { Progress } from "@ds/ui/ui/progress";
@@ -133,13 +134,9 @@ export default function Sales365ProductsPage() {
                     </TableCell>
                     <TableCell>
                       {p.onSale ? (
-                        <span className="inline-flex items-center gap-1.5 text-sm">
-                          <span className="size-2 rounded-full bg-success" /> 판매 중
-                        </span>
+                        <StatusBadge label="판매 중" tone="success" bg={false} />
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 text-sm text-destructive">
-                          <span className="size-2 rounded-full bg-destructive" /> 판매 중지
-                        </span>
+                        <StatusBadge label="판매 중지" tone="error" bg={false} />
                       )}
                     </TableCell>
                   </TableRow>

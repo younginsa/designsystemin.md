@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { Badge } from "@ds/ui/ui/badge";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Button } from "@ds/ui/ui/button";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@ds/ui/ui/empty";
 // 필터는 전부 FilterBar(2026-09-08 이식) — 상세 조건(연산자) 층, 기준일은 화면 TODAY
@@ -32,6 +33,8 @@ import {
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 검색 제안(SearchBox) — 페이지 옵트인(2026-09-11 디자이너 확정: 계정·유저 제외 전 목록)
+import { SearchBox } from "@ds/ui/ui/search-box";
 // 상세 조건 매처(2026-09-08) — 여섯 목록 공용
 import { passDate, passDateSpan, passSelect } from "../_filter";
 import { contractName, itemFromPackage } from "../../_detail/contract-name";
@@ -117,6 +120,11 @@ const ROWS: Row[] = [
   { id: 14, vessel: { hull: "Hull 1004", name: null }, product: "SVM", contract: { id: "C-2026-001", name: cn("2026-01-15", "대양해운", "Enterprise", 5) }, item: "C-2026-001-03", start: "2026-05-01", termMonths: 36, adjDays: 0, early: null, pauses: [], cancelled: true },
 ];
 
+// 검색 제안 후보 — 검색가능 열(호선)의 값. Hull마다 하나, 선명을 보조줄로
+const SEARCH_CANDIDATES = Array.from(
+  new Map(ROWS.map((r) => [r.vessel.hull, { label: r.vessel.hull, sub: r.vessel.name ?? undefined }])).values(),
+);
+
 /* ---------------------------------------------------------------- 조회 시점 계산 */
 
 // 계약상 만기일 = 시작일 + 기간 + 조정 일수
@@ -145,12 +153,13 @@ const statusOf = (r: Row): Status => {
   return "진행 중";
 };
 
-const ST_DOT: Record<Status, string> = {
-  "진행 중": "bg-success",
-  중단: "bg-muted-foreground",
-  예정: "bg-primary",
-  만료: "bg-destructive",
-  취소: "bg-destructive",
+// 상태 → DS StatusBadge 톤(2026-09-14 부품으로 통일). 취소 = error(글자도 빨강) · 만료 = 주의(도트만 빨강, toneClassName 우회 — UX-DS #11)
+const ST_TONE: Record<Status, React.ComponentProps<typeof StatusBadge>["tone"]> = {
+  "진행 중": "success",
+  중단: "neutral",
+  예정: "progress",
+  만료: "neutral",
+  취소: "error",
 };
 
 /* ---------------------------------------------------------------- 화면 */
@@ -258,6 +267,18 @@ export default function SubscriptionListPage() {
           바의 [초기화]는 DS 문법대로 조건 없음 ── */}
       <FilterBar
         searchPlaceholder="호선 검색"
+        searchSlot={
+          <div className="shrink-0">
+            <SearchBox
+              placeholder="호선 검색"
+              value={keyword}
+              onChange={setKeyword}
+              candidates={SEARCH_CANDIDATES}
+              recentInitial={["Hull 1001", "MV EXAMPLE", "Hull 1006"]}
+              quick={["Hull 1001", "Hull 1003", "Hull 1006", "MV EXAMPLE", "Hull 1002"]}
+            />
+          </div>
+        }
         keyword={keyword}
         onKeyword={setKeyword}
         filters={PAGE_FILTERS}
@@ -363,14 +384,12 @@ export default function SubscriptionListPage() {
                     )}
                   </TableCell>
                   <TableCell>
-                    <span
-                      className={
-                        "inline-flex items-center gap-1.5 text-sm" +
-                        (st === "취소" ? " text-destructive" : "")
-                      }
-                    >
-                      <span className={`size-2 rounded-full ${ST_DOT[st]}`} /> {st}
-                    </span>
+                    <StatusBadge
+                      label={st}
+                      tone={ST_TONE[st]}
+                      toneClassName={st === "만료" ? "text-destructive" : undefined}
+                      bg={false}
+                    />
                     {st === "중단" && (
                       <div className="text-xs text-secondary-foreground">
                         재개 시 연장을 고르면 만료일이 밀립니다

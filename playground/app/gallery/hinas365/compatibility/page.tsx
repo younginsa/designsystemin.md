@@ -14,6 +14,7 @@
 // 어휘 게이트 메모: skeleton 채택 완료(DES-205 해소, 2026-08-25) — 로딩=스켈레톤 · 프로그레스 바=실제 진행률 전용
 
 import * as React from "react";
+import { useSearchParams } from "next/navigation";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import {
@@ -59,7 +60,6 @@ import {
   TableHeader,
   TableRow,
 } from "@ds/ui/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 
 /* ---------------------------------------------------------------- 데이터 */
@@ -140,13 +140,25 @@ type ViewState = "default" | "loading" | "progress" | "error" | "empty";
 
 /* ---------------------------------------------------------------- 페이지 */
 
+// 하위 페이지(2026-09-11): 탭 스위치 폐기 → 사이드바 자식 메뉴 + ?view=matrix|update. useSearchParams는 Suspense 경계 필수(정적 export)
+const SUB_LABEL = { matrix: "버전 호환성", update: "업데이트 호환성" } as const;
+
 export default function CompatibilityPage() {
+  return (
+    <React.Suspense fallback={null}>
+      <CompatibilityBody />
+    </React.Suspense>
+  );
+}
+
+function CompatibilityBody() {
   const [view, setView] = React.useState<ViewState>("default");
+  const sub: keyof typeof SUB_LABEL = useSearchParams().get("view") === "update" ? "update" : "matrix";
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-lg font-bold">버전 호환성</h1>
+        <h1 className="text-lg font-bold">{SUB_LABEL[sub]}</h1>
         <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
       </div>
 
@@ -178,20 +190,7 @@ export default function CompatibilityPage() {
         </Empty>
       )}
 
-      {view === "default" && (
-        <Tabs defaultValue="matrix" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="matrix">버전 호환성</TabsTrigger>
-            <TabsTrigger value="update">업데이트 호환성</TabsTrigger>
-          </TabsList>
-          <TabsContent value="matrix">
-            <MatrixTab />
-          </TabsContent>
-          <TabsContent value="update">
-            <UpdateTab />
-          </TabsContent>
-        </Tabs>
-      )}
+      {view === "default" && (sub === "update" ? <UpdateTab /> : <MatrixTab />)}
     </div>
   );
 }

@@ -19,6 +19,7 @@ import Link from "next/link";
 import { Download, Info, MoreHorizontal, Pencil, Plus, Search, Trash2, Upload, X } from "lucide-react";
 
 import { Badge } from "@ds/ui/ui/badge";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -60,7 +61,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
 import { Textarea } from "@ds/ui/ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
-import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
+import { AuditFilter, AuditLog, useAuditFilter, type AuditEntry } from "../../../_detail/audit-log";
 // 사람 요소 잠금(2026-09-04): 담당·댓글 작성자 = DS Avatar(이니셜) — _detail/person 공유
 import { Person, PersonAvatar } from "../../../_detail/person";
 // 미입력 표기 잠금(2026-09-07) — 슬롯 금액 미입력도 같은 부품
@@ -237,24 +238,10 @@ type ViewState = "default" | "loading" | "progress" | "error" | "empty";
 
 // 슬롯 상태 표기 — 도트+텍스트 규칙 (미입력=warning · 미배정=muted · 취소=destructive)
 function SlotStatus({ state }: { state: SlotState }) {
-  if (state === "missing")
-    return (
-      <span className="inline-flex items-center gap-1.5 text-sm">
-        <span className="size-2 rounded-full bg-destructive" /> 미입력
-      </span>
-    );
-  if (state === "unassigned")
-    return (
-      <span className="inline-flex items-center gap-1.5 text-sm">
-        <span className="size-2 rounded-full bg-muted-foreground" /> 미배정
-      </span>
-    );
-  if (state === "cancelled")
-    return (
-      <span className="inline-flex items-center gap-1.5 text-sm text-destructive">
-        <span className="size-2 rounded-full bg-destructive" /> 취소
-      </span>
-    );
+  // DS StatusBadge(어휘 data-status)로 통일(2026-09-14). 미입력 = 주의(빨간 도트 + 기본 글자) — DS 톤 부재라 toneClassName 우회(UX-DS #11)
+  if (state === "missing") return <StatusBadge label="미입력" toneClassName="text-destructive" bg={false} />;
+  if (state === "unassigned") return <StatusBadge label="미배정" tone="neutral" bg={false} />;
+  if (state === "cancelled") return <StatusBadge label="취소" tone="error" bg={false} />;
   return null;
 }
 
@@ -339,6 +326,9 @@ export default function Sales365ContractDetailPage() {
   const priceTarget = priceSlot ? SLOTS.find((s) => s.no === priceSlot) : undefined;
   const [comments, setComments] = React.useState(COMMENTS);
   const [draft, setDraft] = React.useState("");
+  // Activity 탭은 제어형 — 변경 이력 탭일 때만 탭 행 우측에 분류 필터(2026-09-14)
+  const [activity, setActivity] = React.useState<"comments" | "audit">("comments");
+  const auditFilter = useAuditFilter(AUDIT, AUDIT_DOMAINS);
 
   return (
     // Jira 문법: 콘텐츠 컬럼은 풀스크린에서도 max-width 캡 — 1152→1280(2026-09-08, 배정 호선 금액 2열 수용)
@@ -728,11 +718,15 @@ export default function Sales365ContractDetailPage() {
             {/* ══ Activity — Jira 문법: [댓글 | 변경 이력] 탭 스위치 ══ */}
             {/* Activity — 라벨 없이 여백(pt-16)으로 섹션 구분(2026-08-28 확정) */}
             <section className="pt-16">
-              <Tabs defaultValue="comments">
-                <TabsList>
-                  <TabsTrigger value="comments">댓글 ({comments.length})</TabsTrigger>
-                  <TabsTrigger value="audit">변경 이력</TabsTrigger>
-                </TabsList>
+              <Tabs value={activity} onValueChange={(v) => setActivity(v as "comments" | "audit")}>
+                {/* 탭 행 = 툴바: 좌 탭, 우 변경 이력 필터(활성일 때만) */}
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <TabsList>
+                    <TabsTrigger value="comments">댓글 ({comments.length})</TabsTrigger>
+                    <TabsTrigger value="audit">변경 이력</TabsTrigger>
+                  </TabsList>
+                  {activity === "audit" && <AuditFilter filter={auditFilter} />}
+                </div>
 
                 <TabsContent value="comments" className="mt-3 space-y-4">
                   {comments.map((c, i) => (
@@ -778,7 +772,7 @@ export default function Sales365ContractDetailPage() {
                 </TabsContent>
 
                 <TabsContent value="audit" className="mt-3">
-                  <AuditLog subject="계약 · C-2026-001" entries={AUDIT} domains={AUDIT_DOMAINS} />
+                  <AuditLog subject="계약 · C-2026-001" entries={AUDIT} domains={AUDIT_DOMAINS} filter={auditFilter} />
                 </TabsContent>
               </Tabs>
             </section>

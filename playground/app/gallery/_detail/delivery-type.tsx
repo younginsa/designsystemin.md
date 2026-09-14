@@ -7,7 +7,7 @@
 //   일회성 작업(1회성 업데이트 · 자재 변경·교체·수리) = 테두리(outline).
 // - 반려된 안 2건: secondary 기본(밝은 회색 면 + 회색 글자)은 파랑 칩 옆에서 비활성 버튼처럼 읽혔고,
 //   ring 색 면 + 흰 글자는 1.34:1로 사실상 안 보인다. Gray/600은 실측 6.05:1로 본문 기준 통과.
-//   ⚠ background×secondary-foreground는 contrast-pairs 미선언 조합 — UX-DS 선언 대기.
+//   background×secondary-foreground는 contrast-pairs에 선언됨(구독 배지, body 6.05:1 실측) — 요청 해소.
 // - 쓰는 곳 4곳: 납품 제품 목록 · 호선 상세 납품 탭 · 납품 상세 개요 · 계약 생성 폼(선택지 원천만)
 
 import { Badge } from "@ds/ui/ui/badge";

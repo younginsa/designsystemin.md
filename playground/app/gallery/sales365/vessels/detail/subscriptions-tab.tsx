@@ -12,6 +12,7 @@ import * as React from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
 import { Badge } from "@ds/ui/ui/badge";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Button } from "@ds/ui/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
@@ -129,12 +130,13 @@ const statusOf = (s: Sub): Status => {
   if (e && e <= TODAY) return "만료";
   return "진행 중";
 };
-const ST_DOT: Record<Status, string> = {
-  "진행 중": "bg-success",
-  중단: "bg-muted-foreground",
-  예정: "bg-primary",
-  만료: "bg-destructive",
-  취소: "bg-destructive",
+// 상태 → DS StatusBadge 톤(2026-09-14 부품으로 통일). 만료 = 주의(빨간 도트 + 기본 글자) — DS 톤 부재라 toneClassName 우회(UX-DS #11)
+const ST_TONE: Record<Status, React.ComponentProps<typeof StatusBadge>["tone"]> = {
+  "진행 중": "success",
+  중단: "neutral",
+  예정: "progress",
+  만료: "neutral",
+  취소: "error",
 };
 const currentOf = (g: Group) => g.chain[g.chain.length - 1];
 
@@ -228,9 +230,12 @@ function AxisRow() {
 
 function StatusPill({ st }: { st: Status }) {
   return (
-    <span className="inline-flex items-center gap-1.5 text-xs">
-      <span className={`size-2 rounded-full ${ST_DOT[st]}`} /> {st}
-    </span>
+    <StatusBadge
+      label={st}
+      tone={ST_TONE[st]}
+      toneClassName={st === "만료" ? "text-destructive" : undefined}
+      bg={false}
+    />
   );
 }
 
@@ -403,18 +408,16 @@ export function SubscriptionsTab() {
                       const ce = contractEnd(s);
                       return (
                         ce && (
-                          <React.Fragment key={s.id}>
-                            <span
-                              className="absolute inset-y-1 rounded-sm border border-dashed border-input"
-                              style={{ left: pctOf(s.start), width: wOf(s.start, ce) }}
-                            />
-                            <span
-                              className="absolute top-0 truncate text-xs text-secondary-foreground"
-                              style={{ left: pctOf(s.start) }}
-                            >
+                          // 라벨은 점선 박스 안에서 가운데 정렬 — 박스보다 길면 잘라낸다(2026-09-14: 좌상단에 따로 띄우던 라벨이 박스를 넘어 흘렀다)
+                          <span
+                            key={s.id}
+                            className="absolute inset-y-1 flex items-center justify-center overflow-hidden rounded-sm border border-dashed border-input px-1"
+                            style={{ left: pctOf(s.start), width: wOf(s.start, ce) }}
+                          >
+                            <span className="truncate text-xs text-secondary-foreground">
                               {s.contract} · {s.termMonths}개월
                             </span>
-                          </React.Fragment>
+                          </span>
                         )
                       );
                     })}

@@ -47,6 +47,8 @@ import {
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 검색 제안(SearchBox) — 페이지 옵트인(2026-09-11 디자이너 확정: 계정·유저 제외 전 목록)
+import { SearchBox } from "@ds/ui/ui/search-box";
 // 상세 조건 매처(2026-09-08) — 여섯 목록 공용
 import { BASE_NOW, passDate, passSelect, passText } from "../_filter";
 
@@ -108,6 +110,15 @@ const FILLER: Row[] = Array.from({ length: 237 }, (_, i): Row => {
 });
 
 const ALL_ROWS: Row[] = [...ROWS, ...FILLER];
+
+// 검색 제안 후보 — 검색가능 열(Hull·선명·IMO·선주·시리즈 코드)의 값. Hull은 선명을, 선명·IMO는 Hull을 보조줄로
+const SEARCH_CANDIDATES = [
+  ...ALL_ROWS.map((r) => ({ label: r.hull, sub: r.shipName ?? undefined })),
+  ...ALL_ROWS.filter((r) => r.shipName).map((r) => ({ label: r.shipName as string, sub: r.hull })),
+  ...ALL_ROWS.filter((r) => r.imo).map((r) => ({ label: r.imo as string, sub: r.hull })),
+  ...OWNERS.map((o) => ({ label: o })),
+  ...SERIES.filter((s): s is string => s !== null).map((s) => ({ label: s })),
+];
 /** 무한 스크롤 한 번에 불러오는 행 수 */
 const PAGE = 20;
 
@@ -227,6 +238,18 @@ export default function Sales365VesselsPage() {
       {/* ── 툴바 — 새 규칙(2026-08-26): 필터는 전부 여기, 헤더는 정렬만 ── */}
       <FilterBar
         searchPlaceholder="Hull No. · 선명 · IMO · 선주 · 조선소 · 시리즈 코드 검색"
+        searchSlot={
+          <div className="shrink-0">
+            <SearchBox
+              placeholder="Hull No. · 선명 · IMO · 선주 · 조선소 · 시리즈 코드 검색"
+              value={keyword}
+              onChange={setKeyword}
+              candidates={SEARCH_CANDIDATES}
+              recentInitial={["1001", "MV EXAMPLE", "9876543"]}
+              quick={["대양해운", "서해해운", "청해선사", "SER-2026-A", "MV EXAMPLE"]}
+            />
+          </div>
+        }
         keyword={keyword}
         onKeyword={setKeyword}
         filters={VESSEL_FILTERS}

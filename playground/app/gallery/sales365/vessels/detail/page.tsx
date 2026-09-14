@@ -22,6 +22,7 @@ import { ArrowUpRight, ChevronDown, Info, Pencil, TriangleAlert } from "lucide-r
 
 import { Alert, AlertTitle } from "@ds/ui/ui/alert";
 import { Badge } from "@ds/ui/ui/badge";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Button } from "@ds/ui/ui/button";
 import { Checkbox } from "@ds/ui/ui/checkbox";
 import {
@@ -45,7 +46,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
 import { Textarea } from "@ds/ui/ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
-import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
+import { AuditFilter, AuditLog, useAuditFilter, type AuditEntry } from "../../../_detail/audit-log";
 // 이행 종류 표기 잠금(2026-09-07 · 5종 2026-09-09) — 4곳 공유
 import { DeliveryType } from "../../../_detail/delivery-type";
 // 계약 항목명 조립 규칙(2026-09-09)
@@ -153,6 +154,9 @@ export default function Sales365VesselDetailPage() {
     },
   ]);
   const [draft, setDraft] = React.useState("");
+  // Activity 탭은 제어형 — 변경 이력 탭일 때만 탭 행 우측에 분류 필터(2026-09-14)
+  const [activity, setActivity] = React.useState<"comments" | "audit">("comments");
+  const auditFilter = useAuditFilter(AUDIT, AUDIT_DOMAINS);
 
   return (
     // Jira 문법: 콘텐츠 컬럼은 풀스크린에서도 max-width 캡(계약 상세와 동일 1280)
@@ -316,17 +320,13 @@ export default function Sales365VesselDetailPage() {
                       <TableCell>
                         {r.cancelled ? (
                           <>
-                            <span className="inline-flex items-center gap-1.5 text-sm text-destructive">
-                              <span className="size-2 rounded-full bg-destructive" /> 취소
-                            </span>
+                            <StatusBadge label="취소" tone="error" bg={false} />
                             <div className="whitespace-normal text-xs text-secondary-foreground">
                               {r.note}
                             </div>
                           </>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 text-sm">
-                            <span className="size-2 rounded-full bg-success" /> 유효
-                          </span>
+                          <StatusBadge label="유효" tone="success" bg={false} />
                         )}
                       </TableCell>
                     </TableRow>
@@ -398,11 +398,15 @@ export default function Sales365VesselDetailPage() {
 
             {/* ══ Activity — Jira 문법: [댓글 | 변경 이력] 탭 스위치. 라벨 없이 여백(pt-16)으로 구분 ══ */}
             <section className="pt-16">
-              <Tabs defaultValue="comments">
-                <TabsList>
-                  <TabsTrigger value="comments">댓글 ({comments.length})</TabsTrigger>
-                  <TabsTrigger value="audit">변경 이력</TabsTrigger>
-                </TabsList>
+              <Tabs value={activity} onValueChange={(v) => setActivity(v as "comments" | "audit")}>
+                {/* 탭 행 = 툴바: 좌 탭, 우 변경 이력 필터(활성일 때만) */}
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <TabsList>
+                    <TabsTrigger value="comments">댓글 ({comments.length})</TabsTrigger>
+                    <TabsTrigger value="audit">변경 이력</TabsTrigger>
+                  </TabsList>
+                  {activity === "audit" && <AuditFilter filter={auditFilter} />}
+                </div>
 
                 <TabsContent value="comments" className="mt-3 space-y-4">
                   {comments.map((c, i) => (
@@ -448,7 +452,7 @@ export default function Sales365VesselDetailPage() {
                 </TabsContent>
 
                 <TabsContent value="audit" className="mt-3">
-                  <AuditLog subject="계약 호선 · Hull 1001" entries={AUDIT} domains={AUDIT_DOMAINS} />
+                  <AuditLog subject="계약 호선 · Hull 1001" entries={AUDIT} domains={AUDIT_DOMAINS} filter={auditFilter} />
                 </TabsContent>
               </Tabs>
             </section>

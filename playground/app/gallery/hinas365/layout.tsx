@@ -15,11 +15,12 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   Activity,
   Briefcase,
   Check,
+  ChevronDown,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
@@ -67,14 +68,24 @@ import { IconSelect } from "@ds/ui/ui/icon-select";
 import { Label } from "@ds/ui/ui/label";
 import { NotificationPanel } from "@ds/ui/ui/notification-panel";
 import { Separator } from "@ds/ui/ui/separator";
+import { Toaster } from "@ds/ui/ui/sonner";
 import { Switch } from "@ds/ui/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
 const BASE = "/gallery/hinas365";
 
+// 하위 페이지(2026-09-11 디자이너 확정, 레퍼런스 Statsig): 페이지 탭 스위치가 있던 항목은 사이드바에서 한 단계 펼친다.
+// 자식 = 같은 페이지의 ?view= 값(정적 export 호환). 부모 행 클릭 = 펼치기/접기만, 이동은 자식에서.
+// 접힌 레일에서는 부모 아이콘 = 첫 자식으로 이동 + 툴팁에 자식 목록.
 const NAV_GROUPS: {
   label: string;
-  items: { icon: React.ElementType; label: string; href: string }[];
+  items: {
+    icon: React.ElementType;
+    label: string;
+    href: string;
+    children?: { label: string; view: string }[];
+  }[];
 }[] = [
   {
     label: "운영",
@@ -95,14 +106,42 @@ const NAV_GROUPS: {
     label: "업데이트",
     items: [
       { icon: RefreshCw, label: "업데이트", href: `${BASE}/updates` },
-      { icon: GitCompare, label: "버전 호환성", href: `${BASE}/compatibility` },
-      { icon: Tag, label: "릴리즈 노트", href: `${BASE}/release-notes` },
+      {
+        icon: GitCompare,
+        label: "버전 호환성",
+        href: `${BASE}/compatibility`,
+        children: [
+          { label: "버전 호환성", view: "matrix" },
+          { label: "업데이트 호환성", view: "update" },
+        ],
+      },
+      {
+        icon: Tag,
+        label: "릴리즈 노트",
+        href: `${BASE}/release-notes`,
+        // 제품 탭(COMMON·NAVIGATION·SVM·CONTROL) → 하위 페이지. 데이터는 동일, 제목·강조만 따라간다
+        children: [
+          { label: "COMMON", view: "common" },
+          { label: "NAVIGATION", view: "navigation" },
+          { label: "SVM", view: "svm" },
+          { label: "CONTROL", view: "control" },
+        ],
+      },
     ],
   },
   {
     label: "관리",
     items: [
-      { icon: Code, label: "Developer / QA", href: `${BASE}/dev-qa` },
+      {
+        icon: Code,
+        label: "Developer / QA",
+        href: `${BASE}/dev-qa`,
+        children: [
+          { label: "제품 보안 취약점 현황", view: "vuln" },
+          { label: "번들 버전 비교", view: "bundle" },
+          { label: "릴리즈 노트 갱신", view: "notes" },
+        ],
+      },
       { icon: UserRound, label: "계정 관리", href: `${BASE}/accounts` },
       { icon: KeyRound, label: "기능별 계정권한", href: `${BASE}/permissions` },
     ],
@@ -160,9 +199,161 @@ const CRUMBS: { prefix: string; trail: [string, string][]; page: string }[] = [
   { prefix: `${BASE}/ships/test`, trail: [], page: "테스트 호선" },
 ];
 
+type Crumb = (typeof CRUMBS)[number];
+/** 하위 페이지가 있는 항목(버전 호환성 · Developer / QA)의 자식 목록 — 브레드크럼·사이드바가 같은 원천을 본다 */
+const childrenOf = (prefix: string) =>
+  NAV_GROUPS.flatMap((g) => g.items).find((i) => i.href === prefix)?.children;
+
+// 브레드크럼 꼬리 — 자식이 있으면 "부모 › 자식", 없으면 페이지 이름. useSearchParams는 Suspense 안에서만(정적 export)
+function CrumbTail({ crumb, view }: { crumb: Crumb; view: string | null }) {
+  const kids = childrenOf(crumb.prefix);
+  const child = kids ? (kids.find((c) => c.view === view) ?? kids[0]) : null;
+  return (
+    <>
+      {kids && (
+        <>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href={`${crumb.prefix}?view=${kids[0].view}`}>{crumb.page}</BreadcrumbLink>
+          </BreadcrumbItem>
+        </>
+      )}
+      <BreadcrumbSeparator />
+      <BreadcrumbItem>
+        <BreadcrumbPage>{child ? child.label : crumb.page}</BreadcrumbPage>
+      </BreadcrumbItem>
+    </>
+  );
+}
+function CrumbTailParams({ crumb }: { crumb: Crumb }) {
+  const view = useSearchParams().get("view");
+  return <CrumbTail crumb={crumb} view={view} />;
+}
+
+// 사이드바 메뉴 — 자식이 있는 항목은 펼침 행(부모 = 토글 버튼, 자식 = 링크). 현재 페이지의 부모는 자동으로 열린다
+type NavMenuProps = {
+  collapsed: boolean;
+  pathname: string;
+  view: string | null;
+  open: Record<string, boolean>;
+  onToggle: (label: string, next: boolean) => void;
+};
+function NavMenu({ collapsed, pathname, view, open, onToggle }: NavMenuProps) {
+  const isActive = (href: string) =>
+    href !== BASE && (pathname === href || pathname.startsWith(`${href}/`));
+  return (
+    <>
+      {NAV_GROUPS.map((group) => (
+        <div key={group.label} className={collapsed ? "contents" : undefined}>
+          {!collapsed && (
+            <p className="px-3 text-xs font-medium uppercase tracking-wide text-secondary-foreground">
+              {group.label}
+            </p>
+          )}
+          <div className={collapsed ? "contents" : "mt-1 space-y-1"}>
+            {group.items.map(({ icon: Icon, label, href, children }) => {
+              const active = isActive(href);
+              if (collapsed) {
+                // 접힌 레일 — 자식이 있으면 첫 자식으로, 툴팁에 자식 목록
+                const link = (
+                  <Link
+                    href={children ? `${href}?view=${children[0].view}` : href}
+                    title={children ? undefined : label}
+                    className={
+                      "flex size-10 items-center justify-center rounded-md " +
+                      (active ? "bg-accent text-foreground" : "text-secondary-foreground hover:bg-accent")
+                    }
+                  >
+                    <Icon className="size-4" />
+                  </Link>
+                );
+                if (!children) return <React.Fragment key={group.label + label}>{link}</React.Fragment>;
+                return (
+                  <Tooltip key={group.label + label}>
+                    <TooltipTrigger asChild>{link}</TooltipTrigger>
+                    <TooltipContent side="right">
+                      <p className="font-medium">{label}</p>
+                      {children.map((c) => (
+                        <p key={c.view} className="text-xs">
+                          {c.label}
+                        </p>
+                      ))}
+                    </TooltipContent>
+                  </Tooltip>
+                );
+              }
+              if (children) {
+                const isOpen = open[label] ?? active;
+                const current = view ?? children[0].view;
+                return (
+                  <div key={label}>
+                    <button
+                      type="button"
+                      aria-expanded={isOpen}
+                      onClick={() => onToggle(label, !isOpen)}
+                      className={
+                        "flex w-full items-center gap-2 rounded-md px-3 py-2 " +
+                        (active ? "font-medium" : "text-secondary-foreground hover:bg-accent")
+                      }
+                    >
+                      <Icon className="size-4" />
+                      <span className="flex-1 text-left">{label}</span>
+                      <ChevronDown
+                        className={"size-3.5 transition-transform " + (isOpen ? "" : "-rotate-90")}
+                      />
+                    </button>
+                    {isOpen && (
+                      <div className="mt-0.5 ml-5 space-y-0.5 border-l pl-3">
+                        {children.map((c) => {
+                          const on = active && current === c.view;
+                          return (
+                            <Link
+                              key={c.view}
+                              href={`${href}?view=${c.view}`}
+                              className={
+                                "block rounded-md px-3 py-1.5 " +
+                                (on ? "bg-accent font-medium" : "text-secondary-foreground hover:bg-accent")
+                              }
+                            >
+                              {c.label}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+              return (
+                <Link
+                  key={label}
+                  href={href}
+                  className={
+                    "flex items-center gap-2 rounded-md px-3 py-2 " +
+                    (active ? "bg-accent font-medium" : "text-secondary-foreground hover:bg-accent")
+                  }
+                >
+                  <Icon className="size-4" /> {label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </>
+  );
+}
+function NavMenuParams(props: Omit<NavMenuProps, "view">) {
+  const view = useSearchParams().get("view");
+  return <NavMenu {...props} view={view} />;
+}
+
 export default function HiNAS365Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = React.useState(false);
+  // 하위 페이지 펼침 상태 — 값 없음 = 현재 페이지의 부모만 자동 펼침
+  const [openGroups, setOpenGroups] = React.useState<Record<string, boolean>>({});
+  const toggleGroup = (label: string, next: boolean) => setOpenGroups((s) => ({ ...s, [label]: next }));
   // 계정 전환 데모 — 하단 사용자 메뉴에서 전환하면 로고 옆 (dev)/(qa) 표기가 따라간다
   const [account, setAccount] = React.useState<Account>(ACCOUNTS[0]);
   const [tz, setTz] = React.useState("KST");
@@ -173,8 +364,6 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
   const [centerTab, setCenterTab] = React.useState<"호선" | "업데이트">("호선");
 
   const crumb = CRUMBS.find((c) => pathname.startsWith(c.prefix));
-  const isActive = (href: string) =>
-    href !== BASE && (pathname === href || pathname.startsWith(`${href}/`));
   const unread = notifs.filter((n) => n.unread).length;
   const markRead = (id: string) =>
     setNotifs((p) => p.map((n) => (n.id === id ? { ...n, unread: false } : n)));
@@ -250,49 +439,16 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
             (collapsed ? "flex flex-col items-center gap-1" : "space-y-6 px-4 text-sm")
           }
         >
-          {NAV_GROUPS.map((group) => (
-            <div key={group.label} className={collapsed ? "contents" : undefined}>
-              {!collapsed && (
-                <p className="px-3 text-xs font-medium uppercase tracking-wide text-secondary-foreground">
-                  {group.label}
-                </p>
-              )}
-              <div className={collapsed ? "contents" : "mt-1 space-y-1"}>
-                {group.items.map(({ icon: Icon, label, href }) => {
-                  const active = isActive(href);
-                  if (collapsed) {
-                    return (
-                      <Link
-                        key={group.label + label}
-                        href={href}
-                        title={label}
-                        className={
-                          "flex size-10 items-center justify-center rounded-md " +
-                          (active ? "bg-accent text-foreground" : "text-secondary-foreground")
-                        }
-                      >
-                        <Icon className="size-4" />
-                      </Link>
-                    );
-                  }
-                  return (
-                    <Link
-                      key={label}
-                      href={href}
-                      className={
-                        "flex items-center gap-2 rounded-md px-3 py-2 " +
-                        (active
-                          ? "bg-accent font-medium"
-                          : "text-secondary-foreground hover:bg-accent")
-                      }
-                    >
-                      <Icon className="size-4" /> {label}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
+          {/* 메뉴 본체 — ?view= 를 읽는 판은 Suspense 안(정적 export), 폴백은 같은 메뉴를 view 없이 */}
+          <TooltipProvider>
+            <React.Suspense
+              fallback={
+                <NavMenu collapsed={collapsed} pathname={pathname} view={null} open={openGroups} onToggle={toggleGroup} />
+              }
+            >
+              <NavMenuParams collapsed={collapsed} pathname={pathname} open={openGroups} onToggle={toggleGroup} />
+            </React.Suspense>
+          </TooltipProvider>
         </nav>
 
         {/* 하단 고정 존 — 계정 → 접기 토글 (계정 위 상단 줄 없음 — 피그마 172-3899) */}
@@ -406,12 +562,9 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
                 </React.Fragment>
               ))}
               {crumb && (
-                <>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>{crumb.page}</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </>
+                <React.Suspense fallback={<CrumbTail crumb={crumb} view={null} />}>
+                  <CrumbTailParams crumb={crumb} />
+                </React.Suspense>
               )}
             </BreadcrumbList>
           </Breadcrumb>
@@ -449,6 +602,12 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
         {/* 본문 배경 — secondary 토큰(배경 2 =gray-20, 배경 1보다 반 톤 어두운 캔버스) */}
         {/* 본문 배경 흰색(2026-09-08 확정, 두 셸 공통) — sales365와 같은 이유·같은 값 */}
         <main className="flex min-w-0 flex-1 flex-col bg-background p-8">{children}</main>
+
+        {/* 토스트(어휘 ov-toast) — 셸에 한 번만. 위치 하단 오른쪽(2026-09-14 디자이너 확정, DS 스토리 기본과 동일).
+            페이지는 sonner의 toast()만 부른다(첫 사용: 릴리즈 노트 개발자용 업데이트 결과).
+            theme="light" 고정 — DS 래퍼는 next-themes(없으면 system=OS)를 따라 OS 다크에서 설명 글자가 흰색이 됐다.
+            앱은 라이트 고정이라 셸에서 못 박는다(래퍼가 앱 모드를 보도록 하는 건 UX-DS 요청 #10) */}
+        <Toaster position="bottom-right" theme="light" />
 
         {/* ── 알림 센터 모달 — NotificationCenter 시안 (ov-dialog·data-tabs·form-controls 조합) ── */}
         <Dialog open={centerOpen} onOpenChange={setCenterOpen}>

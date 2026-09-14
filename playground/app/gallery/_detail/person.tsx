@@ -5,7 +5,7 @@
 //   sm(24, 인라인: 표 셀 · dl 값 · 댓글 · 변경 이력 · picker) / default(32, 페이지 헤더 · 계정 존)
 // - Person: PersonAvatar + 이름 라벨. children을 주면 라벨을 대체(유저 목록의 Link 등)
 // - 색(2026-09-07 확정): 면 primary/10(연파랑) · 글자 진한 회색 foreground.
-//   ⚠ primary/10은 dstk/contrast-pairs.json의 tints.allowed에 아직 없다 — UX-DS 추가 요청 대기.
+//   primary/10은 dstk/contrast-pairs.json tints.allowed에 선언됨(아바타 fallback 면, 2026-09-08) — 요청 해소.
 //   먼저 시도한 primary/5는 파랑 5%라 흰 바탕에서 사실상 안 보였다(디자이너 반려 2026-09-07).
 //   글자까지 파랑(text-primary)은 3.77:1이라 본문 기준 미달 + 표가 파랗게 읽혀 폐기.
 //   종전 회색 폴백(bg-muted × secondary-foreground)은 표에서 너무 가라앉아 교체.

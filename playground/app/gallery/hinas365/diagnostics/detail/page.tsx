@@ -36,7 +36,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@ds/ui/ui/accordion";
-import { Badge } from "@ds/ui/ui/badge";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Button } from "@ds/ui/ui/button";
 import { ErrorState } from "@ds/ui/ui/error-state";
 import {
@@ -210,15 +210,11 @@ export default function DiagnosticDetailPage() {
                     <AccordionTrigger className="py-3 text-sm hover:no-underline">
                       <span className="flex w-full items-center justify-between pr-2">
                         <span className="font-semibold">{d.key}</span>
-                        {/* data-status 확정 스펙 — 아웃라인 없음, 도트 8px + text-sm */}
+                        {/* data-status — DS StatusBadge(아웃라인 없음, 도트 8px + text-sm), 2026-09-14 부품으로 통일 */}
                         {d.status === "정상" ? (
-                          <span className="inline-flex items-center gap-1.5 text-sm font-normal">
-                            <span className="size-2 rounded-full bg-success" /> 정상
-                          </span>
+                          <StatusBadge label="정상" tone="success" bg={false} className="font-normal" />
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 text-sm font-normal text-destructive">
-                            <span className="size-2 rounded-full bg-destructive" /> 이상
-                          </span>
+                          <StatusBadge label="이상" tone="error" bg={false} className="font-normal" />
                         )}
                       </span>
                     </AccordionTrigger>
@@ -393,9 +389,7 @@ export default function DiagnosticDetailPage() {
       <Dialog open={jsonOpen} onOpenChange={setJsonOpen}>
         <DialogContent className="sm:max-w-xl">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Code className="size-5" /> System JSON
-            </DialogTitle>
+            <DialogTitle>System JSON</DialogTitle>
             <DialogDescription>SYSTEM 진단의 원본 데이터입니다.</DialogDescription>
           </DialogHeader>
           <ToggleGroup type="single" variant="outline" size="sm" defaultValue="table" className="w-full">
@@ -621,13 +615,9 @@ function KVRow({ k, v }: { k: string; v: React.ReactNode }) {
 // data-status 확정 스펙 — 아웃라인 없음, 도트+텍스트(위험만 동색)
 function BoolChip({ ok }: { ok: boolean }) {
   return ok ? (
-    <span className="inline-flex items-center gap-1.5 font-mono text-sm">
-      <span className="size-2 rounded-full bg-success" /> TRUE
-    </span>
+    <StatusBadge label="TRUE" tone="success" bg={false} mono />
   ) : (
-    <span className="inline-flex items-center gap-1.5 font-mono text-sm text-destructive">
-      <span className="size-2 rounded-full bg-destructive" /> FALSE
-    </span>
+    <StatusBadge label="FALSE" tone="error" bg={false} mono />
   );
 }
 

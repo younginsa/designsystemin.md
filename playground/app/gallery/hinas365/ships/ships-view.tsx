@@ -36,6 +36,7 @@ import {
 
 import { Alert, AlertDescription, AlertTitle } from "@ds/ui/ui/alert";
 import { Badge } from "@ds/ui/ui/badge";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Button } from "@ds/ui/ui/button";
 import { ErrorState } from "@ds/ui/ui/error-state";
 import { Checkbox } from "@ds/ui/ui/checkbox";
@@ -129,12 +130,12 @@ const PRODUCT_VERSIONS: Record<ProductName, string[]> = {
 
 type SubscriptionStatus = "ACTIVE" | "PENDING" | "EXPIRED" | "NONE";
 
-// warning 토큰 부재 → PENDING 은 primary 도트 (DES-206)
-const SUBSCRIPTION_DOT: Record<SubscriptionStatus, string> = {
-  ACTIVE: "bg-success",
-  PENDING: "bg-primary",
-  EXPIRED: "bg-destructive",
-  NONE: "bg-muted-foreground",
+// warning 토큰 부재 → PENDING 은 progress(파랑) 톤 (DES-206). DS StatusBadge 톤으로 통일(2026-09-14)
+const SUBSCRIPTION_TONE: Record<SubscriptionStatus, React.ComponentProps<typeof StatusBadge>["tone"]> = {
+  ACTIVE: "success",
+  PENDING: "progress",
+  EXPIRED: "error",
+  NONE: "neutral",
 };
 const SUBSCRIPTION_LABEL: Record<SubscriptionStatus, string> = {
   ACTIVE: "Active",
@@ -567,14 +568,17 @@ export default function ShipsView({ kind }: { kind: ListKind }) {
         <FilterBar
           searchSlot={
             <>
-              <SearchBox
-                placeholder="IMO · 호선명 · Hull · 선사 검색"
-                value={keyword}
-                onChange={setKeyword}
-                candidates={searchCandidates}
-                recentInitial={["9800137", "9800274", "HYUNDAI GLOBE 001"]}
-                quick={["HYUNDAI GLOBE", "MAERSK", "SVM", "BUSAN", "TEST"]}
-              />
+              {/* shrink-0 — 한 줄 칩 행(2026-09-09)이 검색창을 줄이지 못하게, 다른 목록의 검색 제안과 같은 처리 */}
+              <div className="shrink-0">
+                <SearchBox
+                  placeholder="IMO · 호선명 · Hull · 선사 검색"
+                  value={keyword}
+                  onChange={setKeyword}
+                  candidates={searchCandidates}
+                  recentInitial={["9800137", "9800274", "HYUNDAI GLOBE 001"]}
+                  quick={["HYUNDAI GLOBE", "MAERSK", "SVM", "BUSAN", "TEST"]}
+                />
+              </div>
               {/* PRODUCT 계층 필터 칩 — 모달 폐기, 캐스케이드 패널(2026-08-26) */}
               <VersionFilterChip
                 label="제품"
@@ -892,16 +896,8 @@ function ShipTable({
                 </div>
               </TableCell>
               <TableCell>
-                {/* data-status 색 쌍 규칙 — 위험·에러 계열은 텍스트도 같은 색 */}
-                <span
-                  className={
-                    "flex items-center gap-1.5 text-sm" +
-                    (s.subscription === "EXPIRED" ? " text-destructive" : "")
-                  }
-                >
-                  <span className={`size-2 rounded-full ${SUBSCRIPTION_DOT[s.subscription]}`} />
-                  {SUBSCRIPTION_LABEL[s.subscription]}
-                </span>
+                {/* data-status — DS StatusBadge: error 톤은 글자도 빨강(위험·에러 계열 색 쌍 규칙) */}
+                <StatusBadge label={SUBSCRIPTION_LABEL[s.subscription]} tone={SUBSCRIPTION_TONE[s.subscription]} bg={false} />
               </TableCell>
               <TableCell>
                 <p className="text-sm">{s.statusUpdated}</p>

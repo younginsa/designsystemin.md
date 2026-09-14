@@ -24,6 +24,7 @@ import Link from "next/link";
 import { Info, Pencil } from "lucide-react";
 
 import { Badge } from "@ds/ui/ui/badge";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Button } from "@ds/ui/ui/button";
 import {
   Dialog,
@@ -50,7 +51,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
 import { Textarea } from "@ds/ui/ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
-import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
+import { AuditFilter, AuditLog, useAuditFilter, type AuditEntry } from "../../../_detail/audit-log";
 // 사람 요소 잠금(2026-09-04): 헤더 유저 = DS Avatar default(32) + 이름 · 댓글 작성자 = sm — _detail/person 공유
 import { PersonAvatar } from "../../../_detail/person";
 // 계약명 조립 규칙(2026-09-09) — 샘플은 패키지 + 척수로 적는다
@@ -114,6 +115,9 @@ export default function Sales365UserDetailPage() {
   const [deactivateOpen, setDeactivateOpen] = React.useState(false);
   const [comments, setComments] = React.useState<{ author: string; time: string; text: string }[]>([]);
   const [draft, setDraft] = React.useState("");
+  // Activity 탭은 제어형 — 변경 이력 탭일 때만 탭 행 우측에 분류 필터(2026-09-14)
+  const [activity, setActivity] = React.useState<"comments" | "audit">("comments");
+  const auditFilter = useAuditFilter(AUDIT, AUDIT_DOMAINS);
 
   return (
     // Jira 문법: 콘텐츠 컬럼은 풀스크린에서도 max-width 캡(계약 상세와 동일 1280)
@@ -127,13 +131,9 @@ export default function Sales365UserDetailPage() {
           <h1 className="flex items-center gap-2 text-lg font-bold">
             {USER.name}
             {active ? (
-              <span className="inline-flex items-center gap-1.5 text-sm font-normal">
-                <span className="size-2 rounded-full bg-success" /> 활성
-              </span>
+              <StatusBadge label="활성" tone="success" bg={false} className="font-normal" />
             ) : (
-              <span className="inline-flex items-center gap-1.5 text-sm font-normal text-secondary-foreground">
-                <span className="size-2 rounded-full bg-muted-foreground" /> 비활성
-              </span>
+              <StatusBadge label="비활성" tone="neutral" bg={false} className="font-normal" />
             )}
           </h1>
         </div>
@@ -243,11 +243,15 @@ export default function Sales365UserDetailPage() {
 
             {/* ══ Activity — Jira 문법: [댓글 | 변경 이력] 탭 스위치. 라벨 없이 여백(pt-16)으로 구분 ══ */}
             <section className="pt-16">
-              <Tabs defaultValue="comments">
-                <TabsList>
-                  <TabsTrigger value="comments">댓글 ({comments.length})</TabsTrigger>
-                  <TabsTrigger value="audit">변경 이력</TabsTrigger>
-                </TabsList>
+              <Tabs value={activity} onValueChange={(v) => setActivity(v as "comments" | "audit")}>
+                {/* 탭 행 = 툴바: 좌 탭, 우 변경 이력 필터(활성일 때만) */}
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <TabsList>
+                    <TabsTrigger value="comments">댓글 ({comments.length})</TabsTrigger>
+                    <TabsTrigger value="audit">변경 이력</TabsTrigger>
+                  </TabsList>
+                  {activity === "audit" && <AuditFilter filter={auditFilter} />}
+                </div>
 
                 <TabsContent value="comments" className="mt-3 space-y-4">
                   {comments.length === 0 && (
@@ -296,7 +300,7 @@ export default function Sales365UserDetailPage() {
                 </TabsContent>
 
                 <TabsContent value="audit" className="mt-3">
-                  <AuditLog subject="유저 · 김민준" entries={AUDIT} domains={AUDIT_DOMAINS} />
+                  <AuditLog subject="유저 · 김민준" entries={AUDIT} domains={AUDIT_DOMAINS} filter={auditFilter} />
                 </TabsContent>
               </Tabs>
             </section>
@@ -334,9 +338,8 @@ export default function Sales365UserDetailPage() {
                 </div>
                 <div className="flex items-center">
                   <dt className="w-28 shrink-0 text-secondary-foreground">활성 여부</dt>
-                  <dd className="inline-flex items-center gap-1.5">
-                    <span className={"size-2 rounded-full " + (active ? "bg-success" : "bg-muted-foreground")} />
-                    {active ? "활성" : "비활성"}
+                  <dd>
+                    <StatusBadge label={active ? "활성" : "비활성"} tone={active ? "success" : "neutral"} bg={false} />
                   </dd>
                 </div>
                 <div className="flex items-baseline">

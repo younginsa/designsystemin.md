@@ -18,6 +18,7 @@ import Link from "next/link";
 import { Info, Plus, Users } from "lucide-react";
 
 import { Button } from "@ds/ui/ui/button";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import {
   Dialog,
   DialogContent,
@@ -206,13 +207,9 @@ export default function Sales365UsersPage() {
                 </TableCell>
                 <TableCell>
                   {r.active ? (
-                    <span className="inline-flex items-center gap-1.5 text-sm">
-                      <span className="size-2 rounded-full bg-success" /> 활성
-                    </span>
+                    <StatusBadge label="활성" tone="success" bg={false} />
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 text-sm">
-                      <span className="size-2 rounded-full bg-muted-foreground" /> 비활성
-                    </span>
+                    <StatusBadge label="비활성" tone="neutral" bg={false} />
                   )}
                 </TableCell>
                 <TableCell className="font-mono text-sm">{r.createdOn}</TableCell>

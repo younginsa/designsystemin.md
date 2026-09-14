@@ -48,7 +48,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
 import { Textarea } from "@ds/ui/ui/textarea";
 
-import { AuditLog, type AuditEntry } from "../../../_detail/audit-log";
+import { AuditFilter, AuditLog, useAuditFilter, type AuditEntry } from "../../../_detail/audit-log";
 // 납품 유형 표기 잠금(2026-09-07) — 4곳 공유
 import { DeliveryType } from "../../../_detail/delivery-type";
 // 사람 요소 잠금(2026-09-04): 댓글 작성자 = DS Avatar sm(이니셜) — _detail/person 공유
@@ -127,6 +127,9 @@ export default function Sales365DeliveryDetailPage() {
     { author: "이수진", time: "2026-08-19 10:12", text: "일정 변경 사유와 현장 이슈를 남깁니다" },
   ]);
   const [draft, setDraft] = React.useState("");
+  // Activity 탭은 제어형 — 변경 이력 탭일 때만 탭 행 우측에 분류 필터(2026-09-14)
+  const [activity, setActivity] = React.useState<"comments" | "audit">("comments");
+  const auditFilter = useAuditFilter(AUDIT, AUDIT_DOMAINS);
 
   return (
     // Jira 문법: 콘텐츠 컬럼은 풀스크린에서도 max-width 캡(계약 상세와 동일 1280)
@@ -250,11 +253,15 @@ export default function Sales365DeliveryDetailPage() {
 
             {/* ══ Activity — Jira 문법: [댓글 | 변경 이력] 탭 스위치. 라벨 없이 여백(pt-16)으로 구분 ══ */}
             <section className="pt-16">
-              <Tabs defaultValue="comments">
-                <TabsList>
-                  <TabsTrigger value="comments">댓글 ({comments.length})</TabsTrigger>
-                  <TabsTrigger value="audit">변경 이력</TabsTrigger>
-                </TabsList>
+              <Tabs value={activity} onValueChange={(v) => setActivity(v as "comments" | "audit")}>
+                {/* 탭 행 = 툴바: 좌 탭, 우 변경 이력 필터(활성일 때만) */}
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <TabsList>
+                    <TabsTrigger value="comments">댓글 ({comments.length})</TabsTrigger>
+                    <TabsTrigger value="audit">변경 이력</TabsTrigger>
+                  </TabsList>
+                  {activity === "audit" && <AuditFilter filter={auditFilter} />}
+                </div>
 
                 <TabsContent value="comments" className="mt-3 space-y-4">
                   {comments.map((c, i) => (
@@ -300,7 +307,7 @@ export default function Sales365DeliveryDetailPage() {
                 </TabsContent>
 
                 <TabsContent value="audit" className="mt-3">
-                  <AuditLog subject="납품 제품 · Hull 1001 · Control" entries={AUDIT} domains={AUDIT_DOMAINS} />
+                  <AuditLog subject="납품 제품 · Hull 1001 · Control" entries={AUDIT} domains={AUDIT_DOMAINS} filter={auditFilter} />
                 </TabsContent>
               </Tabs>
             </section>

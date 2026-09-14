@@ -12,6 +12,7 @@
 // 어휘 게이트 메모: skeleton 채택 완료(DES-205 해소, 2026-08-25) — 로딩=스켈레톤 · 프로그레스 바=실제 진행률 전용
 
 import * as React from "react";
+import { useSearchParams } from "next/navigation";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import {
@@ -23,6 +24,7 @@ import {
 } from "lucide-react";
 
 import { Badge } from "@ds/ui/ui/badge";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Button } from "@ds/ui/ui/button";
 import { ErrorState } from "@ds/ui/ui/error-state";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@ds/ui/ui/empty";
@@ -43,7 +45,6 @@ import {
   TableHeader,
   TableRow,
 } from "@ds/ui/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
@@ -83,14 +84,28 @@ const SCAN_ROWS: ScanRow[] = [
 
 type ViewState = "default" | "loading" | "progress" | "error" | "empty";
 
+// 하위 페이지(2026-09-11): 탭 스위치 폐기 → 사이드바 자식 메뉴 + ?view=vuln|bundle|notes. useSearchParams는 Suspense 경계 필수(정적 export)
+const SUB_LABEL = { vuln: "제품 보안 취약점 현황", bundle: "번들 버전 비교", notes: "릴리즈 노트 갱신" } as const;
+type Sub = keyof typeof SUB_LABEL;
+
 export default function DevQaPage() {
+  return (
+    <React.Suspense fallback={null}>
+      <DevQaBody />
+    </React.Suspense>
+  );
+}
+
+function DevQaBody() {
   const [view, setView] = React.useState<ViewState>("default");
+  const raw = useSearchParams().get("view");
+  const sub: Sub = raw === "bundle" || raw === "notes" ? raw : "vuln";
 
   return (
     <TooltipProvider>
       <div className="space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-lg font-bold">Developer/QA</h1>
+          <h1 className="text-lg font-bold">{SUB_LABEL[sub]}</h1>
           <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
         </div>
 
@@ -113,25 +128,8 @@ export default function DevQaPage() {
           />
         )}
 
-        {(view === "default" || view === "empty") && (
-          <Tabs defaultValue="vuln" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="vuln">제품 보안 취약점 현황</TabsTrigger>
-              <TabsTrigger value="bundle">번들 버전 비교</TabsTrigger>
-              <TabsTrigger value="notes">릴리즈 노트 갱신</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="vuln">
-              <VulnTab empty={view === "empty"} />
-            </TabsContent>
-            <TabsContent value="bundle">
-              <BundleTab />
-            </TabsContent>
-            <TabsContent value="notes">
-              <NotesTab />
-            </TabsContent>
-          </Tabs>
-        )}
+        {(view === "default" || view === "empty") &&
+          (sub === "bundle" ? <BundleTab /> : sub === "notes" ? <NotesTab /> : <VulnTab empty={view === "empty"} />)}
       </div>
     </TooltipProvider>
   );
@@ -254,15 +252,11 @@ function VulnTab({ empty }: { empty: boolean }) {
                         <TableCell className="font-medium">{r.repo}</TableCell>
                         <TableCell className="font-mono text-sm">{r.tag}</TableCell>
                         <TableCell>
-                          {/* data-status 확정 스펙 — 도트 8px·text-sm·배경 없음 */}
+                          {/* data-status — DS StatusBadge(도트 8px·text-sm·배경 없음), 2026-09-14 부품으로 통일 */}
                           {r.status === "COMPLETE" ? (
-                            <span className="inline-flex items-center gap-1.5 text-sm">
-                              <span className="size-2 rounded-full bg-success" /> COMPLETE
-                            </span>
+                            <StatusBadge label="COMPLETE" tone="success" bg={false} />
                           ) : (
-                            <span className="inline-flex items-center gap-1.5 font-mono text-sm text-secondary-foreground">
-                              <span className="size-2 rounded-full bg-muted-foreground" /> SCAN_ELIGIBILITY_EXPIRED
-                            </span>
+                            <StatusBadge label="SCAN_ELIGIBILITY_EXPIRED" tone="neutral" bg={false} mono />
                           )}
                         </TableCell>
                         <TableCell>

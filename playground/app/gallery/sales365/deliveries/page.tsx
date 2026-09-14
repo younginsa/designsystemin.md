@@ -21,6 +21,7 @@ import Link from "next/link";
 import { ArrowDown, ArrowUp, CalendarDays, ChevronDown, Info } from "lucide-react";
 
 import { Badge } from "@ds/ui/ui/badge";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Button } from "@ds/ui/ui/button";
 import { Checkbox } from "@ds/ui/ui/checkbox";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@ds/ui/ui/empty";
@@ -51,6 +52,8 @@ import {
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 검색 제안(SearchBox) — 페이지 옵트인(2026-09-11 디자이너 확정: 계정·유저 제외 전 목록)
+import { SearchBox } from "@ds/ui/ui/search-box";
 // 상세 조건 매처(2026-09-08) — 여섯 목록 공용
 import { BASE_NOW, passDate, passSelect, passText } from "../_filter";
 
@@ -122,6 +125,13 @@ const FILLER: Row[] = Array.from({ length: HULLS.length * PRODUCTS.length }, (_,
 }).filter((f) => !ROWS.some((r) => r.name === f.name));
 
 const ALL_ROWS: Row[] = [...ROWS, ...FILLER];
+
+// 검색 제안 후보 — 검색가능 열(납품 제품 이름·호선·계약)의 값. 이름은 호선을 보조줄로
+const SEARCH_CANDIDATES = [
+  ...ALL_ROWS.map((r) => ({ label: r.name, sub: r.hull })),
+  ...HULLS.map((h) => ({ label: h })),
+  ...CONTRACT_IDS.map((c) => ({ label: c })),
+];
 /** 무한 스크롤 한 번에 불러오는 행 수 */
 const PAGE = 20;
 
@@ -244,6 +254,18 @@ export default function Sales365DeliveriesPage() {
       {/* ── 툴바 — 새 규칙(2026-08-26): 필터는 전부 여기, 헤더는 정렬만 ── */}
       <FilterBar
         searchPlaceholder="납품 제품 이름 · 호선 · 계약 검색"
+        searchSlot={
+          <div className="shrink-0">
+            <SearchBox
+              placeholder="납품 제품 이름 · 호선 · 계약 검색"
+              value={keyword}
+              onChange={setKeyword}
+              candidates={SEARCH_CANDIDATES}
+              recentInitial={["Hull 1001 · Control", "C-2026-001", "HN-2025-001"]}
+              quick={["Hull 1001", "C-2026-001", "Control", "SVM", "Hull 1003"]}
+            />
+          </div>
+        }
         keyword={keyword}
         onKeyword={setKeyword}
         filters={PAGE_FILTERS}
@@ -417,9 +439,7 @@ export default function Sales365DeliveriesPage() {
                       정상은 빈 칸: 도트도 글자도 없다 */}
                   <TableCell>
                     {r.cancelled && (
-                      <span className="inline-flex items-center gap-1.5 text-sm text-destructive">
-                        <span className="size-2 rounded-full bg-destructive" /> 취소됨
-                      </span>
+                      <StatusBadge label="취소됨" tone="error" bg={false} />
                     )}
                   </TableCell>
                 </TableRow>

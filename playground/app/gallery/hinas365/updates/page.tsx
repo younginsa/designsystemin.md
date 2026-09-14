@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 
 import { Badge } from "@ds/ui/ui/badge";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Button } from "@ds/ui/ui/button";
 import { ErrorState } from "@ds/ui/ui/error-state";
 import {
@@ -72,6 +73,8 @@ import {
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 검색 제안(SearchBox) — 페이지 옵트인(2026-09-11 디자이너 확정), 납품 호선 리스트와 같은 부품
+import { SearchBox } from "@ds/ui/ui/search-box";
 // 상세 조건 매처(2026-09-09 두 앱 통일) — 세일즈 365 목록과 같은 부품
 import { BASE_NOW, passDate, passSelect } from "../../_detail/filter-match";
 import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
@@ -82,21 +85,9 @@ type UpdateStatus = "IMAGE READY" | "PENDING" | "DOWNLOAD REQUESTED";
 // data-status 확정 스펙 — 도트 8px + 기본색 텍스트(text-sm), 배경·색 텍스트 없음
 // success=준비 완료 · muted=대기 · info=요청/진행(원본 파랑 칩과 일치 — 계약 '진행 중'과 동일 계열)
 const STATUS_RENDER: Record<UpdateStatus, React.ReactNode> = {
-  "IMAGE READY": (
-    <span className="inline-flex items-center gap-1.5 text-sm">
-      <span className="size-2 rounded-full bg-success" /> IMAGE READY
-    </span>
-  ),
-  PENDING: (
-    <span className="inline-flex items-center gap-1.5 text-sm">
-      <span className="size-2 rounded-full bg-muted-foreground" /> PENDING
-    </span>
-  ),
-  "DOWNLOAD REQUESTED": (
-    <span className="inline-flex items-center gap-1.5 text-sm">
-      <span className="size-2 rounded-full bg-primary" /> DOWNLOAD REQUESTED
-    </span>
-  ),
+  "IMAGE READY": <StatusBadge label="IMAGE READY" tone="success" bg={false} />,
+  PENDING: <StatusBadge label="PENDING" tone="neutral" bg={false} />,
+  "DOWNLOAD REQUESTED": <StatusBadge label="DOWNLOAD REQUESTED" tone="progress" bg={false} />,
 };
 
 const ROWS: {
@@ -116,6 +107,9 @@ const ROWS: {
   { id: "00478e55", imo: "LIBRARY_UPDATE_TEST_2", product: "SVM", status: "DOWNLOAD REQUESTED", start: "2026-01-28 01:06", startAgo: "6개월 전", end: null },
   { id: "1158ead1", imo: "LIBRARY_UPDATE_TEST", product: "SVM", status: "DOWNLOAD REQUESTED", start: "2026-01-29 08:41", startAgo: "5개월 전", end: null },
 ];
+
+// 검색 제안 후보 — IMO(검색가능 열) 고유값
+const SEARCH_CANDIDATES = Array.from(new Set(ROWS.map((r) => r.imo))).map((imo) => ({ label: imo }));
 
 const YEARS = ["2025년", "2026년"];
 const MONTHS = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
@@ -192,6 +186,18 @@ export default function UpdatesPage() {
              헤더는 정렬만. 구 헤더 필터(PRODUCT·STATUS·기간)·최신만 스위치 편입 ── */}
         <FilterBar
           searchPlaceholder="IMO 검색"
+          searchSlot={
+            <div className="shrink-0">
+              <SearchBox
+                placeholder="IMO 검색"
+                value={keyword}
+                onChange={setKeyword}
+                candidates={SEARCH_CANDIDATES}
+                recentInitial={["SVM_V120_RC1", "LIBRARY_UPDATE_TEST", "UPDATE_TEST"]}
+                quick={["SVM_V120_RC1", "LIBRARY_UPDATE_TEST", "UPDATE_TEST", "LIBRARY_UPDATE_TEST_2"]}
+              />
+            </div>
+          }
           keyword={keyword}
           onKeyword={setKeyword}
           filters={UPDATE_FILTERS}

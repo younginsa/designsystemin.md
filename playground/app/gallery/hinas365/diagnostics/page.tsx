@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 
 import { Badge } from "@ds/ui/ui/badge";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Button } from "@ds/ui/ui/button";
 import { ErrorState } from "@ds/ui/ui/error-state";
 import {
@@ -91,6 +92,8 @@ import {
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 검색 제안(SearchBox) — 페이지 옵트인(2026-09-11 디자이너 확정), 납품 호선 리스트와 같은 부품
+import { SearchBox } from "@ds/ui/ui/search-box";
 // 상세 조건 매처(2026-09-09 두 앱 통일) — 세일즈 365 목록과 같은 부품
 import { passSelect } from "../../_detail/filter-match";
 
@@ -339,6 +342,9 @@ const DIAG_HISTORY: [string, string, string][] = [
   ["2026-07-26 01:53", "System", "이상 -> 정상"],
 ];
 
+// 검색 제안 후보 — 호선명(샘플 데이터에 IMO·Hull·선사 필드가 없어 이름만). 최근·빠른검색도 같은 목록에서
+const SEARCH_CANDIDATES = SHIPS.map((s) => ({ label: s.name }));
+
 const STATUS_OPTIONS = ["전체", "Camera 이상", "장비 이상", "Normal"];
 // 산출 상태 → 칩 옵션 표기(상태 컬럼과 같은 원천)
 const STATUS_LABEL: Record<ReturnType<typeof diagStatusOf>, string> = {
@@ -437,8 +443,13 @@ function DiagnosticsBody() {
     const act = s.active as string[];
     return op === "is not" ? !wanted.some((a) => act.includes(a)) : wanted.every((a) => act.includes(a));
   };
+  // 검색 — 호선명 부분 일치(2026-09-11 신설: 종전엔 검색창만 있고 거르지 않았다)
+  const kw = keyword.trim().toLowerCase();
   const rows = (view === "empty" ? [] : SHIPS).filter(
-    (s) => passSelect(filterValues.status, STATUS_LABEL[diagStatusOf(s)]) && activeOk(s),
+    (s) =>
+      (!kw || s.name.toLowerCase().includes(kw)) &&
+      passSelect(filterValues.status, STATUS_LABEL[diagStatusOf(s)]) &&
+      activeOk(s),
   );
 
   return (
@@ -463,6 +474,18 @@ function DiagnosticsBody() {
         {/* ── 툴바 — header-filter 시스템(FilterBar 시안) ── */}
         <FilterBar
           searchPlaceholder="IMO · 호선명 · Hull · 선사 검색"
+          searchSlot={
+            <div className="shrink-0">
+              <SearchBox
+                placeholder="IMO · 호선명 · Hull · 선사 검색"
+                value={keyword}
+                onChange={setKeyword}
+                candidates={SEARCH_CANDIDATES}
+                recentInitial={SEARCH_CANDIDATES.slice(0, 3).map((c) => c.label)}
+                quick={SEARCH_CANDIDATES.slice(0, 5).map((c) => c.label)}
+              />
+            </div>
+          }
           keyword={keyword}
           onKeyword={setKeyword}
           filters={DIAG_FILTERS}
@@ -618,16 +641,15 @@ function DiagnosticsBody() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {/* 상태 도트 — 목록 표기와 동일 위계: Camera 이상만 글자까지 빨강 */}
+                {/* 상태 — DS StatusBadge, 목록 표기와 동일 위계: Camera 이상만 글자까지 빨강(error), 장비는 주의(도트만 빨강) */}
                 <SelectItem value="WARNING_CAMERA">
-                  <span className="size-2 rounded-full bg-destructive" />{" "}
-                  <span className="text-destructive">Warning · Camera</span>
+                  <StatusBadge label="Warning · Camera" tone="error" bg={false} />
                 </SelectItem>
                 <SelectItem value="WARNING">
-                  <span className="size-2 rounded-full bg-destructive" /> Warning · 장비
+                  <StatusBadge label="Warning · 장비" toneClassName="text-destructive" bg={false} />
                 </SelectItem>
                 <SelectItem value="NORMAL">
-                  <span className="size-2 rounded-full bg-success" /> Normal
+                  <StatusBadge label="Normal" tone="success" bg={false} />
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -999,22 +1021,21 @@ function StatusPill({
   camera?: boolean;
   cause?: string;
 }) {
+  // DS StatusBadge(2026-09-14): Camera 이상 = error(글자도 빨강) · 장비 이상 = 주의(도트만 빨강, toneClassName 우회 — UX-DS #11)
   if (status === "WARNING") {
     return (
       <span className="inline-flex flex-col gap-0.5 text-sm">
-        <span className="inline-flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-destructive" />
-          <span className={camera ? "text-destructive" : undefined}>WARNING</span>
-        </span>
-        {cause && <span className="pl-3.5 text-xs text-secondary-foreground">{cause}</span>}
+        <StatusBadge
+          label="WARNING"
+          tone={camera ? "error" : "neutral"}
+          toneClassName={camera ? undefined : "text-destructive"}
+          bg={false}
+        />
+        {cause && <span className="pl-5.5 text-xs text-secondary-foreground">{cause}</span>}
       </span>
     );
   }
-  return (
-    <span className="inline-flex items-center gap-1.5 text-sm">
-      <span className="size-2 rounded-full bg-success" /> Normal
-    </span>
-  );
+  return <StatusBadge label="Normal" tone="success" bg={false} />;
 }
 
 // 제품 컬럼 셀 — 항목 칩 먼저, 아래 셋째 줄에 수집 시각 ✓ (작고 연하게). 미설치면 "-"

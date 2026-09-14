@@ -37,6 +37,7 @@ import {
 } from "lucide-react";
 
 import { Badge } from "@ds/ui/ui/badge";
+import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Button } from "@ds/ui/ui/button";
 import { ErrorState } from "@ds/ui/ui/error-state";
 import {
@@ -65,6 +66,8 @@ import {
   type FilterDef,
   type FilterValues,
 } from "@ds/ui/ui/filter-bar";
+// 검색 제안(SearchBox) — 페이지 옵트인(2026-09-11 디자이너 확정: 계정·유저 제외 전 목록)
+import { SearchBox } from "@ds/ui/ui/search-box";
 // 상세 조건 매처(2026-09-08) — 여섯 목록 공용
 import { BASE_NOW, passDate, passSelect, passText } from "../_filter";
 
@@ -169,6 +172,13 @@ const FILLER: Row[] = Array.from({ length: 39 }, (_, i): Row => {
 });
 
 const ROWS: Row[] = [...FEATURED, ...FILLER];
+
+// 검색 제안 후보 — 검색가능 열(계약명·고객·담당)의 값. 계약명은 코드를 보조줄로. 검색창은 shrink-0(한 줄 칩 행이 못 줄임)
+const SEARCH_CANDIDATES = [
+  ...ROWS.map((r) => ({ label: r.name, sub: r.id })),
+  ...CUSTOMERS.map((c) => ({ label: c })),
+  ...OWNERS.map((o) => ({ label: o })),
+];
 
 // 필터 스펙 표 6.1 계약 리스트(2026-09-08) — 정본 filter-bar.stories.tsx CONTRACT_FILTERS.
 // 연산자·유형·순서·base는 스펙, 옵션 목록은 이 페이지 데이터, 값 표기는 현행(정상·취소됨) 유지(디자이너 확정).
@@ -277,6 +287,18 @@ export default function Sales365ContractsPage() {
       {/* ── 툴바 — 새 규칙(2026-08-26): 필터는 전부 여기, 헤더는 정렬만 ── */}
       <FilterBar
         searchPlaceholder="계약명 · 고객 · 담당 검색"
+        searchSlot={
+          <div className="shrink-0">
+            <SearchBox
+              placeholder="계약명 · 고객 · 담당 검색"
+              value={keyword}
+              onChange={setKeyword}
+              candidates={SEARCH_CANDIDATES}
+              recentInitial={["대양해운", "Enterprise", "홍길동"]}
+              quick={["대양해운", "한성해운", "청해선사", "홍길동", "김담당"]}
+            />
+          </div>
+        }
         keyword={keyword}
         onKeyword={setKeyword}
         filters={CONTRACT_FILTERS}
@@ -431,9 +453,7 @@ export default function Sales365ContractsPage() {
                 <TableCell>
                   {r.cancelled && (
                     <>
-                      <span className="inline-flex items-center gap-1.5 text-sm text-destructive">
-                        <span className="size-2 rounded-full bg-destructive" /> 취소됨
-                      </span>
+                      <StatusBadge label="취소됨" tone="error" bg={false} />
                       {r.cancelReason && (
                         <div className="whitespace-normal text-xs text-secondary-foreground">
                           {r.cancelReason}
