@@ -55,6 +55,9 @@
 - **DropdownMenu** — 행 단위 액션 묶음 (테이블 우측 ⋯ 버튼).
 - **Tabs** — 같은 데이터의 뷰 전환. 페이지 네비게이션에는 쓰지 않는다.
 - **Avatar** — 사용자 표시. 이미지 없으면 이니셜 폴백.
+- **필드 표면(2026-09-14 확정)** — Input·Textarea·Select 트리거·InputGroup 은 항상 `bg-card`(흰색),
+  캔버스가 `bg-secondary`(대시보드)여도 같다. 종전 InputGroup `filled` 변형이 기본이 됐고 prop 은 호환용.
+  피그마 필드 세트 fill = General/background(card 번들). 반경은 토큰 그대로 — md 8 · sm 6 · lg 10 · xl 14.
 - **Separator** — 섹션 구분. 여백으로 충분하면 쓰지 않는다.
 - **Alert** — 페이지 내 정적 안내·경고. 파괴 배너 표면 = `bg-destructive/5`
   (2026-09-02 개정 — /10은 hover·버튼 잉크로 이관).

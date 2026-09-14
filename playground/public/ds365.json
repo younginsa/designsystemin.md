@@ -46,7 +46,7 @@
     },
     "form-textarea": {
       "overrides": { "shadow": "none" },
-      "note": "폼 컨트롤 플랫 규칙 — 텍스트에어리어 그림자 제거. 렌더 차이 없음 — 재캡처 생략",
+      "note": "폼 컨트롤 플랫 규칙 — 텍스트에어리어 그림자 제거. 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — 캔버스 무관 흰색). 피그마 Textarea fill General/background · 반경 8(md)",
       "render": "done"
     },
     "btn-basic": {
@@ -61,17 +61,17 @@
     },
     "form-text": {
       "overrides": { "shadow": "none" },
-      "note": "폼 컨트롤 플랫 규칙 — 인풋·셀렉트·검색 박스·드롭다운 트리거 그림자 제거(shadow-xs 삭제). 플로팅 패널의 elevation 그림자는 유지. 카드 축척에서 렌더 차이 없음 — 재캡처 생략",
+      "note": "폼 컨트롤 플랫 규칙 — 인풋·셀렉트·검색 박스·드롭다운 트리거 그림자 제거(shadow-xs 삭제). 플로팅 패널의 elevation 그림자는 유지. 카드 축척에서 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — 캔버스 무관 흰색). 피그마 Input fill General/background · 반경 8(md) · 링 11",
       "render": "done"
     },
     "form-select": {
       "overrides": { "shadow": "none" },
-      "note": "폼 컨트롤 플랫 규칙 — 트리거 그림자 제거. 렌더 차이 없음 — 재캡처 생략",
+      "note": "폼 컨트롤 플랫 규칙 — 트리거 그림자 제거. 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — Search 와 같은 흰색, hover 는 accent 로 교체). 피그마: SelectTrigger(size×state 12) fill General/background · 반경 8, SelectItem 5상태(selected-focus 신설 = 체크 + accent) · 반경 6, 예시 Select / closed · open, Form 섹션으로 편입",
       "render": "done"
     },
     "form-search": {
       "overrides": { "shadow": "none", "filled": "variant" },
-      "note": "폼 컨트롤 플랫 규칙 — 검색 박스 그림자 제거. filled 변형 추가(variant=\"filled\" = bg-card) — 회색 캔버스(bg-background) 위 시인성용, 흰 카드 위는 기본형. 렌더 차이 없음 — 재캡처 생략",
+      "note": "폼 컨트롤 플랫 규칙 — 검색 박스 그림자 제거. filled 변형 추가(variant=\"filled\" = bg-card) — 회색 캔버스(bg-background) 위 시인성용, 흰 카드 위는 기본형. 렌더 차이 없음 — 재캡처 생략. 2026-09-14: 필드 표면 = bg-card 상시 규칙으로 filled 가 기본이 됨(prop 은 호환용 무해 — 클론·갤러리 수정 불필요). 피그마 InputGroup fill General/background · 반경 8 · 링 11",
       "render": "done"
     },
     "data-table": {

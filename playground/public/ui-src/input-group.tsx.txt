@@ -18,9 +18,9 @@ function InputGroup({
       data-slot="input-group"
       role="group"
       className={cn(
-        "group/input-group relative flex w-full items-center rounded-md border border-border transition-[color,box-shadow] outline-none dark:bg-input/30",
-        // filled = 회색 캔버스(bg-background) 위 시인성용 흰 배경 변형
-        variant === "filled" && "bg-card",
+        // 필드 표면 = card(흰색) 상시(2026-09-14 확정) — 종전 filled 변형(회색 캔버스 시인성용)이 기본이 됐다.
+        // variant prop 은 호환용으로 남긴다(filled = 기본과 동일, 무해). 클론·갤러리의 variant="filled" 는 지우지 않아도 된다.
+        "group/input-group relative flex w-full items-center rounded-md border border-border bg-card transition-[color,box-shadow] outline-none dark:bg-input/30",
         "h-9 min-w-0 has-[>textarea]:h-auto",
 
         // Variants based on alignment.
