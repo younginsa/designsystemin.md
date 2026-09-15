@@ -14,6 +14,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
 import { Download, Info, MoreHorizontal, Pencil, Plus, Search, Trash2, Upload, X } from "lucide-react";
@@ -360,13 +361,13 @@ export default function Sales365ContractDetailPage() {
 
       {view === "loading" && <BlockSkeleton />}
       {view === "progress" && (
-        <div className="space-y-4 rounded-lg border bg-card p-6">
+        <Card variant="flat" className="space-y-4 p-6">
           <div className="flex items-center gap-4">
             <Progress value={62} className="flex-1" />
             <span className="font-mono text-sm text-secondary-foreground">62%</span>
           </div>
           <p className="text-sm text-secondary-foreground">계약 정보를 불러오는 중입니다…</p>
-        </div>
+        </Card>
       )}
 
       {view === "error" && (
@@ -781,7 +782,7 @@ export default function Sales365ContractDetailPage() {
           {/* ══ 우측 Details 패널 — Jira 문법: 개요 KV가 스크롤 내내 고정 ══ */}
           {/* top-22 = 셸 상단바 h-16(64px) + 24px 여백 — top-6은 상단바 아래로 숨었다(2026-09-10, 상세 5종 공통) */}
           <aside className="sticky top-22 w-80 shrink-0 space-y-4 self-start">
-            <section className="rounded-lg border bg-card p-5">
+            <Card variant="flat" className="p-6">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">계약 정보</h2>
                 {/* 수정 = 저강조 ghost(text-secondary-foreground) — FilterBar 필터 추가·RowsPerPage 초기화와
@@ -846,11 +847,11 @@ export default function Sales365ContractDetailPage() {
                   </dd>
                 </div>
               </dl>
-            </section>
+            </Card>
 
             {/* 문서·청구 요약(2026-09-08 확정) — 본문 섹션으로 가는 앵커. 전체를 레일에 넣으면
                 계약 정보 280 + 문서 260 + 청구 320 ≈ 860px로 뷰포트를 넘겨 sticky가 무력화된다 */}
-            <section className="rounded-lg border bg-card p-5">
+            <Card variant="flat" className="p-6">
               <dl className="space-y-3 text-sm">
                 <div className="flex items-center">
                   <dt className="w-24 shrink-0 text-secondary-foreground">문서</dt>
@@ -869,7 +870,7 @@ export default function Sales365ContractDetailPage() {
                   </dd>
                 </div>
               </dl>
-            </section>
+            </Card>
           </aside>
         </div>
       )}

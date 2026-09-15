@@ -14,7 +14,9 @@
 // 어휘 게이트 메모: skeleton 채택 완료(DES-205 해소, 2026-08-25) — 로딩=스켈레톤 · 프로그레스 바=실제 진행률 전용
 
 import * as React from "react";
+import { ListFooter } from "@ds/ui/ui/list-footer";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -78,11 +80,7 @@ import {
   TableRow,
 } from "@ds/ui/ui/table";
 
-import {
-  ROWS_PER_PAGE_DEFAULT,
-  RowsPerPage,
-} from "@ds/ui/ui/rows-per-page";
-import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
+import { ROWS_PER_PAGE_DEFAULT } from "@ds/ui/ui/rows-per-page";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
 import {
@@ -379,8 +377,9 @@ function DiagnosticsBody() {
   const searchParams = useSearchParams();
   const router = useRouter(); // 현재 진단 상태 행 클릭 → 상세 (A 문법)
   const [view, setView] = React.useState<ViewState>("default");
-  // 푸터 페이지네이션 문법(2026-08-26 전역 규칙) — 건수·페이지당은 하단
+  // 푸터 페이지네이션 문법(2026-08-26 전역 규칙) — 건수·페이지당은 하단. 페이지 상태·슬라이스는 2026-09-15 신설
   const [pageSize, setPageSize] = React.useState(ROWS_PER_PAGE_DEFAULT);
+  const [page, setPage] = React.useState(1);
   const [keyword, setKeyword] = React.useState("");
   const [selected, setSelected] = React.useState<ShipDiag | null>(null);
   // 대시보드에서 ?status=Camera 이상 등으로 진입하면 필터가 걸린 채로 열린다 — 값 문법 "is <상태>"
@@ -451,6 +450,8 @@ function DiagnosticsBody() {
       passSelect(filterValues.status, STATUS_LABEL[diagStatusOf(s)]) &&
       activeOk(s),
   );
+  const pageRows = rows.slice((page - 1) * pageSize, page * pageSize);
+  React.useEffect(() => setPage(1), [keyword, filterValues]);
 
   return (
     <TooltipProvider>
@@ -512,13 +513,13 @@ function DiagnosticsBody() {
         {/* ── 상태별 본문 ── */}
         {view === "loading" && <TableSkeleton />}
         {view === "progress" && (
-          <div className="space-y-4 rounded-lg border bg-card p-6">
+          <Card variant="flat" className="space-y-4 p-6">
             <div className="flex items-center gap-4">
               <Progress value={62} className="flex-1" />
               <span className="font-mono text-sm text-secondary-foreground">62%</span>
             </div>
             <p className="text-sm text-secondary-foreground">진단 현황을 불러오는 중입니다…</p>
-          </div>
+          </Card>
         )}
 
         {view === "error" && (
@@ -549,13 +550,15 @@ function DiagnosticsBody() {
                 <TableHead className="w-24">활성</TableHead>
                 <TableHead>호선 정보</TableHead>
                 <TableHead>상태</TableHead>
-                <TableHead>Navigation</TableHead>
-                <TableHead>Control</TableHead>
-                <TableHead>SVM</TableHead>
+                {/* 제품 3열 = 같은 고정 폭(2026-09-15 디자이너 확정) — 미설치("-")여도 폭 유지.
+                    칩 블록이 고정 폭이라 좁은 창에서는 열이 줄지 않고 표가 가로 스크롤된다(DS Table 컨테이너 overflow-x-auto) */}
+                <TableHead className="w-56">Navigation</TableHead>
+                <TableHead className="w-56">Control</TableHead>
+                <TableHead className="w-56">SVM</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {rows.map((s) => {
+              {pageRows.map((s) => {
                 const nav = s.products.find((p) => p.product === "Navigation");
                 const ctl = s.products.find((p) => p.product === "Control");
                 const svm = s.products.find((p) => p.product === "SVM");
@@ -621,9 +624,16 @@ function DiagnosticsBody() {
           </Table>
         )}
 
-        {/* ── 푸터 — 건수는 하단 규칙(2026-08-26 전역) ── */}
+        {/* ── 푸터 = DS ListFooter(2026-09-15 부품으로 통일) — 건수는 하단 규칙, 한 페이지면 페이저 생략 ── */}
         {view === "default" && (
-          <RowsPerPage value={pageSize} onChange={setPageSize} summary={`전체 ${rows.length}척`} />
+          <ListFooter
+            pageSize={pageSize}
+            onPageSizeChange={setPageSize}
+            total={rows.length}
+            unit="척"
+            page={page}
+            onPageChange={setPage}
+          />
         )}
       </div>
 
@@ -824,32 +834,7 @@ function DiagnosticsBody() {
                       })}
                     </TableBody>
                   </Table>
-                  <div className="flex justify-end pt-1">
-                    <Pagination className="mx-0 w-auto">
-                      <PaginationContent>
-                        <PaginationItem>
-                          <PaginationPrevious href="#" />
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationLink href="#" isActive>
-                            1
-                          </PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationLink href="#">2</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationEllipsis />
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationLink href="#">53</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationNext href="#" />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
-                  </div>
+                  {/* 장식 페이저(1 · 2 · … · 53) 제거(2026-09-15) — 이력 5건은 한 페이지라 페이저를 두지 않는다(해결 상태 히스토리는 실제 슬라이스 페이저 유지) */}
                 </section>
 
                 {/* 해결 상태 히스토리 — 시간·변경자 폭 축소, 변경은 화살표에서 줄바꿈, 메모 최대 폭 */}
@@ -1045,13 +1030,14 @@ function DiagProductCell({ row }: { row: ProductRow | undefined }) {
   }
   return (
     <TableCell className="py-4 align-top">
-      {/* 고정 6슬롯 — 3×2 그리드, 같은 위치 = 같은 기능 */}
-      <div className="grid w-fit grid-cols-3 gap-1">
+      {/* 고정 6슬롯 — 3×2, 같은 위치 = 같은 기능. 블록 폭 고정(w-50 = 칩 64×3 + 간격 4×2)이라 셀이 그 아래로 못 줄어든다 —
+          종전 grid-cols-3(minmax 0) 트랙은 좁은 창에서 0까지 줄어 칩이 겹쳤다(2026-09-15) */}
+      <div className="flex w-50 shrink-0 flex-wrap gap-1">
         {row.items.map(([label, tone]) => (
           <span
             key={label}
             className={
-              "flex h-7 w-16 items-center justify-center truncate rounded-sm text-xs " +
+              "flex h-7 w-16 shrink-0 items-center justify-center truncate rounded-sm text-xs " +
               TONE_CLS[tone]
             }
           >

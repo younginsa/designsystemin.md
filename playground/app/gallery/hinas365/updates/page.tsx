@@ -14,7 +14,9 @@
 // 어휘 게이트 메모: skeleton 채택 완료(DES-205 해소, 2026-08-25) — 로딩=스켈레톤 · 프로그레스 바=실제 진행률 전용
 
 import * as React from "react";
+import { ListFooter } from "@ds/ui/ui/list-footer";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import {
   ArrowDown,
@@ -36,14 +38,6 @@ import {
   DropdownMenuTrigger,
 } from "@ds/ui/ui/dropdown-menu";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@ds/ui/ui/empty";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@ds/ui/ui/pagination";
 import { Progress } from "@ds/ui/ui/progress";
 import {
   Select,
@@ -61,10 +55,7 @@ import {
   TableRow,
 } from "@ds/ui/ui/table";
 
-import {
-  ROWS_PER_PAGE_DEFAULT,
-  RowsPerPage,
-} from "@ds/ui/ui/rows-per-page";
+import { ROWS_PER_PAGE_DEFAULT } from "@ds/ui/ui/rows-per-page";
 import {
   FilterBar,
   OPS_DATE,
@@ -77,7 +68,6 @@ import {
 import { SearchBox } from "@ds/ui/ui/search-box";
 // 상세 조건 매처(2026-09-09 두 앱 통일) — 세일즈 365 목록과 같은 부품
 import { BASE_NOW, passDate, passSelect } from "../../_detail/filter-match";
-import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
 type UpdateStatus = "IMAGE READY" | "PENDING" | "DOWNLOAD REQUESTED";
@@ -173,6 +163,9 @@ export default function UpdatesPage() {
       const c = a[sort].localeCompare(b[sort]);
       return sortAsc ? c : -c;
     });
+  // 페이지 슬라이스(2026-09-15) — 종전엔 페이저가 "1" 고정 장식이었다. 조건·정렬이 바뀌면 1페이지로
+  const pageRows = rows.slice((page - 1) * pageSize, page * pageSize);
+  React.useEffect(() => setPage(1), [keyword, filterValues, sort, sortAsc]);
 
   return (
     <TooltipProvider>
@@ -209,13 +202,13 @@ export default function UpdatesPage() {
 
         {view === "loading" && <TableSkeleton />}
         {view === "progress" && (
-          <div className="space-y-4 rounded-lg border bg-card p-6">
+          <Card variant="flat" className="space-y-4 p-6">
             <div className="flex items-center gap-4">
               <Progress value={62} className="flex-1" />
               <span className="font-mono text-sm text-secondary-foreground">62%</span>
             </div>
             <p className="text-sm text-secondary-foreground">업데이트 목록을 불러오는 중입니다…</p>
-          </div>
+          </Card>
         )}
 
         {view === "error" && (
@@ -254,7 +247,7 @@ export default function UpdatesPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {rows.map((r) => (
+                  {pageRows.map((r) => (
                     <TableRow key={r.id + r.start}>
                       <TableCell className="font-mono text-sm">{r.id}</TableCell>
                       <TableCell>
@@ -285,25 +278,15 @@ export default function UpdatesPage() {
               </Table>
             </div>
 
-            <div className="flex items-center justify-between gap-2">
-              {/* 좌: 페이지당 표시 + 전체 건수 · 우: 페이지네이션 (2026-08-26 확정) */}
-              <RowsPerPage value={pageSize} onChange={setPageSize} summary={`전체 ${rows.length}건`} />
-              <Pagination className="mx-0 w-auto">
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious href="#" aria-disabled={page <= 1} onClick={() => setPage(1)} />
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink href="#" isActive>
-                      1
-                    </PaginationLink>
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationNext href="#" onClick={() => setPage(1)} />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </div>
+            {/* 푸터 = DS ListFooter(2026-09-15 부품으로 통일) — 한 페이지면 페이저 생략, 건수는 남는다 */}
+            <ListFooter
+              pageSize={pageSize}
+              onPageSizeChange={setPageSize}
+              total={rows.length}
+              unit="건"
+              page={page}
+              onPageChange={setPage}
+            />
           </>
         )}
       </div>

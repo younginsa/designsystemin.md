@@ -158,23 +158,56 @@ const TIMEZONES = [
 ];
 
 // 알림 데이터 — 패널(요약)과 알림 센터 모달이 같은 상태를 공유
+// 날짜 그룹 4단(2026-09-15 — 80건 목업에 맞춰 이번 주·이전 신설)
+const NOTIF_GROUPS = ["오늘", "어제", "이번 주", "이전"] as const;
+type NotifGroup = (typeof NOTIF_GROUPS)[number];
 type Notif = {
   id: string;
   ship: string | null;
   title: string;
   ago: string;
-  group: "오늘" | "어제";
+  group: NotifGroup;
   cat: "호선" | "업데이트";
   unread: boolean;
   detail: string;
 };
 
-const NOTIFICATIONS: Notif[] = [
+const NOTIF_SEEDS: Notif[] = [
   { id: "n1", ship: "HYUNDAI GLOBE 001", title: "업데이트 완료", ago: "방금 전", group: "오늘", cat: "호선", unread: true, detail: "common 2.1.0 적용이 완료되었습니다. 업데이트 화면에서 결과를 확인하세요." },
   { id: "n2", ship: "MAERSK SEOUL 002", title: "자가 진단 실패", ago: "2시간 전", group: "오늘", cat: "호선", unread: true, detail: "SVM 카메라 모듈 진단이 실패했습니다. 자가 진단 화면에서 로그를 확인하세요." },
   { id: "n3", ship: null, title: "common 2.1.0 릴리즈", ago: "어제", group: "어제", cat: "업데이트", unread: false, detail: "변경 사항은 릴리즈 노트에서 확인하세요." },
   { id: "n4", ship: null, title: "v3.99.20-anduril 다운로드 대기", ago: "어제", group: "어제", cat: "업데이트", unread: true, detail: "다운로드 대기 중인 업데이트가 있습니다. 업데이트 화면에서 진행하세요." },
 ];
+// 80건 목업(2026-09-15 디자이너 확정 — 대량 알림에서 스크롤·그룹·읽음 처리 확인용). 씨앗 4건 뒤로 결정적 생성, 호선:업데이트 = 2:1, 미읽음 약 30%
+const NOTIF_SHIPS = ["HYUNDAI GLOBE 001", "MAERSK SEOUL 002", "EVER GIVEN 003", "COSCO PRIDE 006", "HMM ALGECIRAS 004", "MSC GULSUN 007", "ONE APUS 005"];
+const SHIP_EVENTS: [string, string][] = [
+  ["업데이트 완료", "적용이 완료되었습니다. 업데이트 화면에서 결과를 확인하세요."],
+  ["자가 진단 실패", "진단 항목 중 이상이 감지되었습니다. 자가 진단 화면에서 로그를 확인하세요."],
+  ["구독 만료 임박", "구독이 30일 안에 만료됩니다. 계약 화면에서 갱신을 진행하세요."],
+  ["다운로드 완료", "업데이트 이미지 다운로드가 끝났습니다. 적용 대기 상태로 넘어갑니다."],
+  ["인터넷 미연결", "호선과의 연결이 끊겼습니다. 마지막 수신 이후 상태가 갱신되지 않습니다."],
+];
+const UPDATE_EVENTS: [string, string][] = [
+  ["common 2.1.0 릴리즈", "변경 사항은 릴리즈 노트에서 확인하세요."],
+  ["v3.99.20-anduril 다운로드 대기", "다운로드 대기 중인 업데이트가 있습니다. 업데이트 화면에서 진행하세요."],
+  ["navigation 3.7.0-rc.7 릴리즈", "릴리즈 노트가 발행되었습니다."],
+  ["번들 검증 완료", "번들 버전 비교 결과 호환성 문제가 없습니다."],
+];
+function buildNotifications(total: number): Notif[] {
+  const out = [...NOTIF_SEEDS];
+  for (let i = out.length; i < total; i++) {
+    const cat: Notif["cat"] = i % 3 === 2 ? "업데이트" : "호선";
+    const group: NotifGroup = i < 8 ? "오늘" : i < 20 ? "어제" : i < 44 ? "이번 주" : "이전";
+    const ago =
+      group === "오늘" ? `${(i % 8) + 3}시간 전` : group === "어제" ? "어제" : group === "이번 주" ? `${(i % 5) + 2}일 전` : `${(i % 3) + 1}주 전`;
+    const ship = cat === "호선" ? NOTIF_SHIPS[i % NOTIF_SHIPS.length] : null;
+    const [title, detail] = cat === "호선" ? SHIP_EVENTS[i % SHIP_EVENTS.length] : UPDATE_EVENTS[i % UPDATE_EVENTS.length];
+    const unread = i < 8 ? i % 2 === 0 : i % 4 === 0;
+    out.push({ id: `n${i + 1}`, ship, title, ago, group, cat, unread, detail });
+  }
+  return out;
+}
+const NOTIFICATIONS: Notif[] = buildNotifications(80);
 
 // 계정 전환 데모 — 로그인 계정에 따라 보이는 페이지 분기가 갈리므로 로고 옆에 (dev)/(qa)를 표기
 // 실제 분기·인증은 제품 몫, 여기서는 표기 규칙 시연용
@@ -360,8 +393,19 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
   const [notifs, setNotifs] = React.useState(NOTIFICATIONS);
   const [centerOpen, setCenterOpen] = React.useState(false);
   const [unreadOnly, setUnreadOnly] = React.useState(false);
-  const [expanded, setExpanded] = React.useState<string | null>(null);
-  const [centerTab, setCenterTab] = React.useState<"호선" | "업데이트">("호선");
+  // 펼침은 여러 행 동시에(2026-09-15 디자이너 확정) — id 집합
+  const [expanded, setExpanded] = React.useState<Set<string>>(() => new Set());
+  const toggleExpanded = (id: string) =>
+    setExpanded((s) => {
+      const next = new Set(s);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  // 탭 = 전체 · 호선 · 업데이트(2026-09-15 전체 신설)
+  type CenterTab = "전체" | "호선" | "업데이트";
+  const CENTER_TABS: CenterTab[] = ["전체", "호선", "업데이트"];
+  const [centerTab, setCenterTab] = React.useState<CenterTab>("전체");
 
   const crumb = CRUMBS.find((c) => pathname.startsWith(c.prefix));
   const unread = notifs.filter((n) => n.unread).length;
@@ -585,7 +629,8 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
             {/* 알림 — ov-notif 프리셋(NotificationPanel), 손 조합 금지. 모두 보기 → 알림 센터 모달 */}
             <NotificationPanel
               align="end"
-              items={notifs.map((n) => ({
+              // 벨 드롭다운은 요약 — 최근 5건만(80건 목업에서 메뉴가 화면을 덮지 않게, 2026-09-15). 전체는 알림 센터 모달
+              items={notifs.slice(0, 5).map((n) => ({
                 id: n.id,
                 title: n.ship ? `${n.ship} ${n.title}` : n.title,
                 ago: n.ago,
@@ -625,34 +670,36 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
               </div>
             </DialogHeader>
 
-            <Tabs value={centerTab} onValueChange={(v) => setCenterTab(v as "호선" | "업데이트")}>
-              <TabsList>
-                {(["호선", "업데이트"] as const).map((cat) => {
-                  const cnt = notifs.filter((n) => n.cat === cat && n.unread).length;
-                  return (
-                    <TabsTrigger key={cat} value={cat}>
-                      {cat}
-                      {/* 배지도 탭 선택 상태를 따라감 — 선택=진빨강 · 비선택=destructive/12 틴트(허용 목록) */}
-                      {cnt > 0 && (
-                        <Badge
-                          variant={centerTab === cat ? "destructive" : "secondary"}
-                          className={
-                            "ml-1.5 rounded-full px-1.5" +
-                            (centerTab === cat ? "" : " bg-destructive/12 text-destructive")
-                          }
-                        >
-                          {cnt}
-                        </Badge>
-                      )}
-                    </TabsTrigger>
-                  );
-                })}
-              </TabsList>
-              {(["호선", "업데이트"] as const).map((cat) => (
-                <TabsContent key={cat} value={cat} className="mt-3 space-y-4">
-                  {(["오늘", "어제"] as const).map((g) => {
+            <TooltipProvider>
+            <Tabs value={centerTab} onValueChange={(v) => setCenterTab(v as CenterTab)}>
+              {/* line 탭 좌정렬 + 전폭 밑줄은 래퍼가(2026-09-15 디자이너 확정, 레퍼런스 Notification) — 목록이 w-full이면 트리거가 늘어난다.
+                  배지 = 연빨강 원(destructive/12, 허용 틴트) + 빨간 숫자, 선택 여부 무관(채운 원은 너무 튀었다 — 2026-09-15) */}
+              <div className="border-b">
+                <TabsList variant="line">
+                  {CENTER_TABS.map((cat) => {
+                    const cnt = notifs.filter((n) => (cat === "전체" || n.cat === cat) && n.unread).length;
+                    return (
+                      <TabsTrigger key={cat} value={cat}>
+                        {cat}
+                        {cnt > 0 && (
+                          <Badge
+                            variant="secondary"
+                            className="h-5 min-w-5 justify-center rounded-full bg-destructive/12 px-1 text-destructive"
+                          >
+                            {cnt}
+                          </Badge>
+                        )}
+                      </TabsTrigger>
+                    );
+                  })}
+                </TabsList>
+              </div>
+              {CENTER_TABS.map((cat) => (
+                // 목록만 스크롤(약 480px) — 머리·탭·푸터는 고정. 80건 목업 기준
+                <TabsContent key={cat} value={cat} className="mt-3 max-h-120 space-y-4 overflow-y-auto pr-1">
+                  {NOTIF_GROUPS.map((g) => {
                     const items = notifs.filter(
-                      (n) => n.cat === cat && n.group === g && (!unreadOnly || n.unread)
+                      (n) => (cat === "전체" || n.cat === cat) && n.group === g && (!unreadOnly || n.unread)
                     );
                     if (items.length === 0) return null;
                     return (
@@ -663,32 +710,46 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
                             key={n.id}
                             className={
                               // 여백은 이 컨테이너 한 곳에서만 관리한다(자식 마진 금지 — 흩어지면 어긋난다).
-                              // 펼침 하단 12px = 상단 8px의 광학 등가: 위는 글자(줄 간격이 얹힌다),
-                              // 아래는 테두리 있는 카드(하드 에지)를 마주 보기 때문.
-                              "rounded-md px-2 " +
-                              (expanded === n.id ? "bg-muted pt-2 pb-3" : "py-2")
+                              // 행 높이 확대(2026-09-15 디자이너 확정, 레퍼런스 Notification): py-3, 펼침 하단은 16px(테두리 카드 마주 봄)
+                              "rounded-md px-3 " +
+                              (expanded.has(n.id) ? "bg-muted pt-3 pb-4" : "py-3")
                             }
                           >
-                            <div className="flex items-center gap-2">
-                              {/* 도트 고정 슬롯 — 패널과 동일 규칙 */}
-                              <span
-                                className={
-                                  "size-1.5 shrink-0 rounded-full " +
-                                  (n.unread ? "bg-primary" : "bg-transparent")
-                                }
-                              />
+                            {/* 열 = 도트(=읽음 처리 버튼) | 호선 칩 | 제목+시각 | 꺾쇠 — 전부 상단 정렬, 열 간격 24px.
+                                읽음 처리 버튼·'읽음' 라벨 폐기(2026-09-15 디자이너 확정, 레퍼런스 Jira): 왼쪽 파란 도트가 곧 액션 —
+                                hover 툴팁 '읽음 처리', 클릭하면 읽음. 읽은 행은 같은 폭의 빈 슬롯(칩·제목 정렬 유지) */}
+                            <div className="flex items-start gap-6">
+                              {n.unread ? (
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="-mt-1 size-7 shrink-0"
+                                      aria-label="읽음 처리"
+                                      onClick={() => markRead(n.id)}
+                                    >
+                                      <span className="size-1.5 rounded-full bg-primary" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>읽음 처리</TooltipContent>
+                                </Tooltip>
+                              ) : (
+                                <span className="-mt-1 size-7 shrink-0" aria-hidden />
+                              )}
                               {n.ship && (
+                                // 칩은 펼친 행(bg-muted) 위에서도 흰 면(bg-card) — 2026-09-15 디자이너 확정
                                 <Badge
                                   variant="outline"
-                                  className="w-36 shrink-0 rounded-sm font-mono font-normal"
+                                  className="w-36 shrink-0 rounded-sm bg-card font-mono font-normal"
                                 >
                                   {n.ship}
                                 </Badge>
                               )}
-                              <div className="min-w-0 flex-1">
+                              <div className="min-w-0 flex-1 space-y-0.5">
                                 <p
                                   className={
-                                    "truncate text-sm " +
+                                    "truncate text-sm leading-5 " +
                                     (n.unread ? "font-medium" : "text-secondary-foreground")
                                   }
                                 >
@@ -696,33 +757,30 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
                                 </p>
                                 <p className="text-xs text-secondary-foreground">{n.ago}</p>
                               </div>
-                              {n.unread ? (
-                                <Button size="sm" className="h-7 text-xs" onClick={() => markRead(n.id)}>
-                                  읽음 처리
-                                </Button>
-                              ) : (
-                                <span className="text-xs text-secondary-foreground">읽음</span>
-                              )}
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="size-7"
+                                className="-mt-1 size-7 shrink-0"
                                 aria-label="상세 펼치기"
-                                onClick={() => setExpanded((e) => (e === n.id ? null : n.id))}
+                                onClick={() => toggleExpanded(n.id)}
                               >
                                 {/* 닫힘=오른쪽 꺾쇠 · 열림=아래(90° 회전) */}
                                 <ChevronRight
                                   className={
                                     "size-4 transition-transform " +
-                                    (expanded === n.id ? "rotate-90" : "")
+                                    (expanded.has(n.id) ? "rotate-90" : "")
                                   }
                                 />
                               </Button>
                             </div>
-                            {expanded === n.id && (
-                              <p className="mt-2 rounded-md border bg-card px-3 py-2 text-xs text-secondary-foreground">
-                                {n.detail}
-                              </p>
+                            {/* 상세 행 = 도트 열 다음부터 오른쪽 끝까지 전폭(칩 유무 무관, 2026-09-15 디자이너 확정 — 업데이트 행과 같은 동작) */}
+                            {expanded.has(n.id) && (
+                              <div className="flex gap-6 pt-2">
+                                <span className="size-7 shrink-0" aria-hidden />
+                                <p className="min-w-0 flex-1 rounded-md border bg-card px-3 py-2 text-xs text-secondary-foreground">
+                                  {n.detail}
+                                </p>
+                              </div>
                             )}
                           </div>
                         ))}
@@ -732,6 +790,7 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
                 </TabsContent>
               ))}
             </Tabs>
+            </TooltipProvider>
 
             <DialogFooter className="sm:justify-between">
               {/* 안 읽음 있으면 파란 글자(누를 수 있음이 보이게) · 전부 읽으면 회색 disabled */}

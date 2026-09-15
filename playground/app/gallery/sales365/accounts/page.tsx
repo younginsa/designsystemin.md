@@ -11,8 +11,10 @@
 // 어휘 게이트 메모: skeleton 채택 완료(DES-205 해소, 2026-08-25) — 로딩=스켈레톤 · 프로그레스 바=실제 진행률 전용
 
 import * as React from "react";
+import { ListFooter } from "@ds/ui/ui/list-footer";
 import { useRouter } from "next/navigation";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
 import { Anchor, Building2, ChevronDown, Factory, Info, Plus, Ship } from "lucide-react";
@@ -47,10 +49,7 @@ import {
   TableHeader,
   TableRow,
 } from "@ds/ui/ui/table";
-import {
-  ROWS_PER_PAGE_DEFAULT,
-  RowsPerPage,
-} from "@ds/ui/ui/rows-per-page";
+import { ROWS_PER_PAGE_DEFAULT } from "@ds/ui/ui/rows-per-page";
 
 // 새 규칙(2026-08-26): 정렬은 헤더 전담 · 필터는 전부 FilterBar(2026-08-26 승격 완료)
 import {
@@ -113,8 +112,9 @@ type ViewState = "default" | "loading" | "progress" | "error" | "empty";
 export default function Sales365AccountsPage() {
   const router = useRouter(); // 행 클릭 → 상세 (A 문법)
   const [view, setView] = React.useState<ViewState>("default");
-  // 푸터 페이지네이션 문법(2026-08-26) — 페이지네이션 없어도 페이지당·전체 건수는 하단
+  // 푸터 페이지네이션 문법(2026-08-26) — 페이지네이션 없어도 페이지당·전체 건수는 하단. 페이지 상태·슬라이스는 2026-09-15 신설
   const [pageSize, setPageSize] = React.useState(ROWS_PER_PAGE_DEFAULT);
+  const [page, setPage] = React.useState(1);
   const [keyword, setKeyword] = React.useState("");
   const [filterValues, setFilterValues] = React.useState<FilterValues>({});
   const [extraShown, setExtraShown] = React.useState<string[]>([]);
@@ -133,6 +133,8 @@ export default function Sales365AccountsPage() {
       passSelect(filterValues.tier, r.tier) &&
       passDate(filterValues.createdOn, r.createdOn),
   );
+  const pageRows = rows.slice((page - 1) * pageSize, page * pageSize);
+  React.useEffect(() => setPage(1), [keyword, filterValues]);
 
   return (
     <div className="space-y-6">
@@ -163,13 +165,13 @@ export default function Sales365AccountsPage() {
 
       {view === "loading" && <TableSkeleton />}
       {view === "progress" && (
-        <div className="space-y-4 rounded-lg border bg-card p-6">
+        <Card variant="flat" className="space-y-4 p-6">
           <div className="flex items-center gap-4">
             <Progress value={62} className="flex-1" />
             <span className="font-mono text-sm text-secondary-foreground">62%</span>
           </div>
           <p className="text-sm text-secondary-foreground">계정 목록을 불러오는 중입니다…</p>
-        </div>
+        </Card>
       )}
 
       {view === "error" && (
@@ -207,7 +209,7 @@ export default function Sales365AccountsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {rows.map((r) => (
+            {pageRows.map((r) => (
               <TableRow
                 key={r.name}
                 className="cursor-pointer hover:bg-accent"
@@ -240,9 +242,16 @@ export default function Sales365AccountsPage() {
         </Table>
       )}
 
-      {/* ── 푸터 — 건수는 하단 규칙(2026-08-26): 페이지네이션 없어도 여기 ── */}
+      {/* ── 푸터 = DS ListFooter(2026-09-15 부품으로 통일) — 건수는 하단 규칙, 한 페이지면 페이저 생략 ── */}
       {view === "default" && (
-        <RowsPerPage value={pageSize} onChange={setPageSize} summary={`총 ${rows.length}개`} />
+        <ListFooter
+          pageSize={pageSize}
+          onPageSizeChange={setPageSize}
+          total={rows.length}
+          unit="개"
+          page={page}
+          onPageChange={setPage}
+        />
       )}
 
       {/* ── 계정 등록 모달 ── */}

@@ -12,6 +12,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import { Check, Info } from "lucide-react";
 
@@ -67,13 +68,13 @@ export default function Sales365ProductsPage() {
 
       {view === "loading" && <TableSkeleton />}
       {view === "progress" && (
-        <div className="space-y-4 rounded-lg border bg-card p-6">
+        <Card variant="flat" className="space-y-4 p-6">
           <div className="flex items-center gap-4">
             <Progress value={62} className="flex-1" />
             <span className="font-mono text-sm text-secondary-foreground">62%</span>
           </div>
           <p className="text-sm text-secondary-foreground">제품 목록을 불러오는 중입니다…</p>
-        </div>
+        </Card>
       )}
 
       {view === "error" && (

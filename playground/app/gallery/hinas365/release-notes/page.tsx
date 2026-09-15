@@ -18,7 +18,7 @@
 //      목업은 첫 클릭 성공 · 다음 클릭 실패를 번갈아 보여 두 상태를 모두 시연한다
 //             노트 제목 줄 우측 = 수정·삭제(ghost 아이콘, 삭제만 빨강)
 //             정보 위 = 발행(전폭 CTA, 미발행에만) + 다운로드(아이콘) — 발행되면 다운로드가 전폭 outline
-//   우측 레일: 액션 행 아래 정보 · (개발자용 Helm/Binary 표) · 첨부 파일이 각각 카드(rounded-lg border bg-card p-4) — 구분선 없이 카드 간격
+//   우측 레일: 액션 행 아래 정보 · (개발자용 Helm/Binary 표) · 첨부 파일이 각각 DS Card variant=flat p-4(2026-09-15 어휘화) — 구분선 없이 카드 간격
 //   제품 탭(COMMON·NAVIGATION·SVM·CONTROL)은 2026-09-11 사이드바 하위 페이지(?view=)로 이관 — 제목이 "{제품} 릴리즈 노트"
 //   용어: 표 데이터를 형식 골라 내보내면 내보내기, 있는 파일을 받으면 다운로드 — 노트는 파일이므로 다운로드
 //   ② 개발자용 뷰 — What's Changed PR 목록 + Helm Modules / Binary Versions / Assets
@@ -30,12 +30,12 @@ import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import {
-  ChevronDown,
-  ChevronRight,
   Code,
   Download,
+  ImagePlus,
   Info,
   Paperclip,
   Pencil,
@@ -84,6 +84,7 @@ import {
   TableHeader,
   TableRow,
 } from "@ds/ui/ui/table";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupText, InputGroupTextarea } from "@ds/ui/ui/input-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
 import { Textarea } from "@ds/ui/ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
@@ -292,14 +293,9 @@ function ReleaseNotesBody() {
             <Accordion type="multiple" value={openGroups} onValueChange={setOpenGroups}>
               {VERSION_TREE.map((g) => (
                 <AccordionItem key={g.group} value={g.group} className="border-b-0">
-                  {/* 머리글: 앞 셰브론 + 그룹명 · 우 건수. DS 뒤 셰브론(열림=위)은 이 트리에서만 숨긴다 */}
-                  <AccordionTrigger className="px-2 py-2 text-sm hover:no-underline [&>svg]:hidden">
+                  {/* 머리글: DS chevron="start"(2026-09-15 DS 회신 — 트리 문법 ▸ 닫힘 → ▾ 열림을 DS가 그린다) + 그룹명 · 우 건수 */}
+                  <AccordionTrigger chevron="start" className="items-center gap-1.5 px-2 py-2 text-sm hover:no-underline">
                     <span className="flex w-full items-center gap-1.5 pr-2">
-                      {openGroups.includes(g.group) ? (
-                        <ChevronDown className="size-4 shrink-0 text-secondary-foreground" />
-                      ) : (
-                        <ChevronRight className="size-4 shrink-0 text-secondary-foreground" />
-                      )}
                       <span className="flex-1 font-medium">{g.group}</span>
                       <span className="text-xs text-secondary-foreground">{g.count}</span>
                     </span>
@@ -480,7 +476,7 @@ function ReleaseNotesBody() {
               </>
             )}
             {/* 섹션마다 카드 하나(2026-09-11 디자이너 확정): 정보 · (개발자용 Helm/Binary) · 첨부 파일 — 구분선 대신 카드 간격 */}
-            <div className="space-y-2 rounded-lg border bg-card p-4">
+            <Card variant="flat" className="space-y-2 p-4">
               <p className="text-xs font-semibold uppercase text-secondary-foreground">정보</p>
               {audience === "user" ? (
                 <>
@@ -492,11 +488,11 @@ function ReleaseNotesBody() {
               ) : (
                 <p className="text-sm">릴리즈일 2026-05-11</p>
               )}
-            </div>
+            </Card>
 
             {audience === "dev" && (
               <>
-                <div className="space-y-2 rounded-lg border bg-card p-4">
+                <Card variant="flat" className="space-y-2 p-4">
                   <p className="text-xs font-semibold uppercase text-secondary-foreground">
                     Helm Modules (28)
                   </p>
@@ -518,8 +514,8 @@ function ReleaseNotesBody() {
                       ))}
                     </TableBody>
                   </Table>
-                </div>
-                <div className="space-y-2 rounded-lg border bg-card p-4">
+                </Card>
+                <Card variant="flat" className="space-y-2 p-4">
                   <p className="text-xs font-semibold uppercase text-secondary-foreground">
                     Binary Versions (14)
                   </p>
@@ -539,18 +535,19 @@ function ReleaseNotesBody() {
                       ))}
                     </TableBody>
                   </Table>
-                </div>
+                </Card>
               </>
             )}
 
-            <div className="space-y-2 rounded-lg border bg-card p-4">
+            <Card variant="flat" className="space-y-2 p-4">
               <p className="text-xs font-semibold uppercase text-secondary-foreground">
                 첨부 파일 {audience === "user" ? "0" : "(0)"}
               </p>
-              <p className="rounded-lg border border-dashed p-4 text-center text-sm text-secondary-foreground">
+              {/* 인라인 빈 상태 = DS Empty size=sm(2026-09-15 신설, 어휘 fb-empty) */}
+              <Empty size="sm" className="justify-center">
                 {audience === "user" ? "첨부 파일이 비어있습니다." : "첨부 파일 없음"}
-              </p>
-            </div>
+              </Empty>
+            </Card>
           </aside>
         </div>
       )}
@@ -558,13 +555,13 @@ function ReleaseNotesBody() {
 
       {view === "loading" && <TableSkeleton />}
       {view === "progress" && (
-        <div className="space-y-4 rounded-lg border bg-card p-6">
+        <Card variant="flat" className="space-y-4 p-6">
           <div className="flex items-center gap-4">
             <Progress value={62} className="flex-1" />
             <span className="font-mono text-sm text-secondary-foreground">62%</span>
           </div>
           <p className="text-sm text-secondary-foreground">릴리즈 노트를 불러오는 중입니다…</p>
-        </div>
+        </Card>
       )}
 
       {view === "error" && (
@@ -700,6 +697,12 @@ function CreateNoteDialog({
   const [title, setTitle] = React.useState("");
   const [body, setBody] = React.useState("## 새로운 기능\n- \n\n## 개선 사항\n- \n\n## 버그 수정\n- ");
   const [mode, setMode] = React.useState<"write" | "preview">("write");
+  // 이미지 삽입(2026-09-15 디자이너 확정, 피그마 코멘트 "이미지 파일 업로드 버튼 필요") — 필드 안 하단 툴바 버튼 → OS 파일 선택 → 본문 끝에 마크다운 이미지 줄
+  const imageInput = React.useRef<HTMLInputElement>(null);
+  const insertImage = (file: File | undefined) => {
+    if (!file) return;
+    setBody((b) => `${b.replace(/\s+$/, "")}\n\n![${file.name}](업로드 예정)\n`);
+  };
   const close = (v: boolean) => {
     if (!v) setVersion("");
     onOpenChange(v);
@@ -760,12 +763,45 @@ function CreateNoteDialog({
                 <TabsTrigger value="preview">미리보기</TabsTrigger>
               </TabsList>
               <TabsContent value="write">
-                <Textarea
-                  id="cn-body"
-                  rows={8}
-                  className="font-mono"
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
+                {/* DS InputGroup: 텍스트에어리어 + 필드 안 하단 툴바(block-end 애드온) — 이미지 삽입 버튼이 필드 테두리 안에 붙는다.
+                    제품 화면은 툴바가 위에 있지만 여기선 세그먼트 탭이 이미 위에 있어 아래로 둔다(2026-09-15) */}
+                <InputGroup>
+                  <InputGroupTextarea
+                    id="cn-body"
+                    rows={8}
+                    className="font-mono"
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                  />
+                  <InputGroupAddon align="block-end" className="justify-between border-t">
+                    <InputGroupText className="text-xs">이미지는 본문 끝에 마크다운으로 들어갑니다</InputGroupText>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <InputGroupButton
+                            size="icon-xs"
+                            aria-label="이미지 삽입"
+                            onClick={() => imageInput.current?.click()}
+                          >
+                            <ImagePlus />
+                          </InputGroupButton>
+                        </TooltipTrigger>
+                        <TooltipContent>이미지 삽입</TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </InputGroupAddon>
+                </InputGroup>
+                <input
+                  ref={imageInput}
+                  type="file"
+                  accept="image/*"
+                  className="sr-only"
+                  aria-hidden
+                  tabIndex={-1}
+                  onChange={(e) => {
+                    insertImage(e.target.files?.[0]);
+                    e.target.value = "";
+                  }}
                 />
               </TabsContent>
               <TabsContent value="preview">

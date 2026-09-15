@@ -156,7 +156,8 @@ export function AuditLog({
               <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
                 <div className="flex flex-wrap items-center gap-2">
                   {/* 분류 배지 — 병합 이력에서 섹션을 말하는 유일한 표기. 버튼: 누르면 그 분류로 필터 */}
-                  <Badge asChild variant="outline" className="cursor-pointer font-normal hover:bg-accent hover:text-accent-foreground">
+                  {/* hover 는 DS Badge 가 button 렌더에도 준다(2026-09-14 확장) — 손 hover 클래스 제거 */}
+                  <Badge asChild variant="outline" className="cursor-pointer font-normal">
                     <button
                       type="button"
                       onClick={() => pickDomain(e.domain)}

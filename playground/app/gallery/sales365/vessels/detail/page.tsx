@@ -16,6 +16,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
 import { ArrowUpRight, ChevronDown, Info, Pencil, TriangleAlert } from "lucide-react";
@@ -62,7 +63,7 @@ const BASE = "/gallery/sales365";
 // 2열 KV 패널 — 본문 「제원」 섹션용(행이 많은 제원·전자장비)
 function SpecPanel({ title, rows }: { title: string; rows: [string, React.ReactNode][] }) {
   return (
-    <div className="rounded-lg border bg-card p-5">
+    <Card variant="flat" className="p-6">
       <h3 className="text-sm font-medium">{title}</h3>
       <dl className="mt-3 grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2">
         {rows.map(([k, v]) => (
@@ -72,7 +73,7 @@ function SpecPanel({ title, rows }: { title: string; rows: [string, React.ReactN
           </div>
         ))}
       </dl>
-    </div>
+    </Card>
   );
 }
 
@@ -187,13 +188,13 @@ export default function Sales365VesselDetailPage() {
 
       {view === "loading" && <BlockSkeleton />}
       {view === "progress" && (
-        <div className="space-y-4 rounded-lg border bg-card p-6">
+        <Card variant="flat" className="space-y-4 p-6">
           <div className="flex items-center gap-4">
             <Progress value={62} className="flex-1" />
             <span className="font-mono text-sm text-secondary-foreground">62%</span>
           </div>
           <p className="text-sm text-secondary-foreground">호선 정보를 불러오는 중입니다…</p>
-        </div>
+        </Card>
       )}
 
       {view === "error" && (
@@ -462,7 +463,7 @@ export default function Sales365VesselDetailPage() {
           {/* top-22 = 셸 상단바 h-16(64px) + 24px 여백 — top-6은 상단바 아래로 숨었다(2026-09-10, 상세 5종 공통) */}
           <aside className="sticky top-22 w-80 shrink-0 space-y-4 self-start">
             {/* 호선 정보 — 식별자·당사자·기본 정보 합본(와이어프레임 3카드 → 1패널). 수정 = 저강조 ghost */}
-            <section className="rounded-lg border bg-card p-5">
+            <Card variant="flat" className="p-6">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">호선 정보</h2>
                 <Button variant="ghost" size="sm" className="text-secondary-foreground">
@@ -534,10 +535,10 @@ export default function Sales365VesselDetailPage() {
                   <dd className="font-mono">2027-06-01</dd>
                 </div>
               </dl>
-            </section>
+            </Card>
 
             {/* 참여 계약 — 헤더 칩 3개를 레일 패널로. 값 자체가 계약 상세 링크, 앵커는 계약 이력 섹션 */}
-            <section className="rounded-lg border bg-card p-5">
+            <Card variant="flat" className="p-6">
               <h2 className="text-sm font-medium text-secondary-foreground">
                 <a href="#history" className="hover:underline">
                   참여 계약 ({CONTRACT_HISTORY.length})
@@ -553,7 +554,7 @@ export default function Sales365VesselDetailPage() {
                   </li>
                 ))}
               </ul>
-            </section>
+            </Card>
           </aside>
         </div>
       )}

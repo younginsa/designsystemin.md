@@ -18,6 +18,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
 import { Pencil, Plus } from "lucide-react";
@@ -150,13 +151,13 @@ export default function Sales365AccountDetailPage() {
 
       {view === "loading" && <BlockSkeleton />}
       {view === "progress" && (
-        <div className="space-y-4 rounded-lg border bg-card p-6">
+        <Card variant="flat" className="space-y-4 p-6">
           <div className="flex items-center gap-4">
             <Progress value={62} className="flex-1" />
             <span className="font-mono text-sm text-secondary-foreground">62%</span>
           </div>
           <p className="text-sm text-secondary-foreground">계정 정보를 불러오는 중입니다…</p>
-        </div>
+        </Card>
       )}
 
       {view === "error" && (
@@ -294,7 +295,7 @@ export default function Sales365AccountDetailPage() {
           {/* ══ 우측 Details 패널 — Jira 문법: 개요 KV가 스크롤 내내 고정 ══ */}
           {/* top-22 = 셸 상단바 h-16(64px) + 24px 여백 — top-6은 상단바 아래로 숨었다(2026-09-10, 상세 5종 공통) */}
           <aside className="sticky top-22 w-80 shrink-0 space-y-4 self-start">
-            <section className="rounded-lg border bg-card p-5">
+            <Card variant="flat" className="p-6">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">계정 정보</h2>
                 {/* 수정 = 저강조 ghost(text-secondary-foreground) — 4개 상세 페이지 공통(2026-09-08 확정) */}
@@ -335,10 +336,10 @@ export default function Sales365AccountDetailPage() {
                   <dd>{ACCOUNT.tier}</dd>
                 </div>
               </dl>
-            </section>
+            </Card>
 
             {/* 담당자 — 와이어프레임 담당자 카드(+추가 폼) 그대로 레일로 */}
-            <section className="rounded-lg border bg-card p-5">
+            <Card variant="flat" className="p-6">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">담당자</h2>
                 <Button
@@ -378,10 +379,10 @@ export default function Sales365AccountDetailPage() {
                   </div>
                 )}
               </div>
-            </section>
+            </Card>
 
             {/* 요약 — 헤더 메타(계약 N건 · 계약 호선 N척)를 앵커·링크로. 계약 상세의 문서·청구 요약과 같은 문법 */}
-            <section className="rounded-lg border bg-card p-5">
+            <Card variant="flat" className="p-6">
               <dl className="space-y-3 text-sm">
                 <div className="flex items-center">
                   <dt className="w-28 shrink-0 text-secondary-foreground">계약</dt>
@@ -400,7 +401,7 @@ export default function Sales365AccountDetailPage() {
                   </dd>
                 </div>
               </dl>
-            </section>
+            </Card>
           </aside>
         </div>
       )}

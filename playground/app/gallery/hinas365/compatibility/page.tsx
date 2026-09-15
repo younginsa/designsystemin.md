@@ -16,6 +16,7 @@
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import {
   ArrowRight,
@@ -60,7 +61,6 @@ import {
   TableHeader,
   TableRow,
 } from "@ds/ui/ui/table";
-import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 
 /* ---------------------------------------------------------------- 데이터 */
 
@@ -164,13 +164,13 @@ function CompatibilityBody() {
 
       {view === "loading" && <TableSkeleton />}
       {view === "progress" && (
-        <div className="space-y-4 rounded-lg border bg-card p-6">
+        <Card variant="flat" className="space-y-4 p-6">
           <div className="flex items-center gap-4">
             <Progress value={62} className="flex-1" />
             <span className="font-mono text-sm text-secondary-foreground">62%</span>
           </div>
           <p className="text-sm text-secondary-foreground">호환성 정보를 불러오는 중입니다…</p>
-        </div>
+        </Card>
       )}
 
       {view === "error" && (
@@ -426,7 +426,7 @@ function UpdateTab() {
   return (
     <div className="flex flex-col items-start gap-4 xl:flex-row">
       {/* 좌: 시작 버전(from) 트리 */}
-      <aside className="w-full shrink-0 space-y-3 rounded-lg border bg-card p-4 xl:w-80">
+      <Card variant="flat" className="w-full shrink-0 space-y-3 p-4 xl:w-80">
         <p className="text-sm font-medium">업데이트 시작 버전 (from)</p>
         <InputGroup variant="filled">
           <InputGroupAddon>
@@ -478,7 +478,7 @@ function UpdateTab() {
             </div>
           ))}
         </div>
-      </aside>
+      </Card>
 
       {/* 우: 업데이트 대상(TO) */}
       <div className="min-w-0 flex-1 space-y-4">

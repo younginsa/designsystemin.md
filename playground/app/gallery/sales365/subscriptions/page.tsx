@@ -17,6 +17,7 @@
 // - 조회 전용이라 프로그레스 바 없음 — 4상태(DEFAULT_STATES).
 
 import * as React from "react";
+import { ListFooter } from "@ds/ui/ui/list-footer";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -49,10 +50,7 @@ import {
   TableHeader,
   TableRow,
 } from "@ds/ui/ui/table";
-import {
-  ROWS_PER_PAGE_DEFAULT,
-  RowsPerPage,
-} from "@ds/ui/ui/rows-per-page";
+import { ROWS_PER_PAGE_DEFAULT } from "@ds/ui/ui/rows-per-page";
 
 const BASE = "/gallery/sales365";
 // 계약명 조립 규칙(2026-09-09) — 샘플은 패키지 + 척수로 적는다
@@ -187,8 +185,9 @@ const EXTRA_DEFAULTS = ["untilExpiry"];
 export default function SubscriptionListPage() {
   const router = useRouter();
   const [view, setView] = React.useState<ViewState>("default");
-  // 푸터 페이지네이션 문법(2026-08-26) — 페이지네이션 없어도 페이지당·전체 건수는 하단
+  // 푸터 페이지네이션 문법(2026-08-26) — 페이지네이션 없어도 페이지당·전체 건수는 하단. 페이지 상태·슬라이스는 2026-09-15 신설
   const [pageSize, setPageSize] = React.useState(ROWS_PER_PAGE_DEFAULT);
+  const [page, setPage] = React.useState(1);
 
   // 기본 = 취소 제외 + 만료까지 60일 — FilterBar 값 맵. 빈 상태의 [필터 초기화]는 기본값으로 되돌린다
   const [keyword, setKeyword] = React.useState("");
@@ -241,10 +240,13 @@ export default function SubscriptionListPage() {
       return x.localeCompare(y);
     });
 
-  // 푸터 요약 — 켜진 조건만 이어 붙인다(칩과 같은 "<op> <value>" 표기)
+  const pageRows = rows.slice((page - 1) * pageSize, page * pageSize);
+  React.useEffect(() => setPage(1), [keyword, filterValues]);
+
+  // 푸터 요약 — 켜진 조건만 이어 붙인다(칩과 같은 "<op> <value>" 표기). 건수 표기는 DS 푸터 기본("전체")에 맞춘다
   const cancelExcluded = Boolean(filterValues.status) && !passSelect(filterValues.status, "취소");
   const summary = [
-    `총 ${rows.length}건`,
+    `전체 ${rows.length}건`,
     filterValues.untilExpiry && `만료까지 ${filterValues.untilExpiry}`,
     filterValues.expiresOn && `만료일 ${filterValues.expiresOn}`,
     cancelExcluded && "취소 제외",
@@ -334,7 +336,7 @@ export default function SubscriptionListPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {rows.map((r) => {
+            {pageRows.map((r) => {
               const st = statusOf(r);
               const expiry = expiryOf(r);
               return (
@@ -421,12 +423,15 @@ export default function SubscriptionListPage() {
         </Table>
       )}
 
-      {/* ── 푸터 — 건수는 하단 규칙(2026-08-26) ── */}
+      {/* ── 푸터 = DS ListFooter(2026-09-15 부품으로 통일) — 건수는 하단 규칙, 한 페이지면 페이저 생략 ── */}
       {(view === "default" || view === "empty") && (
-        <RowsPerPage
-          value={pageSize}
-          onChange={setPageSize}
+        <ListFooter
+          pageSize={pageSize}
+          onPageSizeChange={setPageSize}
+          total={rows.length}
           summary={summary}
+          page={page}
+          onPageChange={setPage}
         />
       )}
     </div>

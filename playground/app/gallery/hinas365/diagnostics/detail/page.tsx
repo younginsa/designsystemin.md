@@ -20,6 +20,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import {
   ChevronRight,
@@ -65,7 +66,20 @@ import {
   TableHeader,
   TableRow,
 } from "@ds/ui/ui/table";
-import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
+
+// System JSON 원본(목업) — 모달의 상세 테이블과 같은 값. 원본 JSON 탭이 실제로 이 값을 보여준다(2026-09-15, 종전엔 토글이 장식이었다)
+const SYSTEM_RAW = {
+  network: {
+    status: false,
+    list: [
+      { name: "Desktop", address: "10.0.100.101", status: false },
+      { name: "Jetson", address: "10.0.100.10", status: false },
+      { name: "Firewall", address: "10.0.100.1", status: false },
+    ],
+  },
+  disk: { status: true },
+};
 
 /* ---------------------------------------------------------------- 상수 */
 
@@ -153,13 +167,13 @@ export default function DiagnosticDetailPage() {
 
       {view === "loading" && <BlockSkeleton />}
       {view === "progress" && (
-        <div className="space-y-4 rounded-lg border bg-card p-6">
+        <Card variant="flat" className="space-y-4 p-6">
           <div className="flex items-center gap-4">
             <Progress value={62} className="flex-1" />
             <span className="font-mono text-sm text-secondary-foreground">62%</span>
           </div>
           <p className="text-sm text-secondary-foreground">진단 데이터를 불러오는 중입니다…</p>
-        </div>
+        </Card>
       )}
 
       {view === "error" && (
@@ -183,7 +197,7 @@ export default function DiagnosticDetailPage() {
         <div className="flex flex-col items-start gap-4 xl:flex-row">
           {/* ── 좌: 진단 패널 ── */}
           <aside className="w-full shrink-0 space-y-4 xl:w-72">
-            <section className="space-y-3 rounded-lg border bg-card p-4">
+            <Card variant="flat" className="space-y-3 p-4">
               <div>
                 <p className="text-xs font-semibold uppercase text-secondary-foreground">
                   Reference Time
@@ -198,9 +212,9 @@ export default function DiagnosticDetailPage() {
                 <p className="text-sm font-medium">2026-07-24 10:06:44 KST</p>
                 <p className="text-xs text-secondary-foreground">4일 5시간 전</p>
               </div>
-            </section>
+            </Card>
 
-            <section className="space-y-2 rounded-lg border bg-card p-4">
+            <Card variant="flat" className="space-y-2 p-4">
               <p className="text-xs font-semibold uppercase text-secondary-foreground">
                 Diagnosis Details
               </p>
@@ -260,9 +274,9 @@ export default function DiagnosticDetailPage() {
                   </AccordionItem>
                 ))}
               </Accordion>
-            </section>
+            </Card>
 
-            <section className="space-y-2 rounded-lg border bg-card p-4">
+            <Card variant="flat" className="space-y-2 p-4">
               <p className="text-xs font-semibold uppercase text-secondary-foreground">
                 System Tools &amp; Resources
               </p>
@@ -282,7 +296,7 @@ export default function DiagnosticDetailPage() {
                   </button>
                 ))}
               </div>
-            </section>
+            </Card>
           </aside>
 
           {/* ── 우: 차트·히트맵 ── */}
@@ -306,7 +320,7 @@ export default function DiagnosticDetailPage() {
                   ["HDD Storage Usage 0%", "bg-success"],
                 ]}
               />
-              <section className="rounded-lg border bg-card p-4">
+              <Card variant="flat" className="p-4">
                 <h2 className="text-sm font-medium text-secondary-foreground">Network Status</h2>
                 <p className="text-xs text-secondary-foreground">
                   네트워크 인터페이스별 인/아웃바운드 트래픽 추이
@@ -317,7 +331,7 @@ export default function DiagnosticDetailPage() {
                     <EmptyDescription>제품이나 조회 기간을 변경해 보세요.</EmptyDescription>
                   </EmptyHeader>
                 </Empty>
-              </section>
+              </Card>
             </div>
 
             {/* Camera Status 히트맵 */}
@@ -392,14 +406,20 @@ export default function DiagnosticDetailPage() {
             <DialogTitle>System JSON</DialogTitle>
             <DialogDescription>SYSTEM 진단의 원본 데이터입니다.</DialogDescription>
           </DialogHeader>
-          <ToggleGroup type="single" variant="outline" size="sm" defaultValue="table" className="w-full">
-            <ToggleGroupItem value="table" className="flex-1">
-              상세 테이블
-            </ToggleGroupItem>
-            <ToggleGroupItem value="json" className="flex-1">
-              원본 JSON
-            </ToggleGroupItem>
-          </ToggleGroup>
+          {/* 표 | JSON 전환 = DS line 탭(2026-09-15 관리자 지시 — ToggleGroup 폐기). 탭이 실제로 패널을 바꾼다 */}
+          <Tabs defaultValue="table">
+            <div className="border-b">
+              <TabsList variant="line">
+                <TabsTrigger value="table">상세 테이블</TabsTrigger>
+                <TabsTrigger value="json">원본 JSON</TabsTrigger>
+              </TabsList>
+            </div>
+            <TabsContent value="json">
+              <pre className="max-h-96 overflow-auto rounded-lg border bg-muted p-4 font-mono text-xs">
+                {JSON.stringify(SYSTEM_RAW, null, 2)}
+              </pre>
+            </TabsContent>
+            <TabsContent value="table">
           <div className="max-h-96 overflow-y-auto rounded-lg border">
             <Table className="bg-card">
               <TableHeader>
@@ -430,6 +450,8 @@ export default function DiagnosticDetailPage() {
               </TableBody>
             </Table>
           </div>
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
 
@@ -492,7 +514,7 @@ function ChartCard({
   legend: [string, string][];
 }) {
   return (
-    <section className="rounded-lg border bg-card p-4">
+    <Card variant="flat" className="p-4">
       <h2 className="text-sm font-medium text-secondary-foreground">{title}</h2>
       <p className="text-xs text-secondary-foreground">{desc}</p>
       <div className="mt-2 flex flex-wrap gap-4">
@@ -503,14 +525,15 @@ function ChartCard({
           </span>
         ))}
       </div>
-      <div className="mt-3 flex h-48 items-center justify-center rounded-lg border border-dashed">
-        <p className="text-center text-sm text-secondary-foreground">
+      {/* 미채택 어휘 자리표시 = DS Empty size=sm(2026-09-15) — 차트 높이만 유지 */}
+      <Empty size="sm" className="mt-3 h-48 justify-center">
+        <p className="text-center">
           미채택: viz-line
           <br />
           <span className="text-xs">라인 차트 자리 — 어휘 채택 후 렌더</span>
         </p>
-      </div>
-    </section>
+      </Empty>
+    </Card>
   );
 }
 
@@ -530,7 +553,7 @@ function HeatmapCard({
   expandAll?: boolean;
 }) {
   return (
-    <section className="rounded-lg border bg-card p-4">
+    <Card variant="flat" className="p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
           <h2 className="text-sm font-medium text-secondary-foreground">{title}</h2>
@@ -589,7 +612,7 @@ function HeatmapCard({
           </tbody>
         </table>
       </div>
-    </section>
+    </Card>
   );
 }
 

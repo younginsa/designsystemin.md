@@ -14,6 +14,7 @@
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import {
   ArrowRight,
@@ -45,7 +46,6 @@ import {
   TableHeader,
   TableRow,
 } from "@ds/ui/ui/table";
-import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
 const PRODUCTS = ["Common", "Navigation", "SVM", "Control"];
@@ -111,13 +111,13 @@ function DevQaBody() {
 
         {view === "loading" && <TableSkeleton />}
         {view === "progress" && (
-          <div className="space-y-4 rounded-lg border bg-card p-6">
+          <Card variant="flat" className="space-y-4 p-6">
             <div className="flex items-center gap-4">
               <Progress value={62} className="flex-1" />
               <span className="font-mono text-sm text-secondary-foreground">62%</span>
             </div>
             <p className="text-sm text-secondary-foreground">데이터를 불러오는 중입니다…</p>
-          </div>
+          </Card>
         )}
 
         {view === "error" && (
@@ -144,7 +144,7 @@ function VulnTab({ empty }: { empty: boolean }) {
 
   return (
     <div className="space-y-4">
-      <section className="space-y-4 rounded-lg border bg-card p-6">
+      <Card variant="flat" className="space-y-4 p-6">
         <div>
           <h2 className="text-sm font-medium text-secondary-foreground">제품 &amp; 버전 선택</h2>
           <p className="text-xs text-secondary-foreground">
@@ -201,11 +201,11 @@ function VulnTab({ empty }: { empty: boolean }) {
             </Select>
           </div>
         </div>
-      </section>
+      </Card>
 
       {selected && (
         <>
-          <section className="flex flex-wrap items-center justify-between gap-4 rounded-lg border bg-card p-6">
+          <Card variant="flat" className="flex flex-wrap items-center justify-between gap-4 p-6">
             <div>
               <h2 className="text-sm font-medium text-secondary-foreground">스캔 결과</h2>
               <p className="text-xs text-secondary-foreground">
@@ -215,7 +215,7 @@ function VulnTab({ empty }: { empty: boolean }) {
             <Button variant="outline">
               <RefreshCw className="size-4" /> 데이터 새로고침
             </Button>
-          </section>
+          </Card>
 
           {empty ? (
             <Empty className="border border-dashed">
@@ -228,10 +228,10 @@ function VulnTab({ empty }: { empty: boolean }) {
             <>
               <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
                 {SEVERITIES.map((s) => (
-                  <div key={s.key} className="rounded-lg border bg-card p-4">
+                  <Card variant="flat" key={s.key} className="p-4">
                     <p className={"text-xs font-semibold uppercase " + s.cls}>{s.key}</p>
                     <p className={"text-3xl font-bold " + s.cls}>{s.value}</p>
-                  </div>
+                  </Card>
                 ))}
               </div>
 
@@ -311,7 +311,7 @@ function BundleTab() {
 
   return (
     <div className="space-y-4">
-      <section className="space-y-4 rounded-lg border bg-card p-6">
+      <Card variant="flat" className="space-y-4 p-6">
         <div>
           <h2 className="text-sm font-medium text-secondary-foreground">제품 &amp; 버전 선택</h2>
           <p className="text-xs text-secondary-foreground">
@@ -381,10 +381,10 @@ function BundleTab() {
         <div className="flex justify-end">
           <Button onClick={() => setCompared(true)}>비교하기</Button>
         </div>
-      </section>
+      </Card>
 
       {compared && (
-        <section className="rounded-lg border bg-card">
+        <Card variant="flat">
           <div className="border-b p-6">
             <h2 className="text-sm font-medium text-secondary-foreground">비교 결과</h2>
             <p className="text-xs text-secondary-foreground">
@@ -403,7 +403,7 @@ function BundleTab() {
               </Button>
             </Empty>
           </div>
-        </section>
+        </Card>
       )}
     </div>
   );
@@ -416,7 +416,7 @@ function NotesTab() {
   const [version, setVersion] = React.useState("");
 
   return (
-    <section className="space-y-4 rounded-lg border bg-card p-6">
+    <Card variant="flat" className="space-y-4 p-6">
       <div>
         <h2 className="text-sm font-medium text-secondary-foreground">제품 &amp; 버전 선택</h2>
         <p className="text-xs text-secondary-foreground">
@@ -476,7 +476,7 @@ function NotesTab() {
         </div>
         <Button disabled={!product}>갱신</Button>
       </div>
-    </section>
+    </Card>
   );
 }
 

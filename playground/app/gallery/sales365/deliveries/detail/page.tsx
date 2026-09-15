@@ -18,6 +18,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
 import { Download, Info, Paperclip, Pencil, Plus, Upload } from "lucide-react";
@@ -165,13 +166,13 @@ export default function Sales365DeliveryDetailPage() {
 
       {view === "loading" && <BlockSkeleton />}
       {view === "progress" && (
-        <div className="space-y-4 rounded-lg border bg-card p-6">
+        <Card variant="flat" className="space-y-4 p-6">
           <div className="flex items-center gap-4">
             <Progress value={62} className="flex-1" />
             <span className="font-mono text-sm text-secondary-foreground">62%</span>
           </div>
           <p className="text-sm text-secondary-foreground">납품 제품 정보를 불러오는 중입니다…</p>
-        </div>
+        </Card>
       )}
 
       {view === "error" && (
@@ -317,7 +318,7 @@ export default function Sales365DeliveryDetailPage() {
           {/* top-22 = 셸 상단바 h-16(64px) + 24px 여백 — top-6은 상단바 아래로 숨었다(2026-09-10, 상세 5종 공통) */}
           <aside className="sticky top-22 w-80 shrink-0 space-y-4 self-start">
             {/* 일정 — 이 엔티티의 편집 가능 필드. 수정 = 저강조 ghost(4개 상세 페이지 공통) */}
-            <section className="rounded-lg border bg-card p-5">
+            <Card variant="flat" className="p-6">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">일정</h2>
                 <Button
@@ -340,9 +341,9 @@ export default function Sales365DeliveryDetailPage() {
                   <dd className="font-mono">2027-05-01</dd>
                 </div>
               </dl>
-            </section>
+            </Card>
 
-            <section className="rounded-lg border bg-card p-5">
+            <Card variant="flat" className="p-6">
               <h2 className="text-sm font-medium text-secondary-foreground">납품 제품 정보</h2>
               <dl className="mt-3 space-y-3 text-sm">
                 <div className="flex items-baseline">
@@ -375,10 +376,10 @@ export default function Sales365DeliveryDetailPage() {
                   </dd>
                 </div>
               </dl>
-            </section>
+            </Card>
 
             {/* 계약 정보 체인 — 계약 → 항목 → 슬롯 → 호선, 값 자체가 링크 */}
-            <section className="rounded-lg border bg-card p-5">
+            <Card variant="flat" className="p-6">
               <h2 className="text-sm font-medium text-secondary-foreground">계약 정보</h2>
               <dl className="mt-3 space-y-3 text-sm">
                 {CHAIN.map((c) => (
@@ -392,7 +393,7 @@ export default function Sales365DeliveryDetailPage() {
                   </div>
                 ))}
               </dl>
-            </section>
+            </Card>
           </aside>
         </div>
       )}
@@ -464,16 +465,16 @@ export default function Sales365DeliveryDetailPage() {
               <Label htmlFor="d-file">파일 첨부</Label>
               {/* 점선 영역 = label + 숨긴 file input(2026-09-10 디자이너 확정) — 클릭하면 OS 파일 선택창이 열린다.
                   고른 파일 이름이 안내 문구 자리에 온다. 드래그는 시각 스펙만(핸들러 없음) */}
-              <label
-                htmlFor="d-file"
-                className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed p-6 text-sm text-secondary-foreground hover:bg-accent"
-              >
-                <Paperclip className="size-4" />
-                {drawingFile ? (
-                  <span className="truncate text-foreground">{drawingFile}</span>
-                ) : (
-                  "파일을 클릭하거나 드래그하여 업로드"
-                )}
+              <label htmlFor="d-file" className="block cursor-pointer">
+                {/* 드롭존 = DS Empty size=sm(2026-09-15 신설) — 클릭·hover 는 label 이 받고, 드롭 표적이라 p-6 만 키운다 */}
+                <Empty size="sm" className="justify-center p-6 hover:bg-accent">
+                  <Paperclip className="size-4" />
+                  {drawingFile ? (
+                    <span className="truncate text-foreground">{drawingFile}</span>
+                  ) : (
+                    "파일을 클릭하거나 드래그하여 업로드"
+                  )}
+                </Empty>
                 <input
                   id="d-file"
                   type="file"

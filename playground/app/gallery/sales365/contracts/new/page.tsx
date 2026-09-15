@@ -22,8 +22,10 @@ import Link from "next/link";
 import { Calendar as CalendarIcon, ChevronsUpDown, Plus, Trash2 } from "lucide-react";
 
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
+import { Card } from "@ds/ui/ui/card";
 import { DEFAULT_STATES, StatePreview } from "@ds/ui/ui/state-preview";
 import { Badge } from "@ds/ui/ui/badge";
+import { Checkbox } from "@ds/ui/ui/checkbox";
 import { Button } from "@ds/ui/ui/button";
 import { Calendar } from "@ds/ui/ui/calendar";
 import {
@@ -125,6 +127,8 @@ type ViewState = "default" | "empty" | "loading" | "error";
 
 // 제원·메이커 필드 — 개별 입력·시리즈 공통(원본 호선 생성 화면 전체 필드 이식, 2026-09-01)
 function SpecFields() {
+  // 선급 다중 선택 = Checkbox 그룹(2026-09-15 관리자 지시 — ToggleGroup type=multiple 폐기). 고른 순서를 기억해 첫 번째가 주선급
+  const [classes, setClasses] = React.useState<string[]>([]);
   return (
     <>
       <div className="space-y-3 rounded-md border p-4">
@@ -132,13 +136,24 @@ function SpecFields() {
         <div className="space-y-1.5">
           {/* 주선급 표기 통일(2026-09-07) — ★ 기호를 버리고 목록·상세와 같은 말로 */}
           <Label>선급 (복수 선택 · 첫 번째가 주선급)</Label>
-          <ToggleGroup type="multiple" variant="outline" size="sm" className="justify-start">
+          <div className="flex flex-wrap gap-x-5 gap-y-2 pt-1">
             {CLASSES.map((c) => (
-              <ToggleGroupItem key={c} value={c}>
+              <label key={c} className="flex items-center gap-2 text-sm">
+                <Checkbox
+                  checked={classes.includes(c)}
+                  onCheckedChange={(v) =>
+                    setClasses((s) => (v === true ? [...s, c] : s.filter((x) => x !== c)))
+                  }
+                />
                 {c}
-              </ToggleGroupItem>
+                {classes[0] === c && (
+                  <Badge variant="secondary" className="font-normal">
+                    주선급
+                  </Badge>
+                )}
+              </label>
             ))}
-          </ToggleGroup>
+          </div>
           <p className="text-xs text-secondary-foreground">
             주선급은 승인도면 제출 상대입니다. 미입력이면 확정 후 호선 상세에서 추가할 수 있습니다
           </p>
@@ -334,7 +349,7 @@ export default function Sales365ContractCreatePage() {
       {view === "default" && (
         <>
           {/* ══ ① 기본 계약 정보 ══ */}
-          <section className="rounded-lg border bg-card p-5">
+          <Card variant="flat" className="p-6">
             <h2 className="text-sm font-medium text-secondary-foreground">기본 계약 정보</h2>
             <div className="mt-4 space-y-4">
               <div className="space-y-2">
@@ -457,11 +472,11 @@ export default function Sales365ContractCreatePage() {
                 기본 계약 정보 필수 4개 항목을 모두 입력하면 계약 항목이 자동으로 열립니다.
               </p>
             )}
-          </section>
+          </Card>
 
           {/* ══ ② 계약 항목 블록 (반복) ══ */}
           {items.map((it, itemIdx) => (
-            <section key={it.id} className="rounded-lg border bg-card p-5">
+            <Card variant="flat" key={it.id} className="p-6">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">
                   계약 항목 {itemIdx + 1}
@@ -687,7 +702,7 @@ export default function Sales365ContractCreatePage() {
                   })}
                 </div>
               )}
-            </section>
+            </Card>
           ))}
 
           {/* 항목 블록 반복 — 기본 정보 완성 후 상시 노출 */}

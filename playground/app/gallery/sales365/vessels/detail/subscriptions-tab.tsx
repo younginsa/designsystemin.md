@@ -12,6 +12,8 @@ import * as React from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
 import { Badge } from "@ds/ui/ui/badge";
+import { Empty } from "@ds/ui/ui/empty";
+import { Card } from "@ds/ui/ui/card";
 import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Button } from "@ds/ui/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@ds/ui/ui/tooltip";
@@ -351,7 +353,7 @@ export function SubscriptionsTab() {
       </div>
 
       {/* ── 안 A — 제품별 타임라인(클릭 = 선택) ── */}
-      <div className="space-y-1 rounded-lg border bg-card p-4">
+      <Card variant="flat" className="space-y-1 p-4">
         {shown.map((grp) => {
           const gst = statusOf(currentOf(grp));
           const active = grp.prod === picked;
@@ -383,11 +385,11 @@ export function SubscriptionsTab() {
             <AxisRow />
           </div>
         </div>
-      </div>
+      </Card>
 
       {/* ── 안 B — 선택 제품 확대 + 관리 ── */}
       {g && cur && st && (
-        <div className="rounded-lg border bg-card">
+        <Card variant="flat">
           <div className="flex flex-wrap items-center gap-3 border-b px-4 py-3">
             <span className="font-medium">{g.prod}</span>
             <span className="text-sm text-secondary-foreground">{cur.termMonths}개월 구독</span>
@@ -498,19 +500,24 @@ export function SubscriptionsTab() {
               </div>
             </div>
 
+            {/* 인라인 메모 = DS Empty size=sm(2026-09-15 신설) — 점선 한 줄 박스 */}
             {cur.early && (
-              <p className="rounded-md border border-dashed p-3 text-sm">
-                <span className="font-medium">조기 종료</span> ·{" "}
-                {EARLY_CODES[cur.early.code] ?? cur.early.code} · {cur.early.detail}
-              </p>
+              <Empty size="sm">
+                <p className="text-foreground">
+                  <span className="font-medium">조기 종료</span> ·{" "}
+                  {EARLY_CODES[cur.early.code] ?? cur.early.code} · {cur.early.detail}
+                </p>
+              </Empty>
             )}
             {st === "만료" && !cur.early && (
-              <p className="rounded-md border border-dashed p-3 text-sm text-secondary-foreground">
-                <span className="font-medium text-foreground">
-                  만료됐지만 갱신 계약이 없어 이 구독이 여전히 가장 최근입니다.
-                </span>{" "}
-                크레딧을 부여하면 만료일부터 적용 시작일까지가 공백 중단으로 함께 기록됩니다.
-              </p>
+              <Empty size="sm">
+                <p>
+                  <span className="font-medium text-foreground">
+                    만료됐지만 갱신 계약이 없어 이 구독이 여전히 가장 최근입니다.
+                  </span>{" "}
+                  크레딧을 부여하면 만료일부터 적용 시작일까지가 공백 중단으로 함께 기록됩니다.
+                </p>
+              </Empty>
             )}
 
             <div>
@@ -579,7 +586,7 @@ export function SubscriptionsTab() {
               )}
             </div>
           </div>
-        </div>
+        </Card>
       )}
     </div>
   );

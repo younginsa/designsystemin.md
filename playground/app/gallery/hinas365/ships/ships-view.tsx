@@ -18,7 +18,9 @@
 // - 원본 primary 는 네이비지만 DS 토큰(zinc-900)을 그대로 쓴다 — 토큰 반영 시 자동 추종
 
 import * as React from "react";
+import { ListFooter } from "@ds/ui/ui/list-footer";
 import { StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import {
   ArrowDown,
@@ -63,15 +65,6 @@ import {
 import { Input } from "@ds/ui/ui/input";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@ds/ui/ui/input-group";
 import { Label } from "@ds/ui/ui/label";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@ds/ui/ui/pagination";
 import { Popover, PopoverContent, PopoverTrigger } from "@ds/ui/ui/popover";
 import { Progress } from "@ds/ui/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@ds/ui/ui/radio-group";
@@ -92,7 +85,6 @@ import {
   TableRow,
 } from "@ds/ui/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
-import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
 import {
@@ -105,10 +97,7 @@ import {
 // 상세 조건 매처(2026-09-09 두 앱 통일) — 세일즈 365 목록과 같은 부품
 import { BASE_NOW, passDate, passSelect } from "../../_detail/filter-match";
 import { SearchBox } from "@ds/ui/ui/search-box";
-import {
-  ROWS_PER_PAGE_DEFAULT,
-  RowsPerPage,
-} from "@ds/ui/ui/rows-per-page";
+import { ROWS_PER_PAGE_DEFAULT } from "@ds/ui/ui/rows-per-page";
 import {
   VersionFilterChip,
   type VersionRow,
@@ -387,7 +376,38 @@ const TEST_SHIPS: ShipRow[] = [
   },
 ];
 
-const TOTALS = { delivery: 143, test: 27 };
+// 목록 실데이터화(2026-09-15 디자이너 확정) — 종전 TOTALS 상수(143·27)는 표시용 가짜 건수라 페이지당 50이 7행만 보였다.
+// 씨앗 행에서 결정적으로 필러를 만들어 실제 143·27행: 페이지당·페이지네이션·건수가 전부 거른 데이터에서 나온다(계약·납품 제품 목록의 FILLER 문법)
+const FILLER_NAMES = ["HYUNDAI", "MAERSK", "COSCO", "HMM", "EVER", "MSC", "ONE", "HAPAG", "CMA CGM", "YANG MING"];
+const FILLER_SUFFIX = ["GLORY", "SPIRIT", "HARMONY", "PIONEER", "HORIZON", "FORTUNE", "VICTORY"];
+const FILLER_SUBS: SubscriptionStatus[] = ["ACTIVE", "ACTIVE", "PENDING", "ACTIVE", "EXPIRED", "NONE"];
+const pad = (n: number, w: number) => String(n).padStart(w, "0");
+const stamp = (d: Date, i: number) =>
+  `${d.getFullYear()}-${pad(d.getMonth() + 1, 2)}-${pad(d.getDate(), 2)} ${pad(8 + (i % 10), 2)}:${pad((i * 7) % 60, 2)}`;
+function expandShips(seeds: ShipRow[], total: number, hullPrefix: string): ShipRow[] {
+  const out = [...seeds];
+  for (let i = out.length; i < total; i++) {
+    const seed = seeds[i % seeds.length];
+    const monthsAgo = (i % 18) + 1;
+    out.push({
+      ...seed,
+      imo: `98${pad(1000 + i * 37, 5)}`,
+      hull: i % 9 === 8 ? null : `${hullPrefix}${pad(2200 + i, 4)}`,
+      shipName: `${FILLER_NAMES[i % FILLER_NAMES.length]} ${FILLER_SUFFIX[i % FILLER_SUFFIX.length]} ${pad(i, 3)}`,
+      subscription: FILLER_SUBS[i % FILLER_SUBS.length],
+      security: i % 3 !== 0,
+      cloud: i % 4 !== 1,
+      // 기준일(2026-08-14)에서 하루씩 과거로 — 씨앗 행이 항상 위(상태 갱신일 내림차순)
+      statusUpdated: stamp(new Date(2026, 7, 13 - i), i),
+      statusUpdatedAgo: `${i + 2}일 전`,
+      createdAt: stamp(new Date(2026, 7 - monthsAgo, 1 + (i % 27)), i),
+      createdAgo: `${monthsAgo}개월 전`,
+    });
+  }
+  return out;
+}
+const DELIVERY_ALL = expandShips(DELIVERY_SHIPS, 143, "H");
+const TEST_ALL = expandShips(TEST_SHIPS, 27, "T");
 
 /* ---------------------------------------------------------------- 타입 */
 
@@ -475,9 +495,7 @@ export default function ShipsView({ kind }: { kind: ListKind }) {
   const [pageSize, setPageSize] = React.useState(ROWS_PER_PAGE_DEFAULT);
 
   const isTest = kind === "test";
-  const total = isTest ? TOTALS.test : TOTALS.delivery;
-  const PAGE_COUNT = Math.max(1, Math.ceil(total / pageSize));
-  const source = isTest ? TEST_SHIPS : DELIVERY_SHIPS;
+  const source = isTest ? TEST_ALL : DELIVERY_ALL;
   // 검색 제안 후보 — 검색 가능 필드(IMO·호선명) 값에서 도출, Hull은 보조줄
   const searchCandidates = React.useMemo(
     () => [
@@ -536,6 +554,10 @@ export default function ShipsView({ kind }: { kind: ListKind }) {
       const c = a[f].localeCompare(b[f]);
       return sortOrder === "asc" ? c : -c;
     });
+  // 페이지 슬라이스(2026-09-15) — 건수·페이지 수는 거른 결과에서. 조건·정렬·목록 종류가 바뀌면 1페이지로
+  const total = rows.length;
+  const pageRows = rows.slice((page - 1) * pageSize, page * pageSize);
+  React.useEffect(() => setPage(1), [keyword, filterValues, versionRows, sort, sortOrder, kind]);
 
   // 결과 없음 = 미리보기 강제 상태 + 실제 필터링이 0건으로 수렴한 경우
   const showNoResult = view === "no-result" || (view === "default" && rows.length === 0);
@@ -676,7 +698,7 @@ export default function ShipsView({ kind }: { kind: ListKind }) {
         {view === "default" && !showNoResult && (
           <>
             <ShipTable
-              rows={rows}
+              rows={pageRows}
               sort={sort}
               sortOrder={sortOrder}
               onSort={(f) => {
@@ -688,68 +710,15 @@ export default function ShipsView({ kind }: { kind: ListKind }) {
               }}
             />
 
-            <div className="flex items-center justify-between gap-4">
-              {/* 좌: 페이지당 표시 + 전체 건수 · 우: 페이지네이션 (2026-08-26 확정) */}
-              <RowsPerPage
-                value={pageSize}
-                onChange={(n) => {
-                  setPageSize(n);
-                  setPage(1);
-                }}
-                summary={`전체 ${total.toLocaleString()}척`}
-              />
-              <Pagination className="mx-0 w-auto justify-end">
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      href="#"
-                      aria-disabled={page <= 1}
-                      onClick={() => setPage((p) => Math.max(1, p - 1))}
-                    />
-                  </PaginationItem>
-                  {page > 2 && (
-                    <PaginationItem>
-                      <PaginationLink href="#" onClick={() => setPage(1)}>
-                        1
-                      </PaginationLink>
-                    </PaginationItem>
-                  )}
-                  {page > 3 && (
-                    <PaginationItem>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-                  )}
-                  {[page - 1, page, page + 1]
-                    .filter((p) => p >= 1 && p <= PAGE_COUNT)
-                    .map((p) => (
-                      <PaginationItem key={p}>
-                        <PaginationLink href="#" isActive={p === page} onClick={() => setPage(p)}>
-                          {p}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
-                  {page < PAGE_COUNT - 2 && (
-                    <PaginationItem>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-                  )}
-                  {page < PAGE_COUNT - 1 && (
-                    <PaginationItem>
-                      <PaginationLink href="#" onClick={() => setPage(PAGE_COUNT)}>
-                        {PAGE_COUNT}
-                      </PaginationLink>
-                    </PaginationItem>
-                  )}
-                  <PaginationItem>
-                    <PaginationNext
-                      href="#"
-                      aria-disabled={page >= PAGE_COUNT}
-                      onClick={() => setPage((p) => Math.min(PAGE_COUNT, p + 1))}
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </div>
+            {/* 푸터 = DS ListFooter(2026-09-15 부품으로 통일) — 건수·페이지 창·행 수 변경 시 1페이지 리셋 내장 */}
+            <ListFooter
+              pageSize={pageSize}
+              onPageSizeChange={setPageSize}
+              total={total}
+              unit="척"
+              page={page}
+              onPageChange={setPage}
+            />
           </>
         )}
       </div>
@@ -949,13 +918,13 @@ function SortHeader({
 // 로딩 — skeleton 채택 완료(DES-205 해소, 2026-08-25) — 로딩=스켈레톤 · 프로그레스 바=실제 진행률 전용
 function LoadingTable() {
   return (
-    <div className="space-y-4 rounded-lg border bg-card p-6">
+    <Card variant="flat" className="space-y-4 p-6">
       <div className="flex items-center gap-4">
         <Progress value={62} className="flex-1" />
         <span className="font-mono text-sm text-secondary-foreground">62%</span>
       </div>
       <p className="text-sm text-secondary-foreground">호선 목록을 불러오는 중입니다…</p>
-    </div>
+    </Card>
   );
 }
 
@@ -1491,7 +1460,7 @@ function ReviewCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-lg border bg-card">
+    <Card variant="flat">
       <div className="flex items-center justify-between border-b px-4 py-3">
         <h3 className="text-sm font-medium text-secondary-foreground">{title}</h3>
         <Button variant="ghost" size="sm" className="text-secondary-foreground" onClick={onEdit}>
@@ -1499,7 +1468,7 @@ function ReviewCard({
         </Button>
       </div>
       <div className="space-y-3 p-4">{children}</div>
-    </section>
+    </Card>
   );
 }
 

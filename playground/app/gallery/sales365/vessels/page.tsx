@@ -15,6 +15,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { Card } from "@ds/ui/ui/card";
 import { Skeleton, TableSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
 import { ArrowDown, ArrowUp, ChevronsUpDown, Info, Plus } from "lucide-react";
@@ -276,13 +277,13 @@ export default function Sales365VesselsPage() {
 
       {view === "loading" && <TableSkeleton />}
       {view === "progress" && (
-        <div className="space-y-4 rounded-lg border bg-card p-6">
+        <Card variant="flat" className="space-y-4 p-6">
           <div className="flex items-center gap-4">
             <Progress value={62} className="flex-1" />
             <span className="font-mono text-sm text-secondary-foreground">62%</span>
           </div>
           <p className="text-sm text-secondary-foreground">계약 호선 목록을 불러오는 중입니다…</p>
-        </div>
+        </Card>
       )}
 
       {view === "error" && (
