@@ -7,7 +7,7 @@
     "registry": "node scripts/build-registry.mjs",
     "storybook": "pnpm --filter playground storybook",
     "dev": "pnpm --filter playground dev",
-    "build": "pnpm ds:build && pnpm --filter playground build"
+    "build": "pnpm ds:build && pnpm --filter playground build && pnpm --filter playground build-storybook -o out/storybook"
   },
   "devDependencies": {
     "@types/node": "^26.1.2",

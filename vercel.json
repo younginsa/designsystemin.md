@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "pnpm install",
-  "buildCommand": "pnpm ds:build && pnpm --filter playground build",
+  "buildCommand": "pnpm ds:build && pnpm --filter playground build && pnpm --filter playground build-storybook -o out/storybook",
   "outputDirectory": "playground/out"
 }

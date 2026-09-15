@@ -75,6 +75,8 @@ const preview: Preview = {
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
     a11y: { test: "todo" },
     layout: "fullscreen",
+    // 사이드바 순서 — Foundations(팔레트·시맨틱·타이포) → Templates(프레임·본문 패턴) → DS(컴포넌트, 피그마 섹션 순은 레지스트리)
+    options: { storySort: { order: ["Foundations", "Templates", "DS"] } },
   },
   // 컴포넌트마다 Docs 페이지 자동 생성(타입에서 props 표).
   tags: ["autodocs"],
