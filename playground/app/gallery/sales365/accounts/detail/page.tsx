@@ -169,7 +169,7 @@ export default function Sales365AccountDetailPage() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>계정을 찾을 수 없습니다.</EmptyTitle>
             <EmptyDescription>삭제되었거나 접근 권한이 없는 계정입니다.</EmptyDescription>
@@ -295,7 +295,7 @@ export default function Sales365AccountDetailPage() {
           {/* ══ 우측 Details 패널 — Jira 문법: 개요 KV가 스크롤 내내 고정 ══ */}
           {/* top-22 = 셸 상단바 h-16(64px) + 24px 여백 — top-6은 상단바 아래로 숨었다(2026-09-10, 상세 5종 공통) */}
           <aside className="sticky top-22 w-80 shrink-0 space-y-4 self-start">
-            <Card variant="flat" className="p-6">
+            <Card variant="flat" className="p-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">계정 정보</h2>
                 {/* 수정 = 저강조 ghost(text-secondary-foreground) — 4개 상세 페이지 공통(2026-09-08 확정) */}
@@ -339,7 +339,7 @@ export default function Sales365AccountDetailPage() {
             </Card>
 
             {/* 담당자 — 와이어프레임 담당자 카드(+추가 폼) 그대로 레일로 */}
-            <Card variant="flat" className="p-6">
+            <Card variant="flat" className="p-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">담당자</h2>
                 <Button
@@ -382,7 +382,7 @@ export default function Sales365AccountDetailPage() {
             </Card>
 
             {/* 요약 — 헤더 메타(계약 N건 · 계약 호선 N척)를 앵커·링크로. 계약 상세의 문서·청구 요약과 같은 문법 */}
-            <Card variant="flat" className="p-6">
+            <Card variant="flat" className="p-4">
               <dl className="space-y-3 text-sm">
                 <div className="flex items-center">
                   <dt className="w-28 shrink-0 text-secondary-foreground">계약</dt>

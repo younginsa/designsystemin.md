@@ -4,7 +4,8 @@
 // 원천: hinas365 와이어프레임 v2 wireframe_s2_contract_create.html (구조 개편)
 //
 // 확정 구조
-// - ① 기본 계약 정보(4필드 필수 — 고객·유형·계약일·담당자) → 전부 채워지면 [+ 계약 항목 추가] 활성
+// - ① 기본 계약 정보(4필드 필수 — 고객·유형·계약일·영업 담당자) → 전부 채워지면 [+ 계약 항목 추가] 활성
+//   납품 담당자는 선택(2026-09-15 피그마 코멘트 반영 — 목록·상세에도 같이 표기). 담당 두 사람은 「영업 담당 · 납품 담당」으로 짝을 맞춘다
 //   계약명은 입력이 아니라 자동 생성(2026-09-09 확정: 계약일-고객-패키지-N척, 항목마다 이어 붙음) · 계약서 시리얼 넘버는 선택
 // - ② 계약 항목 블록(반복 가능): 제품 타입 라디오 2행 5선택 → 선택 시
 //   「선택된 제품 및 이행 종류」 패널이 라디오 아래 임베드 등장(이행 종류 5종, 2026-09-09) →
@@ -65,7 +66,7 @@ import {
   TableHeader,
   TableRow,
 } from "@ds/ui/ui/table";
-import { ToggleGroup, ToggleGroupItem } from "@ds/ui/ui/toggle-group";
+import { Tabs, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
 
 // 사람 요소 잠금(2026-09-04): 담당자 picker 항목 = 프로필(이니셜) + 이름 — _detail/person 공유
 import { Person } from "../../../_detail/person";
@@ -83,6 +84,8 @@ const BASE = "/gallery/sales365";
 
 const CUSTOMERS = ["대양해운", "한성해운", "동보선사", "우진해운", "신광해운"];
 const OWNERS = ["홍길동", "김담당", "이대리"];
+// 납품 담당 후보 — 납품팀 유저(영업 담당 풀과 다른 사람들)
+const DELIVERY_OWNERS = ["박서준", "최지우", "정도현"];
 
 // 제품 타입 5선택(패키지 4종 + 직접 선택) — 2행 라디오
 const PKG_OPTIONS = ["Enterprise", "Smart Standard", "Safety Forward", "Safety Around", "직접 선택"];
@@ -262,6 +265,7 @@ export default function Sales365ContractCreatePage() {
   const [ctype, setCtype] = React.useState("");
   const [date, setDate] = React.useState("");
   const [owner, setOwner] = React.useState("");
+  const [deliveryOwner, setDeliveryOwner] = React.useState(""); // 선택 — 필수 4개 게이트에 들지 않는다
   const [serial, setSerial] = React.useState("");
   const basicComplete = [customer, ctype, date, owner].every((v) => v.trim() !== "");
 
@@ -335,7 +339,7 @@ export default function Sales365ContractCreatePage() {
         />
       )}
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>계약을 생성할 수 없습니다.</EmptyTitle>
             <EmptyDescription>계정에 생성 권한이 없습니다. 관리자에게 문의하세요.</EmptyDescription>
@@ -400,16 +404,14 @@ export default function Sales365ContractCreatePage() {
                 <Label>
                   계약 유형 <span className="text-destructive">*</span>
                 </Label>
-                <ToggleGroup
-                  type="single"
-                  variant="outline"
-                  value={ctype}
-                  onValueChange={(v) => v && setCtype(v)}
-                  className="justify-start"
-                >
-                  <ToggleGroupItem value="신조">신조</ToggleGroupItem>
-                  <ToggleGroupItem value="개조">개조</ToggleGroupItem>
-                </ToggleGroup>
+                {/* 단일 선택 = RadioGroup(2026-09-15 관리자 지시 — ToggleGroup 폐기). 가로 배치 */}
+                <RadioGroup value={ctype} onValueChange={setCtype} className="flex gap-6">
+                  {(["신조", "개조"] as const).map((t) => (
+                    <label key={t} className="flex items-center gap-2 text-sm">
+                      <RadioGroupItem value={t} /> {t}
+                    </label>
+                  ))}
+                </RadioGroup>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="c-date">
@@ -437,14 +439,30 @@ export default function Sales365ContractCreatePage() {
               </div>
               <div className="space-y-2">
                 <Label>
-                  담당자 <span className="text-destructive">*</span>
+                  영업 담당자 <span className="text-destructive">*</span>
                 </Label>
                 <Select value={owner} onValueChange={setOwner}>
                   <SelectTrigger className="w-full max-w-sm">
-                    <SelectValue placeholder="담당자를 선택하세요" />
+                    <SelectValue placeholder="영업 담당자를 선택하세요" />
                   </SelectTrigger>
                   <SelectContent>
                     {OWNERS.map((o) => (
+                      <SelectItem key={o} value={o}>
+                        <Person name={o} />
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {/* 납품 담당자(선택, 2026-09-15 피그마 코멘트) — 같은 사람 picker, 납품팀 풀 */}
+              <div className="space-y-2">
+                <Label>납품 담당자 (선택)</Label>
+                <Select value={deliveryOwner} onValueChange={setDeliveryOwner}>
+                  <SelectTrigger className="w-full max-w-sm">
+                    <SelectValue placeholder="납품 담당자를 선택하세요" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {DELIVERY_OWNERS.map((o) => (
                       <SelectItem key={o} value={o}>
                         <Person name={o} />
                       </SelectItem>
@@ -738,17 +756,14 @@ export default function Sales365ContractCreatePage() {
             </DialogDescription>
           </DialogHeader>
 
-          <ToggleGroup
-            type="single"
-            variant="outline"
-            size="sm"
-            value={createMode}
-            onValueChange={(v) => v && setCreateMode(v)}
-            className="justify-start"
-          >
-            <ToggleGroupItem value="individual">개별 입력</ToggleGroupItem>
-            <ToggleGroupItem value="series">시리즈 생성</ToggleGroupItem>
-          </ToggleGroup>
+          {/* 입력 방식 전환 = DS Tabs 기본(세그먼트: 회색 트랙 전폭 + 흰 필, 2026-09-15 디자이너 확정 — 관리자 지시의 line 대신).
+              ToggleGroup 폐기. 아래 본문은 기존 조건 렌더 그대로 */}
+          <Tabs value={createMode} onValueChange={setCreateMode}>
+            <TabsList className="w-full">
+              <TabsTrigger value="individual">개별 입력</TabsTrigger>
+              <TabsTrigger value="series">시리즈 생성</TabsTrigger>
+            </TabsList>
+          </Tabs>
 
           {createMode === "individual" ? (
             <div className="space-y-4">

@@ -80,6 +80,8 @@ const CONTRACT = {
   ctype: "신조",
   date: "2026-01-15",
   owner: "홍길동",
+  /** 납품 담당(선택, 2026-09-15 피그마 코멘트) — 비어 있으면 미입력 표기 */
+  deliveryOwner: "박서준" as string | null,
   /** 계약서 시리얼 넘버 — 선택 필드(2026-09-09 신설). 비어 있으면 미입력 표기 */
   serial: "SN-2026-0115-01" as string | null,
   memo: "—",
@@ -284,7 +286,8 @@ const AUDIT: AuditEntry[] = [
   { at: "2026-08-20 14:32", domain: "배정 호선", action: "슬롯 제품별 금액 수정", tone: "modify", actor: "김민준", lines: ["C-2026-001-01 1번 · Hull 1001 · MV EXAMPLE"], fields: [{ label: "제품별 금액", from: "Control USD 22,000 /월 · SVM 미입력 · Control 무상 없음", to: "Control USD 20,000 /월 · SVM USD 15,000 /월 · Control 무상 3개월" }] },
   { at: "2026-08-20 11:05", domain: "개요", action: "계약 정보 수정", tone: "modify", actor: "김민준", fields: [{ label: "계약일", from: "2026-01-10", to: "2026-01-15" }] },
   { at: "2026-08-19 16:40", domain: "계약 항목", action: "계약 항목 취소", tone: "remove", actor: "이수영", lines: ["C-2026-001-02"], reason: "발주처 사양 변경" },
-  { at: "2026-08-18 09:15", domain: "개요", action: "계약 정보 수정", tone: "modify", actor: "이수영", fields: [{ label: "담당", from: "김민준", to: "홍길동" }] },
+  { at: "2026-08-18 09:15", domain: "개요", action: "계약 정보 수정", tone: "modify", actor: "이수영", fields: [{ label: "영업 담당", from: "김민준", to: "홍길동" }] },
+  { at: "2026-08-12 14:05", domain: "개요", action: "계약 정보 수정", tone: "modify", actor: "홍길동", fields: [{ label: "납품 담당", from: null, to: "박서준" }] },
   { at: "2026-08-15 13:05", domain: "배정 호선", action: "호선 배정", tone: "add", actor: "박지훈", lines: ["C-2026-001-01 3번 ← Hull 1003", "구독 시작일 · Control 2027-05-01 · SVM 미정"] },
   { at: "2026-08-11 11:02", domain: "청구", action: "청구서 삭제", tone: "remove", actor: "김민준", lines: ["2026-08-10 발행 · 금액 미입력", "대상 2건 · Hull 1003 Navigation 외 1건"] },
   { at: "2026-08-10 09:40", domain: "배정 호선", action: "슬롯 삭제", tone: "remove", actor: "김민준", lines: ["C-2026-001-01 6번"] },
@@ -379,7 +382,7 @@ export default function Sales365ContractDetailPage() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>계약을 찾을 수 없습니다.</EmptyTitle>
             <EmptyDescription>삭제되었거나 접근 권한이 없는 계약입니다.</EmptyDescription>
@@ -398,11 +401,12 @@ export default function Sales365ContractDetailPage() {
                 하선 패널(rounded-lg border p-5, 채움 없음)에 담긴다. 흰 바닥 위 하선은 "카드 위 카드"가
                 아니라 Jira Details 패널과 같은 문법이다. 2차의 좌측 레일은 소속이 약해 폐기.
                 항목 코드가 패널 제목이고 코드 설명은 [i] 툴팁으로 접는다. [+ 계약 항목 추가]는 그룹 하단 ══ */}
-            <section className="space-y-4">
+            {/* id·scroll-mt = 우측 레일 계약 항목 목차의 앵커(문서·청구와 같은 문법) */}
+            <section id="items" className="scroll-mt-24 space-y-4">
               <h2 className="text-sm font-medium text-secondary-foreground">계약 항목 (1)</h2>
 
               {/* 항목 C-2026-001-01 — 패널 안이 전부 이 항목의 것 */}
-              <div className="space-y-6 rounded-lg border p-5">
+              <div id={ITEM.code} className="scroll-mt-24 space-y-6 rounded-lg border p-5">
                 {/* 패널 제목 행 — 코드 · [i] 설명 · 패키지 · 척수 (와이어프레임 분류 체계) */}
                 <div className="flex flex-wrap items-center gap-3">
                   <h3 className="font-mono font-medium">{ITEM.code}</h3>
@@ -782,7 +786,7 @@ export default function Sales365ContractDetailPage() {
           {/* ══ 우측 Details 패널 — Jira 문법: 개요 KV가 스크롤 내내 고정 ══ */}
           {/* top-22 = 셸 상단바 h-16(64px) + 24px 여백 — top-6은 상단바 아래로 숨었다(2026-09-10, 상세 5종 공통) */}
           <aside className="sticky top-22 w-80 shrink-0 space-y-4 self-start">
-            <Card variant="flat" className="p-6">
+            <Card variant="flat" className="p-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">계약 정보</h2>
                 {/* 수정 = 저강조 ghost(text-secondary-foreground) — FilterBar 필터 추가·RowsPerPage 초기화와
@@ -841,17 +845,51 @@ export default function Sales365ContractDetailPage() {
                   <dd>{CONTRACT.date}</dd>
                 </div>
                 <div className="flex items-center">
-                  <dt className="w-24 shrink-0 text-secondary-foreground">담당</dt>
+                  <dt className="w-24 shrink-0 text-secondary-foreground">영업 담당</dt>
                   <dd>
                     <Person name={CONTRACT.owner} />
                   </dd>
                 </div>
+                {/* 납품 담당(선택, 2026-09-15 피그마 코멘트) — 등록 폼·목록과 같은 짝 이름 */}
+                <div className="flex items-center">
+                  <dt className="w-24 shrink-0 text-secondary-foreground">납품 담당</dt>
+                  <dd>{CONTRACT.deliveryOwner ? <Person name={CONTRACT.deliveryOwner} /> : <MissingMark />}</dd>
+                </div>
               </dl>
+            </Card>
+
+            {/* 계약 항목 목차(2026-09-15 피그마 코멘트 — "이 계약에 어떤 계약 항목들이 있는지 한 눈에"). 행 = 코드(본문 패널 앵커) · 패키지 · 척수.
+                취소된 02는 변경 이력(추가 → 취소)에만 있는 항목이라 본문 패널이 없다 — 링크 없이 취소됨으로 표기 */}
+            <Card variant="flat" className="p-4">
+              <h2 className="text-sm font-medium text-secondary-foreground">계약 항목 (1)</h2>
+              <ul className="mt-3 space-y-3 text-sm">
+                <li>
+                  <a href={`#${ITEM.code}`} className="font-mono font-medium text-primary hover:underline">
+                    {ITEM.code}
+                  </a>
+                  <p className="mt-1 flex items-center gap-2 text-xs text-secondary-foreground">
+                    <Badge variant="outline" className="border-primary font-normal text-primary">
+                      {ITEM.pkg}
+                    </Badge>
+                    척수 <span className="font-semibold text-foreground">{ITEM.assigned}</span> / {ITEM.total}
+                  </p>
+                </li>
+                <li className="text-secondary-foreground">
+                  <span className="font-mono">C-2026-001-02</span>
+                  <p className="mt-1 flex items-center gap-2 text-xs">
+                    <Badge variant="outline" className="font-normal">
+                      Safety Forward
+                    </Badge>
+                    2척
+                    <StatusBadge label="취소됨" tone="error" bg={false} className="text-xs" />
+                  </p>
+                </li>
+              </ul>
             </Card>
 
             {/* 문서·청구 요약(2026-09-08 확정) — 본문 섹션으로 가는 앵커. 전체를 레일에 넣으면
                 계약 정보 280 + 문서 260 + 청구 320 ≈ 860px로 뷰포트를 넘겨 sticky가 무력화된다 */}
-            <Card variant="flat" className="p-6">
+            <Card variant="flat" className="p-4">
               <dl className="space-y-3 text-sm">
                 <div className="flex items-center">
                   <dt className="w-24 shrink-0 text-secondary-foreground">문서</dt>

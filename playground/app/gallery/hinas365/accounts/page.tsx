@@ -161,7 +161,7 @@ export default function AccountsPage() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>등록된 계정이 없습니다.</EmptyTitle>
             <EmptyDescription>사용자가 초대되면 이 목록에 표시됩니다.</EmptyDescription>

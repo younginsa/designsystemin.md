@@ -531,7 +531,7 @@ function DiagnosticsBody() {
         )}
 
         {view === "empty" && (
-          <Empty className="border border-dashed">
+          <Empty>
             <EmptyHeader>
               <EmptyTitle>진단 데이터가 없습니다.</EmptyTitle>
               <EmptyDescription>호선이 데이터를 보내오면 진단 결과가 표시됩니다.</EmptyDescription>

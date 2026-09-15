@@ -185,7 +185,7 @@ export default function DiagnosticDetailPage() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>선택한 기간에 수집된 데이터가 없습니다</EmptyTitle>
             <EmptyDescription>제품이나 조회 기간을 변경해 보세요.</EmptyDescription>

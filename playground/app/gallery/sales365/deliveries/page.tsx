@@ -326,7 +326,7 @@ export default function Sales365DeliveriesPage() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>납품 제품이 없습니다.</EmptyTitle>
             <EmptyDescription>계약에서 호선을 배정하면 자동으로 생성됩니다.</EmptyDescription>

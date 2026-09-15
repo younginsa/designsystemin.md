@@ -184,7 +184,7 @@ export default function Sales365DeliveryDetailPage() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>납품 제품을 찾을 수 없습니다.</EmptyTitle>
             <EmptyDescription>삭제되었거나 접근 권한이 없습니다.</EmptyDescription>
@@ -318,7 +318,7 @@ export default function Sales365DeliveryDetailPage() {
           {/* top-22 = 셸 상단바 h-16(64px) + 24px 여백 — top-6은 상단바 아래로 숨었다(2026-09-10, 상세 5종 공통) */}
           <aside className="sticky top-22 w-80 shrink-0 space-y-4 self-start">
             {/* 일정 — 이 엔티티의 편집 가능 필드. 수정 = 저강조 ghost(4개 상세 페이지 공통) */}
-            <Card variant="flat" className="p-6">
+            <Card variant="flat" className="p-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">일정</h2>
                 <Button
@@ -343,7 +343,7 @@ export default function Sales365DeliveryDetailPage() {
               </dl>
             </Card>
 
-            <Card variant="flat" className="p-6">
+            <Card variant="flat" className="p-4">
               <h2 className="text-sm font-medium text-secondary-foreground">납품 제품 정보</h2>
               <dl className="mt-3 space-y-3 text-sm">
                 <div className="flex items-baseline">
@@ -379,7 +379,7 @@ export default function Sales365DeliveryDetailPage() {
             </Card>
 
             {/* 계약 정보 체인 — 계약 → 항목 → 슬롯 → 호선, 값 자체가 링크 */}
-            <Card variant="flat" className="p-6">
+            <Card variant="flat" className="p-4">
               <h2 className="text-sm font-medium text-secondary-foreground">계약 정보</h2>
               <dl className="mt-3 space-y-3 text-sm">
                 {CHAIN.map((c) => (

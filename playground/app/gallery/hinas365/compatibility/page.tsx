@@ -182,7 +182,7 @@ function CompatibilityBody() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>등록된 호환성 정보가 없습니다.</EmptyTitle>
             <EmptyDescription>Common 버전을 추가하면 매트릭스가 표시됩니다.</EmptyDescription>

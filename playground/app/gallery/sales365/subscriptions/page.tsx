@@ -302,7 +302,7 @@ export default function SubscriptionListPage() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>구독이 없습니다.</EmptyTitle>
             <EmptyDescription>계약 항목에 구독이 생기면 이 목록에 표시됩니다.</EmptyDescription>
@@ -311,7 +311,7 @@ export default function SubscriptionListPage() {
       )}
 
       {view === "default" && rows.length === 0 && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>조건에 맞는 구독이 없습니다.</EmptyTitle>
             <EmptyDescription>만료일 범위나 상태 필터를 조정해 보세요.</EmptyDescription>

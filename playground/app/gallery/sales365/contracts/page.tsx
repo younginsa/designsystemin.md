@@ -6,7 +6,8 @@
 // 와이어프레임 대조 메모
 // - 새 규칙(2026-08-26): 헤더는 정렬 전담(계약명·척수·계약일) · 필터는 전부 FilterBar
 //   (취소 여부 base 기본 정상 · 담당 base · 고객·계약 유형은 [+ 필터 추가])
-// - 행: 계약명(링크+ID 서브) / 고객 / 유형 칩 / 담당(프로필+이름, 2026-09-04) / 척수(유효 슬롯 수 하나 — v2: 전체 병기 금지) /
+// - 행: 계약명(링크+ID 서브) / 고객 / 유형 칩 / 영업 담당 · 납품 담당(프로필+이름, 2026-09-04 · 납품 담당 열은 2026-09-15 피그마 코멘트 반영,
+//   필터 스펙 표 6.1 밖 추가분 — PRD 갱신 대기. 미지정은 목록 빈 셀 규칙 '—') / 척수(유효 슬롯 수 하나 — v2: 전체 병기 금지) /
 //   계약일 / 취소 여부. 취소 행은 흐림 + 사유 서브
 // - 행 클릭 → S3 계약 상세
 // - 내보내기는 목록 공통 요소 규칙(CSV/XLSX 드롭다운)으로 통일 — 와이어프레임은 플레인 버튼
@@ -92,13 +93,32 @@ type Row = {
   ctype: "신조" | "개조";
   date: string;
   owner: string;
+  /** 납품 담당(선택) — 없으면 null. row()가 id별 표에서 채운다 */
+  deliveryOwner?: string | null;
   /** 계약 항목별 패키지·척수 — 계약명의 원천(제품별 이행 종류는 itemFromPackage 기본값) */
   items: { pkg: string; count: number }[];
   vessels: { valid: number; total: number };
 };
 /** 행 조립 — name은 항상 규칙에서 나온다(손으로 적지 않는다) */
+// 납품 담당 후보 — 납품팀 유저(영업 담당 풀과 다른 사람들). 지정된 계약만 id별로 적고 나머지는 미지정(null)
+const DELIVERY_OWNERS = ["박서준", "최지우", "정도현"];
+const DELIVERY_BY_ID: Record<string, string> = {
+  "C-2026-047": "박서준",
+  "C-2026-046": "최지우",
+  "C-2026-045": "정도현",
+  "C-2026-043": "박서준",
+  "C-2026-041": "최지우",
+  "C-2026-038": "박서준",
+  "C-2026-024": "정도현",
+  "C-2026-001": "박서준",
+  "C-2025-008": "최지우",
+  "C-2024-092": "정도현",
+  "C-2026-036": "정도현",
+  "C-2025-077": "박서준",
+};
 const row = (r: Omit<Row, "name">): Row => ({
   ...r,
+  deliveryOwner: r.deliveryOwner ?? DELIVERY_BY_ID[r.id] ?? null,
   name: contractName(r.date, r.customer, r.items.map((i) => itemFromPackage(i.pkg, i.count))),
 });
 
@@ -167,6 +187,7 @@ const FILLER: Row[] = Array.from({ length: 39 }, (_, i): Row => {
     ctype: i % 6 === 0 ? "개조" : "신조",
     date: `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`,
     owner: OWNERS[i % OWNERS.length],
+    deliveryOwner: i % 4 === 3 ? null : DELIVERY_OWNERS[i % DELIVERY_OWNERS.length],
     items: [{ pkg, count }],
     vessels: { valid: count, total: count },
   });
@@ -179,6 +200,7 @@ const SEARCH_CANDIDATES = [
   ...ROWS.map((r) => ({ label: r.name, sub: r.id })),
   ...CUSTOMERS.map((c) => ({ label: c })),
   ...OWNERS.map((o) => ({ label: o })),
+  ...DELIVERY_OWNERS.map((o) => ({ label: o })),
 ];
 
 // 필터 스펙 표 6.1 계약 리스트(2026-09-08) — 정본 filter-bar.stories.tsx CONTRACT_FILTERS.
@@ -189,7 +211,9 @@ const CONTRACT_FILTERS: FilterDef[] = [
   { name: "name", label: "계약명", kind: "text", operators: OPS_TEXT, placeholder: "계약명" },
   { name: "customer", label: "고객", options: CUSTOMERS, multi: true, operators: OPS_SELECT },
   { name: "ctype", label: "계약 유형", options: ["신조", "개조"], multi: true, operators: OPS_SELECT },
-  { name: "owner", label: "담당", options: OWNERS, multi: true, operators: OPS_SELECT },
+  { name: "owner", label: "영업 담당", options: OWNERS, multi: true, operators: OPS_SELECT },
+  // 납품 담당(2026-09-15 추가 — 스펙 표 6.1 밖, PRD 갱신 대기). 미지정 행은 '미지정' 옵션으로 거른다
+  { name: "deliveryOwner", label: "납품 담당", options: [...DELIVERY_OWNERS, "미지정"], multi: true, operators: OPS_SELECT },
   { name: "date", label: "계약일", kind: "date", operators: OPS_DATE, now: BASE_NOW },
 ];
 
@@ -218,12 +242,13 @@ export default function Sales365ContractsPage() {
   const rows = (view === "empty" ? [] : ROWS)
     .filter(
       (r) =>
-        (!q || `${r.name} ${r.customer} ${r.owner}`.toLowerCase().includes(q)) &&
+        (!q || `${r.name} ${r.customer} ${r.owner} ${r.deliveryOwner ?? ""}`.toLowerCase().includes(q)) &&
         passSelect(filterValues.cancelled, r.cancelled ? "취소됨" : "정상") &&
         passText(filterValues.name, r.name) &&
         passSelect(filterValues.customer, r.customer) &&
         passSelect(filterValues.ctype, r.ctype) &&
         passSelect(filterValues.owner, r.owner) &&
+        passSelect(filterValues.deliveryOwner, r.deliveryOwner ?? "미지정") &&
         passDate(filterValues.date, r.date),
     )
     .sort((a, b) => {
@@ -360,7 +385,7 @@ export default function Sales365ContractsPage() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>등록된 계약이 없습니다.</EmptyTitle>
             <EmptyDescription>계약을 등록하면 이 목록에 표시됩니다.</EmptyDescription>
@@ -379,7 +404,7 @@ export default function Sales365ContractsPage() {
           그 아래에서는 표가 더 줄지 않고 래퍼(overflow-x-auto)가 가로 스크롤을 낸다.
           창이 넓으면 선언 폭 비율대로 함께 커진다 */}
       {listVisible && (
-        <Table className="min-w-284 table-fixed bg-card">
+        <Table className="min-w-316 table-fixed bg-card">
           <TableHeader>
             <TableRow>
               {/* 계약명 384px — 좁아지면 2줄로 접히도록 여유를 준 값(종전 600은 한 줄 고정) */}
@@ -393,7 +418,8 @@ export default function Sales365ContractsPage() {
               {/* 아래 폭 선언의 합 = 표 min-w. 하나라도 바꾸면 min-w도 같이 고쳐야 한다 */}
               <TableHead className="w-28">고객</TableHead>
               <TableHead className="w-28">계약 유형</TableHead>
-              <TableHead className="w-32">담당</TableHead>
+              <TableHead className="w-32">영업 담당</TableHead>
+              <TableHead className="w-32">납품 담당</TableHead>
               <TableHead className="w-20">
                 <span className="inline-flex items-center gap-1">
                   <button type="button" className="inline-flex items-center gap-1 rounded-sm px-1 py-0.5 hover:bg-accent" onClick={() => sortBy("vessels")}>
@@ -445,6 +471,9 @@ export default function Sales365ContractsPage() {
                   <Person name={r.owner} />
                 </TableCell>
                 <TableCell>
+                  {r.deliveryOwner ? <Person name={r.deliveryOwner} /> : <span className="text-muted-foreground">—</span>}
+                </TableCell>
+                <TableCell>
                   {/* v2: 척수 = 취소되지 않은 유효 슬롯 수 하나 — 전체 병기 금지.
                       원래 몇 척이었는지는 계약 상세의 취소된 슬롯이 답한다 */}
                   <span className="font-medium">{r.vessels.valid}척</span>
@@ -479,6 +508,9 @@ export default function Sales365ContractsPage() {
                   </TableCell>
                   <TableCell>
                     <Skeleton className="h-5 w-10" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-6 w-20" />
                   </TableCell>
                   <TableCell>
                     <Skeleton className="h-6 w-20" />

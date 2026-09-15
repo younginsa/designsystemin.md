@@ -218,7 +218,7 @@ function VulnTab({ empty }: { empty: boolean }) {
           </Card>
 
           {empty ? (
-            <Empty className="border border-dashed">
+            <Empty>
               <EmptyHeader>
                 <EmptyTitle>스캔 결과가 없습니다.</EmptyTitle>
                 <EmptyDescription>이 버전에서 스캔된 이미지가 없습니다.</EmptyDescription>

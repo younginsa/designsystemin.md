@@ -183,7 +183,7 @@ export default function Sales365AccountsPage() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>등록된 계정이 없습니다.</EmptyTitle>
             <EmptyDescription>고객사·조선소 계정을 등록하면 이 목록에 표시됩니다.</EmptyDescription>

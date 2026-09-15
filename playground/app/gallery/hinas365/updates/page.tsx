@@ -220,7 +220,7 @@ export default function UpdatesPage() {
         )}
 
         {view === "empty" && (
-          <Empty className="border border-dashed">
+          <Empty>
             <EmptyHeader>
               <EmptyTitle>업데이트 이력이 없습니다.</EmptyTitle>
               <EmptyDescription>업데이트가 요청되면 이 목록에 표시됩니다.</EmptyDescription>

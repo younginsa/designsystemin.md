@@ -162,7 +162,7 @@ export default function Sales365UsersPage() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>등록된 유저가 없습니다.</EmptyTitle>
             <EmptyDescription>사내 유저를 등록하면 이 목록에 표시됩니다.</EmptyDescription>

@@ -295,7 +295,7 @@ export default function Sales365VesselsPage() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>등록된 계약 호선이 없습니다.</EmptyTitle>
             <EmptyDescription>

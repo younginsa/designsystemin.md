@@ -206,7 +206,7 @@ export default function Sales365VesselDetailPage() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>호선을 찾을 수 없습니다.</EmptyTitle>
             <EmptyDescription>삭제되었거나 접근 권한이 없는 호선입니다.</EmptyDescription>
@@ -463,7 +463,7 @@ export default function Sales365VesselDetailPage() {
           {/* top-22 = 셸 상단바 h-16(64px) + 24px 여백 — top-6은 상단바 아래로 숨었다(2026-09-10, 상세 5종 공통) */}
           <aside className="sticky top-22 w-80 shrink-0 space-y-4 self-start">
             {/* 호선 정보 — 식별자·당사자·기본 정보 합본(와이어프레임 3카드 → 1패널). 수정 = 저강조 ghost */}
-            <Card variant="flat" className="p-6">
+            <Card variant="flat" className="p-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-medium text-secondary-foreground">호선 정보</h2>
                 <Button variant="ghost" size="sm" className="text-secondary-foreground">
@@ -538,7 +538,7 @@ export default function Sales365VesselDetailPage() {
             </Card>
 
             {/* 참여 계약 — 헤더 칩 3개를 레일 패널로. 값 자체가 계약 상세 링크, 앵커는 계약 이력 섹션 */}
-            <Card variant="flat" className="p-6">
+            <Card variant="flat" className="p-4">
               <h2 className="text-sm font-medium text-secondary-foreground">
                 <a href="#history" className="hover:underline">
                   참여 계약 ({CONTRACT_HISTORY.length})

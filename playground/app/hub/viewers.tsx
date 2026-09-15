@@ -15,6 +15,8 @@ const loadDstk = () => (dstkCache ??= Promise.all([
   fetch("/dstk/typography.json").then((r) => r.json()),
   fetch("/dstk/products/control.json").then((r) => r.json()),
   fetch("/dstk/theme-map.json").then((r) => r.ok ? r.json() : null).catch(() => null),
+  // 틴트 7종은 스냅샷에만 있다(Theme 컬렉션 Tint 그룹) — 대조표 아래쪽 Tint 행의 원천
+  fetch("/dstk/figma-theme-snapshot.json").then((r) => r.ok ? r.json() : null).catch(() => null),
 ]));
 
 export function useDsViewers() {
@@ -72,44 +74,52 @@ export function useDsViewers() {
       }).join("");
     }
 
-    function renderSem() {
+    // 시맨틱 표 = 대조표 한 장(2026-09-15 병합 — 종전 「공통 시맨틱」 + Design system 「Theme × dstk 대조표」 두 표).
+    // 이름 = dstk 토큰(= Tailwind 클래스, 피그마 폴더 General/… 제거) · 모드 셀 = 12px 스와치 + 팔레트 칩 이름(mono) + hex ·
+    // 비고 = 피그마 그룹(Tint · Chart · Product)·번들(card · popover)·주석. 원천 theme-map.json(스냅샷, ds:build 대조 검증) +
+    // Theme 밖 dstk 토큰(extras: 상태 축·램프·비색상)은 같은 표 아래쪽에 semantic.json 해석값으로 이어 붙인다.
+    function renderSem(map: any, tints?: any[] | null) {
+      const box = document.getElementById("sem-table");
+      if (!box) return;
       const SMODES = ["light", "dark", "control"];
-      // 모드 셀 = 대조표식 2줄(참조 위·hex 아래, cellblock 재사용) — 종전 참조 컬럼의
-      // "외(모드별)" 뭉개기 제거(2026-09-02). 비색상 행 colspan은 모드 3칸.
-      const clean = (r: string) => (r || "").replace("{palette.", "").replace("}", "");
-      const rows = Object.entries(sem).filter(([k]) => !k.startsWith("$")).map(([name, tok]: [string, any]) => {
-        const val = tok.$value;
-        if (tok.$type !== "color") {
-          const raw = typeof val === "string" ? val : JSON.stringify(val);
-          return '<tr><td class="mono">' + name + '</td><td class="mono" colspan="3">' + raw + "</td></tr>";
-        }
-        const cells = SMODES.map((m) => {
-          const refStr = typeof val === "string" ? val : val[m];
-          const v = refStr ? resolveRef(refStr, m) : null;
-          return "<td>" + (v && v !== "TODO"
-            ? '<span class="sem-sw" style="background:' + v + '"></span><span class="mono cellblock"><span class="al">' + clean(refStr) + '</span><br><span class="hx">' + v + "</span></span>"
-            : '<span class="mono" style="color:var(--doc-muted)">—</span>') + "</td>";
+      const shortName = (theme: string) => theme.replace(/^(General|Tint|Chart|Product)\//, "");
+      const groupOf = (theme: string) => (theme.match(/^(Tint|Chart|Product)\//) || [])[1] || "";
+      const chipName = (a: string | null) => a ? a.replace(" mode/", " ").replace("Basic Foreground/", "") : "(고유값)";
+      const swatchCell = (hex: string, label: string) =>
+        '<td><span class="map-sw" style="background:' + hex + '"></span><span class="mono cellblock"><span class="al">' + label + '</span><br><span class="hx">' + hex + "</span></span></td>";
+      const dash = '<td><span class="mono" style="color:var(--doc-muted)">—</span></td>';
+      let rows = "";
+      if (map && map.rows) {
+        rows += map.rows.map((r: any) => {
+          const tokens: string[] = r.tokens || [];
+          const name = tokens[0] || shortName(r.theme);
+          const note = [groupOf(r.theme), tokens.length > 1 ? tokens.slice(1).join(" · ") + " 번들" : "", r.note || ""].filter(Boolean).join(" · ");
+          return '<tr><td class="mono al">' + name + "</td>" + swatchCell(r.light.hex, chipName(r.light.alias)) + swatchCell(r.dark.hex, chipName(r.dark.alias)) + swatchCell(r.control.hex, chipName(r.control.alias)) +
+            '<td class="hx" style="font-size:12px">' + note + "</td></tr>";
         }).join("");
-        return '<tr><td class="mono">' + name + "</td>" + cells + "</tr>";
+      }
+      // Tint 7종(Theme 컬렉션 Tint 그룹) — 스와치는 원색 위 알파(rgba), 칩 이름 = 원색 시맨틱 + 알파
+      const rgba = (hex: string, a: number) => { const n = parseInt(hex.slice(1), 16); return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")"; };
+      rows += (tints || []).map((t: any) => {
+        const name = t.class || t.name.replace(/^Tint\//, "");
+        const base = name.replace(/\/\d+$/, "");
+        const cells = SMODES.map((m) => { const v = t[m]; if (!v) return dash; const pct = Math.round(v.alpha * 100) + "%"; return '<td><span class="map-sw" style="background:' + rgba(v.hex, v.alpha) + '"></span><span class="mono cellblock"><span class="al">' + base + " " + pct + '</span><br><span class="hx">' + v.hex + " @" + pct + "</span></span></td>"; }).join("");
+        return '<tr><td class="mono al">' + name + "</td>" + cells + '<td class="hx" style="font-size:12px">Tint · ' + t.name + "</td></tr>";
       }).join("");
-      document.getElementById("sem-table")!.innerHTML =
-        '<table class="sem-t"><thead><tr><th>이름</th><th>Light (Cloud)</th><th>Dark (SVM·NAS)</th><th>Control</th></tr></thead><tbody>' + rows + "</tbody></table>";
-    }
-
-    function renderMap(map: any) {
-      const box = document.getElementById("theme-map-table");
-      if (!box || !map) return;
-      const short = (a: string | null) => a ? a.replace(" mode/", " ").replace("Semantic", "").replace("Basic Foreground/", "") : "(고유값)";
-      const cell = (v: any) => '<td><span class="map-sw" style="background:' + v.hex + '"></span><span class="mono cellblock"><span class="al">' + short(v.alias) + '</span><br><span class="hx">' + v.hex + "</span></span></td>";
-      const rows = map.rows.map((r: any) =>
-        '<tr><td class="mono al">' + r.theme + (r.note ? '<br><span class="hx" style="font-size:10px">' + r.note + "</span>" : "") + "</td>" + cell(r.light) + cell(r.dark) + cell(r.control) +
-        '<td class="mono">' + (r.tokens ? r.tokens.join(" · ") : '<span class="hx">참조 전용</span>') + "</td></tr>").join("");
-      const extras = map.extras.map((e: any) =>
-        '<tr><td class="mono al">' + e.name + '</td><td class="mono hx">' + e.ref + '</td><td class="hx">' + e.note + "</td></tr>").join("");
+      // Theme 밖 dstk 토큰 — 색이면 semantic.json 참조를 모드별로 해석해 같은 셀 문법, 아니면 참조 원문
+      const clean = (r: string) => (r || "").replace("{palette.", "").replace("}", "");
+      const extras: any[] = (map && map.extras) || [];
+      rows += extras.map((e: any) => {
+        const tok = sem && sem[e.name];
+        if (tok && tok.$type === "color") {
+          const val = tok.$value;
+          const cells = SMODES.map((m) => { const ref = typeof val === "string" ? val : val[m]; const hex = ref ? resolveRef(ref, m) : null; return hex && hex !== "TODO" ? swatchCell(hex, clean(ref)) : dash; }).join("");
+          return '<tr><td class="mono al">' + e.name + "</td>" + cells + '<td class="hx" style="font-size:12px">Theme 밖 · ' + (e.note || "") + "</td></tr>";
+        }
+        return '<tr><td class="mono al">' + e.name + '</td><td class="mono hx" colspan="3">' + e.ref + '</td><td class="hx" style="font-size:12px">Theme 밖 · ' + (e.note || "") + "</td></tr>";
+      }).join("");
       box.innerHTML =
-        '<table class="map-t map-main"><thead><tr><th>Theme 변수</th><th>Light (Cloud)</th><th>Dark (SVM·NAS)</th><th>Control</th><th>dstk 토큰</th></tr></thead><tbody>' + rows + "</tbody></table>" +
-        '<h3 style="margin-top:28px">Theme 외 dstk 토큰 (상태 축·램프·비색상)</h3>' +
-        '<table class="map-t"><thead><tr><th>토큰</th><th>참조</th><th>비고</th></tr></thead><tbody>' + extras + "</tbody></table>";
+        '<table class="map-t map-main"><thead><tr><th>이름</th><th>Light (Cloud)</th><th>Dark (SVM·NAS)</th><th>Control</th><th>비고</th></tr></thead><tbody>' + rows + "</tbody></table>";
     }
 
     function renderTypo() {
@@ -156,9 +166,9 @@ export function useDsViewers() {
     const palModes = document.getElementById("pal-modes")!;
     palModes.addEventListener("click", onPalClick);
 
-    loadDstk().then(([p, s, t, c, map]) => {
+    loadDstk().then(([p, s, t, c, map, snap]) => {
       pal = p; sem = s; typo = t; ctl = c;
-      renderPal(); renderSem(); renderTypo(); renderCtl(); renderMap(map);
+      renderPal(); renderSem(map, snap && snap.tints); renderTypo(); renderCtl();
       const up = document.getElementById("theme-map-updated");
       if (up && map && map.updated) up.textContent = "· 마지막 업데이트 " + map.updated;
     }).catch(() => {

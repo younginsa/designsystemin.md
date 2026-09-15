@@ -715,9 +715,10 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
                               (expanded.has(n.id) ? "bg-muted pt-3 pb-4" : "py-3")
                             }
                           >
-                            {/* 열 = 도트(=읽음 처리 버튼) | 호선 칩 | 제목+시각 | 꺾쇠 — 전부 상단 정렬, 열 간격 24px.
-                                읽음 처리 버튼·'읽음' 라벨 폐기(2026-09-15 디자이너 확정, 레퍼런스 Jira): 왼쪽 파란 도트가 곧 액션 —
-                                hover 툴팁 '읽음 처리', 클릭하면 읽음. 읽은 행은 같은 폭의 빈 슬롯(칩·제목 정렬 유지) */}
+                            {/* 열 = 도트(=읽음 처리 버튼) | 메시지(제목+시각, 남은 폭) | 맥락 태그(분류 라벨 · 호선 칩, 우측) | 꺾쇠 — 전부 상단 정렬, 열 간격 24px.
+                                메시지 먼저·맥락은 뒤(2026-09-15 디자이너 확정): 칩이 앞에 서면 칩 없는 행의 제목이 왼쪽으로 튀어 열이 들쭉날쭉했다.
+                                읽음 처리 버튼·'읽음' 라벨 폐기(2026-09-15, 레퍼런스 Jira): 왼쪽 파란 도트가 곧 액션 — hover 툴팁 '읽음 처리', 클릭하면 읽음.
+                                읽은 행은 같은 폭의 빈 슬롯(제목 정렬 유지) */}
                             <div className="flex items-start gap-6">
                               {n.unread ? (
                                 <Tooltip>
@@ -737,15 +738,6 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
                               ) : (
                                 <span className="-mt-1 size-7 shrink-0" aria-hidden />
                               )}
-                              {n.ship && (
-                                // 칩은 펼친 행(bg-muted) 위에서도 흰 면(bg-card) — 2026-09-15 디자이너 확정
-                                <Badge
-                                  variant="outline"
-                                  className="w-36 shrink-0 rounded-sm bg-card font-mono font-normal"
-                                >
-                                  {n.ship}
-                                </Badge>
-                              )}
                               <div className="min-w-0 flex-1 space-y-0.5">
                                 <p
                                   className={
@@ -757,6 +749,13 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
                                 </p>
                                 <p className="text-xs text-secondary-foreground">{n.ago}</p>
                               </div>
+                              {/* 맥락 = 호선 칩만(우측). 분류 라벨(호선·업데이트)은 칩이 이미 말해 폐기(2026-09-15).
+                                  칩은 펼친 행(bg-muted) 위에서도 흰 면(bg-card) */}
+                              {n.ship && (
+                                <Badge variant="outline" className="shrink-0 rounded-sm bg-card font-mono font-normal">
+                                  {n.ship}
+                                </Badge>
+                              )}
                               <Button
                                 variant="ghost"
                                 size="icon"

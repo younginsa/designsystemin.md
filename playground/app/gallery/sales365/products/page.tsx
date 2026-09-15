@@ -86,7 +86,7 @@ export default function Sales365ProductsPage() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>등록된 제품이 없습니다.</EmptyTitle>
             <EmptyDescription>제품 마스터가 등록되면 이 목록에 표시됩니다.</EmptyDescription>

@@ -658,7 +658,7 @@ export default function ShipsView({ kind }: { kind: ListKind }) {
         )}
 
         {view === "empty" && (
-          <Empty className="border border-dashed">
+          <Empty>
             <EmptyHeader>
               <EmptyTitle>등록된 데이터가 없습니다.</EmptyTitle>
               <EmptyDescription>
@@ -676,7 +676,7 @@ export default function ShipsView({ kind }: { kind: ListKind }) {
         )}
 
         {showNoResult && (
-          <Empty className="border border-dashed">
+          <Empty>
             <EmptyHeader>
               <EmptyTitle>검색 결과 없음</EmptyTitle>
               <EmptyDescription>다른 조건으로 검색해주세요.</EmptyDescription>

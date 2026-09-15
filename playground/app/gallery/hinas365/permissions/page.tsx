@@ -18,7 +18,7 @@ export default function PermissionsPage() {
     <div className="space-y-6">
       <h1 className="text-lg font-bold">기능별 계정권한</h1>
 
-      <Empty className="border border-dashed">
+      <Empty>
         <EmptyHeader>
           <EmptyTitle>화면 미확정</EmptyTitle>
           <EmptyDescription>

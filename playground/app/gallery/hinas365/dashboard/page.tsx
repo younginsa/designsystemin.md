@@ -156,7 +156,7 @@ export default function DashboardPage() {
         )}
 
         {view === "empty" && (
-          <Empty className="border border-dashed">
+          <Empty>
             <EmptyHeader>
               <EmptyTitle>표시할 데이터가 없습니다.</EmptyTitle>
               <EmptyDescription>연결된 호선이 등록되면 현황이 표시됩니다.</EmptyDescription>

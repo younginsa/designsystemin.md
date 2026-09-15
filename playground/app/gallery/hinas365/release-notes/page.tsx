@@ -124,29 +124,30 @@ const PUBLISHED_VERSIONS = VERSION_TREE.flatMap((g) => g.versions)
 const NOTE_FREE_VERSIONS = ["v4.0.6-rc.1", "v4.0.5-success", "v4.1.0-rc.1"];
 
 // 선택 노트의 편집 원문(목업) — 요약 박스 + 마크다운 본문. 화면의 정적 본문과 같은 내용
+// 본문은 한국어(2026-09-15 디자이너 확정) — 개발자용 GitHub PR 제목·Helm·바이너리 이름은 식별자라 그대로
 const NOTE_SUMMARY =
-  "Introduces authentication features, improves performance, and fixes critical bugs while adding security and operational enhancements.";
+  "인증 기능을 추가하고 성능을 개선했으며, 보안·운영 기능을 보강하면서 주요 버그를 수정했습니다.";
 const NOTE_BODY_MD = [
-  "# Release Notes v1.3.0",
+  "# 릴리즈 노트 v1.3.0",
   "",
-  "Release Date: June 25, 2026",
+  "릴리즈일: 2026년 6월 25일",
   "",
-  "## New Features",
+  "## 새로운 기능",
   "",
-  "### Team Workspace",
-  "- Introduced team workspaces for improved collaboration.",
-  "- Added role-based access management.",
-  "- Enabled resource sharing across team members.",
+  "### 팀 워크스페이스",
+  "- 협업을 위한 팀 워크스페이스를 도입했습니다.",
+  "- 역할 기반 접근 관리를 추가했습니다.",
+  "- 팀원 간 리소스 공유가 가능해졌습니다.",
   "",
-  "### Report Scheduling",
-  "- Users can schedule reports to be generated automatically.",
-  "- Supported delivery frequencies: Daily, Weekly, and Monthly.",
-  "- Added email delivery options for generated reports.",
+  "### 리포트 예약",
+  "- 리포트를 자동으로 생성하도록 예약할 수 있습니다.",
+  "- 발송 주기: 매일 · 매주 · 매월을 지원합니다.",
+  "- 생성된 리포트의 이메일 발송 옵션을 추가했습니다.",
   "",
-  "## Improvements",
+  "## 개선 사항",
   "",
-  "### Dashboard Experience",
-  "- Improved dashboard loading performance.",
+  "### 대시보드 경험",
+  "- 대시보드 로딩 성능을 개선했습니다.",
 ].join("\n");
 
 const HELM_MODULES: [string, string, string, string][] = [
@@ -387,35 +388,35 @@ function ReleaseNotesBody() {
                   />
                 ) : (
                   <>
-                <h3 className="border-b pb-2 text-xl font-bold">Release Notes v1.3.0</h3>
+                <h3 className="border-b pb-2 text-xl font-bold">릴리즈 노트 v1.3.0</h3>
                 <p className="text-sm">
-                  <span className="font-semibold">Release Date:</span> June 25, 2026
+                  <span className="font-semibold">릴리즈일:</span> 2026년 6월 25일
                 </p>
 
-                <h4 className="border-b pb-2 text-lg font-semibold">New Features</h4>
+                <h4 className="border-b pb-2 text-lg font-semibold">새로운 기능</h4>
                 <div className="space-y-1">
-                  <p className="font-medium">Team Workspace</p>
+                  <p className="font-medium">팀 워크스페이스</p>
                   <ul className="list-disc space-y-1 pl-5 text-sm">
-                    <li>Introduced team workspaces for improved collaboration.</li>
-                    <li>Added role-based access management.</li>
-                    <li>Enabled resource sharing across team members.</li>
+                    <li>협업을 위한 팀 워크스페이스를 도입했습니다.</li>
+                    <li>역할 기반 접근 관리를 추가했습니다.</li>
+                    <li>팀원 간 리소스 공유가 가능해졌습니다.</li>
                   </ul>
                 </div>
                 <div className="space-y-1">
-                  <p className="font-medium">Report Scheduling</p>
+                  <p className="font-medium">리포트 예약</p>
                   <ul className="list-disc space-y-1 pl-5 text-sm">
-                    <li>Users can schedule reports to be generated automatically.</li>
-                    <li>Supported delivery frequencies: Daily, Weekly, and Monthly.</li>
-                    <li>Added email delivery options for generated reports.</li>
+                    <li>리포트를 자동으로 생성하도록 예약할 수 있습니다.</li>
+                    <li>발송 주기: 매일 · 매주 · 매월을 지원합니다.</li>
+                    <li>생성된 리포트의 이메일 발송 옵션을 추가했습니다.</li>
                   </ul>
                 </div>
 
                 <Separator />
-                <h4 className="text-lg font-semibold">Improvements</h4>
+                <h4 className="text-lg font-semibold">개선 사항</h4>
                 <div className="space-y-1">
-                  <p className="font-medium">Dashboard Experience</p>
+                  <p className="font-medium">대시보드 경험</p>
                   <ul className="list-disc space-y-1 pl-5 text-sm">
-                    <li>Improved dashboard loading performance.</li>
+                    <li>대시보드 로딩 성능을 개선했습니다.</li>
                   </ul>
                 </div>
                   </>
@@ -573,7 +574,7 @@ function ReleaseNotesBody() {
       )}
 
       {view === "empty" && (
-        <Empty className="border border-dashed">
+        <Empty>
           <EmptyHeader>
             <EmptyTitle>릴리즈 노트가 없습니다.</EmptyTitle>
             <EmptyDescription>노트를 생성하면 버전 목록에 표시됩니다.</EmptyDescription>

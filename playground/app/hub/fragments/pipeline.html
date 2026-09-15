@@ -34,9 +34,7 @@
         <div class="dsnav-sec" data-sec="common" style="display:none">
         <h3>레퍼런스 구현 스택</h3>
         <p>레퍼런스 구현 스택: <strong>React + Tailwind + shadcn/ui 계열</strong>. 화면 이해(시각 스펙)용이며, 토큰 JSON은 중립이므로 다른 스택 제품도 토큰을 가져다 쓸 수 있다.</p>
-        <h3>Theme × dstk 대조표 <span class="mono" id="theme-map-updated" style="font-size:12px;color:var(--doc-muted)"></span></h3>
-        <p class="lead">피그마 「Theme × dstk 대조표」와 같은 데이터 — <strong>Theme 변수 ↔ dstk 토큰 매핑</strong>. 원천 <span class="mono">dstk/figma-theme-snapshot.json</span>, ds:build가 대조 검증 후 게시한다.</p>
-        <div id="theme-map-table"></div>
+        <p class="lead">토큰 표는 「시맨틱」 한 장으로 합쳤다(2026-09-15) — 피그마 Theme 대조와 dstk 토큰이 같은 표다.</p>
         </div><!-- /dsnav-sec common -->
 
         <div class="dsnav-sec" data-sec="d365" style="display:none">
@@ -62,8 +60,9 @@
         </div><!-- /dsnav-sec palette -->
 
         <div class="dsnav-sec" data-sec="semantic" style="display:none">
-        <h3>공통 시맨틱 — 이름표 (동결)</h3>
-        <p class="lead">값 직접 기입 금지 — 전부 팔레트 참조(빌드 게이트가 강제). 모드별 해석값을 나란히 보인다.
+        <h3>공통 시맨틱 — Theme × dstk 대조표 <span class="mono" id="theme-map-updated" style="font-size:12px;color:var(--doc-muted)"></span></h3>
+        <p class="lead">한 표(2026-09-15 병합): <strong>이름 = dstk 토큰 = Tailwind 클래스</strong>(피그마 폴더 <span class="mono">General/</span>는 뺐다) · 모드 셀 = 스와치 + <strong>팔레트 칩 이름</strong>(피그마 Colors 이름 그대로) + hex · 비고 = 피그마 그룹(Tint · Chart · Product)·번들. 원천 <span class="mono">dstk/figma-theme-snapshot.json</span> — ds:build가 시맨틱과 대조 검증 후 게시한다. Theme 밖 dstk 토큰(상태 축·램프·비색상)은 아래쪽에 이어진다.
+        <br>값 직접 기입 금지 — 전부 팔레트 참조(빌드 게이트가 강제).
         <br><strong>상태-토큰 매핑</strong>(상태 이름 ≠ 토큰 이름): WARNING(심각)=<span class="mono">destructive</span> · CAUTION(주의)=<span class="mono">warning</span> · UNREAD(미확인)=<span class="mono">info</span> · NORMAL(정상)=<span class="mono">success</span> — 위계 빨강 &gt; 주황 &gt; 파랑 &gt; 초록.</p>
         <div id="sem-table"></div>
         </div><!-- /dsnav-sec semantic -->
