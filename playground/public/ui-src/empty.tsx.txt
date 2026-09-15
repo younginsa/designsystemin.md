@@ -18,7 +18,8 @@ function Empty({
       className={cn(
         size === "sm"
           ? "flex w-full min-w-0 items-center gap-3 rounded-md border border-dashed p-3 text-sm text-secondary-foreground"
-          : "flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12",
+          : // border 내장(2026-09-15) — 종전엔 dashed 스타일만 있고 선 두께가 없어 13개 화면이 손으로 border 를 더했다
+            "flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border border-dashed p-6 text-center text-balance md:p-12",
         className
       )}
       {...props}
