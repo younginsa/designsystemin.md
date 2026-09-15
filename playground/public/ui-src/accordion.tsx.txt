@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ChevronDownIcon } from "lucide-react"
+import { ChevronDownIcon, ChevronRightIcon } from "lucide-react"
 import { Accordion as AccordionPrimitive } from "radix-ui"
 
 import { cn } from "@ds/ui/lib/utils"
@@ -34,8 +34,10 @@ function AccordionTrigger({
   /** 꺾쇠 위치 — end(기본) · start(제목 앞, 트리 목록) · none(숨김). 2026-09-15 신설 — 종전엔 화면이 [&>svg]:hidden 으로 가렸다 */
   chevron?: "end" | "start" | "none"
 }) {
+  // start = 트리 문법(▸ 닫힘 → ▾ 열림, 우향 꺾쇠 90° 회전) · end = 디스클로저 문법(⌄ 닫힘 → ⌃ 열림, 180° 회전). 2026-09-15 클론 회신 반영
+  const Icon = chevron === "start" ? ChevronRightIcon : ChevronDownIcon
   const icon = (
-    <ChevronDownIcon className="pointer-events-none size-4 shrink-0 translate-y-0.5 text-secondary-foreground transition-transform duration-200" />
+    <Icon className="pointer-events-none size-4 shrink-0 translate-y-0.5 text-secondary-foreground transition-transform duration-200" />
   )
   return (
     <AccordionPrimitive.Header className="flex">
@@ -43,7 +45,8 @@ function AccordionTrigger({
         data-slot="accordion-trigger"
         data-chevron={chevron}
         className={cn(
-          "flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180",
+          "flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50",
+          chevron === "start" ? "[&[data-state=open]>svg]:rotate-90" : "[&[data-state=open]>svg]:rotate-180",
           className
         )}
         {...props}
