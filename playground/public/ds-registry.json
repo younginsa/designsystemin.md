@@ -1,0 +1,2263 @@
+{
+  "$note": "DS 컴포넌트 레지스트리 — 단일 원천(2026-09-15). 항목 키 = 스토리 파일. approved.json · vocab-map.json 은 `pnpm registry` 가 여기서 생성한다(직접 편집 금지). figma = Component 페이지 세트 id. status: adopted · primitive · retired.",
+  "fileKey": "9bDM5hVObGhrFM6vLyeL3K",
+  "updated": "2026-09-15",
+  "components": {
+    "accordion": {
+      "name": {
+        "ko": "아코디언",
+        "en": "Accordion"
+      },
+      "status": "adopted",
+      "section": "Data",
+      "stories": "components/src/ui/accordion.stories.tsx",
+      "file": "components/src/ui/accordion.tsx",
+      "aliases": [
+        {
+          "slug": "data-accordion",
+          "name": "아코디언",
+          "files": [
+            "accordion"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "data-accordion",
+          "group": "데이터 표시",
+          "name": "아코디언",
+          "shadcn": "Accordion",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "590:3057",
+          "name": "AccordionItem",
+          "variants": 6
+        },
+        {
+          "id": "590:3058",
+          "name": "Accordion",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "alert": {
+      "name": {
+        "ko": "배너 · 안내 노트 (결과 피드백 · 상시 안내)",
+        "en": "Alert"
+      },
+      "status": "adopted",
+      "section": "Feedback",
+      "stories": "components/src/ui/alert.stories.tsx",
+      "file": "components/src/ui/alert.tsx",
+      "aliases": [
+        {
+          "slug": "fb-banner",
+          "name": "배너 · 안내 노트 (결과 피드백 · 상시 안내)",
+          "files": [
+            "alert"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [
+        "error-state"
+      ],
+      "hub": [
+        {
+          "slug": "fb-banner",
+          "group": "피드백 · 오버레이",
+          "name": "배너 · 안내 노트 (결과 피드백 · 상시 안내)",
+          "shadcn": "Alert — 사용방식 2가지",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "620:3006",
+          "name": "Alert",
+          "variants": 2
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "alert-dialog": {
+      "name": {
+        "ko": "AlertDialog",
+        "en": "AlertDialog"
+      },
+      "status": "adopted",
+      "section": "Overlay",
+      "stories": "components/src/ui/alert-dialog.stories.tsx",
+      "file": "components/src/ui/alert-dialog.tsx",
+      "aliases": [],
+      "coveredBy": [
+        "ov-dialog"
+      ],
+      "hub": [],
+      "figma": [
+        {
+          "id": "597:3000",
+          "name": "AlertDialog / destructive",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "avatar": {
+      "name": {
+        "ko": "Avatar",
+        "en": "Avatar"
+      },
+      "status": "primitive",
+      "section": "—",
+      "stories": null,
+      "file": "components/src/ui/avatar.tsx",
+      "aliases": [],
+      "coveredBy": [],
+      "hub": [],
+      "figma": [],
+      "note": null,
+      "role": "infrastructure"
+    },
+    "badge": {
+      "name": {
+        "ko": "칩 · 뱃지 (일반 · 버전 · 역할 태그)",
+        "en": "Badge"
+      },
+      "status": "adopted",
+      "section": "Data",
+      "stories": "components/src/ui/badge.stories.tsx",
+      "file": "components/src/ui/badge.tsx",
+      "aliases": [
+        {
+          "slug": "data-badge",
+          "name": "칩 · 뱃지 (일반 · 버전 · 역할 태그)",
+          "files": [
+            "badge"
+          ],
+          "approved": true
+        },
+        {
+          "slug": "form-tags",
+          "name": "태그 인풋",
+          "files": [
+            "badge",
+            "input"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [
+        "data-status"
+      ],
+      "hub": [
+        {
+          "slug": "data-badge",
+          "group": "데이터 표시",
+          "name": "칩 · 뱃지 (일반 · 버전 · 역할 태그)",
+          "shadcn": "Badge — 사용방식 3가지",
+          "prio": null
+        },
+        {
+          "slug": "form-tags",
+          "group": "폼",
+          "name": "태그 인풋",
+          "shadcn": "Badge+Input 조합",
+          "prio": "P2"
+        }
+      ],
+      "figma": [
+        {
+          "id": "586:2914",
+          "name": "Badge",
+          "variants": 24
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "breadcrumb": {
+      "name": {
+        "ko": "브레드크럼",
+        "en": "Breadcrumb"
+      },
+      "status": "adopted",
+      "section": "Navigation",
+      "stories": "components/src/ui/breadcrumb.stories.tsx",
+      "file": "components/src/ui/breadcrumb.tsx",
+      "aliases": [
+        {
+          "slug": "breadcrumb",
+          "name": "브레드크럼",
+          "files": [
+            "breadcrumb"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "breadcrumb",
+          "group": "셸 · 내비게이션",
+          "name": "브레드크럼",
+          "shadcn": "Breadcrumb",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "624:2995",
+          "name": "Breadcrumb",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "button": {
+      "name": {
+        "ko": "기본 버튼",
+        "en": "Button"
+      },
+      "status": "adopted",
+      "section": "Button",
+      "stories": "components/src/ui/button.stories.tsx",
+      "file": "components/src/ui/button.tsx",
+      "aliases": [
+        {
+          "slug": "btn-basic",
+          "name": "기본 버튼",
+          "files": [
+            "button"
+          ],
+          "approved": true
+        },
+        {
+          "slug": "btn-dashed",
+          "name": "점선 추가 버튼",
+          "files": [
+            "button"
+          ],
+          "approved": true
+        },
+        {
+          "slug": "btn-destructive",
+          "name": "파괴 버튼",
+          "files": [
+            "button"
+          ],
+          "approved": true
+        },
+        {
+          "slug": "btn-icon",
+          "name": "아이콘 버튼",
+          "files": [
+            "button"
+          ],
+          "approved": true
+        },
+        {
+          "slug": "btn-states",
+          "name": "비활성 · 로딩 변형",
+          "files": [
+            "button",
+            "spinner"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [
+        "btn-split",
+        "rows-per-page",
+        "version-filter-chip"
+      ],
+      "hub": [
+        {
+          "slug": "btn-basic",
+          "group": "버튼",
+          "name": "기본 버튼 (채움·아웃라인·텍스트)",
+          "shadcn": "Button",
+          "prio": null
+        },
+        {
+          "slug": "btn-dashed",
+          "group": "버튼",
+          "name": "점선 추가 버튼",
+          "shadcn": "Button 변형",
+          "prio": null
+        },
+        {
+          "slug": "btn-destructive",
+          "group": "버튼",
+          "name": "파괴 버튼",
+          "shadcn": "Button(destructive)",
+          "prio": null
+        },
+        {
+          "slug": "btn-icon",
+          "group": "버튼",
+          "name": "아이콘 버튼",
+          "shadcn": "Button(icon)",
+          "prio": null
+        },
+        {
+          "slug": "btn-states",
+          "group": "버튼",
+          "name": "비활성 · 로딩 변형",
+          "shadcn": "Button+Spinner",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "460:2092",
+          "name": "Button",
+          "variants": 216
+        }
+      ],
+      "note": "아웃라인 버튼(이전·취소·필터 등) 그림자 제거 — 플랫 규칙 확장. 렌더 차이 없음 — 재캡처 생략\n\n파괴 아웃라인 정식 변형 destructive-outline 신설 — 테두리 40%(텍스트보다 연하게)·hover bg 10%. 손 조합(border-destructive text-destructive) 금지 · 2026-08-28 destructive-ghost 신설 — 파괴 보조 액션(항목·행 레벨): text-destructive + hover destructive/10 잉크, 텍스트/아이콘 동형. Control 제외(CTA ④ — Control 파괴 보조는 destructive-outline). FilterBar 필터초기화가 이 variant로 교체",
+      "role": "vocab"
+    },
+    "button-group": {
+      "name": {
+        "ko": "스플릿 드롭다운",
+        "en": "ButtonGroup"
+      },
+      "status": "adopted",
+      "section": "Navigation",
+      "stories": "components/src/ui/button-group.stories.tsx",
+      "file": "components/src/ui/button-group.tsx",
+      "aliases": [
+        {
+          "slug": "btn-split",
+          "name": "스플릿 드롭다운",
+          "files": [
+            "button-group",
+            "button",
+            "dropdown-menu"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "btn-split",
+          "group": "버튼",
+          "name": "스플릿 드롭다운",
+          "shadcn": "ButtonGroup",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "624:3065",
+          "name": "ButtonGroup",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "calendar": {
+      "name": {
+        "ko": "날짜 범위 피커",
+        "en": "Calendar"
+      },
+      "status": "adopted",
+      "section": "Form",
+      "stories": "components/src/ui/calendar.stories.tsx",
+      "file": "components/src/ui/calendar.tsx",
+      "aliases": [
+        {
+          "slug": "form-daterange",
+          "name": "날짜 범위 피커",
+          "files": [
+            "calendar"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "form-daterange",
+          "group": "폼",
+          "name": "날짜 범위 피커",
+          "shadcn": "Calendar(range)",
+          "prio": "P2"
+        }
+      ],
+      "figma": [
+        {
+          "id": "572:3104",
+          "name": "Calendar",
+          "variants": 2
+        }
+      ],
+      "note": "shadcn Calendar(range) 조합 — @ds/ui/ui/calendar. 기간 선택 표준 = 프리셋 레일 + range 캘린더 두 달(피그마 209-36201). 어휘 키는 허브 카드와 맞춘 form-daterange다(calendar 아님 — approved.json 키 = 허브 data-comp)",
+      "role": "vocab"
+    },
+    "card": {
+      "name": {
+        "ko": "스탯 · 퍼널 · 랭킹",
+        "en": "Card"
+      },
+      "status": "adopted",
+      "section": "Data",
+      "stories": "components/src/ui/card.stories.tsx",
+      "file": "components/src/ui/card.tsx",
+      "aliases": [
+        {
+          "slug": "data-stat",
+          "name": "스탯 · 퍼널 · 랭킹",
+          "files": [
+            "card"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "data-stat",
+          "group": "데이터 표시",
+          "name": "스탯 · 퍼널 · 랭킹",
+          "shadcn": "Card 조합",
+          "prio": "P2"
+        }
+      ],
+      "figma": [
+        {
+          "id": "589:3036",
+          "name": "Card / stat",
+          "variants": 2
+        },
+        {
+          "id": "589:3037",
+          "name": "Card / full",
+          "variants": 1
+        },
+        {
+          "id": "738:3160",
+          "name": "Card / flat",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "chart": {
+      "name": {
+        "ko": "도넛 차트",
+        "en": "Chart"
+      },
+      "status": "adopted",
+      "section": "Data",
+      "stories": "components/src/ui/chart.stories.tsx",
+      "file": "components/src/ui/chart.tsx",
+      "aliases": [
+        {
+          "slug": "viz-donut",
+          "name": "도넛 차트",
+          "files": [
+            "chart"
+          ],
+          "approved": true
+        },
+        {
+          "slug": "viz-line",
+          "name": "라인 차트",
+          "files": [
+            "chart"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "viz-donut",
+          "group": "시각화",
+          "name": "도넛 차트",
+          "shadcn": "Chart(Pie)",
+          "prio": "P2"
+        },
+        {
+          "slug": "viz-line",
+          "group": "시각화",
+          "name": "라인 차트",
+          "shadcn": "Chart(Line)",
+          "prio": "P2"
+        }
+      ],
+      "figma": [
+        {
+          "id": "592:2951",
+          "name": "Chart / donut",
+          "variants": 1
+        },
+        {
+          "id": "592:2956",
+          "name": "Chart / line",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "checkbox": {
+      "name": {
+        "ko": "체크박스 · 라디오 · 토글",
+        "en": "Checkbox"
+      },
+      "status": "adopted",
+      "section": "Form",
+      "stories": "components/src/ui/checkbox.stories.tsx",
+      "file": "components/src/ui/checkbox.tsx",
+      "aliases": [
+        {
+          "slug": "form-controls",
+          "name": "체크박스 · 라디오 · 토글",
+          "files": [
+            "checkbox",
+            "radio-group",
+            "switch"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [
+        "data-perm"
+      ],
+      "hub": [
+        {
+          "slug": "form-controls",
+          "group": "폼",
+          "name": "체크박스 · 라디오 · 토글",
+          "shadcn": "Checkbox·Radio·Switch",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "560:2865",
+          "name": "Checkbox",
+          "variants": 6
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "collapsible": {
+      "name": {
+        "ko": "트리 목록",
+        "en": "Collapsible"
+      },
+      "status": "adopted",
+      "section": "Data",
+      "stories": "components/src/ui/collapsible.stories.tsx",
+      "file": "components/src/ui/collapsible.tsx",
+      "aliases": [
+        {
+          "slug": "data-tree",
+          "name": "트리 목록",
+          "files": [
+            "collapsible"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "data-tree",
+          "group": "데이터 표시",
+          "name": "트리 목록",
+          "shadcn": "Collapsible 조합",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "590:3071",
+          "name": "Collapsible / tree",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "command": {
+      "name": {
+        "ko": "Command",
+        "en": "Command"
+      },
+      "status": "adopted",
+      "section": "Form",
+      "stories": "components/src/ui/command.stories.tsx",
+      "file": "components/src/ui/command.tsx",
+      "aliases": [],
+      "coveredBy": [
+        "form-select"
+      ],
+      "hub": [],
+      "figma": [
+        {
+          "id": "563:2936",
+          "name": "CommandItem",
+          "variants": 3
+        },
+        {
+          "id": "563:2937",
+          "name": "Command / palette",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "detail-panel": {
+      "name": {
+        "ko": "상세 패널",
+        "en": "DetailPanel"
+      },
+      "status": "adopted",
+      "section": "Navigation",
+      "stories": "components/src/ui/detail-panel.stories.tsx",
+      "file": "components/src/ui/detail-panel.tsx",
+      "aliases": [
+        {
+          "slug": "detail-panel",
+          "name": "상세 패널",
+          "files": [
+            "detail-panel",
+            "sheet"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "detail-panel",
+          "group": "피드백 · 오버레이",
+          "name": "상세 패널 (우측 시트 프리셋)",
+          "shadcn": "Sheet 프리셋",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "624:3132",
+          "name": "DetailPanel / open",
+          "variants": 1
+        }
+      ],
+      "note": "조합 제작 — @ds/ui/ui/detail-panel. Sheet 프리셋: 폭 md(요약)·4xl(상세), 스크림 basic black-20(overlayClassName 노출), overflow-y-auto 기본, 헤더 스캐폴드(①컨트롤 ②타이틀+보조링크 ③메타 ④유틸 ghost — X 왼쪽 고정). 본문 섹션 = 타이틀 + 표준 Table, 섹션 박스로 감싸지 않음(이중 테두리 금지). 모션 500/300 유지 — 손 구현 금지",
+      "role": "vocab"
+    },
+    "dialog": {
+      "name": {
+        "ko": "모달",
+        "en": "Dialog"
+      },
+      "status": "adopted",
+      "section": "Overlay",
+      "stories": "components/src/ui/dialog.stories.tsx",
+      "file": "components/src/ui/dialog.tsx",
+      "aliases": [
+        {
+          "slug": "ov-dialog",
+          "name": "모달",
+          "files": [
+            "dialog",
+            "alert-dialog"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "ov-dialog",
+          "group": "피드백 · 오버레이",
+          "name": "모달",
+          "shadcn": "Dialog·AlertDialog",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "597:2976",
+          "name": "Dialog / open",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "dropdown-menu": {
+      "name": {
+        "ko": "드롭다운 메뉴",
+        "en": "DropdownMenu"
+      },
+      "status": "adopted",
+      "section": "Overlay",
+      "stories": "components/src/ui/dropdown-menu.stories.tsx",
+      "file": "components/src/ui/dropdown-menu.tsx",
+      "aliases": [
+        {
+          "slug": "ov-menus",
+          "name": "드롭다운 메뉴",
+          "files": [
+            "dropdown-menu"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [
+        "btn-split",
+        "rows-per-page"
+      ],
+      "hub": [
+        {
+          "slug": "ov-menus",
+          "group": "피드백 · 오버레이",
+          "name": "드롭다운 메뉴",
+          "shadcn": "DropdownMenu",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "596:2993",
+          "name": "DropdownMenuItem",
+          "variants": 6
+        },
+        {
+          "id": "596:2994",
+          "name": "DropdownMenu / open",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "empty": {
+      "name": {
+        "ko": "빈 상태",
+        "en": "Empty"
+      },
+      "status": "adopted",
+      "section": "Feedback",
+      "stories": "components/src/ui/empty.stories.tsx",
+      "file": "components/src/ui/empty.tsx",
+      "aliases": [
+        {
+          "slug": "fb-empty",
+          "name": "빈 상태",
+          "files": [
+            "empty"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "fb-empty",
+          "group": "피드백 · 오버레이",
+          "name": "빈 상태",
+          "shadcn": "Empty",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "620:3024",
+          "name": "Empty",
+          "variants": 1
+        },
+        {
+          "id": "739:3160",
+          "name": "Empty / inline",
+          "variants": 1
+        }
+      ],
+      "note": "빈 상태 타이틀 강등 — shadcn 순정 text-lg(18px)는 페이지 타이틀·모달 타이틀과 동급이라 빈 상태 메시지가 헤딩을 넘봤다. text-base(16px)로 내려 카드 타이틀(14) < 빈 타이틀(16) < 페이지·모달(18) 위계 정렬. 설명은 text-sm 유지. size=\"sm\" 인라인 변형(2026-09-15 신설): 첨부 슬롯·메모·드롭존 한 줄 — rounded-md · 점선 border · p-3 · text-sm secondary-foreground, 아이콘·우측 액션 선택(갤러리 38곳 손 점선 박스 대체). 스토리 Inline · 피그마 Empty / inline",
+      "role": "vocab"
+    },
+    "error-console": {
+      "name": {
+        "ko": "에러 콘솔",
+        "en": "ErrorConsole"
+      },
+      "status": "adopted",
+      "section": "Feedback",
+      "stories": "components/src/ui/error-console.stories.tsx",
+      "file": null,
+      "aliases": [
+        {
+          "slug": "fb-console",
+          "name": "에러 콘솔",
+          "files": [],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "fb-console",
+          "group": "피드백 · 오버레이",
+          "name": "에러 콘솔",
+          "shadcn": "조합(mono 로그)",
+          "prio": "P2"
+        }
+      ],
+      "figma": [
+        {
+          "id": "620:3072",
+          "name": "ErrorConsole",
+          "variants": 1
+        }
+      ],
+      "note": "스토리 전용 패턴(error-console.stories.tsx 안의 로컬 ErrorConsole) — 전용 컴포넌트 파일 없음. 어휘 files 는 빈 배열(손 조합 패턴).",
+      "role": "vocab"
+    },
+    "error-state": {
+      "name": {
+        "ko": "에러 상태 배너",
+        "en": "ErrorState"
+      },
+      "status": "adopted",
+      "section": "Feedback",
+      "stories": "components/src/ui/error-state.stories.tsx",
+      "file": "components/src/ui/error-state.tsx",
+      "aliases": [
+        {
+          "slug": "error-state",
+          "name": "에러 상태 배너",
+          "files": [
+            "error-state",
+            "alert"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "error-state",
+          "group": "피드백 · 오버레이",
+          "name": "에러 상태 배너",
+          "shadcn": "Alert 프리셋",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "620:3007",
+          "name": "ErrorState",
+          "variants": 1
+        }
+      ],
+      "note": "조합 제작 — @ds/ui/ui/error-state. Alert 프리셋(4상태 계약의 에러 표준): 라운드·테두리 없음·bg-destructive/5 틴트(2026-09-02 /10→/5 완화 — 과하게 붉음, 배너 표면 표준), filled CircleAlert 18px(원 destructive·획 card — filled 아이콘은 Lucide Circle 계열만 허용), 타이틀 검정 semibold, CTA ghost sm /10 틴트(hover /20) '재시도' — /10 유지로 연해진 표면 위 위계. success/warning/info 톤 확장은 추후 — 손 구현 금지",
+      "role": "vocab"
+    },
+    "field": {
+      "name": {
+        "ko": "텍스트 인풋",
+        "en": "Field"
+      },
+      "status": "adopted",
+      "section": "Form",
+      "stories": "components/src/ui/field.stories.tsx",
+      "file": "components/src/ui/field.tsx",
+      "aliases": [
+        {
+          "slug": "form-text",
+          "name": "텍스트 인풋",
+          "files": [
+            "field",
+            "input"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "form-text",
+          "group": "폼",
+          "name": "텍스트 인풋 (필수·placeholder)",
+          "shadcn": "Field+Input",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "564:2882",
+          "name": "Field",
+          "variants": 3
+        }
+      ],
+      "note": "폼 컨트롤 플랫 규칙 — 인풋·셀렉트·검색 박스·드롭다운 트리거 그림자 제거(shadow-xs 삭제). 플로팅 패널의 elevation 그림자는 유지. 카드 축척에서 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — 캔버스 무관 흰색). 피그마 Input fill General/background · 반경 8(md) · 링 11",
+      "role": "vocab"
+    },
+    "filter-bar": {
+      "name": {
+        "ko": "헤더 필터바",
+        "en": "FilterBar"
+      },
+      "status": "adopted",
+      "section": "FilterBar",
+      "stories": "components/src/ui/filter-bar.stories.tsx",
+      "file": "components/src/ui/filter-bar.tsx",
+      "aliases": [
+        {
+          "slug": "header-filter",
+          "name": "헤더 필터바",
+          "files": [
+            "filter-bar"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "header-filter",
+          "group": "피드백 · 오버레이",
+          "name": "헤더 필터바",
+          "shadcn": "조합(InputGroup·DropdownMenu·Popover·Calendar)",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "467:2244",
+          "name": "AddFilterPopover",
+          "variants": 2
+        },
+        {
+          "id": "472:2266",
+          "name": "DatePanel",
+          "variants": 3
+        },
+        {
+          "id": "465:2293",
+          "name": "OptionPanel",
+          "variants": 10
+        },
+        {
+          "id": "463:2150",
+          "name": "FilterChip",
+          "variants": 8
+        },
+        {
+          "id": "464:2160",
+          "name": "OptionRow",
+          "variants": 8
+        },
+        {
+          "id": "464:2127",
+          "name": "RadioRow",
+          "variants": 4
+        },
+        {
+          "id": "488:2857",
+          "name": "FilterBar",
+          "variants": 9
+        }
+      ],
+      "note": "조합 제작 — @ds/ui/ui/filter-bar (FilterBar·FilterChip·DateRangePanel·resolveDateRange·DATE_PRESETS). 피그마 209-17188 구조 · 날짜 패널 209-36201. 행 = 검색(InputGroup filled 상시 좌측 — 검색 제안이 필요한 화면만 searchSlot 으로 SearchBox 옵트인(2026-09-11 확정: 기본 승격 안 함, 현재 납품 호선만). 스토리 SearchSuggest · 피그마 FilterBar state=search-open) → 필터 칩(한 줄 고정 — 2026-09-09 확정, 종전 '최대 2줄' 폐기: 칩이 남은 폭을 쓰고 넘치면 값 말줄임 + title, 검색창·[+ 필터 추가]·[필터초기화]·액션은 줄지 않음. Input 은 긴 placeholder·값 truncate, 2026-09-08) → [+ 필터 추가] │ 우측 액션 슬롯. 칩 문법 2종: 기본(base)=✕ 없이 꺾쇠만 / 추가=✕만(꺾쇠 없음). 칩 면은 전 상태 bg-muted, 비활성 border-transparent·text-foreground / 활성 border-primary·text-primary. 칩 hover는 비활성만 accent(활성 hover는 primary×accent 미선언이라 보류). 값 해제는 드롭다운 우하단 [초기화] — \"전체\" 항목 금지. 정렬은 이 바에 없다(테이블 컬럼 헤더 전담). 손 조합 금지. 행 매처 4종(passText · passSelect · passDate · passDateSpan)은 filter-bar.tsx 가 소유(2026-09-14 승격 — 종전 갤러리 _detail/filter-match.ts, 두 앱 목록 9면 + AuditLog 공용). now 기본값은 실제 시계, 시안 기준일은 호출부가 넘긴다",
+      "role": "vocab"
+    },
+    "icon-select": {
+      "name": {
+        "ko": "아이콘 셀렉터",
+        "en": "IconSelect"
+      },
+      "status": "adopted",
+      "section": "Form",
+      "stories": "components/src/ui/icon-select.stories.tsx",
+      "file": "components/src/ui/icon-select.tsx",
+      "aliases": [
+        {
+          "slug": "icon-select",
+          "name": "아이콘 셀렉터",
+          "files": [
+            "icon-select"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "icon-select",
+          "group": "셸 · 내비게이션",
+          "name": "아이콘 셀렉터 — 타입 3종: 아이콘형·텍스트형·다중형(체크박스)",
+          "shadcn": "DropdownMenu 조합",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "574:2894",
+          "name": "IconSelect",
+          "variants": 2
+        }
+      ],
+      "note": "조합 제작 — @ds/ui/ui/icon-select. shadcn DropdownMenu 프리셋. 타입 3종: 아이콘형(icon 지정)·텍스트형(icon 생략)·다중형(multiple — 왼쪽 Checkbox 상시, 토글해도 안 닫힘, 값은 items 순서 \", \" 병합). 단일 ✓는 오른쪽 ml-auto(2026-08-26 select-grammar 개정). h-9(36px)·아이콘 간격 8px·그림자 없음(플랫) — 손 구현 금지",
+      "role": "vocab"
+    },
+    "input": {
+      "name": {
+        "ko": "파일 첨부",
+        "en": "Input"
+      },
+      "status": "adopted",
+      "section": "Form",
+      "stories": "components/src/ui/input.stories.tsx",
+      "file": "components/src/ui/input.tsx",
+      "aliases": [
+        {
+          "slug": "form-file",
+          "name": "파일 첨부",
+          "files": [
+            "input"
+          ],
+          "approved": true
+        },
+        {
+          "slug": "form-number",
+          "name": "숫자 인풋",
+          "files": [
+            "input"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [
+        "form-tags",
+        "form-text"
+      ],
+      "hub": [
+        {
+          "slug": "form-file",
+          "group": "폼",
+          "name": "파일 첨부",
+          "shadcn": "Input(file)",
+          "prio": null
+        },
+        {
+          "slug": "form-number",
+          "group": "폼",
+          "name": "숫자 인풋",
+          "shadcn": "Input(number)",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "559:2853",
+          "name": "Input",
+          "variants": 5
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "input-group": {
+      "name": {
+        "ko": "검색 인풋",
+        "en": "InputGroup"
+      },
+      "status": "adopted",
+      "section": "Form",
+      "stories": "components/src/ui/input-group.stories.tsx",
+      "file": "components/src/ui/input-group.tsx",
+      "aliases": [
+        {
+          "slug": "form-search",
+          "name": "검색 인풋",
+          "files": [
+            "input-group"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [
+        "search-box"
+      ],
+      "hub": [
+        {
+          "slug": "form-search",
+          "group": "폼",
+          "name": "검색 인풋",
+          "shadcn": "InputGroup",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "572:2890",
+          "name": "InputGroup",
+          "variants": 5
+        },
+        {
+          "id": "572:2891",
+          "name": "InputGroup / clear",
+          "variants": 1
+        },
+        {
+          "id": "572:2900",
+          "name": "InputGroup / prefix suffix",
+          "variants": 1
+        }
+      ],
+      "note": "폼 컨트롤 플랫 규칙 — 검색 박스 그림자 제거. filled 변형 추가(variant=\"filled\" = bg-card) — 회색 캔버스(bg-background) 위 시인성용, 흰 카드 위는 기본형. 렌더 차이 없음 — 재캡처 생략. 2026-09-14: 필드 표면 = bg-card 상시 규칙으로 filled 가 기본이 됨(prop 은 호환용 무해 — 클론·갤러리 수정 불필요). 피그마 InputGroup fill General/background · 반경 8 · 링 11",
+      "role": "vocab"
+    },
+    "item": {
+      "name": {
+        "ko": "kv 정의 목록",
+        "en": "Item"
+      },
+      "status": "adopted",
+      "section": "Data",
+      "stories": "components/src/ui/item.stories.tsx",
+      "file": "components/src/ui/item.tsx",
+      "aliases": [
+        {
+          "slug": "data-kv",
+          "name": "kv 정의 목록",
+          "files": [
+            "item"
+          ],
+          "approved": true
+        },
+        {
+          "slug": "data-listrow",
+          "name": "리스트 행",
+          "files": [
+            "item"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "data-kv",
+          "group": "데이터 표시",
+          "name": "kv 정의 목록",
+          "shadcn": "Item 조합",
+          "prio": null
+        },
+        {
+          "slug": "data-listrow",
+          "group": "데이터 표시",
+          "name": "리스트 행 (아이콘·라벨·카운트·셰브론)",
+          "shadcn": "Item",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "590:2994",
+          "name": "Item",
+          "variants": 6
+        },
+        {
+          "id": "590:2995",
+          "name": "Item / key value",
+          "variants": 1
+        },
+        {
+          "id": "590:3008",
+          "name": "Item / list row",
+          "variants": 1
+        }
+      ],
+      "note": "행 좌측 패딩 제거 — 타이틀과 좌측 정렬",
+      "role": "vocab"
+    },
+    "label": {
+      "name": {
+        "ko": "Label",
+        "en": "Label"
+      },
+      "status": "primitive",
+      "section": "Form",
+      "stories": "components/src/ui/label.stories.tsx",
+      "file": "components/src/ui/label.tsx",
+      "aliases": [],
+      "coveredBy": [],
+      "hub": [],
+      "figma": [
+        {
+          "id": "564:2862",
+          "name": "Label",
+          "variants": 3
+        }
+      ],
+      "note": null,
+      "role": "infrastructure"
+    },
+    "list-footer": {
+      "name": {
+        "ko": "목록 푸터 (행 수 · 전체 건수 · 페이지네이션)",
+        "en": "ListFooter"
+      },
+      "status": "adopted",
+      "section": "Navigation",
+      "stories": "components/src/ui/list-footer.stories.tsx",
+      "file": "components/src/ui/list-footer.tsx",
+      "aliases": [
+        {
+          "slug": "list-footer",
+          "name": "목록 푸터 (행 수 · 전체 건수 · 페이지네이션)",
+          "files": [
+            "list-footer",
+            "rows-per-page",
+            "pagination"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "list-footer",
+          "group": "데이터 표시",
+          "name": "목록 푸터 (행 수 · 전체 건수 · 페이지네이션)",
+          "shadcn": "조합(RowsPerPage·Pagination)",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "633:3124",
+          "name": "ListFooter",
+          "variants": 3
+        }
+      ],
+      "note": "조합 제작 — @ds/ui/ui/list-footer(2026-09-10 신설, 채택 55종째). body-patterns A 리스트 「푸터」 규칙의 컴포넌트판: 좌 RowsPerPage(페이지당 · │ · 전체 N건) + 우 Pagination, flex justify-between 한 행. 창 규칙 Previous · 1 · … · p−1 p p+1 · … · N · Next(간격 있을 때만 …), 양 끝 Previous/Next aria-disabled(흐림 50%·클릭 차단 — PaginationLink 공통). 단일 페이지면 페이지네이션 생략·건수는 남는다. 행 수 변경 시 1페이지 리셋 내장. pageCount 생략 시 total÷pageSize. summary 생략 시 '전체 {total}{unit}'(천 단위 구분) — 리치 표기는 summary 노드. 손 조합(ships-view·updates·diagnostics 등 갤러리 9면) → 이 프리셋으로 치환 예정(클론 프롬프트)",
+      "role": "vocab"
+    },
+    "notification-panel": {
+      "name": {
+        "ko": "알림 패널",
+        "en": "NotificationPanel"
+      },
+      "status": "adopted",
+      "section": "Overlay",
+      "stories": "components/src/ui/notification-panel.stories.tsx",
+      "file": "components/src/ui/notification-panel.tsx",
+      "aliases": [
+        {
+          "slug": "ov-notif",
+          "name": "알림 패널",
+          "files": [
+            "notification-panel"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "ov-notif",
+          "group": "피드백 · 오버레이",
+          "name": "알림 패널",
+          "shadcn": "DropdownMenu 프리셋",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "597:3095",
+          "name": "NotificationPanel",
+          "variants": 2
+        }
+      ],
+      "note": "조합 제작 — @ds/ui/ui/notification-panel(어휘 ov-notif의 실물). Bell ghost 트리거 + unread 도트 배지(destructive), 패널 w-80, 헤더 알림·모두 읽음 양끝 대칭(py-0.5), 아이템 도트 슬롯 상시 렌더(unread=primary·read=투명 — 제목 좌정렬 유지) + 시간 pl-3.5. 헤더 우측 버튼(=모두 읽음 액션) 라벨은 상태 전이(2026-08-28 확정): unread 있음 '새 알림 (N)' primary 파랑(hover 동형 — contrast-pairs primary×popover aux) → 클릭(전체 읽음)·없음 '모두 읽음' 비활성. '모두 보기' 푸터는 onViewAll 예약(NotificationCenter 2단계). 손 조합 금지",
+      "role": "vocab"
+    },
+    "pagination": {
+      "name": {
+        "ko": "페이지네이션",
+        "en": "Pagination"
+      },
+      "status": "adopted",
+      "section": "Data",
+      "stories": "components/src/ui/pagination.stories.tsx",
+      "file": "components/src/ui/pagination.tsx",
+      "aliases": [
+        {
+          "slug": "data-pagination",
+          "name": "페이지네이션",
+          "files": [
+            "pagination"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [
+        "list-footer"
+      ],
+      "hub": [
+        {
+          "slug": "data-pagination",
+          "group": "데이터 표시",
+          "name": "페이지네이션",
+          "shadcn": "Pagination",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "586:2981",
+          "name": "PaginationLink",
+          "variants": 5
+        },
+        {
+          "id": "586:2982",
+          "name": "Pagination",
+          "variants": 1
+        }
+      ],
+      "note": "선택 페이지 = 테두리·배경 없이 텍스트 강조 + 기본색, 비선택·Previous·Next = font-medium + muted. 원형(hover)은 outline 활성 재구성. 기존 생성 화면의 className 오버라이드(클론 5곳)는 소급 제거 대상",
+      "role": "vocab"
+    },
+    "popover": {
+      "name": {
+        "ko": "팝오버",
+        "en": "Popover"
+      },
+      "status": "adopted",
+      "section": "Overlay",
+      "stories": "components/src/ui/popover.stories.tsx",
+      "file": "components/src/ui/popover.tsx",
+      "aliases": [
+        {
+          "slug": "ov-popover",
+          "name": "팝오버",
+          "files": [
+            "popover"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [
+        "search-box",
+        "version-filter-chip"
+      ],
+      "hub": [
+        {
+          "slug": "ov-popover",
+          "group": "피드백 · 오버레이",
+          "name": "팝오버",
+          "shadcn": "Popover",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "596:3025",
+          "name": "Popover / open",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "progress": {
+      "name": {
+        "ko": "진행률 바",
+        "en": "Progress"
+      },
+      "status": "adopted",
+      "section": "Data",
+      "stories": "components/src/ui/progress.stories.tsx",
+      "file": "components/src/ui/progress.tsx",
+      "aliases": [
+        {
+          "slug": "data-progress",
+          "name": "진행률 바",
+          "files": [
+            "progress"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "data-progress",
+          "group": "데이터 표시",
+          "name": "진행률 바",
+          "shadcn": "Progress",
+          "prio": "P2"
+        }
+      ],
+      "figma": [
+        {
+          "id": "586:2963",
+          "name": "Progress",
+          "variants": 5
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "radio-group": {
+      "name": {
+        "ko": "RadioGroup",
+        "en": "RadioGroup"
+      },
+      "status": "adopted",
+      "section": "Form",
+      "stories": "components/src/ui/radio-group.stories.tsx",
+      "file": "components/src/ui/radio-group.tsx",
+      "aliases": [],
+      "coveredBy": [
+        "form-controls"
+      ],
+      "hub": [],
+      "figma": [
+        {
+          "id": "560:2872",
+          "name": "RadioGroupItem",
+          "variants": 4
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "rows-per-page": {
+      "name": {
+        "ko": "페이지당 행 수 (목록 푸터)",
+        "en": "RowsPerPage"
+      },
+      "status": "adopted",
+      "section": "Navigation",
+      "stories": "components/src/ui/rows-per-page.stories.tsx",
+      "file": "components/src/ui/rows-per-page.tsx",
+      "aliases": [
+        {
+          "slug": "rows-per-page",
+          "name": "페이지당 행 수 (목록 푸터)",
+          "files": [
+            "rows-per-page",
+            "dropdown-menu",
+            "button"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [
+        "list-footer"
+      ],
+      "hub": [
+        {
+          "slug": "rows-per-page",
+          "group": "데이터 표시",
+          "name": "페이지당 행 수 (목록 푸터 문법)",
+          "shadcn": "조합(DropdownMenu·Button)",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "624:3054",
+          "name": "RowsPerPage",
+          "variants": 1
+        }
+      ],
+      "note": "조합 제작 — @ds/ui/ui/rows-per-page. 목록 푸터 문법: 좌측 '페이지당: [15 ˅] │ 전체 N척' · 우측 페이지네이션. 라벨 연한 톤 + 숫자만 든 고스트 트리거 + 세로 구분선 + 전체 건수. 기본 15행 · 옵션 10/15/30/50 · 드롭업(side=top) · ✓ 오른쪽. 'Page x of y'·'표시' 라벨 기각. summary는 ReactNode — 건수 하나만(보조 카운트 병기 '● 미입력 N' 규칙은 2026-09-10 폐기). 행 수 변경 시 소비자는 1페이지 리셋. 건수는 푸터가 소유 — 제목 부제 총 N건 표기 폐기(design.md §4)",
+      "role": "vocab"
+    },
+    "scroll-area": {
+      "name": {
+        "ko": "ScrollArea",
+        "en": "ScrollArea"
+      },
+      "status": "primitive",
+      "section": "—",
+      "stories": null,
+      "file": "components/src/ui/scroll-area.tsx",
+      "aliases": [],
+      "coveredBy": [],
+      "hub": [],
+      "figma": [],
+      "note": null,
+      "role": "infrastructure"
+    },
+    "search-box": {
+      "name": {
+        "ko": "검색 제안",
+        "en": "SearchBox"
+      },
+      "status": "adopted",
+      "section": "Form",
+      "stories": "components/src/ui/search-box.stories.tsx",
+      "file": "components/src/ui/search-box.tsx",
+      "aliases": [
+        {
+          "slug": "search-box",
+          "name": "검색 제안",
+          "files": [
+            "search-box",
+            "input-group",
+            "popover"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "search-box",
+          "group": "폼",
+          "name": "검색 제안 (자동완성·최근·빠른검색)",
+          "shadcn": "조합(InputGroup·Popover)",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "464:2108",
+          "name": "Search",
+          "variants": 6
+        }
+      ],
+      "note": "조합 제작 — @ds/ui/ui/search-box. 검색 제안 프리셋(피그마 237-51963 focused2): 입력창은 현행 InputGroup(filled·w-64) 그대로(포커스 링 DS 기본), 패널은 분리 플로팅(ov-popover·PopoverAnchor)·폭 w-64·px-2 pt-3 pb-4(하단만 +4px — 면 있는 칩이 붙어 보임 방지). 빠른검색 칩 hover는 bg-border(muted 바탕 위 accent 6%는 동톤 1.035:1로 감지 불가 — foreground×border hover 한정 선언). 타이핑 = 자동완성 최대 5(돋보기·매칭 볼드·보조줄), 비어 있음 = 최근 검색 3(시계·hover ✕ 삭제) + 빠른검색 칩 최대 5. 패널 줄 아이콘(돋보기·시계)은 size-3.5·text-input — 장식 아이콘은 한 단계 연하게(본문 텍스트 아님, contrast-pairs input×popover 장식 전용 선언). 선택 = 즉시 적용·닫힘·최근 편입. 값 있을 때 입력창 우측 ✕(지우면 포커스 유지·빈 상태 패널로 복귀 — FilterBar 기본 검색도 동일 문법). 적용은 페이지 옵트인(FilterBar searchSlot) — 기본 검색 불변. 빠른검색(최다 검색)·최근검색은 시안 목데이터 — 실제 집계·저장은 제품 백엔드 몫. 빈 상태(2026-09-11 확정): 결과 없음(입력 중 후보 0) = ''{값}'에 맞는 후보가 없습니다' 한 줄 — 목록 행과 같은 문법(items-center · 돋보기 size-3.5 text-input), secondary-foreground, 캡션 없음(Empty 프리셋은 섹션 규모라 미사용). 종전엔 최근 검색으로 되돌아가 매칭처럼 보였다. 기록 없음(최근·빠른검색 둘 다 없음)은 상태가 아니다 — 보여줄 게 없으면 패널이 안 열린다(종전 빈 흰 패널 제거). 스토리 NoMatch, 허브 카드 2패널. 피그마(2026-09-14 병합): 별도 SearchBox 세트 은퇴 — Form/Search 세트 한 계보, state 6종 = default · filled · focused · focused-suggest · typing · no-match(입력은 InputGroup filled 하나, 패널은 옵트인). FilterBar 검색 인스턴스 9개가 같은 세트를 본다",
+      "role": "vocab"
+    },
+    "select": {
+      "name": {
+        "ko": "셀렉트 계열",
+        "en": "Select"
+      },
+      "status": "adopted",
+      "section": "Form",
+      "stories": "components/src/ui/select.stories.tsx",
+      "file": "components/src/ui/select.tsx",
+      "aliases": [
+        {
+          "slug": "form-select",
+          "name": "셀렉트 계열",
+          "files": [
+            "select",
+            "command"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [
+        "version-filter-chip"
+      ],
+      "hub": [
+        {
+          "slug": "form-select",
+          "group": "폼",
+          "name": "셀렉트 계열",
+          "shadcn": "Select·Combobox",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "563:2904",
+          "name": "SelectItem",
+          "variants": 5
+        },
+        {
+          "id": "563:2893",
+          "name": "SelectTrigger",
+          "variants": 12
+        },
+        {
+          "id": "732:3161",
+          "name": "Select / closed",
+          "variants": 1
+        },
+        {
+          "id": "563:2909",
+          "name": "Select / open",
+          "variants": 1
+        }
+      ],
+      "note": "폼 컨트롤 플랫 규칙 — 트리거 그림자 제거. 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — Search 와 같은 흰색, hover 는 accent 로 교체). 피그마: SelectTrigger(size×state 12) fill General/background · 반경 8, SelectItem 5상태(selected-focus 신설 = 체크 + accent) · 반경 6, 예시 Select / closed · open, Form 섹션으로 편입",
+      "role": "vocab"
+    },
+    "separator": {
+      "name": {
+        "ko": "Separator",
+        "en": "Separator"
+      },
+      "status": "primitive",
+      "section": "—",
+      "stories": null,
+      "file": "components/src/ui/separator.tsx",
+      "aliases": [],
+      "coveredBy": [],
+      "hub": [],
+      "figma": [],
+      "note": null,
+      "role": "infrastructure"
+    },
+    "sheet": {
+      "name": {
+        "ko": "슬라이드오버 패널",
+        "en": "Sheet"
+      },
+      "status": "adopted",
+      "section": "Overlay",
+      "stories": "components/src/ui/sheet.stories.tsx",
+      "file": "components/src/ui/sheet.tsx",
+      "aliases": [
+        {
+          "slug": "ov-sheet",
+          "name": "슬라이드오버 패널",
+          "files": [
+            "sheet"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [
+        "detail-panel"
+      ],
+      "hub": [
+        {
+          "slug": "ov-sheet",
+          "group": "피드백 · 오버레이",
+          "name": "슬라이드오버 패널",
+          "shadcn": "Sheet",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "597:3014",
+          "name": "Sheet / right",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "sidebar": {
+      "name": {
+        "ko": "앱 셸",
+        "en": "Sidebar"
+      },
+      "status": "adopted",
+      "section": "Navigation",
+      "stories": "components/src/ui/sidebar.stories.tsx",
+      "file": "components/src/ui/sidebar.tsx",
+      "aliases": [
+        {
+          "slug": "app-shell",
+          "name": "앱 셸",
+          "files": [
+            "sidebar"
+          ],
+          "approved": true
+        },
+        {
+          "slug": "sidebar-nav",
+          "name": "사이드바 내비",
+          "files": [
+            "sidebar"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "app-shell",
+          "group": "셸 · 내비게이션",
+          "name": "앱 셸",
+          "shadcn": "Sidebar",
+          "prio": null
+        },
+        {
+          "slug": "sidebar-nav",
+          "group": "셸 · 내비게이션",
+          "name": "사이드바 내비",
+          "shadcn": "SidebarMenu",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "624:3096",
+          "name": "SidebarMenuButton",
+          "variants": 2
+        },
+        {
+          "id": "624:3097",
+          "name": "Sidebar / nav",
+          "variants": 1
+        },
+        {
+          "id": "741:3162",
+          "name": "Sidebar / nav (하위 페이지)",
+          "variants": 1
+        },
+        {
+          "id": "741:3204",
+          "name": "Sidebar / rail (접힘)",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "skeleton": {
+      "name": {
+        "ko": "스켈레톤 (로딩)",
+        "en": "Skeleton"
+      },
+      "status": "adopted",
+      "section": "Feedback",
+      "stories": "components/src/ui/skeleton.stories.tsx",
+      "file": "components/src/ui/skeleton.tsx",
+      "aliases": [
+        {
+          "slug": "skeleton",
+          "name": "스켈레톤 (로딩)",
+          "files": [
+            "skeleton"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "skeleton",
+          "group": "피드백 · 오버레이",
+          "name": "스켈레톤 (로딩)",
+          "shadcn": "Skeleton",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "620:3043",
+          "name": "Skeleton",
+          "variants": 3
+        },
+        {
+          "id": "620:3044",
+          "name": "TableSkeleton",
+          "variants": 1
+        }
+      ],
+      "note": "shadcn 기성품 그대로 — @ds/ui/ui/skeleton(animate-pulse · rounded-md · bg-accent). 조정·재현 없음(등재만). 로딩 상태 표준 = 스켈레톤이고, 프로그레스 바(data-progress)는 실제 진행률 표시 전용(업데이트 파이프라인 등) — 로딩 자리표시에 프로그레스 바를 쓰지 않는다. accent light 교정(9701b17 · #FBFBFB→#ECEDF0) 이전에는 흰 카드 위 대비가 1.035:1이라 사실상 비가시였고, 교정 후 1.171:1을 확보해 로딩 표준으로 쓸 수 있게 됐다",
+      "role": "vocab"
+    },
+    "sonner": {
+      "name": {
+        "ko": "토스트",
+        "en": "Sonner"
+      },
+      "status": "adopted",
+      "section": "Overlay",
+      "stories": "components/src/ui/sonner.stories.tsx",
+      "file": "components/src/ui/sonner.tsx",
+      "aliases": [
+        {
+          "slug": "ov-toast",
+          "name": "토스트",
+          "files": [
+            "sonner"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "ov-toast",
+          "group": "피드백 · 오버레이",
+          "name": "토스트",
+          "shadcn": "Sonner",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "596:3057",
+          "name": "Toast / success",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "spinner": {
+      "name": {
+        "ko": "Spinner",
+        "en": "Spinner"
+      },
+      "status": "adopted",
+      "section": "Feedback",
+      "stories": "components/src/ui/spinner.stories.tsx",
+      "file": "components/src/ui/spinner.tsx",
+      "aliases": [],
+      "coveredBy": [
+        "btn-states"
+      ],
+      "hub": [],
+      "figma": [
+        {
+          "id": "620:3071",
+          "name": "Spinner",
+          "variants": 2
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "state-preview": {
+      "name": {
+        "ko": "StatePreview",
+        "en": "StatePreview"
+      },
+      "status": "primitive",
+      "section": "—",
+      "stories": null,
+      "file": "components/src/ui/state-preview.tsx",
+      "aliases": [],
+      "coveredBy": [],
+      "hub": [],
+      "figma": [],
+      "note": "생성 화면 4상태 전환 프리셋(StatePreview) — 어휘가 아니라 도구. 모든 생성 화면이 쓴다.",
+      "role": "infrastructure"
+    },
+    "status-badge": {
+      "name": {
+        "ko": "상태 필 · 도트",
+        "en": "StatusBadge"
+      },
+      "status": "adopted",
+      "section": "Data",
+      "stories": "components/src/ui/status-badge.stories.tsx",
+      "file": "components/src/ui/status-badge.tsx",
+      "aliases": [
+        {
+          "slug": "data-status",
+          "name": "상태 필 · 도트",
+          "files": [
+            "status-badge",
+            "badge"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "data-status",
+          "group": "데이터 표시",
+          "name": "상태 필 · 도트",
+          "shadcn": "Badge",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "619:3054",
+          "name": "StatusBadge",
+          "variants": 24
+        }
+      ],
+      "note": "라운드 필 통일. 정상·중립 대표 = bg-muted 필, 동의어 보조 상태(Ready 등)는 배경 없이 도트+텍스트. 위험·에러 = 도트+텍스트 destructive + bg 12% — 도트만 착색 금지. 원형(hover)은 순정 shadcn Badge",
+      "role": "vocab"
+    },
+    "stepper": {
+      "name": {
+        "ko": "Stepper",
+        "en": "Stepper"
+      },
+      "status": "primitive",
+      "section": "—",
+      "stories": null,
+      "file": "components/src/ui/stepper.tsx",
+      "aliases": [],
+      "coveredBy": [],
+      "hub": [],
+      "figma": [],
+      "note": null,
+      "role": "unadopted"
+    },
+    "switch": {
+      "name": {
+        "ko": "Switch",
+        "en": "Switch"
+      },
+      "status": "adopted",
+      "section": "Form",
+      "stories": "components/src/ui/switch.stories.tsx",
+      "file": "components/src/ui/switch.tsx",
+      "aliases": [],
+      "coveredBy": [
+        "form-controls"
+      ],
+      "hub": [],
+      "figma": [
+        {
+          "id": "560:2889",
+          "name": "Switch",
+          "variants": 8
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "table": {
+      "name": {
+        "ko": "매트릭스 편집 표",
+        "en": "Table"
+      },
+      "status": "adopted",
+      "section": "Data",
+      "stories": "components/src/ui/table.stories.tsx",
+      "file": "components/src/ui/table.tsx",
+      "aliases": [
+        {
+          "slug": "data-matrix",
+          "name": "매트릭스 편집 표",
+          "files": [
+            "table"
+          ],
+          "approved": true
+        },
+        {
+          "slug": "data-perm",
+          "name": "권한 매트릭스",
+          "files": [
+            "table",
+            "checkbox"
+          ],
+          "approved": true
+        },
+        {
+          "slug": "data-table",
+          "name": "테이블 (셀 변형 · 정렬 헤더 포함)",
+          "files": [
+            "table"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "data-matrix",
+          "group": "데이터 표시",
+          "name": "매트릭스 편집 표",
+          "shadcn": "Table 조합",
+          "prio": "P2"
+        },
+        {
+          "slug": "data-perm",
+          "group": "데이터 표시",
+          "name": "권한 매트릭스",
+          "shadcn": "Table+Checkbox",
+          "prio": null
+        },
+        {
+          "slug": "data-table",
+          "group": "데이터 표시",
+          "name": "테이블 (셀 변형 · 정렬 헤더 포함)",
+          "shadcn": "Table — 정렬 헤더·링크 셀·2줄 셀·행 액션 흡수",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "589:2909",
+          "name": "Table / basic",
+          "variants": 1
+        },
+        {
+          "id": "589:2963",
+          "name": "Table / matrix",
+          "variants": 1
+        },
+        {
+          "id": "589:2994",
+          "name": "Table / permissions",
+          "variants": 1
+        },
+        {
+          "id": "599:3018",
+          "name": "TableRow",
+          "variants": 3
+        }
+      ],
+      "note": "셀 좌우 패딩 16px · 상하 패딩 12px(1줄 행 ≈48px — 페이지별 표 밀도 제각각 해소) · 아웃라인·헤더 배경을 컴포넌트에 내장(세션별 래퍼 제각각 문제 해소) · 헤더 폰트는 본문보다 흐리게. variant=\"plain\" 추가(D 대시보드 카드 내부용 경량 표 — 외곽선·헤더 배경 없음, 손 unwind 금지). 원형(hover)은 내장 조정을 되돌린 순정 재구성 · 2026-08-28 래퍼 overflow-y-hidden 추가 — thead·행 배경이 둥근 모서리를 뚫는 클리핑 버그 교정(x축 스크롤 유지)",
+      "role": "vocab"
+    },
+    "tabs": {
+      "name": {
+        "ko": "탭 3종",
+        "en": "Tabs"
+      },
+      "status": "adopted",
+      "section": "Data",
+      "stories": "components/src/ui/tabs.stories.tsx",
+      "file": "components/src/ui/tabs.tsx",
+      "aliases": [
+        {
+          "slug": "data-tabs",
+          "name": "탭 3종",
+          "files": [
+            "tabs"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "data-tabs",
+          "group": "데이터 표시",
+          "name": "탭 2종",
+          "shadcn": "Tabs",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "590:3101",
+          "name": "TabsTrigger",
+          "variants": 4
+        },
+        {
+          "id": "590:3102",
+          "name": "Tabs / two kinds",
+          "variants": 1
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "textarea": {
+      "name": {
+        "ko": "텍스트에어리어 · 글자수",
+        "en": "Textarea"
+      },
+      "status": "adopted",
+      "section": "Form",
+      "stories": "components/src/ui/textarea.stories.tsx",
+      "file": "components/src/ui/textarea.tsx",
+      "aliases": [
+        {
+          "slug": "form-textarea",
+          "name": "텍스트에어리어 · 글자수",
+          "files": [
+            "textarea"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "form-textarea",
+          "group": "폼",
+          "name": "텍스트에어리어 · 글자수",
+          "shadcn": "Textarea 조합",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "560:2850",
+          "name": "Textarea",
+          "variants": 4
+        }
+      ],
+      "note": "폼 컨트롤 플랫 규칙 — 텍스트에어리어 그림자 제거. 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — 캔버스 무관 흰색). 피그마 Textarea fill General/background · 반경 8(md)",
+      "role": "vocab"
+    },
+    "timeline": {
+      "name": {
+        "ko": "타임라인",
+        "en": "Timeline"
+      },
+      "status": "adopted",
+      "section": "Navigation",
+      "stories": "components/src/ui/timeline.stories.tsx",
+      "file": "components/src/ui/timeline.tsx",
+      "aliases": [
+        {
+          "slug": "timeline",
+          "name": "타임라인",
+          "files": [
+            "timeline"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "timeline",
+          "group": "데이터 표시",
+          "name": "타임라인",
+          "shadcn": "없음",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "624:3031",
+          "name": "TimelineItem",
+          "variants": 4
+        },
+        {
+          "id": "624:3032",
+          "name": "Timeline",
+          "variants": 1
+        }
+      ],
+      "note": "원본 재현 완료 — @ds/ui/ui/timeline. 점·선 마커 컬럼 정렬(구조적 고정)",
+      "role": "vocab"
+    },
+    "toggle": {
+      "name": {
+        "ko": "Toggle",
+        "en": "Toggle"
+      },
+      "status": "primitive",
+      "section": "—",
+      "stories": null,
+      "file": "components/src/ui/toggle.tsx",
+      "aliases": [],
+      "coveredBy": [],
+      "hub": [],
+      "figma": [],
+      "note": null,
+      "role": "infrastructure"
+    },
+    "toggle-group": {
+      "name": {
+        "ko": "ToggleGroup",
+        "en": "ToggleGroup"
+      },
+      "status": "retired",
+      "section": "—",
+      "stories": "components/src/ui/toggle-group.stories.tsx",
+      "file": "components/src/ui/toggle-group.tsx",
+      "aliases": [],
+      "coveredBy": [],
+      "hub": [],
+      "figma": [],
+      "note": "2026-09-15 은퇴 — 선택 상태 혼동. 단일 선택 = Tabs line, 다중 = Checkbox.",
+      "role": "retired"
+    },
+    "tooltip": {
+      "name": {
+        "ko": "툴팁",
+        "en": "Tooltip"
+      },
+      "status": "adopted",
+      "section": "Overlay",
+      "stories": "components/src/ui/tooltip.stories.tsx",
+      "file": "components/src/ui/tooltip.tsx",
+      "aliases": [
+        {
+          "slug": "ov-tooltip",
+          "name": "툴팁",
+          "files": [
+            "tooltip"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "ov-tooltip",
+          "group": "피드백 · 오버레이",
+          "name": "툴팁 (ⓘ)",
+          "shadcn": "Tooltip",
+          "prio": "P1"
+        }
+      ],
+      "figma": [
+        {
+          "id": "596:3056",
+          "name": "Tooltip",
+          "variants": 4
+        }
+      ],
+      "note": null,
+      "role": "vocab"
+    },
+    "version-filter-chip": {
+      "name": {
+        "ko": "버전 조건 필터 칩",
+        "en": "VersionFilterChip"
+      },
+      "status": "adopted",
+      "section": "Form",
+      "stories": "components/src/ui/version-filter-chip.stories.tsx",
+      "file": "components/src/ui/version-filter-chip.tsx",
+      "aliases": [
+        {
+          "slug": "version-filter-chip",
+          "name": "버전 조건 필터 칩",
+          "files": [
+            "version-filter-chip",
+            "popover",
+            "select",
+            "button"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "version-filter-chip",
+          "group": "폼",
+          "name": "버전 조건 필터 칩 (계층 캐스케이드)",
+          "shadcn": "조합(Popover·Select·Button)",
+          "prio": null
+        }
+      ],
+      "figma": [
+        {
+          "id": "574:3005",
+          "name": "VersionFilterChip",
+          "variants": 4
+        }
+      ],
+      "note": "조합 제작 — @ds/ui/ui/version-filter-chip. 계층 캐스케이드 필터 칩(구 필터 모달 폐기 → 칩 아래 패널): 제품 선택 → 공통버전 등장 → 제품버전 등장 순차 노출. 다중 조건 [+ 추가] — 제품 간 AND · 같은 제품 OR(구 모달 규칙 승계). 칩 = FilterChip 기본형 문법(h-9 · muted 면 · 꺾쇠 · 활성 = 파란 테두리+글자). 라벨 기본 '제품'(한국어 헤더 규칙) · 적용 요약 = 버전 포함 '제품 · navigation · 1.2.0 · 1.5.2', 2건 이상은 '첫 조건 외 N건'(2026-08-26 개정). 패널 = 드래프트 편집 → [적용] 확정 · [취소] 폐기 · [초기화] 좌하단 · 풀블리드 구분선. 내부는 채택분 조합(ov-popover·form-select·btn-basic) — 손 구현 금지",
+      "role": "vocab"
+    }
+  }
+}

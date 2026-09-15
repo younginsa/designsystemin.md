@@ -9,6 +9,7 @@ import {
   type FilterDef,
   type FilterValues,
 } from "./filter-bar"
+import { SearchBox } from "./search-box"
 
 /* FilterBar 스토리 — 필터 스펙 표 6개(2026-09-08, 세일즈 365 PRD 6.1~6.6)를 그대로 옮긴 것.
  * 규칙: 유형이 연산자를 정하고, '다중 조건 O'가 multi를 정한다. Number 열은 정렬 전용이라 필터가 아니다.
@@ -29,11 +30,14 @@ function Demo({
   placeholder,
   values: initial = {},
   shown = [],
+  searchSlot,
 }: {
   filters: FilterDef[]
   placeholder: string
   values?: FilterValues
   shown?: string[]
+  /** 검색 슬롯 옵트인(SearchBox 등) — 지정 시 내장 검색창 대신 렌더 */
+  searchSlot?: React.ReactNode
 }) {
   const [keyword, setKeyword] = React.useState("")
   const [values, setValues] = React.useState<FilterValues>(initial)
@@ -41,6 +45,7 @@ function Demo({
   return (
     <div style={{ width: 960 }}>
       <FilterBar
+        searchSlot={searchSlot}
         searchPlaceholder={placeholder}
         keyword={keyword}
         onKeyword={setKeyword}
@@ -133,6 +138,39 @@ export const DeliveryList = {
   ),
 }
 
+/* ── 검색 제안 옵트인 — searchSlot 에 SearchBox(2026-09-11) ─────────────
+ * FilterBar 기본 검색은 InputGroup. 검색 제안(최근 검색 3 · 빠른검색 5 · 입력 중 자동완성)이 필요한 화면만
+ * searchSlot 으로 SearchBox 를 넣는다(현재 납품 호선 리스트). defaultOpen 은 미리보기 전용 — 피그마 FilterBar state=search-open 과 같은 그림. */
+function SearchSuggestDemo() {
+  const [keyword, setKeyword] = React.useState("")
+  return (
+    <Demo
+      placeholder="IMO · 호선명 · Hull · 선사 검색"
+      filters={DELIVERY_FILTERS}
+      searchSlot={
+        <SearchBox
+          placeholder="IMO · 호선명 · Hull · 선사 검색"
+          value={keyword}
+          onChange={setKeyword}
+          candidates={[
+            { label: "9800137", sub: "HYUNDAI GLOBE 001" },
+            { label: "9800274", sub: "MAERSK SEOUL 002" },
+            { label: "HYUNDAI GLOBE 001", sub: "IMO 9800137" },
+          ]}
+          recentInitial={["9800137", "9800274", "HYUNDAI GLOBE 001"]}
+          quick={["HYUNDAI GLOBE", "MAERSK", "SVM", "BUSAN", "TEST"]}
+          defaultOpen
+        />
+      }
+    />
+  )
+}
+
+export const SearchSuggest = {
+  parameters: { vocab: "header-filter" },
+  render: () => <SearchSuggestDemo />,
+}
+
 /* ── 6.4 구독 리스트 ────────────────────────────────────────────── */
 const SUBSCRIPTION_FILTERS: FilterDef[] = [
   { name: "status", label: "상태", options: ["진행중", "중단", "예정", "만료", "취소"], multi: true, operators: OPS_SELECT, base: true },
@@ -218,6 +256,7 @@ export const __namedExportsOrder = [
   "ContractList",
   "VesselList",
   "DeliveryList",
+  "SearchSuggest",
   "SubscriptionList",
   "AccountList",
   "UserList",

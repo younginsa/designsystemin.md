@@ -8,7 +8,8 @@
 
 import * as React from "react";
 
-import { AdoptPanel, AdoptRail, useAdoption, useHubData } from "./adopt";
+import { useAdoption, useHubData } from "./adopt";
+import { RegistryPanel, RegistryRail } from "./registry";
 import { CatalogPanel } from "./catalog";
 import { CropImg, Lockbar, hydrateFragments, useScreens } from "./screens";
 import { useDsViewers, useGallery } from "./viewers";
@@ -27,7 +28,7 @@ const META: Record<DocKey, { label: string; stamp: string }> = {
 const DEEP_LINKS: Record<string, [DocKey, string]> = {
   "#templates": ["d365", "페이지 템플릿"],
   "#usage365": ["d365", "프론트 연동"],
-  "#adopt": ["d365", "컴포넌트 채택"],
+  "#adopt": ["d365", "Storybook 컴포넌트"],
   "#ds365": ["d365", "365 DS"],
   "#history": ["d365", "히스토리"],
   "#pipeline": ["hinas", "공통 DS"],
@@ -81,7 +82,7 @@ export default function HubApp({ fragments, hist, shotNames }: {
       { title: "Resources" },
     ],
     d365: [
-      { title: "컴포넌트 채택", visual: "adopt" },
+      { title: "Storybook 컴포넌트", visual: "adopt" },
       { title: "365 DS" },
       { title: "페이지 템플릿" },
       { title: "프론트 연동" },
@@ -91,7 +92,7 @@ export default function HubApp({ fragments, hist, shotNames }: {
 
   const panels = PANELS[doc];
   const panel = panels[sel];
-  const isAdopt = panel.title === "컴포넌트 채택";
+  const isAdopt = panel.title === "Storybook 컴포넌트";
   const isDsnav = panel.title === "공통 DS";
   const isHist = panel.title === "히스토리";
   const hasVisual = panel.visual !== undefined;
@@ -263,7 +264,7 @@ export default function HubApp({ fragments, hist, shotNames }: {
             <div className="doc" id="doc-365" style={{ display: doc === "d365" ? "" : "none" }}>
               <Lockbar unlocked={unlocked} unlock={unlock} />
               <section className={"panel hubdoc" + (doc === "d365" && sel === 0 ? " on" : "")}>
-                <AdoptPanel urls={urls} adoption={adoption} flash={flash} />
+                <RegistryPanel />
               </section>
               <section className={"panel hubdoc" + (doc === "d365" && sel === 1 ? " on" : "")}>
                 <CatalogPanel approvals={adoption} ds365={ds365File} urls={urls} />
@@ -293,14 +294,9 @@ export default function HubApp({ fragments, hist, shotNames }: {
             <div className="strip">
               <span>{isAdopt || isDsnav ? "" : stack ? stack.title : "Visual"}</span>
               <span className="sub">{isAdopt || isDsnav ? "" : stack ? stack.names.length + "장" : "준비 중"}</span>
-              {isAdopt ? (
-                <span style={{ marginLeft: "auto" }}>
-                  <button type="button" className="chip" onClick={adoption.exportApproved}>approved.json 내보내기</button>
-                </span>
-              ) : null}
             </div>
             {isAdopt ? (
-              <AdoptRail adoption={adoption} onJump={jumpToCard} />
+              <RegistryRail />
             ) : isDsnav ? (
               <div id="visual-dsnav" style={{ display: "flex" }}>
                 {([

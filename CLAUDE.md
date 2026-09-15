@@ -74,6 +74,11 @@ AI 친화 디자인 시스템 저장소다.
    **사용 가능 어휘 = approved.json 채택분뿐이다(유일한 게이트).** ds365.json은
    토큰·값 조정·재현 제작 상태의 기록이며 어휘를 부여하지 않는다 —
    재현 컴포넌트도 채택되어야 어휘다.
+   **원천은 `playground/public/ds-registry.json`이다(2026-09-15)** — 항목 키 = 스토리 파일,
+   `status: adopted`가 곧 채택이고 `figma`에 Component 페이지 세트 id, `aliases`에 구 슬러그가 있다.
+   approved.json·vocab-map.json은 `pnpm registry`가 여기서 생성하는 호환 뷰다(직접 편집 금지 —
+   클론은 이 두 파일을 그대로 읽어도 된다). 채택·은퇴는 관리자가 레지스트리의 status를 바꾸고
+   `pnpm registry`를 돌린다. 피그마 대조는 `pnpm registry --audit`(인벤토리 scripts/figma-inventory.json).
    **가용성 확인은 `vocab-map.json` 조회로 한다 — 키 이름 추측 금지.**
    어휘 슬러그·카드 이름은 한국어 패턴명이라("드롭다운 메뉴", "배너 · 결과 카드")
    특정 컴포넌트가 어휘에 있는지 이름만 보고는 알 수 없다. "X 쓸 수 있나?"는

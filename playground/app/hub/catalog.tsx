@@ -459,7 +459,7 @@ export function CatalogPanel({ approvals, ds365, urls }: {
       </div>
       <p className="lead"><strong>365 DS = 채택 어휘에 365 토큰을 얹은 모습.</strong> 01에서 채택된 컴포넌트만
         여기 올라온다 — 카드 그림은 실물 렌더라 토큰이 바뀌면 즉시 따라온다.
-        미채택분은 여기 없다(현황은 01 컴포넌트 채택의 우측 레일, 과거 분석 자료는 04 히스토리).</p>
+        미채택분은 여기 없다(전체 현황은 01 Storybook 컴포넌트 — ds-registry.json, 과거 분석 자료는 05 히스토리).</p>
 
       <div className="card-grid" style={{ marginBottom: 8 }}>
         <div className="card ds-add" onClick={() => alert("새 컴포넌트 분석 요청서는 다음 단계(②)에서 활성화됩니다.")}>

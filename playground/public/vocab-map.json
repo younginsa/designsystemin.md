@@ -1,8 +1,8 @@
 {
-  "$description": "어휘 슬러그 → 실제 컴포넌트 파일 매핑. approved.json은 '무엇이 채택됐나'(게이트)이고, 이 파일은 '그 어휘가 어느 파일을 쓰나'를 답한다. 카드 이름은 한국어 패턴명이라 이름만 보고는 특정 컴포넌트가 어휘에 있는지 알 수 없다 — 2026-08-26 ov-popover 사고(ov-menus 이름 안에 Popover가 묻혀 있어 중복 신설)의 재발 방지용.",
-  "$usage": "가용성 확인 = 이 파일에서 파일명을 찾는다(키 이름 추측 금지). 예) 'Popover 쓸 수 있나?' → files에 \"popover\"가 있는 슬러그를 찾고, 그 슬러그가 approved.json에 있는지 본다. 역방향(파일 → 어휘)은 files 배열 검색으로 답한다.",
-  "$note": "files는 components/src/ui/<name>.tsx 기준. 여러 파일을 쓰는 조합 어휘는 전부 나열한다. files가 빈 배열이면 전용 파일 없이 손으로 조합하는 패턴이다.",
-  "updated": "2026-09-03 — 용례 병합 5건(fb-note→fb-banner · data-verchip/data-roletag→data-badge · data-cells/data-colhead→data-table). 26.08.26 '병합 기각' 번복 — 같은 파일·정적·용례 병기로 대체(관리자 확정) · btn-fab 은퇴 — CTA 문법 ③(rounded-full 금지) 충돌 + 365·세일즈 실사용 0건 전수 확인",
+  "$description": "어휘 슬러그 → 실제 컴포넌트 파일 매핑. ds-registry.json 에서 생성(직접 편집 금지 — pnpm registry).",
+  "$usage": "가용성 확인 = 이 파일에서 파일명을 찾는다(키 이름 추측 금지).",
+  "$note": "files는 components/src/ui/<name>.tsx 기준. 여러 파일을 쓰는 조합 어휘는 전부 나열한다. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지.",
+  "updated": "2026-09-15 — ds-registry.json 에서 생성(pnpm registry)",
   "vocab": {
     "app-shell": { "name": "앱 셸", "files": ["sidebar"] },
     "breadcrumb": { "name": "브레드크럼", "files": ["breadcrumb"] },
@@ -23,7 +23,7 @@
     "data-stat": { "name": "스탯 · 퍼널 · 랭킹", "files": ["card"] },
     "data-status": { "name": "상태 필 · 도트", "files": ["status-badge", "badge"] },
     "data-table": { "name": "테이블 (셀 변형 · 정렬 헤더 포함)", "files": ["table"] },
-    "data-tabs": { "name": "탭 3종", "files": ["tabs", "toggle-group"] },
+    "data-tabs": { "name": "탭 3종", "files": ["tabs"] },
     "data-tree": { "name": "트리 목록", "files": ["collapsible"] },
     "detail-panel": { "name": "상세 패널", "files": ["detail-panel", "sheet"] },
     "error-state": { "name": "에러 상태 배너", "files": ["error-state", "alert"] },
@@ -41,6 +41,7 @@
     "form-textarea": { "name": "텍스트에어리어 · 글자수", "files": ["textarea"] },
     "header-filter": { "name": "헤더 필터바", "files": ["filter-bar"] },
     "icon-select": { "name": "아이콘 셀렉터", "files": ["icon-select"] },
+    "list-footer": { "name": "목록 푸터 (행 수 · 전체 건수 · 페이지네이션)", "files": ["list-footer", "rows-per-page", "pagination"] },
     "ov-dialog": { "name": "모달", "files": ["dialog", "alert-dialog"] },
     "ov-menus": { "name": "드롭다운 메뉴", "files": ["dropdown-menu"] },
     "ov-notif": { "name": "알림 패널", "files": ["notification-panel"] },
@@ -48,7 +49,6 @@
     "ov-sheet": { "name": "슬라이드오버 패널", "files": ["sheet"] },
     "ov-toast": { "name": "토스트", "files": ["sonner"] },
     "ov-tooltip": { "name": "툴팁", "files": ["tooltip"] },
-    "list-footer": { "name": "목록 푸터 (행 수 · 전체 건수 · 페이지네이션)", "files": ["list-footer", "rows-per-page", "pagination"] },
     "rows-per-page": { "name": "페이지당 행 수 (목록 푸터)", "files": ["rows-per-page", "dropdown-menu", "button"] },
     "search-box": { "name": "검색 제안", "files": ["search-box", "input-group", "popover"] },
     "sidebar-nav": { "name": "사이드바 내비", "files": ["sidebar"] },
@@ -58,8 +58,8 @@
     "viz-donut": { "name": "도넛 차트", "files": ["chart"] },
     "viz-line": { "name": "라인 차트", "files": ["chart"] }
   },
-  "$infrastructure": "어휘가 직접 가리키지 않지만 컴포넌트들이 내부에서 쓰거나 조합 부품으로 쓰는 파일. 어휘 밖이라고 임포트 금지는 아니다. ds:build 게이트가 이 배열을 읽는다 — components/src/ui의 모든 파일은 vocab files ∪ infrastructure ∪ unadopted 중 하나에 속해야 한다.",
-  "infrastructure": ["avatar", "label", "scroll-area", "separator", "toggle", "state-preview"],
-  "$unadopted": "실물은 있으나 채택 어휘가 없는 것 — 쓰려면 채택 절차를 밟아야 한다.",
-  "unadopted": ["stepper"]
+  "$infrastructure": "어휘가 직접 가리키지 않지만 컴포넌트들이 내부에서 쓰거나 조합 부품으로 쓰는 파일(레지스트리 role=infrastructure). ds:build 게이트가 이 배열을 읽는다.",
+  "infrastructure": ["avatar","label","scroll-area","separator","state-preview","toggle"],
+  "$unadopted": "실물은 있으나 채택 어휘가 없는 것(role=unadopted) + 은퇴(retired). 쓰려면 채택 절차를 밟아야 한다.",
+  "unadopted": ["stepper","toggle-group"]
 }
