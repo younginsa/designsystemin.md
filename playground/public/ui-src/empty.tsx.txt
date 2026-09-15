@@ -17,7 +17,7 @@ function Empty({
       data-size={size}
       className={cn(
         size === "sm"
-          ? "flex min-w-0 items-center gap-3 rounded-md border border-dashed p-3 text-sm text-secondary-foreground"
+          ? "flex w-full min-w-0 items-center gap-3 rounded-md border border-dashed p-3 text-sm text-secondary-foreground"
           : "flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12",
         className
       )}

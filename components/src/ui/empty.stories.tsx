@@ -46,7 +46,7 @@ export const NoResult = {
 export const Inline = {
   parameters: { vocab: "fb-empty" },
   render: () => (
-    <div className="w-96 space-y-3">
+    <div className="w-full space-y-3">
       <Empty size="sm">
         <Inbox className="size-4 shrink-0" />
         첨부 파일이 없습니다
