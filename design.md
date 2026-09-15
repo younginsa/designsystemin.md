@@ -59,6 +59,11 @@
   캔버스가 `bg-secondary`(대시보드)여도 같다. 종전 InputGroup `filled` 변형이 기본이 됐고 prop 은 호환용.
   피그마 필드 세트 fill = General/background(card 번들). 반경은 토큰 그대로 — md 8 · sm 6 · lg 10 · xl 14.
 - **Separator** — 섹션 구분. 여백으로 충분하면 쓰지 않는다.
+- **ToggleGroup — 은퇴(2026-09-15)**: outline 세그먼트·칩 그리드는 선택 상태(accent 6%)가 안 보여
+  혼동을 낳았다. 단일 선택 뷰 전환 = `Tabs variant="line"`, 다중 선택 = `Checkbox` 그룹.
+  `form-segment`·`form-chipgrid` 어휘 삭제, 파일은 미채택 프리미티브로 남는다.
+- **필드 보조 요소(2026-09-15)** — ✕ 지우기 등 아이콘 액션 = `text-input`(hover `foreground`),
+  힌트 접미어(`InputGroupText muted`, "7자리") = `text-input`. 라벨 접두어("IMO")는 `secondary-foreground`.
 - **Alert** — 페이지 내 정적 안내·경고. 파괴 배너 표면 = `bg-destructive/5`
   (2026-09-02 개정 — /10은 hover·버튼 잉크로 이관).
 - **hover 색(2026-09-10 확정)** — 중립 면 위 hover = `accent` 하나(오버레이라 light·dark·control 공통).

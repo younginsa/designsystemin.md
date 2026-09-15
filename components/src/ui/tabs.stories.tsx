@@ -1,9 +1,9 @@
 import * as React from "react"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs"
-import { ToggleGroup, ToggleGroupItem } from "./toggle-group"
 
-/* Tabs 스토리 — 허브 카드 data-tabs(탭 3종)의 원문: TabsList default(bg-muted 필) + ToggleGroup outline sm(세그먼트).
+/* Tabs 스토리 — 허브 카드 data-tabs(탭 2종)의 원문: TabsList default(bg-muted 필) · line(밑줄).
+ * ToggleGroup 세그먼트는 2026-09-15 은퇴(선택 상태 혼동) — 뷰 전환은 line 탭, 다중 선택은 Checkbox.
  * cva tabsList variant default(bg-muted) · line(gap-1 bg-transparent, 밑줄). @storybook import 0. */
 
 export default {
@@ -14,7 +14,7 @@ export default {
   },
 }
 
-export const Three = {
+export const Default = {
   parameters: { vocab: "data-tabs" },
   render: () => (
     <>
@@ -25,10 +25,12 @@ export const Three = {
           <TabsTrigger value="svm">SVM</TabsTrigger>
         </TabsList>
       </Tabs>
-      <ToggleGroup type="single" defaultValue="user" variant="outline" size="sm">
-        <ToggleGroupItem value="user">사용자용</ToggleGroupItem>
-        <ToggleGroupItem value="dev">개발자용</ToggleGroupItem>
-      </ToggleGroup>
+      <Tabs defaultValue="user">
+        <TabsList variant="line">
+          <TabsTrigger value="user">사용자용</TabsTrigger>
+          <TabsTrigger value="dev">개발자용</TabsTrigger>
+        </TabsList>
+      </Tabs>
     </>
   ),
 }
@@ -46,4 +48,4 @@ export const Line = {
   ),
 }
 
-export const __namedExportsOrder = ["Three", "Line"]
+export const __namedExportsOrder = ["Default", "Line"]

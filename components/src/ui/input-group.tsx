@@ -85,8 +85,9 @@ function InputGroupAddon({
   )
 }
 
+// 보조 액션(✕ 지우기 등)은 한 단계 연하게 — text-input, hover 시 foreground(2026-09-15 확정. 라벨 접두어는 addon 의 secondary-foreground 유지)
 const inputGroupButtonVariants = cva(
-  "flex items-center gap-2 text-sm shadow-none",
+  "flex items-center gap-2 text-sm text-input shadow-none hover:text-foreground",
   {
     variants: {
       size: {
@@ -122,11 +123,20 @@ function InputGroupButton({
   )
 }
 
-function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
+function InputGroupText({
+  className,
+  muted = false,
+  ...props
+}: React.ComponentProps<"span"> & {
+  /** 힌트 접미어('7자리' 등) = text-input 한 단계 연하게(2026-09-15). 라벨 접두어('IMO')는 기본 secondary-foreground */
+  muted?: boolean
+}) {
   return (
     <span
+      data-muted={muted || undefined}
       className={cn(
-        "flex items-center gap-2 text-sm text-secondary-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+        "flex items-center gap-2 text-sm [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+        muted ? "text-input" : "text-secondary-foreground",
         className
       )}
       {...props}

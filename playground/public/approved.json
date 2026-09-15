@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-10",
+  "updated": "2026-09-15",
   "approved": [
     "app-shell",
     "breadcrumb",
@@ -27,13 +27,11 @@
     "fb-banner",
     "fb-console",
     "fb-empty",
-    "form-chipgrid",
     "form-controls",
     "form-daterange",
     "form-file",
     "form-number",
     "form-search",
-    "form-segment",
     "form-select",
     "form-tags",
     "form-text",

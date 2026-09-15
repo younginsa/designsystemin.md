@@ -112,7 +112,7 @@ function SearchBox({
                   })
                 }}
               >
-                <X className="size-3.5 text-secondary-foreground" />
+                <X className="size-3.5 text-input hover:text-foreground" />
               </button>
             </InputGroupAddon>
           )}
@@ -175,7 +175,7 @@ function SearchBox({
                         setRecent((list) => list.filter((x) => x !== r))
                       }}
                     >
-                      <X className="size-3.5 text-secondary-foreground" />
+                      <X className="size-3.5 text-input hover:text-foreground" />
                     </button>
                   </div>
                 ))}

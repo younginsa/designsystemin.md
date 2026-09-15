@@ -2,9 +2,9 @@ import * as React from "react"
 
 import { ToggleGroup, ToggleGroupItem } from "./toggle-group"
 
-/* ToggleGroup 스토리 — 허브 카드 form-segment(3상태 세그먼트) · form-chipgrid(칩 멀티셀렉트 그리드)의 원문.
- * cva(toggle): variant default · outline / size sm(h-8) · default(h-9) · lg(h-10). spacing 0 = 붙은 세그먼트(끝만 둥글게).
- * data-tabs 카드(탭 3종)도 이 파일을 쓴다 — 배치 3. @storybook import 0. */
+/* ToggleGroup 스토리 — ⚠ 미채택(2026-09-15 은퇴): form-segment · form-chipgrid 어휘 삭제, 허브 카드 없음, 피그마 세트 삭제.
+ * 선택 상태(accent 6%)가 안 보여 혼동 — 단일 선택 뷰 전환 = Tabs line, 다중 선택 = Checkbox 그룹. 파일은 shadcn 프리미티브로만 남는다.
+ * cva(toggle): variant default · outline / size sm(h-8) · default(h-9) · lg(h-10). @storybook import 0. */
 
 export default {
   title: "DS/ToggleGroup",

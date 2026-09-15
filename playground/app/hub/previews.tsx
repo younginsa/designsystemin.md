@@ -61,7 +61,6 @@ import * as radioGroupStories from "@ds/ui/ui/radio-group.stories";
 import * as switchStories from "@ds/ui/ui/switch.stories";
 import * as selectStories from "@ds/ui/ui/select.stories";
 import * as commandStories from "@ds/ui/ui/command.stories";
-import * as toggleGroupStories from "@ds/ui/ui/toggle-group.stories";
 import * as inputGroupStories from "@ds/ui/ui/input-group.stories";
 import * as calendarStories from "@ds/ui/ui/calendar.stories";
 import * as iconSelectStories from "@ds/ui/ui/icon-select.stories";
@@ -416,11 +415,9 @@ export const PREVIEWS: Record<string, Pv> = {
     ),
   },
   // 배치 2 — toggle-group · input-group · calendar · icon-select 스토리 원문(2026-09-10)
-  "form-segment": fromStories("form-segment", toggleGroupStories, { className: "flex items-center justify-center " + BOX, style: { width: 560, height: 120 } }),
   "form-tags": fromStories("form-tags", inputStories, { className: "flex items-center " + BOX + " px-10", style: { width: 560, height: 130 } }),
   "form-daterange": fromStories("form-daterange", calendarStories, { className: "flex w-fit items-center justify-center " + BOX + " p-4" }),
   "form-file": fromStories("form-file", inputStories, { className: "flex items-center " + BOX + " px-10", style: { width: 560, height: 150 } }),
-  "form-chipgrid": fromStories("form-chipgrid", toggleGroupStories, { className: "flex items-center justify-center " + BOX + " p-6", style: { width: 560, height: 200 } }),
 
   /* ── 데이터 표시 ── */
   // 셀 변형·정렬 헤더 흡수(2026-09-03) — 정렬 버튼 헤더 + 링크 셀·2줄 셀·행 액션을 한 표로
@@ -509,11 +506,11 @@ export const CAPTURE_ORDER = [
   "btn-basic", "btn-destructive", "btn-states", "btn-split", "btn-icon", "btn-dashed",
   "fb-banner", "fb-empty", "fb-console", "viz-line", "viz-donut",
   "form-text", "form-number", "form-search", "form-textarea", "form-select", "form-controls",
-  "form-choicecard", "form-segment", "form-tags", "form-daterange", "form-file",
+  "form-choicecard", "form-tags", "form-daterange", "form-file",
   "data-table", "data-kv", "data-status", "data-badge",
   "data-matrix", "data-perm", "data-stat", "data-accordion",
   "data-tabs", "data-pagination", "data-pagination-stock", "data-progress", "data-tree",
-  "timeline", "stepper", "data-listrow", "form-chipgrid",
+  "timeline", "stepper", "data-listrow",
 ];
 
 /* ── 카드 프레임 맞춤 렌더 ─────────────────────────────────────────── */

@@ -48,7 +48,7 @@ export const PrefixSuffix = {
       </InputGroupAddon>
       <InputGroupInput defaultValue="9800685" aria-label="IMO" />
       <InputGroupAddon align="inline-end">
-        <InputGroupText>7자리</InputGroupText>
+        <InputGroupText muted>7자리</InputGroupText>
       </InputGroupAddon>
     </InputGroup>
   ),

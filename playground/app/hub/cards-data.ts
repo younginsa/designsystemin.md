@@ -184,13 +184,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "crop": "735,330,480,190"
       },
       {
-        "slug": "form-segment",
-        "name": "3상태 세그먼트",
-        "shadcn": "ToggleGroup",
-        "shot": "filter-modal",
-        "crop": "745,590,430,120"
-      },
-      {
         "slug": "form-tags",
         "name": "태그 인풋",
         "prio": "P2",
@@ -225,14 +218,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "shot": "release-editor",
         "crop": "650,780,625,90"
       },
-      {
-        "slug": "form-chipgrid",
-        "name": "칩 멀티셀렉트 그리드",
-        "prio": "P3",
-        "shadcn": "ToggleGroup(multiple)",
-        "shot": "compat-chips",
-        "crop": "700,340,520,400"
-      }
     ]
   },
   {
@@ -333,9 +318,9 @@ export const CARD_GROUPS: HubGroup[] = [
       },
       {
         "slug": "data-tabs",
-        "name": "탭 3종",
+        "name": "탭 2종",
         "prio": "P1",
-        "shadcn": "Tabs·ToggleGroup",
+        "shadcn": "Tabs",
         "shot": "release-notes",
         "crop": "233,130,420,55"
       },

@@ -90,7 +90,7 @@
       "text": "input",
       "bg": "card",
       "level": "aux",
-      "note": "버전 스탬프류 장식 표기 한정(셸 사이드바 브랜드 존 caption_xs — 2026-09-02) — 본문 텍스트 아님"
+      "note": "버전 스탬프류 장식 표기 한정(셸 사이드바 브랜드 존 caption_xs — 2026-09-02) + 필드 보조 요소(InputGroup ✕ 지우기 버튼 · muted 힌트 접미어 '7자리', 2026-09-15 — hover 시 foreground) — 본문 텍스트 아님"
     },
     {
       "text": "foreground",

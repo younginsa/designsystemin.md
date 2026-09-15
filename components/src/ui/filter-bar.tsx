@@ -184,7 +184,7 @@ function FilterBar({
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => onKeyword("")}
                 >
-                  <X className="size-3.5 text-secondary-foreground" />
+                  <X className="size-3.5" />
                 </button>
               </InputGroupAddon>
             )}
