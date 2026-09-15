@@ -52,4 +52,15 @@ export const Full = {
   ),
 }
 
-export const __namedExportsOrder = ["Stat", "Full"]
+/** flat 패널 — 본문(A·B·C)의 보더 카드. 그림자·내장 패딩 없음: 섹션 p-6 · 우측 레일 p-4(2026-09-15 신설, 갤러리 74곳 손 조합 대체) */
+export const FlatPanel = {
+  parameters: { vocab: "data-stat" },
+  render: () => (
+    <Card variant="flat" className="p-6">
+      <p className="text-sm font-medium">계약 정보</p>
+      <p className="mt-2 text-sm text-secondary-foreground">대양해운 · Control 신규 납품 · 2026-01-15</p>
+    </Card>
+  ),
+}
+
+export const __namedExportsOrder = ["Stat", "Full", "FlatPanel"]

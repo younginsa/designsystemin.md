@@ -2,12 +2,23 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@ds/ui/lib/utils"
 
-function Empty({ className, ...props }: React.ComponentProps<"div">) {
+function Empty({
+  className,
+  size = "default",
+  ...props
+}: React.ComponentProps<"div"> & {
+  /** sm = 인라인 빈 상태(첨부 슬롯 · 메모 · 드롭존) — 한 줄, rounded-md · 점선 border · p-3 · text-sm secondary-foreground.
+   *  2026-09-15 신설: 갤러리 38곳의 손 점선 박스를 어휘로 잠근다. default = 섹션 규모 빈 상태(StatePreview 빈) */
+  size?: "default" | "sm"
+}) {
   return (
     <div
       data-slot="empty"
+      data-size={size}
       className={cn(
-        "flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12",
+        size === "sm"
+          ? "flex min-w-0 items-center gap-3 rounded-md border border-dashed p-3 text-sm text-secondary-foreground"
+          : "flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12",
         className
       )}
       {...props}

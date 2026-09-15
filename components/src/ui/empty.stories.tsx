@@ -42,4 +42,19 @@ export const NoResult = {
   ),
 }
 
-export const __namedExportsOrder = ["WithAction", "NoResult"]
+/** 인라인 빈 상태 — 첨부 슬롯 · 메모 · 드롭존 한 줄(size="sm", 2026-09-15 신설, 갤러리 38곳 손 점선 박스 대체) */
+export const Inline = {
+  parameters: { vocab: "fb-empty" },
+  render: () => (
+    <div className="w-96 space-y-3">
+      <Empty size="sm">
+        <Inbox className="size-4 shrink-0" />
+        첨부 파일이 없습니다
+        <Button variant="ghost" size="sm" className="ml-auto"><Plus /> 추가</Button>
+      </Empty>
+      <Empty size="sm">등록된 메모가 없습니다</Empty>
+    </div>
+  ),
+}
+
+export const __namedExportsOrder = ["WithAction", "NoResult", "Inline"]

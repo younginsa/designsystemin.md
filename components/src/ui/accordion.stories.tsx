@@ -44,4 +44,31 @@ export const Multiple = {
   ),
 }
 
-export const __namedExportsOrder = ["Default", "Multiple"]
+/** 꺾쇠 앞(트리 목록 — 릴리즈 노트 버전 목록) · 꺾쇠 없음. chevron prop(2026-09-15) — 종전 화면의 [&>svg]:hidden 대체 */
+export const ChevronStart = {
+  render: () => (
+    <Accordion type="single" collapsible defaultValue="a" className="w-80">
+      <AccordionItem value="a">
+        <AccordionTrigger chevron="start" className="py-2 text-sm">v3.0.0-rc.26</AccordionTrigger>
+        <AccordionContent className="pl-8">2026-08-13 발행 · 사용자용 노트</AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="b">
+        <AccordionTrigger chevron="start" className="py-2 text-sm">v3.0.0-rc.25</AccordionTrigger>
+        <AccordionContent className="pl-8">2026-08-01 발행</AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  ),
+}
+
+export const NoChevron = {
+  render: () => (
+    <Accordion type="single" collapsible defaultValue="a" className="w-80">
+      <AccordionItem value="a">
+        <AccordionTrigger chevron="none" className="py-2 text-sm hover:no-underline">SYSTEM</AccordionTrigger>
+        <AccordionContent>CPU 9.2% · Memory 25.0%</AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  ),
+}
+
+export const __namedExportsOrder = ["Default", "Multiple", "ChevronStart", "NoChevron"]

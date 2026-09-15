@@ -2,12 +2,22 @@ import * as React from "react"
 
 import { cn } from "@ds/ui/lib/utils"
 
-function Card({ className, ...props }: React.ComponentProps<"div">) {
+function Card({
+  className,
+  variant = "default",
+  ...props
+}: React.ComponentProps<"div"> & {
+  /** flat = 본문(A·B·C)의 보더 패널 — rounded-lg · border · bg-card, 그림자·내장 패딩 없음(소비자가 p-4 레일 · p-6 섹션). 2026-09-15 신설:
+   *  갤러리 74곳이 손으로 쓰던 `rounded-lg border bg-card p-*` 를 어휘로 잠근다. default = 대시보드(D) 카드 */
+  variant?: "default" | "flat"
+}) {
   return (
     <div
       data-slot="card"
+      data-variant={variant}
       className={cn(
-        "flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm",
+        "flex flex-col border bg-card text-card-foreground",
+        variant === "flat" ? "rounded-lg" : "gap-6 rounded-xl py-6 shadow-sm",
         className
       )}
       {...props}
