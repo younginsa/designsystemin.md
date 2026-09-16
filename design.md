@@ -82,7 +82,7 @@ import 경로는 `@ds/ui/ui/<컴포넌트>` 형식이다. 예: `import { Button 
 
 - **어드민 셸**: 좌측 사이드바(`w-64 border-r bg-card p-4`) + 우측 콘텐츠(`p-8`).
 - **인증 셸**: 중앙 정렬 단일 카드(`max-w-sm`), 배경 `bg-muted`.
-- 페이지 헤더: 제목(`text-2xl font-bold`) + 우측 주요 액션 버튼.
+- 페이지 헤더: `PageHeader` 프리셋(2026-09-16) — 제목 `text-lg font-bold`(text-2xl 아님) + `actions`(우측 페이지 레벨 액션), 부제는 `description`, 제목 옆 배지·툴팁은 `addon`. 타이틀 행 손 조합 금지.
 - 콘텐츠 최대폭: 테이블 페이지는 전체폭, 폼·문서형은 `max-w-2xl`.
 - 수직 리듬: 섹션 간 `space-y-6`, 폼 필드 간 `space-y-4`.
 
@@ -94,8 +94,8 @@ import 경로는 `@ds/ui/ui/<컴포넌트>` 형식이다. 예: `import { Button 
   (`RowsPerPage`) + 우측 Pagination 한 행. 페이지네이션이 없어도(단일 페이지) 건수는 남는다.
   **건수는 푸터가 소유한다** — 제목 아래 부제로 "총 N건"을 표기하는 문법은 폐기.
   RowsPerPage·Pagination 을 페이지에서 직접 나열하는 손 조합은 금지.
-- **페이지 헤더 행**: 단일 줄 제목이면 `items-center`. 실제 부제(설명 텍스트)가 있을
-  때만 `items-start`.
+- **페이지 헤더 행**: `PageHeader` 프리셋 — 단일 줄 제목이면 `items-center`, 실제 부제(`description`)가
+  있을 때만 `items-start`(프리셋이 자동 판정).
 - **목록 액션**(내보내기·등록 CTA)은 **FilterBar `actions` 슬롯**(툴바 우측)에 둔다 —
   제목 행에 두지 않는다.
 - **테이블 헤더는 한국어 기본** — 식별자(IMO·Hull 등)와 제품명(Control 등)만 영문 유지.

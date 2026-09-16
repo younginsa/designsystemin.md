@@ -47,6 +47,7 @@ const FIGMA_MAP = {
   Progress: "progress", PaginationLink: "pagination", Pagination: "pagination",
   "Table / basic": "table", "Table / matrix": "table", "Table / permissions": "table", TableRow: "table",
   "Card / stat": "card", "Card / full": "card", "Card / flat": "card",
+  PageHeader: "page-header", StepperItem: "stepper", Stepper: "stepper", HeatmapGrid: "heatmap-grid",
   Item: "item", "Item / key value": "item", "Item / list row": "item",
   AccordionItem: "accordion", Accordion: "accordion", "Collapsible / tree": "collapsible",
   TabsTrigger: "tabs", "Tabs / two kinds": "tabs", "Chart / donut": "chart", "Chart / line": "chart",

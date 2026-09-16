@@ -1,7 +1,7 @@
 {
   "$note": "DS 컴포넌트 레지스트리 — 단일 원천(2026-09-15). 항목 키 = 스토리 파일. status: adopted(= Storybook 에 있다 = DS) · primitive(shadcn 대체 전용, 스토리 없음) · retired. approved.json · vocab-map.json 은 pnpm registry 가 여기서 생성한다(직접 편집 금지). figma = Component 페이지 세트 id. 파이프라인: 레지스트리 → Storybook → 생성(shadcn 대체 + Jira 자동 발행), 2026-09-16.",
   "fileKey": "9bDM5hVObGhrFM6vLyeL3K",
-  "updated": "2026-09-15",
+  "updated": "2026-09-16",
   "components": {
     "accordion": {
       "name": {
@@ -934,6 +934,43 @@
       "note": "조합 제작 — @ds/ui/ui/filter-bar (FilterBar·FilterChip·DateRangePanel·resolveDateRange·DATE_PRESETS). 피그마 209-17188 구조 · 날짜 패널 209-36201. 행 = 검색(InputGroup filled 상시 좌측 — 검색 제안이 필요한 화면만 searchSlot 으로 SearchBox 옵트인(2026-09-11 확정: 기본 승격 안 함, 현재 납품 호선만). 스토리 SearchSuggest · 피그마 FilterBar state=search-open) → 필터 칩(한 줄 고정 — 2026-09-09 확정, 종전 '최대 2줄' 폐기: 칩이 남은 폭을 쓰고 넘치면 값 말줄임 + title, 검색창·[+ 필터 추가]·[필터초기화]·액션은 줄지 않음. Input 은 긴 placeholder·값 truncate, 2026-09-08) → [+ 필터 추가] │ 우측 액션 슬롯. 칩 문법 2종: 기본(base)=✕ 없이 꺾쇠만 / 추가=✕만(꺾쇠 없음). 칩 면은 전 상태 bg-muted, 비활성 border-transparent·text-foreground / 활성 border-primary·text-primary. 칩 hover는 비활성만 accent(활성 hover는 primary×accent 미선언이라 보류). 값 해제는 드롭다운 우하단 [초기화] — \"전체\" 항목 금지. 정렬은 이 바에 없다(테이블 컬럼 헤더 전담). 손 조합 금지. 행 매처 4종(passText · passSelect · passDate · passDateSpan)은 filter-bar.tsx 가 소유(2026-09-14 승격 — 종전 갤러리 _detail/filter-match.ts, 두 앱 목록 9면 + AuditLog 공용). now 기본값은 실제 시계, 시안 기준일은 호출부가 넘긴다",
       "role": "vocab"
     },
+    "heatmap-grid": {
+      "name": {
+        "ko": "히트맵 그리드",
+        "en": "HeatmapGrid"
+      },
+      "status": "adopted",
+      "section": "Data",
+      "stories": "components/src/ui/heatmap-grid.stories.tsx",
+      "file": "components/src/ui/heatmap-grid.tsx",
+      "aliases": [
+        {
+          "slug": "heatmap",
+          "name": "히트맵 그리드",
+          "files": [
+            "heatmap-grid"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "heatmap",
+          "group": "데이터 표시",
+          "name": "히트맵 그리드"
+        }
+      ],
+      "figma": [
+        {
+          "id": "814:3206",
+          "name": "HeatmapGrid",
+          "variants": 1
+        }
+      ],
+      "note": "원본 재현 — @ds/ui/ui/heatmap-grid(2026-09-16, 시스템 진단 상세 Camera Status · Pod Status 에서 추출). HeatmapGrid(columns · rows{name, group?, cells} · rowLabel · cellTitle) + HeatmapLegend(items{label, tone}). 셀 톤 4종뿐 — success · primary · destructive · none(bg-muted opacity-40); DES-206 노랑·파랑 계열은 primary 대체. 셀 h-5 min-w-8 rounded-sm, 행 이름 font-mono text-sm(그룹 행 + 접두), 열 헤더 text-xs. 카드 셸(제목·설명·Expand All)은 화면의 Card variant=\"flat\" — 컴포넌트 밖.",
+      "role": "vocab"
+    },
     "icon-select": {
       "name": {
         "ko": "아이콘 셀렉터",
@@ -1229,6 +1266,43 @@
         }
       ],
       "note": "조합 제작 — @ds/ui/ui/notification-panel(어휘 ov-notif의 실물). Bell ghost 트리거 + unread 도트 배지(destructive), 패널 w-80, 헤더 알림·모두 읽음 양끝 대칭(py-0.5), 아이템 도트 슬롯 상시 렌더(unread=primary·read=투명 — 제목 좌정렬 유지) + 시간 pl-3.5. 헤더 우측 버튼(=모두 읽음 액션) 라벨은 상태 전이(2026-08-28 확정): unread 있음 '새 알림 (N)' primary 파랑(hover 동형 — contrast-pairs primary×popover aux) → 클릭(전체 읽음)·없음 '모두 읽음' 비활성. '모두 보기' 푸터는 onViewAll 예약(NotificationCenter 2단계). 손 조합 금지",
+      "role": "vocab"
+    },
+    "page-header": {
+      "name": {
+        "ko": "페이지 헤더 (타이틀 행)",
+        "en": "PageHeader"
+      },
+      "status": "adopted",
+      "section": "Navigation",
+      "stories": "components/src/ui/page-header.stories.tsx",
+      "file": "components/src/ui/page-header.tsx",
+      "aliases": [
+        {
+          "slug": "page-header",
+          "name": "페이지 헤더",
+          "files": [
+            "page-header"
+          ],
+          "approved": true
+        }
+      ],
+      "coveredBy": [],
+      "hub": [
+        {
+          "slug": "page-header",
+          "group": "셸 · 내비게이션",
+          "name": "페이지 헤더"
+        }
+      ],
+      "figma": [
+        {
+          "id": "812:3207",
+          "name": "PageHeader",
+          "variants": 3
+        }
+      ],
+      "note": "조합 제작 — @ds/ui/ui/page-header(2026-09-16 신설). 갤러리 22면의 타이틀 행 손 조합(flex flex-wrap items-center justify-between gap-4 + h1 text-lg font-bold)을 한 프리셋으로. props: title(h1 text-lg font-bold) · description(부제 — 있을 때만 items-start, design.md §4) · addon(제목 옆 인라인: StatusBadge·Info 툴팁) · leading(제목 앞: 아바타) · actions(우측 페이지 레벨 액션 — 파괴적 액션·StatePreview). 목록 액션·CTA는 여기가 아니라 FilterBar actions 슬롯, \"총 N건\" 부제 금지(ListFooter 소유). 손 조합 금지 — 갤러리 22면 치환은 클론 프롬프트.",
       "role": "vocab"
     },
     "pagination": {
@@ -1806,19 +1880,45 @@
     },
     "stepper": {
       "name": {
-        "ko": "Stepper",
+        "ko": "스테퍼 (위저드)",
         "en": "Stepper"
       },
-      "status": "primitive",
-      "section": "—",
-      "stories": null,
+      "status": "adopted",
+      "section": "Navigation",
+      "stories": "components/src/ui/stepper.stories.tsx",
       "file": "components/src/ui/stepper.tsx",
-      "aliases": [],
+      "aliases": [
+        {
+          "slug": "stepper",
+          "name": "스테퍼",
+          "files": [
+            "stepper"
+          ],
+          "approved": true
+        }
+      ],
       "coveredBy": [],
-      "hub": [],
-      "figma": [],
-      "note": null,
-      "role": "unadopted"
+      "hub": [
+        {
+          "slug": "stepper",
+          "group": "데이터 표시",
+          "name": "스테퍼"
+        }
+      ],
+      "figma": [
+        {
+          "id": "813:3205",
+          "name": "StepperItem",
+          "variants": 3
+        },
+        {
+          "id": "813:3206",
+          "name": "Stepper",
+          "variants": 1
+        }
+      ],
+      "note": "원본 재현 완료 — @ds/ui/ui/stepper(2026-09-16 채택 — 종전 unadopted, 스토리 신설). Stepper(ol flex gap-2) + StepperItem(step · state completed|current|upcoming). 완료 = primary 채움 + Check(size-4) · 현재 = primary 테두리 + 굵은 라벨(aria-current=step) · 미래 = border + secondary-foreground. 원 size-7 text-xs semibold, 라벨 text-sm, 연결선 h-px(완료 구간 primary, 나머지 border), 마지막 단계 연결선 없음. body-patterns C 위저드 상단 — 3단계 미만이면 쓰지 않는다. 손 조합(update-wizard 갤러리) 치환은 클론 프롬프트.",
+      "role": "vocab"
     },
     "switch": {
       "name": {

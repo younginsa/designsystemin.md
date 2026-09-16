@@ -1,8 +1,8 @@
 {
   "$description": "어휘 슬러그 → 실제 컴포넌트 파일 매핑. ds-registry.json 에서 생성(직접 편집 금지 — pnpm registry).",
   "$usage": "가용성 확인 = 이 파일에서 파일명을 찾는다(키 이름 추측 금지).",
-  "$note": "files는 components/src/ui/<name>.tsx 기준. 여러 파일을 쓰는 조합 어휘는 전부 나열한다. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지.",
-  "updated": "2026-09-15 — ds-registry.json 에서 생성(pnpm registry)",
+  "$note": "files는 components/src/ui/<name>.tsx 기준. 여러 파일을 쓰는 조합 어휘는 전부 나열한다. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지.",
+  "updated": "2026-09-16 — ds-registry.json 에서 생성(pnpm registry)",
   "vocab": {
     "app-shell": { "name": "앱 셸", "files": ["sidebar"] },
     "breadcrumb": { "name": "브레드크럼", "files": ["breadcrumb"] },
@@ -40,6 +40,7 @@
     "form-text": { "name": "텍스트 인풋", "files": ["field", "input"] },
     "form-textarea": { "name": "텍스트에어리어 · 글자수", "files": ["textarea"] },
     "header-filter": { "name": "헤더 필터바", "files": ["filter-bar"] },
+    "heatmap": { "name": "히트맵 그리드", "files": ["heatmap-grid"] },
     "icon-select": { "name": "아이콘 셀렉터", "files": ["icon-select"] },
     "list-footer": { "name": "목록 푸터 (행 수 · 전체 건수 · 페이지네이션)", "files": ["list-footer", "rows-per-page", "pagination"] },
     "ov-dialog": { "name": "모달", "files": ["dialog", "alert-dialog"] },
@@ -49,10 +50,12 @@
     "ov-sheet": { "name": "슬라이드오버 패널", "files": ["sheet"] },
     "ov-toast": { "name": "토스트", "files": ["sonner"] },
     "ov-tooltip": { "name": "툴팁", "files": ["tooltip"] },
+    "page-header": { "name": "페이지 헤더", "files": ["page-header"] },
     "rows-per-page": { "name": "페이지당 행 수 (목록 푸터)", "files": ["rows-per-page", "dropdown-menu", "button"] },
     "search-box": { "name": "검색 제안", "files": ["search-box", "input-group", "popover"] },
     "sidebar-nav": { "name": "사이드바 내비", "files": ["sidebar"] },
     "skeleton": { "name": "스켈레톤 (로딩)", "files": ["skeleton"] },
+    "stepper": { "name": "스테퍼", "files": ["stepper"] },
     "timeline": { "name": "타임라인", "files": ["timeline"] },
     "version-filter-chip": { "name": "버전 조건 필터 칩", "files": ["version-filter-chip", "popover", "select", "button"] },
     "viz-donut": { "name": "도넛 차트", "files": ["chart"] },
@@ -61,5 +64,5 @@
   "$infrastructure": "어휘가 직접 가리키지 않지만 컴포넌트들이 내부에서 쓰거나 조합 부품으로 쓰는 파일(레지스트리 role=infrastructure). ds:build 게이트가 이 배열을 읽는다.",
   "infrastructure": ["avatar","label","scroll-area","separator","state-preview","toggle"],
   "$unadopted": "실물은 있으나 채택 어휘가 없는 것(role=unadopted) + 은퇴(retired). 쓰려면 채택 절차를 밟아야 한다.",
-  "unadopted": ["stepper","toggle-group"]
+  "unadopted": ["toggle-group"]
 }

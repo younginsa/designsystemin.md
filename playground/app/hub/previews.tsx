@@ -73,6 +73,9 @@ import * as itemStories from "@ds/ui/ui/item.stories";
 import * as accordionStories from "@ds/ui/ui/accordion.stories";
 import * as collapsibleStories from "@ds/ui/ui/collapsible.stories";
 import * as tabsStories from "@ds/ui/ui/tabs.stories";
+import * as pageHeaderStories from "@ds/ui/ui/page-header.stories";
+import * as stepperStories from "@ds/ui/ui/stepper.stories";
+import * as heatmapStories from "@ds/ui/ui/heatmap-grid.stories";
 import * as chartStories from "@ds/ui/ui/chart.stories";
 import * as popoverStories from "@ds/ui/ui/popover.stories";
 import * as tooltipStories from "@ds/ui/ui/tooltip.stories";
@@ -120,7 +123,6 @@ import {
   TableHeader,
   TableRow,
 } from "@ds/ui/ui/table";
-import { Stepper, StepperItem } from "@ds/ui/ui/stepper";
 import { Tabs, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
 import { Timeline, TimelineItem, TimelineMeta, TimelineTitle } from "@ds/ui/ui/timeline";
 import { ButtonGroup } from "@ds/ui/ui/button-group";
@@ -154,7 +156,6 @@ import {
   ArrowUpDown,
   Boxes,
   CheckCircle2,
-  ChevronDown,
   ChevronRight,
   Copy,
   Database,
@@ -163,7 +164,6 @@ import {
   Globe,
   Inbox,
   Info,
-  KeyRound,
   LayoutDashboard,
   Maximize2,
   Monitor,
@@ -172,7 +172,6 @@ import {
   RefreshCw,
   Search,
   Ship,
-  Star,
   Trash2,
   X,
 } from "lucide-react";
@@ -316,30 +315,7 @@ export const PREVIEWS: Record<string, Pv> = {
   // 배치 6 — app-shell · sidebar-nav · breadcrumb · rows-per-page · timeline 은 스토리 원문(2026-09-10)
   "app-shell": fromStories("app-shell", sidebarStories, { className: "w-fit " + BOX }),
   "sidebar-nav": fromStories("sidebar-nav", sidebarStories, { className: "w-fit " + BOX }),
-  "page-header": {
-    className: "flex items-center justify-between " + BOX + " px-6",
-    style: { width: 960, height: 76 },
-    node: (
-      <>
-        <div className="flex items-center gap-2">
-          <h1 className="text-lg font-semibold">SHIP_A</h1>
-          <Star className="size-4 text-muted-foreground" />
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <KeyRound /> 비밀번호
-          </Button>
-          <Button variant="outline" size="sm">
-            도구 및 관리 <ChevronDown />
-          </Button>
-          <Button variant="secondary" size="sm">
-            자가 진단
-          </Button>
-          <Button size="sm">업데이트</Button>
-        </div>
-      </>
-    ),
-  },
+  "page-header": fromStories("page-header", pageHeaderStories, { className: BOX + " px-6 py-4", style: { width: 960 } }),
   breadcrumb: fromStories("breadcrumb", breadcrumbStories, { className: "flex items-center " + BOX + " px-6", style: { width: 640, height: 56 } }),
   "icon-select": fromStories("icon-select", iconSelectStories, { className: "flex items-center justify-center " + BOX, style: strip, hubOnly: true }),
 
@@ -439,21 +415,9 @@ export const PREVIEWS: Record<string, Pv> = {
   "data-progress": fromStories("data-progress", progressStories, { className: "flex items-center gap-4 " + BOX + " px-10", style: { width: 560, height: 110 } }),
   "data-tree": fromStories("data-tree", collapsibleStories, { className: BOX + " p-4", style: { width: 400 } }),
   timeline: fromStories("timeline", timelineStories, { className: BOX + " p-6", style: { width: 400 }, captureId: "data-timeline" }),
-  stepper: {
-    className: BOX + " p-6",
-    style: { width: 720 },
-    captureId: "data-stepper",
-    node: (
-      <Stepper>
-        <StepperItem step={1} state="completed">업데이트 옵션 설정</StepperItem>
-        <StepperItem step={2} state="completed">업데이트 내용</StepperItem>
-        <StepperItem step={3} state="completed">업데이트 항목 조회</StepperItem>
-        <StepperItem step={4} state="current">이미지 다운로드</StepperItem>
-        <StepperItem step={5} state="upcoming">업데이트 적용</StepperItem>
-      </Stepper>
-    ),
-  },
+  stepper: fromStories("stepper", stepperStories, { className: BOX + " p-6", style: { width: 720 }, captureId: "data-stepper" }),
   "data-listrow": fromStories("data-listrow", itemStories, { className: BOX + " p-4", style: { width: 480 } }),
+  heatmap: fromStories("heatmap", heatmapStories, { className: BOX + " p-4", style: { width: 720 } }),
 
   /* ── 오버레이 — 실물 렌더는 격리가 필요해 프리뷰 라우트를 iframe으로 담는다
         (포털·z-index가 카드 그리드를 침범하지 않게) ── */
@@ -493,7 +457,7 @@ export const CAPTURE_ORDER = [
   "data-table", "data-kv", "data-status", "data-badge",
   "data-matrix", "data-perm", "data-stat", "data-accordion",
   "data-tabs", "data-pagination", "data-progress", "data-tree",
-  "timeline", "stepper", "data-listrow",
+  "timeline", "stepper", "data-listrow", "heatmap",
 ];
 
 /* ── 카드 프레임 맞춤 렌더 ─────────────────────────────────────────── */

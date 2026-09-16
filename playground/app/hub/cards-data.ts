@@ -248,11 +248,7 @@ export const CARD_GROUPS: HubGroup[] = [
         "prio": "P1",
         "shadcn": "없음",
         "shot": "update-wizard",
-        "crop": "600,150,1200,75",
-        "ph": [
-          "UI 예정",
-          "컴포넌트 제작 후 교체"
-        ]
+        "crop": "600,150,1200,75"
       },
       {
         "slug": "data-matrix",
@@ -329,11 +325,7 @@ export const CARD_GROUPS: HubGroup[] = [
         "prio": "P2",
         "shadcn": "없음",
         "shot": "diagnosis-heatmap",
-        "crop": "555,290,1340,420",
-        "ph": [
-          "UI 예정",
-          "컴포넌트 제작 후 교체"
-        ]
+        "crop": "555,290,1340,420"
       },
       {
         "slug": "data-progress",

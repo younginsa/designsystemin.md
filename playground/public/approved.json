@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-15",
+  "updated": "2026-09-16",
   "approved": [
     "app-shell",
     "breadcrumb",
@@ -37,6 +37,7 @@
     "form-text",
     "form-textarea",
     "header-filter",
+    "heatmap",
     "icon-select",
     "list-footer",
     "ov-dialog",
@@ -46,10 +47,12 @@
     "ov-sheet",
     "ov-toast",
     "ov-tooltip",
+    "page-header",
     "rows-per-page",
     "search-box",
     "sidebar-nav",
     "skeleton",
+    "stepper",
     "timeline",
     "version-filter-chip",
     "viz-donut",

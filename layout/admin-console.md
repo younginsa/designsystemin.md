@@ -33,11 +33,11 @@ HiNAS 365 내부 화면 전부 — 리스트·상세·대시보드·설정·다�
   **배경 = `bg-card`(흰색)** — 페이지 캔버스(`bg-background` = gray-10)와 대비되는
   흰 셸 구도. 시간대 IconSelect 트리거도 `bg-card`.
 - **본문** — 상단바 아래 전폭(`p-8`), 페이지 제목 **`text-lg font-bold`**
-  + 우측 헤더 CTA. 사용자가 준 화면이 이 영역에 들어간다.
+  + 우측 헤더 CTA = `PageHeader` 프리셋(2026-09-16). 사용자가 준 화면이 이 영역에 들어간다.
 
 ## 전 페이지 공통 관례 (사용자 확정)
 
-- **페이지 타이틀** = `text-lg font-bold` (text-2xl 아님 — 16페이지 통일 완료).
+- **페이지 타이틀** = `text-lg font-bold` (text-2xl 아님 — 16페이지 통일 완료) — `PageHeader` 프리셋의 `title`.
 - **헤더 CTA 순서** = Primary 맨 오른쪽, secondary(outline)는 그 왼쪽. 페이지당 primary 1개.
 - **유틸 버튼**(새로고침·갱신류, 드롭다운 아님) = `ghost` — outline 금지.
 - **섹션 리듬** = `space-y-6`(24px) — 전 페이지 공통.
