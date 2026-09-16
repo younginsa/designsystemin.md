@@ -238,7 +238,7 @@ export const UserList = {
 }
 
 /* ── 회귀 — operators 없는 현행 문법(hinas365 날짜 프리셋)이 그대로인지 ── */
-export const LegacyPresets = {
+export const Presets = {
   parameters: { vocab: "header-filter" },
   render: () => (
     <Demo
@@ -260,5 +260,5 @@ export const __namedExportsOrder = [
   "SubscriptionList",
   "AccountList",
   "UserList",
-  "LegacyPresets",
+  "Presets",
 ]

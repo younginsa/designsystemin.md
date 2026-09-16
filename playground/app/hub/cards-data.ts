@@ -177,13 +177,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "crop": "1115,425,330,440"
       },
       {
-        "slug": "form-choicecard",
-        "name": "라디오 · 체크 카드",
-        "shadcn": "RadioGroup 조합",
-        "shot": "ship-create",
-        "crop": "735,330,480,190"
-      },
-      {
         "slug": "form-tags",
         "name": "태그 인풋",
         "prio": "P2",
@@ -198,18 +191,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "shadcn": "Calendar(range)",
         "shot": "datepicker",
         "crop": "1120,220,395,250"
-      },
-      {
-        "slug": "markdown-editor",
-        "name": "마크다운 에디터",
-        "prio": "P2",
-        "shadcn": "없음",
-        "shot": "release-editor",
-        "crop": "650,235,625,510",
-        "ph": [
-          "UI 예정",
-          "컴포넌트 제작 후 교체"
-        ]
       },
       {
         "slug": "form-file",
@@ -526,18 +507,6 @@ export const CARD_GROUPS: HubGroup[] = [
         "shot": "version-donut",
         "crop": "1240,210,660,470"
       },
-      {
-        "slug": "topology",
-        "name": "노드-링크 토폴로지",
-        "prio": "P3",
-        "shadcn": "없음",
-        "shot": "topology",
-        "crop": "245,195,970,660",
-        "ph": [
-          "UI 예정",
-          "컴포넌트 제작 후 교체"
-        ]
-      }
     ]
   }
 ]

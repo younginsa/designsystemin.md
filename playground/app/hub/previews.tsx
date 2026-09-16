@@ -480,24 +480,7 @@ export const PREVIEWS: Record<string, Pv> = {
 
 /* 캡처 페이지 전용 — 카드 슬러그가 아니지만 기존 캡처 대상이던 섹션 */
 export const CAPTURE_EXTRAS: Record<string, Pv> = {
-  "data-pagination-stock": {
-    className:
-      "flex items-center justify-center " + BOX +
-      " [&_a]:font-medium [&_a]:text-foreground [&_[aria-current=page]]:border [&_[aria-current=page]]:bg-background",
-    style: { width: 560, height: 110 },
-    node: (
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem><PaginationPrevious href="#" /></PaginationItem>
-          <PaginationItem><PaginationLink href="#" isActive>1</PaginationLink></PaginationItem>
-          <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
-          <PaginationItem><PaginationEllipsis /></PaginationItem>
-          <PaginationItem><PaginationLink href="#">7</PaginationLink></PaginationItem>
-          <PaginationItem><PaginationNext href="#" /></PaginationItem>
-        </PaginationContent>
-      </Pagination>
-    ),
-  },
+  // data-pagination-stock(스톡 shadcn 비교 컷)은 2026-09-16 은퇴 — 구모델(shadcn 매핑 비교) 산물
 };
 
 /* 캡처 페이지 섹션 순서 — 구 페이지의 원래 순서 그대로 (hubOnly 제외) */
@@ -509,7 +492,7 @@ export const CAPTURE_ORDER = [
   "form-choicecard", "form-tags", "form-daterange", "form-file",
   "data-table", "data-kv", "data-status", "data-badge",
   "data-matrix", "data-perm", "data-stat", "data-accordion",
-  "data-tabs", "data-pagination", "data-pagination-stock", "data-progress", "data-tree",
+  "data-tabs", "data-pagination", "data-progress", "data-tree",
   "timeline", "stepper", "data-listrow",
 ];
 

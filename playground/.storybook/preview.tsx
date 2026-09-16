@@ -5,10 +5,6 @@ import * as React from "react";
 import "../app/globals.css";
 // next/font 가 만들어 주던 --font-inter 변수의 Storybook 판(로컬 Inter → 시스템 폴백).
 import "./preview.css";
-// 어휘 게이트 — 365의 approved.json 을 그대로 읽어 스토리마다 채택 여부를 표시한다.
-import approvedFile from "../public/approved.json";
-
-const APPROVED = new Set<string>(approvedFile.approved as string[]);
 
 /* 3모드 — dstk.css 의 최상위 클래스 그대로(:root=Light · .dark=Dark · .theme-control=Control).
    래퍼 div 에 클래스를 얹으면 자손이 변수를 상속한다. 툴바에서 전환. */
@@ -26,35 +22,11 @@ const withMode: Decorator = (Story, ctx) => {
   );
 };
 
-/* 채택 배지 — 스토리의 parameters.vocab(365 어휘 슬러그)을 approved.json 과 대조.
-   Storybook은 승인 개념이 없으므로, 365의 게이트를 여기서 "보이게만" 한다(권한은 365에 남는다). */
-const withVocabBadge: Decorator = (Story, ctx) => {
-  const vocab = ctx.parameters.vocab as string | undefined;
-  const ok = !!vocab && APPROVED.has(vocab);
-  const label = !vocab ? "어휘 미지정" : ok ? `채택됨 · ${vocab}` : `미채택 · ${vocab}`;
-  const color = !vocab ? "#8a8f98" : ok ? "#1f7a3a" : "#b42318";
-  return (
-    <>
-      <div
-        data-vocab-badge={!vocab ? "none" : ok ? "approved" : "unapproved"}
-        style={{
-          display: "inline-block", marginBottom: 16, padding: "2px 8px", fontSize: 11,
-          fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", letterSpacing: ".02em",
-          color, border: `1px solid ${color}`, borderRadius: 4,
-        }}
-      >
-        {label}
-      </div>
-      <div>
-        <Story />
-      </div>
-    </>
-  );
-};
+/* 채택 배지는 2026-09-16 은퇴 — Storybook 에 있는 것이 곧 DS 라 "채택됨/미채택" 표시가 무의미해졌다.
+   parameters.vocab 은 365 허브 카드가 스토리를 고르는 키로만 남는다. */
 
 const preview: Preview = {
-  // 데코레이터는 앞이 안쪽 — 배지가 모드 래퍼 안에 들어간다.
-  decorators: [withVocabBadge, withMode],
+  decorators: [withMode],
   globalTypes: {
     mode: {
       description: "365 테마 모드",

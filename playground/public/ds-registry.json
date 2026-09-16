@@ -1,5 +1,5 @@
 {
-  "$note": "DS 컴포넌트 레지스트리 — 단일 원천(2026-09-15). 항목 키 = 스토리 파일. approved.json · vocab-map.json 은 `pnpm registry` 가 여기서 생성한다(직접 편집 금지). figma = Component 페이지 세트 id. status: adopted · primitive · retired.",
+  "$note": "DS 컴포넌트 레지스트리 — 단일 원천(2026-09-15). 항목 키 = 스토리 파일. status: adopted(= Storybook 에 있다 = DS) · primitive(shadcn 대체 전용, 스토리 없음) · retired. approved.json · vocab-map.json 은 pnpm registry 가 여기서 생성한다(직접 편집 금지). figma = Component 페이지 세트 id. 파이프라인: 레지스트리 → Storybook → 생성(shadcn 대체 + Jira 자동 발행), 2026-09-16.",
   "fileKey": "9bDM5hVObGhrFM6vLyeL3K",
   "updated": "2026-09-15",
   "components": {
@@ -27,9 +27,7 @@
         {
           "slug": "data-accordion",
           "group": "데이터 표시",
-          "name": "아코디언",
-          "shadcn": "Accordion",
-          "prio": "P1"
+          "name": "아코디언"
         }
       ],
       "figma": [
@@ -73,9 +71,7 @@
         {
           "slug": "fb-banner",
           "group": "피드백 · 오버레이",
-          "name": "배너 · 안내 노트 (결과 피드백 · 상시 안내)",
-          "shadcn": "Alert — 사용방식 2가지",
-          "prio": "P1"
+          "name": "배너 · 안내 노트 (결과 피드백 · 상시 안내)"
         }
       ],
       "figma": [
@@ -163,16 +159,12 @@
         {
           "slug": "data-badge",
           "group": "데이터 표시",
-          "name": "칩 · 뱃지 (일반 · 버전 · 역할 태그)",
-          "shadcn": "Badge — 사용방식 3가지",
-          "prio": null
+          "name": "칩 · 뱃지 (일반 · 버전 · 역할 태그)"
         },
         {
           "slug": "form-tags",
           "group": "폼",
-          "name": "태그 인풋",
-          "shadcn": "Badge+Input 조합",
-          "prio": "P2"
+          "name": "태그 인풋"
         }
       ],
       "figma": [
@@ -209,9 +201,7 @@
         {
           "slug": "breadcrumb",
           "group": "셸 · 내비게이션",
-          "name": "브레드크럼",
-          "shadcn": "Breadcrumb",
-          "prio": "P1"
+          "name": "브레드크럼"
         }
       ],
       "figma": [
@@ -285,37 +275,27 @@
         {
           "slug": "btn-basic",
           "group": "버튼",
-          "name": "기본 버튼 (채움·아웃라인·텍스트)",
-          "shadcn": "Button",
-          "prio": null
+          "name": "기본 버튼 (채움·아웃라인·텍스트)"
         },
         {
           "slug": "btn-dashed",
           "group": "버튼",
-          "name": "점선 추가 버튼",
-          "shadcn": "Button 변형",
-          "prio": null
+          "name": "점선 추가 버튼"
         },
         {
           "slug": "btn-destructive",
           "group": "버튼",
-          "name": "파괴 버튼",
-          "shadcn": "Button(destructive)",
-          "prio": null
+          "name": "파괴 버튼"
         },
         {
           "slug": "btn-icon",
           "group": "버튼",
-          "name": "아이콘 버튼",
-          "shadcn": "Button(icon)",
-          "prio": null
+          "name": "아이콘 버튼"
         },
         {
           "slug": "btn-states",
           "group": "버튼",
-          "name": "비활성 · 로딩 변형",
-          "shadcn": "Button+Spinner",
-          "prio": null
+          "name": "비활성 · 로딩 변형"
         }
       ],
       "figma": [
@@ -354,9 +334,7 @@
         {
           "slug": "btn-split",
           "group": "버튼",
-          "name": "스플릿 드롭다운",
-          "shadcn": "ButtonGroup",
-          "prio": null
+          "name": "스플릿 드롭다운"
         }
       ],
       "figma": [
@@ -393,9 +371,7 @@
         {
           "slug": "form-daterange",
           "group": "폼",
-          "name": "날짜 범위 피커",
-          "shadcn": "Calendar(range)",
-          "prio": "P2"
+          "name": "날짜 범위 피커"
         }
       ],
       "figma": [
@@ -432,9 +408,7 @@
         {
           "slug": "data-stat",
           "group": "데이터 표시",
-          "name": "스탯 · 퍼널 · 랭킹",
-          "shadcn": "Card 조합",
-          "prio": "P2"
+          "name": "스탯 · 퍼널 · 랭킹"
         }
       ],
       "figma": [
@@ -489,16 +463,12 @@
         {
           "slug": "viz-donut",
           "group": "시각화",
-          "name": "도넛 차트",
-          "shadcn": "Chart(Pie)",
-          "prio": "P2"
+          "name": "도넛 차트"
         },
         {
           "slug": "viz-line",
           "group": "시각화",
-          "name": "라인 차트",
-          "shadcn": "Chart(Line)",
-          "prio": "P2"
+          "name": "라인 차트"
         }
       ],
       "figma": [
@@ -544,9 +514,7 @@
         {
           "slug": "form-controls",
           "group": "폼",
-          "name": "체크박스 · 라디오 · 토글",
-          "shadcn": "Checkbox·Radio·Switch",
-          "prio": "P1"
+          "name": "체크박스 · 라디오 · 토글"
         }
       ],
       "figma": [
@@ -583,9 +551,7 @@
         {
           "slug": "data-tree",
           "group": "데이터 표시",
-          "name": "트리 목록",
-          "shadcn": "Collapsible 조합",
-          "prio": null
+          "name": "트리 목록"
         }
       ],
       "figma": [
@@ -652,9 +618,7 @@
         {
           "slug": "detail-panel",
           "group": "피드백 · 오버레이",
-          "name": "상세 패널 (우측 시트 프리셋)",
-          "shadcn": "Sheet 프리셋",
-          "prio": "P1"
+          "name": "상세 패널 (우측 시트 프리셋)"
         }
       ],
       "figma": [
@@ -692,9 +656,7 @@
         {
           "slug": "ov-dialog",
           "group": "피드백 · 오버레이",
-          "name": "모달",
-          "shadcn": "Dialog·AlertDialog",
-          "prio": null
+          "name": "모달"
         }
       ],
       "figma": [
@@ -734,9 +696,7 @@
         {
           "slug": "ov-menus",
           "group": "피드백 · 오버레이",
-          "name": "드롭다운 메뉴",
-          "shadcn": "DropdownMenu",
-          "prio": "P1"
+          "name": "드롭다운 메뉴"
         }
       ],
       "figma": [
@@ -778,9 +738,7 @@
         {
           "slug": "fb-empty",
           "group": "피드백 · 오버레이",
-          "name": "빈 상태",
-          "shadcn": "Empty",
-          "prio": "P1"
+          "name": "빈 상태"
         }
       ],
       "figma": [
@@ -820,9 +778,7 @@
         {
           "slug": "fb-console",
           "group": "피드백 · 오버레이",
-          "name": "에러 콘솔",
-          "shadcn": "조합(mono 로그)",
-          "prio": "P2"
+          "name": "에러 콘솔"
         }
       ],
       "figma": [
@@ -860,9 +816,7 @@
         {
           "slug": "error-state",
           "group": "피드백 · 오버레이",
-          "name": "에러 상태 배너",
-          "shadcn": "Alert 프리셋",
-          "prio": "P1"
+          "name": "에러 상태 배너"
         }
       ],
       "figma": [
@@ -900,9 +854,7 @@
         {
           "slug": "form-text",
           "group": "폼",
-          "name": "텍스트 인풋 (필수·placeholder)",
-          "shadcn": "Field+Input",
-          "prio": null
+          "name": "텍스트 인풋 (필수·placeholder)"
         }
       ],
       "figma": [
@@ -939,9 +891,7 @@
         {
           "slug": "header-filter",
           "group": "피드백 · 오버레이",
-          "name": "헤더 필터바",
-          "shadcn": "조합(InputGroup·DropdownMenu·Popover·Calendar)",
-          "prio": "P1"
+          "name": "헤더 필터바"
         }
       ],
       "figma": [
@@ -1008,9 +958,7 @@
         {
           "slug": "icon-select",
           "group": "셸 · 내비게이션",
-          "name": "아이콘 셀렉터 — 타입 3종: 아이콘형·텍스트형·다중형(체크박스)",
-          "shadcn": "DropdownMenu 조합",
-          "prio": "P1"
+          "name": "아이콘 셀렉터 — 타입 3종: 아이콘형·텍스트형·다중형(체크박스)"
         }
       ],
       "figma": [
@@ -1058,16 +1006,12 @@
         {
           "slug": "form-file",
           "group": "폼",
-          "name": "파일 첨부",
-          "shadcn": "Input(file)",
-          "prio": null
+          "name": "파일 첨부"
         },
         {
           "slug": "form-number",
           "group": "폼",
-          "name": "숫자 인풋",
-          "shadcn": "Input(number)",
-          "prio": null
+          "name": "숫자 인풋"
         }
       ],
       "figma": [
@@ -1106,9 +1050,7 @@
         {
           "slug": "form-search",
           "group": "폼",
-          "name": "검색 인풋",
-          "shadcn": "InputGroup",
-          "prio": null
+          "name": "검색 인풋"
         }
       ],
       "figma": [
@@ -1163,16 +1105,12 @@
         {
           "slug": "data-kv",
           "group": "데이터 표시",
-          "name": "kv 정의 목록",
-          "shadcn": "Item 조합",
-          "prio": null
+          "name": "kv 정의 목록"
         },
         {
           "slug": "data-listrow",
           "group": "데이터 표시",
-          "name": "리스트 행 (아이콘·라벨·카운트·셰브론)",
-          "shadcn": "Item",
-          "prio": null
+          "name": "리스트 행 (아이콘·라벨·카운트·셰브론)"
         }
       ],
       "figma": [
@@ -1243,9 +1181,7 @@
         {
           "slug": "list-footer",
           "group": "데이터 표시",
-          "name": "목록 푸터 (행 수 · 전체 건수 · 페이지네이션)",
-          "shadcn": "조합(RowsPerPage·Pagination)",
-          "prio": null
+          "name": "목록 푸터 (행 수 · 전체 건수 · 페이지네이션)"
         }
       ],
       "figma": [
@@ -1282,9 +1218,7 @@
         {
           "slug": "ov-notif",
           "group": "피드백 · 오버레이",
-          "name": "알림 패널",
-          "shadcn": "DropdownMenu 프리셋",
-          "prio": null
+          "name": "알림 패널"
         }
       ],
       "figma": [
@@ -1323,9 +1257,7 @@
         {
           "slug": "data-pagination",
           "group": "데이터 표시",
-          "name": "페이지네이션",
-          "shadcn": "Pagination",
-          "prio": "P1"
+          "name": "페이지네이션"
         }
       ],
       "figma": [
@@ -1370,9 +1302,7 @@
         {
           "slug": "ov-popover",
           "group": "피드백 · 오버레이",
-          "name": "팝오버",
-          "shadcn": "Popover",
-          "prio": "P1"
+          "name": "팝오버"
         }
       ],
       "figma": [
@@ -1409,9 +1339,7 @@
         {
           "slug": "data-progress",
           "group": "데이터 표시",
-          "name": "진행률 바",
-          "shadcn": "Progress",
-          "prio": "P2"
+          "name": "진행률 바"
         }
       ],
       "figma": [
@@ -1476,9 +1404,7 @@
         {
           "slug": "rows-per-page",
           "group": "데이터 표시",
-          "name": "페이지당 행 수 (목록 푸터 문법)",
-          "shadcn": "조합(DropdownMenu·Button)",
-          "prio": null
+          "name": "페이지당 행 수 (목록 푸터 문법)"
         }
       ],
       "figma": [
@@ -1533,9 +1459,7 @@
         {
           "slug": "search-box",
           "group": "폼",
-          "name": "검색 제안 (자동완성·최근·빠른검색)",
-          "shadcn": "조합(InputGroup·Popover)",
-          "prio": "P1"
+          "name": "검색 제안 (자동완성·최근·빠른검색)"
         }
       ],
       "figma": [
@@ -1575,9 +1499,7 @@
         {
           "slug": "form-select",
           "group": "폼",
-          "name": "셀렉트 계열",
-          "shadcn": "Select·Combobox",
-          "prio": "P1"
+          "name": "셀렉트 계열"
         }
       ],
       "figma": [
@@ -1647,9 +1569,7 @@
         {
           "slug": "ov-sheet",
           "group": "피드백 · 오버레이",
-          "name": "슬라이드오버 패널",
-          "shadcn": "Sheet",
-          "prio": "P1"
+          "name": "슬라이드오버 패널"
         }
       ],
       "figma": [
@@ -1694,16 +1614,12 @@
         {
           "slug": "app-shell",
           "group": "셸 · 내비게이션",
-          "name": "앱 셸",
-          "shadcn": "Sidebar",
-          "prio": null
+          "name": "앱 셸"
         },
         {
           "slug": "sidebar-nav",
           "group": "셸 · 내비게이션",
-          "name": "사이드바 내비",
-          "shadcn": "SidebarMenu",
-          "prio": null
+          "name": "사이드바 내비"
         }
       ],
       "figma": [
@@ -1755,9 +1671,7 @@
         {
           "slug": "skeleton",
           "group": "피드백 · 오버레이",
-          "name": "스켈레톤 (로딩)",
-          "shadcn": "Skeleton",
-          "prio": null
+          "name": "스켈레톤 (로딩)"
         }
       ],
       "figma": [
@@ -1799,9 +1713,7 @@
         {
           "slug": "ov-toast",
           "group": "피드백 · 오버레이",
-          "name": "토스트",
-          "shadcn": "Sonner",
-          "prio": null
+          "name": "토스트"
         }
       ],
       "figma": [
@@ -1879,9 +1791,7 @@
         {
           "slug": "data-status",
           "group": "데이터 표시",
-          "name": "상태 필 · 도트",
-          "shadcn": "Badge",
-          "prio": "P1"
+          "name": "상태 필 · 도트"
         }
       ],
       "figma": [
@@ -1975,23 +1885,17 @@
         {
           "slug": "data-matrix",
           "group": "데이터 표시",
-          "name": "매트릭스 편집 표",
-          "shadcn": "Table 조합",
-          "prio": "P2"
+          "name": "매트릭스 편집 표"
         },
         {
           "slug": "data-perm",
           "group": "데이터 표시",
-          "name": "권한 매트릭스",
-          "shadcn": "Table+Checkbox",
-          "prio": null
+          "name": "권한 매트릭스"
         },
         {
           "slug": "data-table",
           "group": "데이터 표시",
-          "name": "테이블 (셀 변형 · 정렬 헤더 포함)",
-          "shadcn": "Table — 정렬 헤더·링크 셀·2줄 셀·행 액션 흡수",
-          "prio": null
+          "name": "테이블 (셀 변형 · 정렬 헤더 포함)"
         }
       ],
       "figma": [
@@ -2031,7 +1935,7 @@
       "aliases": [
         {
           "slug": "data-tabs",
-          "name": "탭 3종",
+          "name": "탭 2종",
           "files": [
             "tabs"
           ],
@@ -2043,9 +1947,7 @@
         {
           "slug": "data-tabs",
           "group": "데이터 표시",
-          "name": "탭 2종",
-          "shadcn": "Tabs",
-          "prio": "P1"
+          "name": "탭 2종"
         }
       ],
       "figma": [
@@ -2087,9 +1989,7 @@
         {
           "slug": "form-textarea",
           "group": "폼",
-          "name": "텍스트에어리어 · 글자수",
-          "shadcn": "Textarea 조합",
-          "prio": null
+          "name": "텍스트에어리어 · 글자수"
         }
       ],
       "figma": [
@@ -2126,9 +2026,7 @@
         {
           "slug": "timeline",
           "group": "데이터 표시",
-          "name": "타임라인",
-          "shadcn": "없음",
-          "prio": "P1"
+          "name": "타임라인"
         }
       ],
       "figma": [
@@ -2202,9 +2100,7 @@
         {
           "slug": "ov-tooltip",
           "group": "피드백 · 오버레이",
-          "name": "툴팁 (ⓘ)",
-          "shadcn": "Tooltip",
-          "prio": "P1"
+          "name": "툴팁 (ⓘ)"
         }
       ],
       "figma": [
@@ -2244,9 +2140,7 @@
         {
           "slug": "version-filter-chip",
           "group": "폼",
-          "name": "버전 조건 필터 칩 (계층 캐스케이드)",
-          "shadcn": "조합(Popover·Select·Button)",
-          "prio": null
+          "name": "버전 조건 필터 칩 (계층 캐스케이드)"
         }
       ],
       "figma": [

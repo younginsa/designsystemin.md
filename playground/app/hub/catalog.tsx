@@ -13,6 +13,7 @@ import { CARD_GROUPS, type HubCard } from "./cards-data";
 import { PREVIEWS, FitScale } from "./previews";
 import { HoverCut } from "./screens";
 import type { Adoption, Ds365File } from "./adopt";
+import { useRegistry, storybookDocsUrl, figmaNodeUrl, type Entry as RegistryEntry } from "./registry";
 
 const SOURCE: HubCard[] = CARD_GROUPS.flatMap((g) => g.cards).filter((c) => c.slug);
 
@@ -443,33 +444,33 @@ export function CatalogPanel({ approvals, ds365, urls }: {
   };
 
   const shown = SOURCE.filter((s) => approvals.current.has(s.slug!));
-  let adjusted = 0, rebuiltCnt = 0;
-  shown.forEach((s) => {
-    const e = entry(s.slug!);
-    if (isAdjusted(e)) adjusted++;
-    if (e.build === "done") rebuiltCnt++;
-  });
+  let adjusted = 0;
+  shown.forEach((s) => { if (isAdjusted(entry(s.slug!))) adjusted++; });
+  // 카드 칩 = Storybook · 피그마 링크(2026-09-16 새 모델 — '재현 제작됨 · shadcn:' 칩 은퇴). 슬러그 → 레지스트리 항목은 aliases 로 역참조
+  const registry = useRegistry();
+  const bySlug: Record<string, { key: string; entry: RegistryEntry }> = {};
+  if (registry) for (const [key, en] of Object.entries(registry.components)) for (const a of en.aliases) bySlug[a.slug] = { key, entry: en };
 
   return (
     <>
       <div className="ds365-bar">
-        <span className="cnt">채택 <strong>{approvals.current.size}</strong> · 조정 <strong>{adjusted}</strong> · 재현 제작 <strong>{rebuiltCnt}</strong></span>
+        <span className="cnt">Storybook <strong>{approvals.current.size}</strong> · 조정 메모 <strong>{adjusted}</strong></span>
         <span className="dirty">{dirty ? "· 커밋 안 된 변경 있음 — 내보내기 후 커밋" : ""}</span>
         <button type="button" className="chip" onClick={exportDs365}>ds365.json 내보내기</button>
       </div>
-      <p className="lead"><strong>365 DS = 채택 어휘에 365 토큰을 얹은 모습.</strong> 01에서 채택된 컴포넌트만
-        여기 올라온다 — 카드 그림은 실물 렌더라 토큰이 바뀌면 즉시 따라온다.
-        미채택분은 여기 없다(전체 현황은 01 Storybook 컴포넌트 — ds-registry.json, 과거 분석 자료는 05 히스토리).</p>
+      <p className="lead"><strong>365 DS = Storybook 컴포넌트에 365 토큰을 얹은 모습.</strong> 카드 그림은 스토리 원문의 실물 렌더라
+        토큰이 바뀌면 즉시 따라온다. 카드의 칩은 Storybook 문서와 피그마 세트로 가는 링크다.
+        여기 없는 컴포넌트가 필요하면 생성 중 shadcn 으로 대체되고 Jira DES 티켓이 자동 발행된다(전체 현황은 01 Storybook 컴포넌트).</p>
 
       <div className="card-grid" style={{ marginBottom: 8 }}>
-        <div className="card ds-add" onClick={() => alert("새 컴포넌트 분석 요청서는 다음 단계(②)에서 활성화됩니다.")}>
-          <span className="plus">＋</span>
-          <span className="t">새 컴포넌트</span>
-          <span className="d">분석 요청서 작성 — 신규인지, 기존 컴포넌트의 상태 추가인지 판정 후 등록 <span className="chip">적용 예정</span></span>
-        </div>
+        <a className="card ds-add" href="/storybook/" target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}>
+          <span className="plus">↗</span>
+          <span className="t">Storybook 열기</span>
+          <span className="d">Foundations · Templates · 컴포넌트 전체 — 보는 곳. 새 컴포넌트 요청은 Jira DES(생성 중 대체분은 자동 발행)</span>
+        </a>
       </div>
 
-      <h3>채택 어휘 — 365 토큰 적용</h3>
+      <h3>Storybook 컴포넌트 — 365 토큰 적용</h3>
       <div className="card-grid">
         {shown.map((s) => {
           const e = entry(s.slug!);
@@ -498,18 +499,15 @@ export function CatalogPanel({ approvals, ds365, urls }: {
                 </div>
               ) : null}
               <div className="ds-foot">
-                {e.build === "done" ? (
+                {bySlug[s.slug!] ? (
                   <>
-                    <span className="chip state p1">재현 제작됨</span>
-                    {adj ? <span className="chip sub">조정 메모 있음</span> : null}
+                    <a className="chip" href={storybookDocsUrl(bySlug[s.slug!].key)} target="_blank" rel="noreferrer">Storybook</a>
+                    {bySlug[s.slug!].entry.figma.length && registry ? (
+                      <a className="chip" href={figmaNodeUrl(registry.fileKey, bySlug[s.slug!].entry.figma[0].id)} target="_blank" rel="noreferrer">Figma</a>
+                    ) : null}
                   </>
-                ) : (
-                  <>
-                    <span className={"chip state" + (adj ? " p1" : "")}>{adj ? "조정됨" : "기본"}</span>
-                    {adj && e.render !== "done" ? <span className="chip sub warn">재렌더 대기</span> : null}
-                  </>
-                )}
-                {s.shadcn ? <span className="chip">shadcn: {s.shadcn}</span> : null}
+                ) : null}
+                {adj ? <span className="chip sub">조정 메모 있음</span> : null}
                 <button type="button" className="chip edit" onClick={() => setEditing(editing === s.slug ? null : s.slug!)}>편집</button>
               </div>
               {editing === s.slug ? <Editor entry={e} onSave={(o, n) => save(s.slug!, o, n)} /> : null}

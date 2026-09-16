@@ -1,7 +1,7 @@
 {
   "$description": "어휘 슬러그 → 실제 컴포넌트 파일 매핑. ds-registry.json 에서 생성(직접 편집 금지 — pnpm registry).",
   "$usage": "가용성 확인 = 이 파일에서 파일명을 찾는다(키 이름 추측 금지).",
-  "$note": "files는 components/src/ui/<name>.tsx 기준. 여러 파일을 쓰는 조합 어휘는 전부 나열한다. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지.",
+  "$note": "files는 components/src/ui/<name>.tsx 기준. 여러 파일을 쓰는 조합 어휘는 전부 나열한다. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지.",
   "updated": "2026-09-15 — ds-registry.json 에서 생성(pnpm registry)",
   "vocab": {
     "app-shell": { "name": "앱 셸", "files": ["sidebar"] },
@@ -23,7 +23,7 @@
     "data-stat": { "name": "스탯 · 퍼널 · 랭킹", "files": ["card"] },
     "data-status": { "name": "상태 필 · 도트", "files": ["status-badge", "badge"] },
     "data-table": { "name": "테이블 (셀 변형 · 정렬 헤더 포함)", "files": ["table"] },
-    "data-tabs": { "name": "탭 3종", "files": ["tabs"] },
+    "data-tabs": { "name": "탭 2종", "files": ["tabs"] },
     "data-tree": { "name": "트리 목록", "files": ["collapsible"] },
     "detail-panel": { "name": "상세 패널", "files": ["detail-panel", "sheet"] },
     "error-state": { "name": "에러 상태 배너", "files": ["error-state", "alert"] },

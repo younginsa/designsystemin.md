@@ -104,7 +104,7 @@
             <div class="k">스토리 파일</div>
             <div class="v"><span class="mono">components/src/ui/&lt;컴포넌트&gt;.stories.tsx</span> — CSF 형식이지만 <strong><span class="mono">@storybook/*</span>을 import 하지 않는다</strong>(순수 객체). 그래서 <strong>02 카드도 같은 파일을 읽는다</strong>(<span class="mono">previews.tsx</span>의 <span class="mono">fromStories()</span>). 스토리를 추가하면 카드에 저절로 나타나고, 지우면 조용히 빠진다.</div>
             <div class="k">규약</div>
-            <div class="v"><span class="mono">parameters.vocab</span> = 채택 어휘 슬러그(<span class="mono">btn-basic</span> 등). 카드 목록은 approved.json이 돌리므로 <strong>미채택 슬러그를 적은 스토리는 허브에 나오지 않는다</strong>(Storybook에는 「미채택」 배지로 나온다).<br>
+            <div class="v"><span class="mono">parameters.vocab</span> = 허브 카드가 스토리를 고르는 키(<span class="mono">btn-basic</span> 등, 레지스트리 aliases). Storybook 에 있는 것이 곧 DS 라 「채택」 배지는 2026-09-16 은퇴 — <strong>슬러그가 없는 스토리는 허브 카드에 안 나올 뿐</strong> Storybook 에서는 그대로 보인다.<br>
             <span class="mono">argTypes</span> = 컨트롤 패널 선택지(cva 정의와 동일하게).<br>
             <span class="mono">__namedExportsOrder</span> = 선언 순서(모듈 export는 알파벳순이라 필요 · 실제 Storybook은 컴파일러가 자동 생성).<br>
             조합형(ButtonGroup 묶음 등)은 <span class="mono">render</span> — 컨트롤은 포기.</div>
