@@ -12,7 +12,7 @@ import { useAdoption, useHubData } from "./adopt";
 import { RegistryPanel, RegistryRail } from "./registry";
 import { CatalogPanel } from "./catalog";
 import { CropImg, Lockbar, hydrateFragments, useScreens } from "./screens";
-import { useDsViewers, useGallery } from "./viewers";
+import { useGallery } from "./viewers";
 
 type DocKey = "hinas" | "d365";
 
@@ -32,7 +32,7 @@ const DEEP_LINKS: Record<string, [DocKey, string]> = {
   "#ds365": ["d365", "365 DS"],
   "#history": ["d365", "히스토리"],
   "#pipeline": ["hinas", "공통 DS"],
-  "#resources": ["hinas", "Resources"],
+  "#resources": ["hinas", "공통 DS"], // 03 Resources 은퇴(2026-09-16) — 카드는 공통 DS 맨 아래 Resources 섹션
 };
 
 const pad = (n: number) => String(n + 1).padStart(2, "0");
@@ -46,14 +46,13 @@ const FragSec = React.memo(function FragSec({ html }: { html: string }) {
 });
 
 export default function HubApp({ fragments, hist, shotNames }: {
-  fragments: { usage: string; pipeline: string; resources: string; templates: string; usage365: string };
+  fragments: { usage: string; pipeline: string; templates: string; usage365: string };
   hist: HistEntry[];
   shotNames: string[];
 }) {
   const [doc, setDoc] = React.useState<DocKey>("hinas");
   const [sel, setSel] = React.useState(0);
   const [histIdx, setHistIdx] = React.useState(0);
-  const [dsnavSec, setDsnavSec] = React.useState("pipeline");
   const [stack, setStack] = React.useState<{ title: string; names: string[] } | null>(null);
   const [lightbox, setLightbox] = React.useState<string | null>(null);
   const [live, setLive] = React.useState<string | null>(null); // 실물 팝업 — /gallery/<slug>/ iframe
@@ -72,14 +71,12 @@ export default function HubApp({ fragments, hist, shotNames }: {
   );
   const adoption = useAdoption(approvedFile, rebuilt);
 
-  useDsViewers();
   useGallery();
 
-  const PANELS: Record<DocKey, Array<{ title: string; visual?: "adopt" | "dsnav" | "stack" }>> = {
+  const PANELS: Record<DocKey, Array<{ title: string; visual?: "adopt" | "stack" }>> = {
     hinas: [
       { title: "사용방법" },
-      { title: "공통 DS", visual: "dsnav" },
-      { title: "Resources" },
+      { title: "공통 DS" },
     ],
     d365: [
       { title: "Storybook 컴포넌트", visual: "adopt" },
@@ -93,7 +90,6 @@ export default function HubApp({ fragments, hist, shotNames }: {
   const panels = PANELS[doc];
   const panel = panels[sel];
   const isAdopt = panel.title === "Storybook 컴포넌트";
-  const isDsnav = panel.title === "공통 DS";
   const isHist = panel.title === "히스토리";
   const hasVisual = panel.visual !== undefined;
 
@@ -113,13 +109,6 @@ export default function HubApp({ fragments, hist, shotNames }: {
 
   /* 주입 프래그먼트 하이드레이션 — 잠금 해제·패널 전환 후 재실행(멱등) */
   React.useEffect(() => { hydrateFragments(urls); }, [urls, doc, sel, histIdx]);
-
-  /* dsnav 섹션 토글 — pipeline 프래그먼트 내부 DOM */
-  React.useEffect(() => {
-    document.querySelectorAll<HTMLElement>(".dsnav-sec").forEach((s) => {
-      s.style.display = s.dataset.sec === dsnavSec ? "" : "none";
-    });
-  }, [dsnavSec, doc, sel]);
 
   /* 템플릿 패널이 열리면 hover 미리보기 iframe을 미리 로드 — 첫 hover 지연 제거.
      잠금 해제 후에만(2026-09-11 — 실물 미리보기도 시각 자료 잠금 뒤로. 잠긴 상태에선 gallery iframe 을 싣지 않는다) */
@@ -165,8 +154,6 @@ export default function HubApp({ fragments, hist, shotNames }: {
     const onLeave = () => { lastX = lastY = -1; hideFly(); };
     const onClick = (e: MouseEvent) => {
       const t = e.target as HTMLElement;
-      const open365 = t.closest("#dsnav-open-365");
-      if (open365) { e.preventDefault(); switchDoc("d365"); return; }
       const lc = t.closest(".livecut") as HTMLElement | null;
       if (lc && lc.dataset.live) { if (!unlocked) return; hideFly(); setLive(lc.dataset.live); return; } // 클릭 = 실물 팝업, 잠금 해제 후에만(2026-09-11)
       const r = t.closest(".rowlink") as HTMLElement | null;
@@ -205,8 +192,7 @@ export default function HubApp({ fragments, hist, shotNames }: {
   const shellClass =
     "shell" +
     (hasVisual ? " wide-visual" : "") +
-    (isAdopt ? " adopt-visual" : "") +
-    (isDsnav ? " dsnav-visual" : "");
+    (isAdopt ? " adopt-visual" : "");
 
   return (
     <div className="hub-root" data-unlocked={unlocked ? "" : undefined}>
@@ -257,9 +243,6 @@ export default function HubApp({ fragments, hist, shotNames }: {
               <div className={"pwrap" + (doc === "hinas" && sel === 1 ? " on" : "")}>
                 <FragSec html={fragments.pipeline} />
               </div>
-              <div className={"pwrap" + (doc === "hinas" && sel === 2 ? " on" : "")}>
-                <FragSec html={fragments.resources} />
-              </div>
             </div>
             <div className="doc" id="doc-365" style={{ display: doc === "d365" ? "" : "none" }}>
               <Lockbar unlocked={unlocked} unlock={unlock} />
@@ -292,33 +275,11 @@ export default function HubApp({ fragments, hist, shotNames }: {
         {hasVisual ? (
           <aside className="visual">
             <div className="strip">
-              <span>{isAdopt || isDsnav ? "" : stack ? stack.title : "Visual"}</span>
-              <span className="sub">{isAdopt || isDsnav ? "" : stack ? stack.names.length + "장" : "준비 중"}</span>
+              <span>{isAdopt ? "" : stack ? stack.title : "Visual"}</span>
+              <span className="sub">{isAdopt ? "" : stack ? stack.names.length + "장" : "준비 중"}</span>
             </div>
             {isAdopt ? (
               <RegistryRail />
-            ) : isDsnav ? (
-              <div id="visual-dsnav" style={{ display: "flex" }}>
-                {([
-                  ["pipeline", "파이프라인", false],
-                  ["common", "Design system", false],
-                  ["palette", "팔레트", true],
-                  ["semantic", "시맨틱", true],
-                  ["typo", "타이포", true],
-                  ["d365", "365", false],
-                  ["cloud", "Cloud", false],
-                  ["control", "Control", false],
-                ] as Array<[string, string, boolean]>).map(([sec, label, sub]) => (
-                  <button
-                    key={sec}
-                    type="button"
-                    className={"dn-item" + (sub ? " sub" : "") + (dsnavSec === sec ? " on" : "")}
-                    onClick={() => { setDsnavSec(sec); window.scrollTo(0, 0); }}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
             ) : stack ? (
               <div className="vstack">
                 {stack.names.map((n) =>

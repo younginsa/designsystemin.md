@@ -19,7 +19,6 @@ export default function Page() {
   const fragments = {
     usage: frag("usage.html"),
     pipeline: frag("pipeline.html"),
-    resources: frag("resources.html"),
     templates: frag("templates.html"),
     usage365: frag("usage365.html"),
   };

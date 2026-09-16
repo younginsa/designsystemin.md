@@ -1,5 +1,4 @@
 
-        <div class="dsnav-sec" data-sec="pipeline">
         <h3>파이프라인 — 레지스트리에서 Storybook, Storybook에서 페이지까지 <span class="mono" style="font-size:12px;color:var(--doc-muted)">2026-09-16 개정</span></h3>
         <div class="card">
           <div class="card-body kv">
@@ -20,67 +19,60 @@
             <div class="k">산출</div>
             <div class="v"><code>pnpm ds:build</code> → CSS 변수(<code>dist/dstk.css</code>) + Tailwind 프리셋 → playground·생성 페이지가 사용. 빌드·커밋은 관리자만.</div>
             <div class="k">365 토큰</div>
-            <div class="v"><code>ds365.json</code> — 채택 카탈로그의 365 토큰·값 조정 기록(현재 1차: 네이비·각짐). 값이 확정되면 dstk로 편입한다.</div>
+            <div class="v"><code>ds365.json</code> — 365 DS 카탈로그의 토큰·값 조정 기록(현재 1차: 네이비·각짐). 값이 확정되면 dstk로 편입한다.</div>
+            <div class="k">Foundations</div>
+            <div class="v">팔레트 · 시맨틱(Theme × dstk 대조표) · 타이포는 <a href="/storybook/?path=/docs/foundations-overview--docs" target="_blank">Storybook Foundations</a>에서 본다 — 같은 dstk JSON 을 렌더한다. 사이트의 표는 2026-09-16 은퇴.</div>
           </div>
         </div>
-        </div><!-- /dsnav-sec pipeline -->
 
-        <div class="dsnav-sec" data-sec="common" style="display:none">
-        <h3>레퍼런스 구현 스택</h3>
-        <p>레퍼런스 구현 스택: <strong>React + Tailwind + shadcn/ui 계열</strong>. 화면 이해(시각 스펙)용이며, 토큰 JSON은 중립이므로 다른 스택 제품도 토큰을 가져다 쓸 수 있다.</p>
-        <p class="lead">토큰 표는 「시맨틱」 한 장으로 합쳤다(2026-09-15) — 피그마 Theme 대조와 dstk 토큰이 같은 표다.</p>
-        </div><!-- /dsnav-sec common -->
-
-        <div class="dsnav-sec" data-sec="d365" style="display:none">
-        <p style="margin:8px 0 28px"><a class="chip" id="dsnav-open-365" href="#adopt">365 탭 열기 →</a></p>
-        <h3>HiNAS 365 DS — 공통 DS 위의 제품 층</h3>
+      <h3>Resources</h3>
+        <div class="card-grid">
         <div class="card">
-          <div class="card-body kv">
-            <div class="k">무엇</div>
-            <div class="v">공통 DS 위에 <strong>Storybook 컴포넌트</strong>(<span class="mono">ds-registry.json</span>, status=adopted)와 <strong>365 토큰</strong>(<span class="mono">ds365.json</span>)을 얹은 HiNAS 365 전용 층. Storybook 에 있는 것이 곧 어휘다.</div>
-            <div class="k">관리 위치</div>
-            <div class="v">컴포넌트 원천은 <span class="mono">ds-registry.json</span>(2026-09-15 — 「Storybook 컴포넌트」가 그 뷰, 채택은 status 로), 토큰·값 조정은 「365 DS」, 레이아웃 프레임은 「페이지 템플릿」, 기획 입력 기록은 「히스토리」 — 모두 365 탭.</div>
-            <div class="k">현재 상태</div>
-            <div class="v">Storybook 컴포넌트 47종 · Foundations·Templates 문서 · /storybook/ 배포(2026-09-16). 다음: PageHeader·Stepper·HeatmapGrid 편입, MCP 연결, 생성 자동 Jira.</div>
+          <div class="card-head"><span class="n">1</span><span>Storybook — DS 컴포넌트</span></div>
+          <div class="card-body">
+            <div class="card-shot"><span class="lb">STORYBOOK</span><span class="cap">designsystemin-md.vercel.app/storybook</span></div>
+            <p>보는 곳. Foundations(팔레트·시맨틱·타이포) · Templates(프레임·본문 패턴) · 컴포넌트 전체. Storybook 에 있는 것이 곧 DS.</p>
+            <p><a class="mono" href="https://designsystemin-md.vercel.app/storybook/" target="_blank" rel="noopener">designsystemin-md.vercel.app/storybook/</a></p>
           </div>
         </div>
-        </div><!-- /dsnav-sec d365 -->
-
-        <div class="dsnav-sec" data-sec="palette" style="display:none">
-        <h3>팔레트 — 유일한 색 원천 <span class="mono" style="font-size:12px;color:var(--doc-muted)">dstk/palette.json · 피그마 fill 실측</span></h3>
-        <p class="lead">번호는 밝기가 아니라 <strong>역할</strong>(50=배경 · 100=면 · 900=최대 대비) — 시맨틱이 번호만 참조하면 조명 모드 전환이 자동이다. ★ = 대비 인증 앵커(Day=600 · Dusk·Night=500).</p>
-        <div class="mode-pills" id="pal-modes"></div>
-        <div id="pal-grid"></div>
-        </div><!-- /dsnav-sec palette -->
-
-        <div class="dsnav-sec" data-sec="semantic" style="display:none">
-        <h3>공통 시맨틱 — Theme × dstk 대조표 <span class="mono" id="theme-map-updated" style="font-size:12px;color:var(--doc-muted)"></span></h3>
-        <p class="lead">한 표(2026-09-15 병합): <strong>이름 = dstk 토큰 = Tailwind 클래스</strong>(피그마 폴더 <span class="mono">General/</span>는 뺐다) · 모드 셀 = 스와치 + <strong>팔레트 칩 이름</strong>(피그마 Colors 이름 그대로) + hex · 비고 = 피그마 그룹(Tint · Chart · Product)·번들. 원천 <span class="mono">dstk/figma-theme-snapshot.json</span> — ds:build가 시맨틱과 대조 검증 후 게시한다. Theme 밖 dstk 토큰(상태 축·램프·비색상)은 아래쪽에 이어진다.
-        <br>값 직접 기입 금지 — 전부 팔레트 참조(빌드 게이트가 강제).
-        <br><strong>상태-토큰 매핑</strong>(상태 이름 ≠ 토큰 이름): WARNING(심각)=<span class="mono">destructive</span> · CAUTION(주의)=<span class="mono">warning</span> · UNREAD(미확인)=<span class="mono">info</span> · NORMAL(정상)=<span class="mono">success</span> — 위계 빨강 &gt; 주황 &gt; 파랑 &gt; 초록.</p>
-        <div id="sem-table"></div>
-        </div><!-- /dsnav-sec semantic -->
-
-        <div class="dsnav-sec" data-sec="typo" style="display:none">
-        <h3>타이포 스케일 — 시거리 기반(1M/2M)</h3>
-        <p class="lead">피그마 HiNAS Control DNV TA 실측(4K 캔버스 px). 근거: <strong>ISO 8468 6.3.4.1</strong> — 글자 높이(mm) ≥ 3.5 × 시거리(m), 폭 = 0.7 × 높이. 원문·생성 게이트: <span class="mono">regulations/control.md</span></p>
-        <div id="typo-table"></div>
-        </div><!-- /dsnav-sec typo -->
-
-        <div class="dsnav-sec" data-sec="cloud" style="display:none">
-        <h3>HiNAS Cloud — 제품 층</h3>
-        <div class="card"><div class="card-body kv">
-          <div class="k">상태</div><div class="v">제품 토큰 미정의 — <span class="mono">dstk/products/cloud.json</span> 스켈레톤만 등재. 오버라이드가 생기면 이 섹션에 표가 생긴다.</div>
-        </div></div>
-        </div><!-- /dsnav-sec cloud -->
-
-        <div class="dsnav-sec" data-sec="control" style="display:none">
-        <h3>HiNAS Control — 제품 층</h3>
-        <div class="card"><div class="card-body kv">
-          <div class="k">조명 모드</div><div class="v">기본 축 = <strong>Dusk / Night</strong> — 아래 스와치도 Dusk 값을 대표로 보인다.</div>
-          <div class="k">destructive 페어</div><div class="v" id="ctl-tokens">…</div>
-          <div class="k">폰트 규정</div><div class="v"><strong>ISO 8468 6.3.4.1</strong> — 글자 높이(mm) ≥ 3.5 × 시거리(m), 폭 = 0.7 × 높이. 예: 시거리 2m → 높이 7mm · 폭 5mm. Control 화면 생성 시 지정 시거리 스케일 세트(1M/2M) 미만 크기는 <strong>self-check가 차단</strong>. mm→px 환산표는 대상 디스플레이 스펙 확정 후 — <span class="mono">추후 확정</span>.</div>
-          <div class="k">타이포 세트</div><div class="v" id="ctl-typo">…</div>
-          <div class="k">원문</div><div class="v"><span class="mono">regulations/control.md</span> · <span class="mono">dstk/products/control.json</span></div>
-        </div></div>
-        </div><!-- /dsnav-sec control -->
+        <div class="card">
+          <div class="card-head"><span class="n">2</span><span>Jira DES 보드</span></div>
+          <div class="card-body">
+            <div class="card-shot"><span class="lb">PLACEHOLDER</span><span class="cap">avikus.atlassian.net</span></div>
+            <p>DS 요청 접수·진행 현황 — 생성 중 shadcn 대체분의 자동 티켓과 "DS 요청: ○○"이 여기로 모인다.</p>
+            <p><a class="mono" href="https://avikus.atlassian.net/jira/software/c/projects/DES/boards/71" target="_blank" rel="noopener">avikus.atlassian.net · DES 보드</a></p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="n">3</span><span>shadcn/ui</span></div>
+          <div class="card-body">
+            <div class="card-shot"><img src="https://ui.shadcn.com/opengraph-image.png" alt="" loading="lazy" onerror="this.remove()"><span class="lb">PLACEHOLDER</span><span class="cap">ui.shadcn.com</span></div>
+            <p>컴포넌트 기본형 문서 — DS 에 없는 컴포넌트의 대체 경로(마커 + Jira).</p>
+            <p><a class="mono" href="https://ui.shadcn.com" target="_blank" rel="noopener">ui.shadcn.com</a></p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="n">4</span><span>lucide 아이콘</span></div>
+          <div class="card-body">
+            <div class="card-shot"><img src="https://lucide.dev/og.png" alt="" loading="lazy" onerror="this.remove()"><span class="lb">PLACEHOLDER</span><span class="cap">lucide.dev</span></div>
+            <p>전 컴포넌트가 쓰는 아이콘 세트(lucide-react). 이름으로 검색.</p>
+            <p><a class="mono" href="https://lucide.dev/icons" target="_blank" rel="noopener">lucide.dev/icons</a></p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="n">5</span><span>Radix UI</span></div>
+          <div class="card-body">
+            <div class="card-shot"><span class="lb">PLACEHOLDER</span><span class="cap">radix-ui.com</span></div>
+            <p>shadcn이 기반하는 프리미티브 — 접근성·키보드·동작 스펙.</p>
+            <p><a class="mono" href="https://www.radix-ui.com" target="_blank" rel="noopener">radix-ui.com</a></p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="n">6</span><span>Tailwind CSS</span></div>
+          <div class="card-body">
+            <div class="card-shot"><img src="https://tailwindcss.com/api/og" alt="" loading="lazy" onerror="this.remove()"><span class="lb">PLACEHOLDER</span><span class="cap">tailwindcss.com</span></div>
+            <p>유틸리티 클래스 레퍼런스 — 생성 코드의 스타일 문법.</p>
+            <p><a class="mono" href="https://tailwindcss.com/docs" target="_blank" rel="noopener">tailwindcss.com/docs</a></p>
+          </div>
+        </div>
+        </div>
