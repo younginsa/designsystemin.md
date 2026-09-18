@@ -3,6 +3,10 @@
 > 이 문서는 사람용 가이드가 아니라 **AI에게 내리는 명령문**이다.
 > 페이지·컴포넌트를 생성하는 모든 AI는 이 규칙을 따른다.
 > 원천은 이 저장소(git)다. 다른 곳에 복사된 사본은 신뢰하지 않는다.
+>
+> **이 문서는 "어떻게 쓰는가"(규칙)만 담는다.** "무엇이 있는가"(목록)는 Storybook 이고,
+> 토큰 값은 `dstk/*.json`(해석본 `/dstk/semantic-map.json`)이다. 여기에 목록이나 값을 다시 적지 않는다.
+> 산출물이 tsx 페이지든 단독 HTML 이든 이 규칙은 같다(2026-09-18 현행화).
 
 ## 0. 규정 우선
 
@@ -19,9 +23,12 @@
   `bg-destructive`, `ring-ring` 등.
 - **임의 값 금지**: `#3B82F6`, `bg-[#f00]`, `p-[13px]`, `rounded-[7px]`, `shadow-[...]` 전부 금지.
 - 간격·크기는 Tailwind 기본 스케일만 사용한다 (`p-4`, `gap-3`, `size-8`).
-- 컴포넌트는 `@ds/ui`에 있는 것만 사용한다. 없는 컴포넌트가 필요하면 **만들지 말고 사용자에게 보고**한다.
-- 새 페이지는 `playground/app/<이름>/page.tsx`에 만든다.
-- 다크 모드는 토큰이 처리한다. 색상에 `dark:` 프리픽스를 붙이지 않는다.
+- **Storybook 에 스토리가 있는 컴포넌트만 쓴다.** 없는 것을 직접 만들면 눈에 보이게 표시하고
+  (`data-ds="fallback"` + 점선 + "DS에 없음: <이름>") 보고서 끝에 목록으로 적는다. 조용히 넣지 않는다.
+- **산출물 위치**는 경로에 따라 다르다 — Claude Code 세션은 `playground/app/generated/<이름>/page.tsx`,
+  claude.ai 경로는 단독 HTML 한 장(`/ds-skill.md` 규약). 나머지 규칙은 양쪽 동일.
+- **생성물에 `dark:` 프리픽스를 쓰지 않는다** — 다크는 토큰이 처리한다.
+  (컴포넌트 내부에 남은 `dark:` 는 shadcn 잔재이고 별도 정리 대상이다. 스니펫에 섞여 있어도 그대로 복사한다.)
 
 ## 2. 시맨틱 토큰 사전
 
@@ -38,11 +45,13 @@
 | `border`, `input`, `ring` | 테두리, 입력 테두리, 포커스 링 |
 | `radius` | 라운드 기준값 (`rounded-lg`) |
 
-원천은 `dstk/*.json`. 값 변경은 반드시 거기서 하고 `pnpm ds:build`를 실행한다.
+이 표는 **용도 사전**이고 값은 없다. 실제 값(제품 모드별 해석 hex)은 `/dstk/semantic-map.json` 이 원천이며,
+`dstk/*.json` 을 고치고 `pnpm ds:build` 를 실행해 만든다.
 
-## 3. 컴포넌트 카탈로그 (@ds/ui)
+## 3. 컴포넌트 사용 규칙
 
-각 항목은 "언제 쓴다 / 언제 안 쓴다" 기준이다.
+**여기 적힌 것이 컴포넌트의 전체 목록이 아니다** — 목록은 Storybook 이다.
+이 절은 "언제 쓴다 / 언제 안 쓴다"만 담는다. 여기 없는 컴포넌트도 Storybook 에 있으면 쓸 수 있다.
 
 - **Button** — 모든 클릭 액션. 페이지당 기본(primary) 버튼은 1개.
 - **Input, Label** — 폼 입력. Label 없는 Input 금지 (placeholder는 label 대체 불가).
@@ -61,7 +70,7 @@
 - **Separator** — 섹션 구분. 여백으로 충분하면 쓰지 않는다.
 - **ToggleGroup — 은퇴(2026-09-15)**: outline 세그먼트·칩 그리드는 선택 상태(accent 6%)가 안 보여
   혼동을 낳았다. 단일 선택 뷰 전환 = `Tabs variant="line"`, 다중 선택 = `Checkbox` 그룹.
-  `form-segment`·`form-chipgrid` 어휘 삭제, 파일은 미채택 프리미티브로 남는다.
+  `form-segment`·`form-chipgrid` 삭제, 파일은 부품으로만 남는다(스토리 없음 = DS 아님).
 - **필드 보조 요소(2026-09-15)** — ✕ 지우기 등 아이콘 액션 = `text-input`(hover `foreground`),
   힌트 접미어(`InputGroupText muted`, "7자리") = `text-input`. 라벨 접두어("IMO")는 `secondary-foreground`.
 - **Alert** — 페이지 내 정적 안내·경고. 파괴 배너 표면 = `bg-destructive/5`
@@ -81,6 +90,8 @@ import 경로는 `@ds/ui/ui/<컴포넌트>` 형식이다. 예: `import { Button 
 ## 4. 레이아웃 규칙
 
 - **어드민 셸**: 좌측 사이드바(`w-64 border-r bg-card p-4`) + 우측 콘텐츠(`p-8`).
+  사이드바는 **일반 토큰만 쓴다** — 면 `bg-card`, 구분선 `border-border`, hover `accent`.
+  전용 sidebar 색 변수 8종은 2026-09-18 은퇴(shadcn 기본값 잔재였고 유틸리티가 생성되지도 않았다).
 - **인증 셸**: 중앙 정렬 단일 카드(`max-w-sm`), 배경 `bg-muted`.
 - 페이지 헤더: `PageHeader` 프리셋(2026-09-16) — 제목 `text-lg font-bold`(text-2xl 아님) + `actions`(우측 페이지 레벨 액션), 부제는 `description`, 제목 옆 배지·툴팁은 `addon`. 타이틀 행 손 조합 금지.
 - 콘텐츠 최대폭: 테이블 페이지는 전체폭, 폼·문서형은 `max-w-2xl`.
@@ -127,5 +138,15 @@ import 경로는 `@ds/ui/ui/<컴포넌트>` 형식이다. 예: `import { Button 
 
 ## 6. 생성 절차 요약
 
-요청 접수 → 규정 검토(§0) → 이 문서 확인 → 페이지 생성 → 임의 값 self-check(§1) →
-dev 서버 미리보기 제공 → 사용자 승인.
+요청 접수 → 규정 검토(§0) → 이 문서 확인 → **프레임 질문**(어느 레이아웃의 본문인가, 단독 화면인가) →
+생성 → self-check(임의 값·DS 밖 클래스) → 전달.
+
+경로별 차이는 이것뿐이다.
+
+| | Claude Code 세션 | claude.ai 경로 |
+|---|---|---|
+| 산출물 | `playground/app/generated/<이름>/page.tsx` | 단독 HTML 한 장 |
+| 확인 | dev 서버 렌더 | 내려받아 브라우저로 열기 |
+| 검사 | grep self-check + `check_html` | `/ds-classes.json` 대조 |
+
+상태는 양쪽 같다 — 기본·빈·로딩·에러 4개, 진행률이 실재하는 화면만 프로그레스 추가.
