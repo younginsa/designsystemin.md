@@ -66,8 +66,8 @@ const classes = new Set([...result.css.matchAll(/\.((?:\\.|[A-Za-z0-9_-])+)(?=[\
 writeFileSync(join(PG, "public/ds-classes.json"), JSON.stringify({
   $note: "ds.css 에 실제로 들어 있는 클래스 전부 + 허용 틴트. 생성 HTML 자가 검사용(pnpm mcp:artifacts).",
   css: "/ds.css",
+  $tints: "틴트를 따로 세지 않는다 — ds.css 에 있으면 쓸 수 있고 없으면 못 쓴다(2026-09-18). 디자이너용 틴트 선언은 dstk/contrast-pairs.json 이고 그건 컴포넌트를 만들 때 쓰는 장부다.",
   count: classes.size,
-  tints: TINTS,
   classes: [...classes].sort(),
 }, null, 1));
 console.log(`[ds.css] ${(result.css.length / 1024).toFixed(0)} KB · 클래스 ${classes.size} · 안전 목록 ${list.length} → playground/public/ds.css`);

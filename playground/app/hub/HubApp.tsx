@@ -4,13 +4,11 @@
 // 구조·클래스·동작은 원본과 동일하게 유지한다:
 //   내비 탭(HINAS DS·365) → 좌측 레일(패널 목록) → 본문 패널 → 우측 시각 컬럼.
 // 산문 패널은 fragments/*.html(원본에서 추출)을 주입하고, 컴포넌트 채택·365 DS 패널만
-// React로 다시 그렸다(카드 = 실물 렌더). 딥링크 해시(#adopt 등)도 원본과 동일.
+// React로 다시 그렸다. 딥링크 해시(#adopt 등)는 구 주소 호환으로 유지한다.
 
 import * as React from "react";
 
-import { useAdoption, useHubData } from "./adopt";
 import { RegistryPanel, RegistryRail } from "./registry";
-import { CatalogPanel } from "./catalog";
 import { CropImg, Lockbar, hydrateFragments, useScreens } from "./screens";
 import { useGallery } from "./viewers";
 
@@ -29,7 +27,6 @@ const DEEP_LINKS: Record<string, [DocKey, string]> = {
   "#templates": ["d365", "페이지 템플릿"],
   "#usage365": ["d365", "프론트 연동"],
   "#adopt": ["d365", "Storybook 컴포넌트"],
-  "#ds365": ["d365", "365 DS"],
   "#history": ["d365", "히스토리"],
   "#pipeline": ["hinas", "공통 DS"],
   "#resources": ["hinas", "공통 DS"], // 03 Resources 은퇴(2026-09-16) — 카드는 공통 DS 맨 아래 Resources 섹션
@@ -61,26 +58,17 @@ export default function HubApp({ fragments, hist, shotNames }: {
   const [fly, setFly] = React.useState<{ live?: string; src?: string; crop?: string } | null>(null);
   const [liveSeen, setLiveSeen] = React.useState<string[]>([]); // 한 번 띄운 슬러그의 iframe은 유지(재hover 즉시)
   const flyRef = React.useRef<HTMLDivElement>(null);
-  const [flash, setFlash] = React.useState<string | null>(null);
 
   const { urls, unlocked, unlock } = useScreens(shotNames);
-  const { approvedFile, ds365File } = useHubData();
-  const rebuilt = React.useMemo(
-    () => Object.keys(ds365File?.components ?? {}).filter((k) => ds365File!.components[k].build === "done"),
-    [ds365File],
-  );
-  const adoption = useAdoption(approvedFile, rebuilt);
-
   useGallery();
 
-  const PANELS: Record<DocKey, Array<{ title: string; visual?: "adopt" | "stack" }>> = {
+  const PANELS: Record<DocKey, Array<{ title: string; visual?: "registry" | "stack" }>> = {
     hinas: [
       { title: "사용방법" },
       { title: "공통 DS" },
     ],
     d365: [
-      { title: "Storybook 컴포넌트", visual: "adopt" },
-      { title: "365 DS" },
+      { title: "Storybook 컴포넌트", visual: "registry" },
       { title: "페이지 템플릿" },
       { title: "프론트 연동" },
       { title: "히스토리", visual: "stack" },
@@ -89,7 +77,7 @@ export default function HubApp({ fragments, hist, shotNames }: {
 
   const panels = PANELS[doc];
   const panel = panels[sel];
-  const isAdopt = panel.title === "Storybook 컴포넌트";
+  const isRegistry = panel.title === "Storybook 컴포넌트";
   const isHist = panel.title === "히스토리";
   const hasVisual = panel.visual !== undefined;
 
@@ -98,8 +86,6 @@ export default function HubApp({ fragments, hist, shotNames }: {
 
   /* 딥링크 — 원본과 동일한 해시 */
   React.useEffect(() => {
-    // #code=<슬러그> — 코드 드로어 딥링크: 365 탭 · 02 패널로 전환(드로어는 CatalogPanel이 연다)
-    if (/^#code=[\w-]+$/.test(location.hash)) { setDoc("d365"); setSel(1); return; }
     const target = DEEP_LINKS[location.hash];
     if (!target) return;
     const idx = PANELS[target[0]].findIndex((p) => p.title === target[1]);
@@ -183,16 +169,10 @@ export default function HubApp({ fragments, hist, shotNames }: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urls, unlocked]);
 
-  const jumpToCard = (slug: string) => {
-    document.querySelector(`#doc-365 [data-comp="${slug}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
-    setFlash(slug);
-    setTimeout(() => setFlash(null), 1400);
-  };
-
   const shellClass =
     "shell" +
     (hasVisual ? " wide-visual" : "") +
-    (isAdopt ? " adopt-visual" : "");
+    (isRegistry ? " registry-visual" : "");
 
   return (
     <div className="hub-root" data-unlocked={unlocked ? "" : undefined}>
@@ -249,16 +229,13 @@ export default function HubApp({ fragments, hist, shotNames }: {
               <section className={"panel hubdoc" + (doc === "d365" && sel === 0 ? " on" : "")}>
                 <RegistryPanel />
               </section>
-              <section className={"panel hubdoc" + (doc === "d365" && sel === 1 ? " on" : "")}>
-                <CatalogPanel approvals={adoption} ds365={ds365File} urls={urls} />
-              </section>
-              <div className={"pwrap" + (doc === "d365" && sel === 2 ? " on" : "")}>
+              <div className={"pwrap" + (doc === "d365" && sel === 1 ? " on" : "")}>
                 <FragSec html={fragments.templates} />
               </div>
-              <div className={"pwrap" + (doc === "d365" && sel === 3 ? " on" : "")}>
+              <div className={"pwrap" + (doc === "d365" && sel === 2 ? " on" : "")}>
                 <FragSec html={fragments.usage365} />
               </div>
-              <section className={"panel hubdoc" + (doc === "d365" && sel === 4 ? " on" : "")}>
+              <section className={"panel hubdoc" + (doc === "d365" && sel === 3 ? " on" : "")}>
                 {hist.map((h, i) => (
                   <div
                     key={h.date}
@@ -275,10 +252,10 @@ export default function HubApp({ fragments, hist, shotNames }: {
         {hasVisual ? (
           <aside className="visual">
             <div className="strip">
-              <span>{isAdopt ? "" : stack ? stack.title : "Visual"}</span>
-              <span className="sub">{isAdopt ? "" : stack ? stack.names.length + "장" : "준비 중"}</span>
+              <span>{isRegistry ? "" : stack ? stack.title : "Visual"}</span>
+              <span className="sub">{isRegistry ? "" : stack ? stack.names.length + "장" : "준비 중"}</span>
             </div>
-            {isAdopt ? (
+            {isRegistry ? (
               <RegistryRail />
             ) : stack ? (
               <div className="vstack">

@@ -19,14 +19,11 @@ export async function optional(path: string): Promise<string | null> { try { ret
 
 export type Entry = {
   name: { ko: string; en: string };
-  status: "adopted" | "primitive" | "retired";
   section: string;
   stories: string | null;
   file: string | null;
-  aliases: { slug: string; name: string; files: string[]; approved: boolean }[];
   figma: { id: string; name: string; variants: number; built?: string }[];
   note: string | null;
-  role: string;
 };
 export type Registry = { $note: string; fileKey: string; updated: string; components: Record<string, Entry> };
 export type StoryIndex = { generated: string; components: Record<string, { name: { ko: string; en: string }; stories: { name: string; file: string; description: string; portal: boolean; error?: string }[] }> };

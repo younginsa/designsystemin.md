@@ -517,19 +517,19 @@
   .chip.approve.on { color: #217a39; border-color: #cde9d4; background: #eef8f0; }
   .chip.approve.on:hover { color: #217a39; background: #e3f2e7; }
   .chip.approve[disabled] { opacity: .45; cursor: not-allowed; }
-  /* 컴포넌트 채택 — 3번째 컬럼 폭만 좁게 (레이아웃 규칙은 .wide-visual 공통) */
-  .shell.adopt-visual { --visual-w: 320px; }
-  .adopt-rail { display: grid; gap: 16px; }
-  .adopt-rail .card { margin: 0; }
-  .adopt-rail .rail-dirty { font-family: var(--mono); font-size: 12px; color: var(--ink); }
-  .adopt-rail .rail-dirty:empty { display: none; }
-  .adopt-rail .rail-head { padding: 12px 16px; border-bottom: 1px solid var(--line);
+  /* Storybook 컴포넌트 레일 — 3번째 컬럼 폭만 좁게 (레이아웃 규칙은 .wide-visual 공통) */
+  .shell.registry-visual { --visual-w: 320px; }
+  .registry-rail { display: grid; gap: 16px; }
+  .registry-rail .card { margin: 0; }
+  .registry-rail .rail-dirty { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+  .registry-rail .rail-dirty:empty { display: none; }
+  .registry-rail .rail-head { padding: 12px 16px; border-bottom: 1px solid var(--line);
     font-family: var(--mono); font-size: 12px; color: var(--doc-muted); }
-  .adopt-rail .rail-head strong { color: var(--ink); font-weight: 600; }
-  .adopt-rail .rail-list { padding: 10px 16px 14px; display: flex; flex-wrap: wrap; gap: 6px; }
-  .adopt-rail .rail-list .chip { cursor: pointer; }
-  .adopt-rail .rail-list .chip:hover { background: var(--surface); }
-  .adopt-rail .rail-list .chip.off { color: var(--doc-muted); border-style: dashed; }
+  .registry-rail .rail-head strong { color: var(--ink); font-weight: 600; }
+  .registry-rail .rail-list { padding: 10px 16px 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .registry-rail .rail-list .chip { cursor: pointer; }
+  .registry-rail .rail-list .chip:hover { background: var(--surface); }
+  .registry-rail .rail-list .chip.off { color: var(--doc-muted); border-style: dashed; }
   .card.comp.flash { outline: 2px solid #217a39; outline-offset: 2px; }
   /* 레지스트리 표(Storybook 컴포넌트 패널) — 컴팩트 */
   .map-t { width: 100%; border-collapse: collapse; }

@@ -25,9 +25,9 @@ export default function Page() {
   const histMeta: Array<{ date: string; summary: string; file: string }> = JSON.parse(frag("hist-meta.json"));
   const hist = histMeta.map((h) => ({ date: h.date, summary: h.summary, html: frag(h.file) }));
 
-  // 암호화 스크린샷 이름 전수 — 프래그먼트 + 카드 데이터에서 수집 (구 페이지의 DOM 스캔 등가)
-  const all = Object.values(fragments).join("\n") + hist.map((h) => h.html).join("\n") +
-    fs.readFileSync(path.join(process.cwd(), "app/hub/cards-data.ts"), "utf8");
+  // 암호화 스크린샷 이름 전수 — 산문 프래그먼트와 히스토리에서 수집.
+  // 2026-09-18: 카드 데이터(cards-data.ts)는 채택 카탈로그와 함께 은퇴해 수집원에서 빠졌다.
+  const all = Object.values(fragments).join("\n") + hist.map((h) => h.html).join("\n");
   const shotNames = [...new Set(
     [...all.matchAll(/data-shots?="([^"]+)"/g)].flatMap((m) => m[1].split(","))
       .concat([...all.matchAll(/"shot": "([^"]+)"/g)].map((m) => m[1]))

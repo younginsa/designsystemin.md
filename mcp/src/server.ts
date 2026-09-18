@@ -2,7 +2,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
-import { BASE, contrastPairs, doc, json, optional, registry, semanticMap, storyIndex, storybookDocsUrl, text, typography } from "./ds.js";
+import { BASE, doc, optional, registry, semanticMap, storyIndex, storybookDocsUrl, text, typography } from "./ds.js";
 
 const ok = (t: string) => ({ content: [{ type: "text" as const, text: t }] });
 const slice = (md: string, from: string, to: string) => { const a = md.indexOf(from); if (a < 0) return ""; const b = md.indexOf(to, a + from.length); return md.slice(a, b < 0 ? undefined : b); };
@@ -15,16 +15,15 @@ export function createServer() {
 
   server.registerTool("list_components", {
     title: "DS 컴포넌트 목록",
-    description: "Storybook 에 있는 DS 컴포넌트 전부(= 생성에 쓸 수 있는 어휘). status 로 필터. 각 항목: key(get_component 인자)·이름·스토리 목록·Storybook 문서 URL·노트 요약.",
-    inputSchema: { status: z.enum(["adopted", "primitive", "retired", "all"]).optional().describe("기본 adopted — 채택분만") },
-  }, async ({ status }) => {
+    description: "DS 컴포넌트 전부. 스토리가 있으면 DS 이고 화면에 쓸 수 있다 — 스토리가 없는 항목은 다른 컴포넌트가 내부에서 쓰는 부품이라 기본 목록에서 빠진다(사람이 켜고 끄는 채택 단계는 2026-09-18 폐기).",
+    inputSchema: { include_parts: z.boolean().optional().describe("스토리 없는 부품까지 포함(기본 false)") },
+  }, async ({ include_parts }) => {
     const reg = await registry();
     let idx: any = null; try { idx = await storyIndex(); } catch { idx = null; }
-    const want = status && status !== "all" ? status : status === "all" ? null : "adopted";
     const rows = Object.entries(reg.components)
-      .filter(([, e]) => !want || e.status === want)
+      .filter(([, e]) => include_parts || !!e.stories)
       .map(([key, e]) => ({
-        key, name: e.name, status: e.status, section: e.section,
+        key, name: e.name, kind: e.stories ? "ds" : "part", section: e.section,
         file: e.file, stories: idx?.components?.[key]?.stories?.map((s: any) => s.name) ?? [],
         storybook: e.stories ? storybookDocsUrl(key) : null,
         note: e.note ? e.note.slice(0, 240) : null,
@@ -43,7 +42,7 @@ export function createServer() {
     const idx = await storyIndex().catch(() => null);
     const stories = idx?.components?.[key]?.stories ?? [];
     const snippets = await Promise.all(stories.map(async (s: any) => ({ name: s.name, description: s.description, portal: s.portal, error: s.error ?? null, html: s.error ? null : await optional("/story-html/" + s.file) })));
-    const out: any = { key, name: e.name, status: e.status, note: e.note, storybook: e.stories ? storybookDocsUrl(key) : null, figma: e.figma, snippets };
+    const out: any = { key, name: e.name, kind: e.stories ? "ds" : "part", note: e.note, storybook: e.stories ? storybookDocsUrl(key) : null, figma: e.figma, snippets };
     if (include_source !== false) {
       out.componentSource = e.file ? await optional("/ui-src/" + key + ".tsx.txt") : null;
       out.storySource = e.stories ? await optional("/ui-src/" + key + ".stories.tsx.txt") : null;
@@ -100,13 +99,11 @@ export function createServer() {
 
   server.registerTool("check_html", {
     title: "HTML 자가 검사",
-    description: "생성한 HTML 의 DS 위반을 찾는다 — 임의 hex·임의 값(-[…])·인라인 style·ds.css 에 없는 클래스·틴트 허용 목록 밖·4상태 섹션 누락·상태 필 누락. 미채택 마커(data-ds=fallback) 목록도 뽑는다. 위반 0 이 될 때까지 고친다.",
+    description: "생성한 HTML 의 DS 위반을 찾는다 — 임의 hex·임의 값(-[…])·인라인 style·ds.css 에 없는 클래스(투명도 변형 포함)·4상태 섹션 누락·상태 필 누락. DS 밖 마커(data-ds=fallback) 목록도 뽑는다. 위반 0 이 될 때까지 고친다.",
     inputSchema: { html: z.string().describe("검사할 HTML 전문") },
   }, async ({ html }) => {
     const css = await text("/ds.css");
-    const cp = await contrastPairs().catch(() => ({}));
     const allowed = new Set([...css.matchAll(/\.((?:\\.|[A-Za-z0-9_-])+)(?=[\s,:{.>[~+])/g)].map((m) => m[1].replace(/\\/g, "")));
-    const tintsAllowed = new Set(((cp as any).tints?.allowed ?? []).map((t: any) => String(t.class)));
     const v: { rule: string; detail: string }[] = [];
     // 속성값의 HTML 엔티티([&amp;_svg] · has-[&gt;svg] · &#x27;)를 되돌린 뒤 비교 — SSR 스니펫이 그렇게 나온다
     const decode = (s: string) => s.replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/&#39;/g, "'");
@@ -117,8 +114,6 @@ export function createServer() {
       const known = allowed.has(c);
       // 컴포넌트가 쓰는 대괄호 변형([&_svg]:… · data-[state=open]:…)은 ds.css 에 있으니 통과 — 번들에 없는 임의 값(w-[300px] 등)만 위반
       if (!known && /-\[[^\]]+\]$/.test(c)) { v.push({ rule: "arbitrary-value", detail: c }); continue; }
-      const tint = c.match(/^(?:hover:)?(?:bg|text|border|ring)-([a-z-]+\/\d+)$/);
-      if (tint && !tintsAllowed.has(tint[1]) && !/^(muted-foreground\/40|border\/50|ring\/50|primary\/90|destructive\/90|black\/20|white\/10)$/.test(tint[1])) { v.push({ rule: "tint-not-allowed", detail: c }); continue; }
       if (!known) v.push({ rule: "unknown-class", detail: c });
     }
     for (const m of html.matchAll(/style="([^"]*)"/g)) v.push({ rule: "inline-style", detail: m[1].slice(0, 80) });
@@ -133,9 +128,9 @@ export function createServer() {
     if (states.has("progress") !== picks.has("progress")) v.push({ rule: "progress-mismatch", detail: states.has("progress") ? "progress 섹션은 있는데 알약 버튼이 없다" : "progress 알약은 있는데 섹션이 없다" });
     for (const s of ["empty", "loading", "error"]) if (states.has(s) && !picks.has(s)) v.push({ rule: "missing-state-pill", detail: s + " 알약 버튼 없음" });
     if (!html.includes("/ds.css")) v.push({ rule: "missing-css-link", detail: `<link rel="stylesheet" href="${BASE}/ds.css">` });
-    const fallbacks = [...html.matchAll(/data-ds="fallback"[\s\S]*?미채택:\s*([^<]+)</g)].map((m) => m[1].trim());
+    const fallbacks = [...html.matchAll(/data-ds="fallback"[\s\S]*?(?:DS에 없음|미채택):\s*([^<]+)</g)].map((m) => m[1].trim());
     const unknown = v.filter((x) => x.rule === "unknown-class").length;
-    return ok(JSON.stringify({ violations: v.length, byRule: v.reduce((a: any, x) => (a[x.rule] = (a[x.rule] || 0) + 1, a), {}), details: v.slice(0, 120), unknownClassNote: unknown ? "ds.css 에 없는 클래스는 스타일이 안 먹는다 — 스니펫의 클래스 조합으로 되돌리거나 토큰 클래스로 바꾼다" : undefined, fallbacks, fallbackNote: fallbacks.length ? "보고 끝에 미채택 목록(컴포넌트 · 자리 · 이유)을 적는다 — 디자이너가 Jira DES 로 판정" : undefined }, null, 1));
+    return ok(JSON.stringify({ violations: v.length, byRule: v.reduce((a: any, x) => (a[x.rule] = (a[x.rule] || 0) + 1, a), {}), details: v.slice(0, 120), unknownClassNote: unknown ? "ds.css 에 없는 클래스는 스타일이 안 먹는다 — 스니펫의 클래스 조합으로 되돌리거나 토큰 클래스로 바꾼다" : undefined, fallbacks, fallbackNote: fallbacks.length ? "보고 끝에 DS 에 없어서 직접 만든 것(컴포넌트 · 자리 · 이유)을 적는다 — 디자이너가 Jira DES 로 판정" : undefined }, null, 1));
   });
 
   server.registerResource("registry", "ds://registry", { title: "DS 레지스트리", mimeType: "application/json" }, async (uri) => ({ contents: [{ uri: uri.href, mimeType: "application/json", text: await text("/ds-registry.json") }] }));

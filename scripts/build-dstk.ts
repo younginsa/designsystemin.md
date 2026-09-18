@@ -185,7 +185,7 @@ for (const f of readdirSync(join(ROOT, "dstk/products")).filter((f) => f.endsWit
   writeFileSync(join(ROOT, `dist/products/${name}.css`), parts.join("\n\n") + "\n");
 }
 
-// ── 빌드 게이트(가독성·어휘) + Storybook 시맨틱 표 데이터 — 피그마 스냅샷 대조는 2026-09-18 은퇴(저장소가 원천, 피그마는 다운스트림) ──
+// ── 빌드 게이트(가독성·스토리) + Storybook 시맨틱 표 데이터 — 피그마 스냅샷 대조는 2026-09-18 은퇴(저장소가 원천, 피그마는 다운스트림) ──
 {
   // ── 가독성 게이트 — contrast-pairs.json의 글자×면 조합을 3모드 전수 WCAG 검사 ──
   const cpPath = join(ROOT, "dstk/contrast-pairs.json");
@@ -238,42 +238,27 @@ for (const f of readdirSync(join(ROOT, "dstk/products")).filter((f) => f.endsWit
     }
   }
 
-  // ── 어휘 게이트 — approved ↔ vocab-map ↔ components/src/ui 전수 대조 ──
-  // 새 컴포넌트가 매핑 없이 추가되면 조회 경로(vocab-map)가 조용히 구멍 난다
-  // (2026-08-26 search-box 승격 때 수작업 기억에 의존했던 것의 기계화).
+  // ── 스토리 게이트 — components/src/ui ↔ ds-registry.json 전수 대조 ──
+  // 2026-09-18 개정: 종전 '어휘 게이트'는 approved.json·vocab-map.json 과 대조했는데
+  // 그 두 파일이 채택 개념과 함께 은퇴했다(label 이 스토리가 있는데도 목록에서 빠져 있던 사고가 근거).
+  // 이제 판정은 하나다 — 스토리가 있으면 DS, 없으면 부품. 레지스트리가 그 사실을 정확히 적고 있는지만 본다.
   {
-    const vmPath = join(ROOT, "playground/public/vocab-map.json");
-    const apPath = join(ROOT, "playground/public/approved.json");
-    if (existsSync(vmPath) && existsSync(apPath)) {
-      const vm: any = JSON.parse(readFileSync(vmPath, "utf8"));
-      const approved: string[] = JSON.parse(readFileSync(apPath, "utf8")).approved ?? [];
-      const vocab: Record<string, { files: string[] }> = vm.vocab ?? {};
-      const uiDir = join(ROOT, "components/src/ui");
-      // *.stories.tsx 는 컴포넌트가 아니라 Storybook·허브 카드가 공유하는 스토리 선언(2026-09-08) —
-      // 어휘 게이트 대상에서 제외한다. FE가 스토리 파일을 추가할 때마다 vocab-map을 손대지 않도록.
-      const files = new Set(
-        readdirSync(uiDir).filter((f) => f.endsWith(".tsx") && !f.endsWith(".stories.tsx")).map((f) => f.slice(0, -4)),
-      );
-      const vocabErrs: string[] = [];
-
-      const apSet = new Set(approved);
-      const vkSet = new Set(Object.keys(vocab));
-      for (const s of approved) if (!vkSet.has(s)) vocabErrs.push(`approved에만 있음(매핑 누락): ${s}`);
-      for (const s of vkSet) if (!apSet.has(s)) vocabErrs.push(`vocab-map에만 있음(미채택 잔재): ${s}`);
-
-      const referenced = new Set<string>([...(vm.infrastructure ?? []), ...(vm.unadopted ?? [])]);
-      for (const [slug, e] of Object.entries(vocab)) {
-        for (const f of e.files ?? []) {
-          if (!files.has(f)) vocabErrs.push(`없는 파일 참조: ${slug} → ${f}`);
-          referenced.add(f);
-        }
+    const regPath = join(ROOT, "playground/public/ds-registry.json");
+    const uiDir = join(ROOT, "components/src/ui");
+    if (existsSync(regPath) && existsSync(uiDir)) {
+      const reg: Record<string, any> = JSON.parse(readFileSync(regPath, "utf8")).components ?? {};
+      const all = readdirSync(uiDir).filter((f) => f.endsWith(".tsx"));
+      const comps = new Set(all.filter((f) => !f.endsWith(".stories.tsx")).map((f) => f.slice(0, -4)));
+      const stories = new Set(all.filter((f) => f.endsWith(".stories.tsx")).map((f) => f.slice(0, -12)));
+      const errs: string[] = [];
+      for (const c of comps) if (!reg[c]) errs.push(`components/src/ui/${c}.tsx 가 레지스트리에 없다 — 항목을 추가할 것`);
+      for (const st of stories) if (!reg[st]) errs.push(`components/src/ui/${st}.stories.tsx 가 레지스트리에 없다 — 스토리가 있으면 DS 인데 소비자 목록에서 빠진다`);
+      for (const [k, e] of Object.entries<any>(reg)) {
+        if (e.file && !comps.has(k)) errs.push(`${k}: 레지스트리에 있는데 파일이 없다`);
+        if (e.stories && !stories.has(k)) errs.push(`${k}: 스토리를 가리키는데 파일이 없다 — ${e.stories}`);
+        if (!e.stories && stories.has(k)) errs.push(`${k}: 스토리 파일이 있는데 레지스트리가 비어 있다 — DS 인데 소비자 목록에서 빠진다`);
       }
-      for (const f of files) {
-        if (!referenced.has(f)) vocabErrs.push(`components/src/ui/${f}.tsx 미등재 — vocab files 또는 infrastructure/unadopted에 넣을 것`);
-      }
-      if (vocabErrs.length) {
-        throw new Error(`어휘 게이트 실패 ${vocabErrs.length}건 (vocab-map.json ↔ approved.json ↔ components/src/ui):\n  ` + vocabErrs.join("\n  "));
-      }
+      if (errs.length) throw new Error(`스토리 게이트 실패 ${errs.length}건 (components/src/ui ↔ ds-registry.json):\n  ` + errs.join("\n  "));
     }
   }
 

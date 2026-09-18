@@ -12,8 +12,8 @@
 
 | 무엇 | 주소 |
 |---|---|
-| 컴포넌트 목록 | `BASE/ds-registry.json` — `components` 중 `status: "adopted"` 만 사용 가능 |
-| 스니펫 목록 | `BASE/story-html/index.json` — 컴포넌트별 스토리 이름·설명·파일 경로 |
+| 컴포넌트 목록 | `BASE/story-html/index.json` — 여기 있으면 쓸 수 있다(스토리가 있다 = DS 다) |
+| 관리 기록 | `BASE/ds-registry.json` — 피그마 세트·설계 노트. 생성에 꼭 필요하진 않다 |
 | 스니펫 본문 | `BASE/story-html/<키>/<스토리>.html` — 렌더된 HTML, 복사해서 쓴다 |
 | 컴포넌트 원문 | `BASE/ui-src/<키>.tsx.txt` · 스토리 원문 `BASE/ui-src/<키>.stories.tsx.txt` |
 | 색 토큰 | `BASE/dstk/semantic-map.json` — 토큰 이름 = Tailwind 클래스 이름 |
@@ -40,7 +40,7 @@
 3. **스니펫을 가져온다.** 쓰려는 컴포넌트마다 `story-html/index.json` 에서 알맞은 스토리를 고르고 그 HTML 을 읽어 **그대로 복사**한 뒤 글자·숫자만 바꾼다. 클래스 조합을 새로 만들지 않는다.
 4. **HTML 한 장을 쓴다.** 3장의 규약을 따른다.
 5. **자가 검사한다.** 4장 체크리스트를 통과할 때까지 고친다.
-6. **보고한다.** 파일을 주고, 끝에 **미채택 목록**(컴포넌트 · 쓰인 자리 · 이유)을 적는다. 없으면 "미채택 없음". 그리고 **프로그레스 포함 여부와 이유**를 한 줄 적는다.
+6. **보고한다.** 파일을 주고, 끝에 **DS에 없어서 직접 만든 것**(컴포넌트 · 쓰인 자리 · 이유)을 적는다. 없으면 "전부 DS 안에서 해결". 그리고 **프로그레스 포함 여부와 이유**를 한 줄 적는다.
 
 ## 3. HTML 규약
 
@@ -84,13 +84,13 @@
 - **DS 에 없는 요소**는 만들되 반드시 표시한다.
   ```html
   <div data-ds="fallback" class="rounded-md border border-dashed border-muted-foreground/40 p-2">
-    <span class="mb-1 block text-xs text-muted-foreground">미채택: 트리 선택기</span>
+    <span class="mb-1 block text-xs text-muted-foreground">DS에 없음: 트리 선택기</span>
     …
   </div>
   ```
 - **금지**: `#` 으로 시작하는 색값, `w-[300px]` 같은 대괄호 임의 값, `style="…"` 인라인 스타일, 임의 픽셀·색 지정.
   색은 토큰 클래스만 쓴다: `bg-primary` · `text-secondary-foreground` · `border-border` · `bg-muted` 등.
-  투명도 변형(`bg-primary/10`)은 `ds-classes.json` 의 `tints` 목록에 있는 것만.
+  투명도 변형(`bg-primary/10`)도 같은 규칙이다 — `ds-classes.json` 의 `classes` 에 있으면 쓰고, 없으면 못 쓴다.
 
 ## 4. 자가 검사 체크리스트
 
@@ -101,8 +101,8 @@
 3. `data-state` 가 default·empty·loading·error 네 개 다 있는가. 진행률이 실재하는 화면이면 progress 까지 다섯 개인가.
 4. 상단 전환 알약과 하단 스크립트가 있는가. 알약 버튼과 `data-state` 섹션이 1:1 로 맞는가.
 5. 스타일시트 링크가 `BASE/ds.css` 한 줄뿐인가.
-6. 투명도 변형이 `tints` 목록 안인가.
-7. `data-ds="fallback"` 으로 감싼 것들을 전부 보고서의 미채택 목록에 적었는가.
+6. (1번 검사에 포함 — 투명도 변형도 클래스 목록으로 함께 판정한다)
+7. `data-ds="fallback"` 으로 감싼 것들을 전부 보고서에 적었는가.
 8. 보고서에 프로그레스 포함 여부와 이유를 한 줄 적었는가.
 9. 규칙서(§0 에서 읽은 `docs/design.md`)의 금지 목록에 걸리는 것이 없는가 —
    Label 없는 Input · 카드 안 카드 · 클릭되는 Badge · 페이지당 primary 2개 이상 · 본문 text-xs · placeholder 로 라벨 대체.
@@ -129,5 +129,5 @@
 
 - 프레임 질문을 건너뛰고 바로 만들지 않는다.
 - 스니펫을 안 읽고 기억으로 마크업을 쓰지 않는다.
-- 미채택 요소를 조용히 넣지 않는다. 반드시 마커와 목록에 남긴다.
+- DS 에 없는 요소를 조용히 넣지 않는다. 반드시 마커와 목록에 남긴다.
 - 값이 안 읽히면 지어내지 않는다. "주소를 읽지 못했다"고 말하고 멈춘다.

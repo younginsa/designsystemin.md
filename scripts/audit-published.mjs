@@ -115,7 +115,7 @@ async function main() {
       }
     }
   }
-  for (const [p, kb] of [["/ds-registry.json", 40], ["/story-html/index.json", 30], ["/ds-skill.md", 20]]) {
+  for (const [p, kb] of [["/ds-registry.json", 40], ["/story-html/index.json", 40], ["/ds-skill.md", 20]]) {
     const r = await get(p);
     if (r.ok && r.body.length / 1024 > kb) add("warn", "크기 예산 초과", `${p} ${(r.body.length / 1024).toFixed(0)}KB (예산 ${kb}KB)`);
   }
