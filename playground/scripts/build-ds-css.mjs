@@ -62,4 +62,12 @@ const out = join(PG, "public/ds.css");
 const header = `/* DS CSS 번들 — 자동 생성(pnpm mcp:artifacts). 원천: dstk/*.json → dist/dstk.css + Tailwind(components/src · gallery · 안전 목록). 단독 HTML 은 <link rel="stylesheet" href="/ds.css"> 한 줄. */\n`;
 writeFileSync(out, header + result.css);
 const classes = new Set([...result.css.matchAll(/\.((?:\\.|[A-Za-z0-9_-])+)(?=[\s,:{.>[~+])/g)].map((m) => m[1].replace(/\\/g, "")));
+// 자가 검사용 허용 클래스 목록 — claude.ai 스킬이 읽어 대조한다(도구 없이 검사하는 경로)
+writeFileSync(join(PG, "public/ds-classes.json"), JSON.stringify({
+  $note: "ds.css 에 실제로 들어 있는 클래스 전부 + 허용 틴트. 생성 HTML 자가 검사용(pnpm mcp:artifacts).",
+  css: "/ds.css",
+  count: classes.size,
+  tints: TINTS,
+  classes: [...classes].sort(),
+}, null, 1));
 console.log(`[ds.css] ${(result.css.length / 1024).toFixed(0)} KB · 클래스 ${classes.size} · 안전 목록 ${list.length} → playground/public/ds.css`);

@@ -18,10 +18,10 @@ const DEFAULT_STATES: StatePreviewState[] = [
   { value: "error", label: "에러" },
 ]
 
-// 로딩 표준이 스켈레톤으로 바뀌면서(ds365: skeleton) 기존 프로그레스 바는 폐기가 아니라
-// 별도 상태로 보존한다 — 실제 진행률 표시가 필요한 화면(업데이트 파이프라인 등)의 비교용.
-// 4상태 계약은 그대로이고, 이 배열은 프로그레스 바를 쓰는 화면에서만 states로 넘긴다.
-const LOADING_STATES: StatePreviewState[] = [
+// 진행률이 실재하는 화면 전용(업데이트 실행·진단 실행·대량 처리·업로드 등) — 기본은 위의 4종이다.
+// 2026-09-18 개명: 종전 이름 LOADING_STATES 는 "로딩이 있는 화면이면 이것"으로 읽혀 20면에 복사로 번졌다
+// (진행률 없는 권한 표·계정 목록까지 막대가 붙었다). 호출부에서 의도가 보이도록 PROGRESS_STATES 로 바꾼다.
+const PROGRESS_STATES: StatePreviewState[] = [
   { value: "default", label: "기본" },
   { value: "empty", label: "빈" },
   { value: "loading", label: "로딩" },
@@ -64,4 +64,7 @@ function StatePreview({ value, onChange, states = DEFAULT_STATES, className }: S
   )
 }
 
-export { StatePreview, DEFAULT_STATES, LOADING_STATES }
+// LOADING_STATES — 구 이름 호환(클론 19면이 아직 import 한다). 신규 화면은 PROGRESS_STATES 를 쓴다.
+const LOADING_STATES = PROGRESS_STATES
+
+export { StatePreview, DEFAULT_STATES, PROGRESS_STATES, LOADING_STATES }

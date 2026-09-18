@@ -7,18 +7,8 @@ import { BASE, contrastPairs, doc, json, optional, registry, semanticMap, storyI
 const ok = (t: string) => ({ content: [{ type: "text" as const, text: t }] });
 const slice = (md: string, from: string, to: string) => { const a = md.indexOf(from); if (a < 0) return ""; const b = md.indexOf(to, a + from.length); return md.slice(a, b < 0 ? undefined : b); };
 
-/** claude.ai 단독 HTML 출력 규약 — CLAUDE.md 생성 계약(세션·tsx 기준)을 HTML 파일 한 장으로 옮긴 것 */
-const HTML_RULES = `# 단독 HTML 출력 규약 (claude.ai · MCP 경로)
-
-1. 산출물은 **HTML 파일 한 장**. <head> 에 \`<link rel="stylesheet" href="${BASE}/ds.css">\` 한 줄 — DS 토큰·유틸리티·컴포넌트 클래스 전부가 여기 있다. 다른 CSS·CDN·인라인 style 금지.
-2. <body class="bg-background text-foreground antialiased"> 로 시작. 다크·Control 모드는 <html class="dark"> / <html class="theme-control">.
-3. 컴포넌트는 반드시 \`get_component\` 가 준 스토리 HTML 스니펫을 복사해 내용만 바꾼다(클래스 조합을 새로 발명하지 않는다). 목록에 없는 요소는 shadcn 기본형 마크업을 쓰되 **눈에 보이는 마커**로 감싼다:
-   \`<div data-ds="fallback" class="rounded-md border border-dashed border-muted-foreground/40 p-2"><span class="mb-1 block text-xs text-muted-foreground">미채택: <이름></span>…</div>\`
-4. 모든 화면은 기본·빈·로딩·에러 4개 상태를 담는다 — \`<section data-state="default|empty|loading|error">\` 4개(기본만 표시, 나머지 hidden) + 상단 중앙 플로팅 필(StatePreview 대체):
-   \`<div class="fixed top-4 left-1/2 z-50 flex -translate-x-1/2 gap-1 rounded-full border border-border bg-card p-1 shadow-card"><button data-pick="default" class="rounded-full px-3 py-1 text-xs font-medium bg-primary text-primary-foreground">기본</button><button data-pick="empty" class="rounded-full px-3 py-1 text-xs text-secondary-foreground hover:bg-accent">빈</button><button data-pick="loading" class="rounded-full px-3 py-1 text-xs text-secondary-foreground hover:bg-accent">로딩</button><button data-pick="error" class="rounded-full px-3 py-1 text-xs text-secondary-foreground hover:bg-accent">에러</button></div>\`
-   + 끝에 스크립트: \`<script>document.querySelectorAll("[data-pick]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-state]").forEach(s=>s.hidden=s.dataset.state!==b.dataset.pick);document.querySelectorAll("[data-pick]").forEach(x=>{const on=x===b;x.className=on?"rounded-full px-3 py-1 text-xs font-medium bg-primary text-primary-foreground":"rounded-full px-3 py-1 text-xs text-secondary-foreground hover:bg-accent"})}))</script>\`
-5. 임의 값 금지 — hex 색(#…)·\`-[…]\` 임의 클래스·인라인 style 없음. 색은 토큰 클래스(bg-primary · text-secondary-foreground …)만, 틴트(/N)는 허용 목록만.
-6. 생성 전 \`get_generation_contract\` → 프레임 질문(\`get_layout\`) → 컴포넌트 스니펫(\`get_component\`) → 작성 → \`check_html\` 로 자가 검사(위반 0 이 될 때까지 수정) → 보고 끝에 **미채택 목록**(컴포넌트 · 자리 · 이유).`;
+// 단독 HTML 출력 규약 — 원문은 /ds-skill.md 한 곳(claude.ai 스킬과 같은 문서를 읽어 규칙이 갈라지지 않게 한다, 2026-09-18)
+const htmlRules = () => text("/ds-skill.md");
 
 export function createServer() {
   const server = new McpServer({ name: "hinas-365-ds", version: "0.1.0" });
@@ -96,7 +86,7 @@ export function createServer() {
     const claude = (await optional("/docs/CLAUDE.md")) ?? "";
     const design = (await optional("/docs/design.md")) ?? "";
     const contract = slice(claude, "## 페이지 생성 요청을 받으면", "## 질문 출력 형식");
-    return ok([HTML_RULES, "# CLAUDE.md — 생성 절차(세션 계약, HTML 경로에도 같은 게이트)\n\n" + contract, "# design.md — 규칙서\n\n" + design].join("\n\n---\n\n"));
+    return ok([await htmlRules(), "# CLAUDE.md — 생성 절차(세션 계약, HTML 경로에도 같은 게이트)\n\n" + contract, "# design.md — 규칙서\n\n" + design].join("\n\n---\n\n"));
   });
 
   server.registerTool("get_css_bundle", {
@@ -135,9 +125,13 @@ export function createServer() {
     // 임의 hex — 색이 들어갈 자리(style·fill·stroke·color 속성, <style> 블록)만 본다. href="#id" 같은 앵커는 제외
     const hexCtx = [...html.matchAll(/(?:style|fill|stroke|color|bgcolor)="([^"]*)"/g)].map((m) => m[1]).concat([...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]));
     for (const ctx of hexCtx) for (const m of ctx.matchAll(/#[0-9a-fA-F]{3,8}\b/g)) v.push({ rule: "raw-hex", detail: m[0] });
-    const states = new Set([...html.matchAll(/data-state="(default|empty|loading|error)"/g)].map((m) => m[1]));
+    const states = new Set([...html.matchAll(/data-state="(default|empty|loading|progress|error)"/g)].map((m) => m[1]));
+    const picks = new Set([...html.matchAll(/data-pick="(default|empty|loading|progress|error)"/g)].map((m) => m[1]));
     for (const s of ["default", "empty", "loading", "error"]) if (!states.has(s)) v.push({ rule: "missing-state", detail: s });
-    if (!/data-pick="default"/.test(html)) v.push({ rule: "missing-state-pill", detail: "상단 중앙 플로팅 필(data-pick) 없음" });
+    if (!picks.has("default")) v.push({ rule: "missing-state-pill", detail: "상단 중앙 플로팅 필(data-pick) 없음" });
+    // 프로그레스는 진행률이 실재하는 화면만 — 넣었으면 섹션과 알약이 둘 다 있어야 한다(한쪽만 = 복사 흔적)
+    if (states.has("progress") !== picks.has("progress")) v.push({ rule: "progress-mismatch", detail: states.has("progress") ? "progress 섹션은 있는데 알약 버튼이 없다" : "progress 알약은 있는데 섹션이 없다" });
+    for (const s of ["empty", "loading", "error"]) if (states.has(s) && !picks.has(s)) v.push({ rule: "missing-state-pill", detail: s + " 알약 버튼 없음" });
     if (!html.includes("/ds.css")) v.push({ rule: "missing-css-link", detail: `<link rel="stylesheet" href="${BASE}/ds.css">` });
     const fallbacks = [...html.matchAll(/data-ds="fallback"[\s\S]*?미채택:\s*([^<]+)</g)].map((m) => m[1].trim());
     const unknown = v.filter((x) => x.rule === "unknown-class").length;

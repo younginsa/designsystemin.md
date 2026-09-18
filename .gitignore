@@ -16,6 +16,7 @@ playground/app/generated/
 # MCP 산출물(pnpm mcp:artifacts) — 빌드 시 생성, 배포 사이트가 서빙. 커밋하지 않는다(2026-09-18)
 playground/public/story-html/
 playground/public/ds.css
+playground/public/ds-classes.json
 playground/public/docs/
 playground/public/dstk/contrast-pairs.json
 playground/scripts/.ds-safelist.html
