@@ -20,6 +20,8 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
+import { HeatmapGrid, HeatmapLegend, type HeatmapTone } from "@ds/ui/ui/heatmap-grid";
 import { Card } from "@ds/ui/ui/card";
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import {
@@ -98,13 +100,13 @@ const TOOLS = [
   { icon: HardDrive, label: "Storage Data List", count: null },
 ];
 
-// 히트맵 톤 — DES-206: 노랑·파랑 계열은 primary 대체
+// 히트맵 톤 — 데이터는 ok·bad·mid·none, 렌더는 DS HeatmapGrid 톤(2026-09-18 채택)으로 매핑. DES-206: 노랑·파랑 계열은 primary 대체
 type Cell = "ok" | "bad" | "mid" | "none";
-const CELL_CLS: Record<Cell, string> = {
-  ok: "bg-success",
-  bad: "bg-destructive",
-  mid: "bg-primary",
-  none: "bg-muted",
+const CELL_TONE: Record<Cell, HeatmapTone> = {
+  ok: "success",
+  bad: "destructive",
+  mid: "primary",
+  none: "none",
 };
 
 const DAYS = ["07-21", "07-22", "07-23", "07-24", "07-25", "07-26", "07-27", "07-28"];
@@ -153,17 +155,21 @@ export default function DiagnosticDetailPage() {
   return (
     <div className="space-y-6">
       {/* ── 페이지 헤더 ── */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-lg font-bold">
-          SVM_TEST3 <span className="text-secondary-foreground">· SVM</span>
-        </h1>
-        <div className="flex items-center gap-2">
-          <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
-          <Button variant="outline" size="sm" onClick={() => setQuickOpen(true)}>
-            <Info className="size-4" /> Product Quick View
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title={
+          <>
+            SVM_TEST3 <span className="text-secondary-foreground">· SVM</span>
+          </>
+        }
+        actions={
+          <>
+            <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
+            <Button variant="outline" size="sm" onClick={() => setQuickOpen(true)}>
+              <Info className="size-4" /> Product Quick View
+            </Button>
+          </>
+        }
+      />
 
       {view === "loading" && <BlockSkeleton />}
       {view === "progress" && (
@@ -339,10 +345,10 @@ export default function DiagnosticDetailPage() {
               title="Camera Status"
               desc="연결된 카메라의 시간대별 동작 상태"
               legend={[
-                ["NORMAL", "bg-success"],
-                ["NO_DATA", "bg-muted"],
-                ["UNDETERMINABLE", "bg-primary"],
-                ["ABNORMAL", "bg-destructive"],
+                { label: "NORMAL", tone: "success" },
+                { label: "NO_DATA", tone: "none" },
+                { label: "UNDETERMINABLE", tone: "primary" },
+                { label: "ABNORMAL", tone: "destructive" },
               ]}
               rows={CAMERA_ROWS}
               colLabel="Camera"
@@ -353,11 +359,11 @@ export default function DiagnosticDetailPage() {
               title="Pod Status"
               desc="각 파드의 시간대별 실행 상태"
               legend={[
-                ["Running", "bg-success"],
-                ["Succeeded / Completed", "bg-primary"],
-                ["Pending / NotReady", "bg-primary"],
-                ["Error", "bg-destructive"],
-                ["NoData", "bg-muted"],
+                { label: "Running", tone: "success" },
+                { label: "Succeeded / Completed", tone: "primary" },
+                { label: "Pending / NotReady", tone: "primary" },
+                { label: "Error", tone: "destructive" },
+                { label: "NoData", tone: "none" },
               ]}
               rows={POD_ROWS}
               colLabel="Pod"
@@ -547,7 +553,7 @@ function HeatmapCard({
 }: {
   title: string;
   desc: string;
-  legend: [string, string][];
+  legend: { label: string; tone: HeatmapTone }[];
   rows: { name: string; group?: boolean; cells: Cell[] }[];
   colLabel: string;
   expandAll?: boolean;
@@ -565,53 +571,14 @@ function HeatmapCard({
           </Button>
         )}
       </div>
-      <div className="mt-2 flex flex-wrap gap-4">
-        {legend.map(([label, cls]) => (
-          <span key={label} className="flex items-center gap-1.5 text-xs text-secondary-foreground">
-            <span className={"size-2 rounded-full " + cls} />
-            {label}
-          </span>
-        ))}
-      </div>
-
-      <div className="mt-3 overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr>
-              <th className="w-48 py-2 text-left text-xs font-medium uppercase text-secondary-foreground">
-                {colLabel}
-              </th>
-              {DAYS.map((d) => (
-                <th key={d} className="py-2 text-left text-xs font-normal text-secondary-foreground">
-                  {d}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.name}>
-                <td className="max-w-48 truncate py-1 pr-4 font-mono text-sm">
-                  {r.group && <span className="mr-1 text-secondary-foreground">+</span>}
-                  {r.name}
-                </td>
-                {r.cells.map((c, i) => (
-                  <td key={i} className="py-1 pr-1">
-                    {c === "none" ? (
-                      <span className="block h-5 w-full min-w-8 rounded-sm bg-muted opacity-40" />
-                    ) : (
-                      <span
-                        className={"block h-5 w-full min-w-8 rounded-sm " + CELL_CLS[c]}
-                        title={`${r.name} · ${DAYS[i]}`}
-                      />
-                    )}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {/* 범례 + 표 = DS HeatmapGrid/HeatmapLegend(2026-09-18 채택) — 카드 셸(제목·설명·Expand All)만 화면 소유 */}
+      <HeatmapLegend className="mt-2" items={legend} />
+      <HeatmapGrid
+        className="mt-3"
+        columns={DAYS}
+        rowLabel={colLabel}
+        rows={rows.map((r) => ({ name: r.name, group: r.group, cells: r.cells.map((c) => CELL_TONE[c]) }))}
+      />
     </Card>
   );
 }

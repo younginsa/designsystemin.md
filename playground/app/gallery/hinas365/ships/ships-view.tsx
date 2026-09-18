@@ -13,13 +13,15 @@
 //
 // 어휘 게이트 메모
 // - skeleton 채택 완료(DES-205 해소, 2026-08-25) — 로딩=스켈레톤 · 프로그레스 바=실제 진행률 전용
-// - stepper 미채택(DES-207) → 생성 모달 3단계 표시는 data-tabs 로 대체
+// - stepper 채택 완료(DES-207 해소, 2026-09-18) — 생성 모달 3단계 표시는 DS Stepper(표시 전용)
 // - warning 톤 없음(DES-206) → 구독 PENDING 은 primary 도트로 대체
 // - 원본 primary 는 네이비지만 DS 토큰(zinc-900)을 그대로 쓴다 — 토큰 반영 시 자동 추종
 
 import * as React from "react";
 import { ListFooter } from "@ds/ui/ui/list-footer";
 import { StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
+import { Stepper, StepperItem } from "@ds/ui/ui/stepper";
 import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import {
@@ -84,7 +86,6 @@ import {
   TableHeader,
   TableRow,
 } from "@ds/ui/ui/table";
-import { Tabs, TabsList, TabsTrigger } from "@ds/ui/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@ds/ui/ui/tooltip";
 
 import {
@@ -568,23 +569,23 @@ export default function ShipsView({ kind }: { kind: ListKind }) {
     <TooltipProvider>
       <div className="space-y-6">
         {/* ── 페이지 헤더 ── */}
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-lg font-bold">
-            {isTest ? "테스트 호선 리스트" : "납품 호선 리스트"}
-          </h1>
-          <StatePreview
-            value={view}
-            onChange={(v) => setView(v as ViewState)}
-            states={[
-              { value: "default", label: "기본" },
-              { value: "empty", label: "빈" },
-              { value: "loading", label: "로딩" },
-              { value: "progress", label: "프로그레스 바" },
-              { value: "error", label: "에러" },
-              { value: "no-result", label: "결과 없음" },
-            ]}
-          />
-        </div>
+        <PageHeader
+          title={isTest ? "테스트 호선 리스트" : "납품 호선 리스트"}
+          actions={
+            <StatePreview
+              value={view}
+              onChange={(v) => setView(v as ViewState)}
+              states={[
+                { value: "default", label: "기본" },
+                { value: "empty", label: "빈" },
+                { value: "loading", label: "로딩" },
+                { value: "progress", label: "프로그레스 바" },
+                { value: "error", label: "에러" },
+                { value: "no-result", label: "결과 없음" },
+              ]}
+            />
+          }
+        />
 
         {/* ── 툴바 — header-filter 시스템 + searchSlot 주입(SearchBox 프리셋) ── */}
         <FilterBar
@@ -993,23 +994,18 @@ function CreateShipDialog({
           </DialogDescription>
         </DialogHeader>
 
-        {/* 단계 표시 — stepper 미채택(DES-207)이라 data-tabs 로 대체 */}
-        <Tabs value={CREATE_STEPS[step].id}>
-          <TabsList className="w-full justify-start">
-            {CREATE_STEPS.map((s, i) => (
-              <TabsTrigger
-                key={s.id}
-                value={s.id}
-                disabled={i > step}
-                className="gap-2"
-                onClick={() => i <= step && setStep(i)}
-              >
-                <span>{i + 1}</span>
-                {s.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+        {/* 단계 표시 — DS Stepper(2026-09-18 채택, DES-207 해소). 표시 전용: 이전 단계 이동은 푸터 [이전] 버튼 */}
+        <Stepper>
+          {CREATE_STEPS.map((s, i) => (
+            <StepperItem
+              key={s.id}
+              step={i + 1}
+              state={i < step ? "completed" : i === step ? "current" : "upcoming"}
+            >
+              {s.label}
+            </StepperItem>
+          ))}
+        </Stepper>
 
         {done && (
           <Alert>

@@ -18,6 +18,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
@@ -138,16 +139,18 @@ export default function Sales365AccountDetailPage() {
     // Jira 문법: 콘텐츠 컬럼은 풀스크린에서도 max-width 캡(계약 상세와 동일 1280)
     <div className="mx-auto w-full max-w-7xl space-y-6">
       {/* ── 페이지 헤더 — 타이틀 단독, 메타는 우측 Details 패널 소유 ── */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <h1 className="text-lg font-bold">{ACCOUNT.name}</h1>
-        <div className="flex items-center gap-2">
-          <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
-          {/* 파괴적 액션 — 아웃라인 파괴형, CTA 순서 관례 */}
-          <Button variant="destructive-outline" size="sm" className="rounded-sm">
-            계정 삭제
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title={ACCOUNT.name}
+        actions={
+          <>
+            <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
+            {/* 파괴적 액션 — 아웃라인 파괴형, CTA 순서 관례 */}
+            <Button variant="destructive-outline" size="sm" className="rounded-sm">
+              계정 삭제
+            </Button>
+          </>
+        }
+      />
 
       {view === "loading" && <BlockSkeleton />}
       {view === "progress" && (

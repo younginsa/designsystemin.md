@@ -16,6 +16,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
 import { Skeleton, TableSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
@@ -231,12 +232,12 @@ export default function Sales365DeliveriesPage() {
     <TooltipProvider>
     <div className="space-y-6">
       {/* ── 페이지 헤더 ── */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        {/* 자동 생성 안내를 제목 옆 [i]로 접었다(2026-09-07) — 상시 문단이 툴바를 밀어내고 있었다.
-            트리거는 button이라 hover뿐 아니라 키보드 포커스로도 열린다.
-            TooltipContent는 w-fit이라 max-w-xs로 줄바꿈 폭을 준다(대시보드 선례와 같은 구조) */}
-        <div className="flex items-center gap-1.5">
-          <h1 className="text-lg font-bold">납품 제품</h1>
+      {/* 자동 생성 안내를 제목 옆 [i]로 접었다(2026-09-07) — 상시 문단이 툴바를 밀어내고 있었다.
+          트리거는 button이라 hover뿐 아니라 키보드 포커스로도 열린다.
+          TooltipContent는 w-fit이라 max-w-xs로 줄바꿈 폭을 준다(대시보드 선례와 같은 구조) */}
+      <PageHeader
+        title="납품 제품"
+        addon={
           <Tooltip>
             <TooltipTrigger asChild>
               <button type="button" aria-label="납품 제품 설명">
@@ -248,9 +249,9 @@ export default function Sales365DeliveriesPage() {
               관리합니다. 직접 만들거나 지울 수 없습니다.
             </TooltipContent>
           </Tooltip>
-        </div>
-        <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
-      </div>
+        }
+        actions={<StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />}
+      />
 
       {/* ── 툴바 — 새 규칙(2026-08-26): 필터는 전부 여기, 헤더는 정렬만 ── */}
       <FilterBar

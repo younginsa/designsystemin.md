@@ -105,7 +105,16 @@ const NAV_GROUPS: {
   {
     label: "업데이트",
     items: [
-      { icon: RefreshCw, label: "업데이트", href: `${BASE}/updates` },
+      {
+        icon: RefreshCw,
+        label: "업데이트",
+        href: `${BASE}/updates`,
+        // 하위 페이지 = 호선 구분(2026-09-18 디자이너 확정) — 운영의 우상단 납품|테스트 토글을 사이드바로 옮겼다
+        children: [
+          { label: "납품 호선", view: "delivery" },
+          { label: "테스트 호선", view: "test" },
+        ],
+      },
       {
         icon: GitCompare,
         label: "버전 호환성",
@@ -119,12 +128,10 @@ const NAV_GROUPS: {
         icon: Tag,
         label: "릴리즈 노트",
         href: `${BASE}/release-notes`,
-        // 제품 탭(COMMON·NAVIGATION·SVM·CONTROL) → 하위 페이지. 데이터는 동일, 제목·강조만 따라간다
+        // 하위 페이지 = 독자(사용자용·개발자용, 2026-09-16 디자이너 확정). 제품(COMMON·NAVIGATION·SVM·CONTROL)은 페이지 안 line 탭으로
         children: [
-          { label: "COMMON", view: "common" },
-          { label: "NAVIGATION", view: "navigation" },
-          { label: "SVM", view: "svm" },
-          { label: "CONTROL", view: "control" },
+          { label: "사용자용", view: "user" },
+          { label: "개발자용", view: "dev" },
         ],
       },
     ],

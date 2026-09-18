@@ -16,6 +16,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
@@ -165,17 +166,21 @@ export default function Sales365VesselDetailPage() {
     <TooltipProvider>
     <div className="mx-auto w-full max-w-7xl space-y-6">
       {/* ── 페이지 헤더 — 타이틀 단독, 메타는 우측 Details 패널 소유 ── */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <h1 className="text-lg font-bold">
-          Hull 1001 <span className="text-secondary-foreground">· MV EXAMPLE</span>
-        </h1>
-        <div className="flex items-center gap-2">
-          <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
-          <Button variant="destructive-outline" size="sm" className="rounded-sm">
-            호선 삭제
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title={
+          <>
+            Hull 1001 <span className="text-secondary-foreground">· MV EXAMPLE</span>
+          </>
+        }
+        actions={
+          <>
+            <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
+            <Button variant="destructive-outline" size="sm" className="rounded-sm">
+              호선 삭제
+            </Button>
+          </>
+        }
+      />
 
       {/* 미입력 식별자 경고 — 주의 레벨. 배너 표준 양식(취소 배너와 동일): variant destructive + /5 틴트 */}
       <Alert variant="destructive" className="border-0 bg-destructive/5">

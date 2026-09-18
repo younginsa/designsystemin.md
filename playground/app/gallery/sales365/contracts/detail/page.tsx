@@ -14,6 +14,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
@@ -340,27 +341,27 @@ export default function Sales365ContractDetailPage() {
     <TooltipProvider>
     <div className="mx-auto w-full max-w-7xl space-y-6">
       {/* ── 페이지 헤더 ── */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          {/* 타이틀 단독 — 메타는 전부 우측 Details 패널 소유(2026-08-28 확정) */}
-          <h1 className="text-lg font-bold">{CONTRACT.name}</h1>
-        </div>
-        <div className="flex items-center gap-2">
-          <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
-          {/* 파괴적 액션 — 아웃라인 파괴형, CTA 순서 관례 */}
-          <Button variant="destructive-outline" size="sm" className="rounded-sm">
-            계약 취소
-          </Button>
-          <Button
-            variant="destructive-outline"
-            size="icon"
-            className="size-8 rounded-sm"
-            aria-label="계약 삭제"
-          >
-            <Trash2 className="size-4" />
-          </Button>
-        </div>
-      </div>
+      {/* 타이틀 단독 — 메타는 전부 우측 Details 패널 소유(2026-08-28 확정) */}
+      <PageHeader
+        title={CONTRACT.name}
+        actions={
+          <>
+            <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
+            {/* 파괴적 액션 — 아웃라인 파괴형, CTA 순서 관례 */}
+            <Button variant="destructive-outline" size="sm" className="rounded-sm">
+              계약 취소
+            </Button>
+            <Button
+              variant="destructive-outline"
+              size="icon"
+              className="size-8 rounded-sm"
+              aria-label="계약 삭제"
+            >
+              <Trash2 className="size-4" />
+            </Button>
+          </>
+        }
+      />
 
       {view === "loading" && <BlockSkeleton />}
       {view === "progress" && (

@@ -9,6 +9,7 @@ import Link from "next/link";
 import { KeyRound, UserRound } from "lucide-react";
 
 import { Button } from "@ds/ui/ui/button";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@ds/ui/ui/empty";
 
 const BASE = "/gallery/hinas365";
@@ -16,7 +17,7 @@ const BASE = "/gallery/hinas365";
 export default function PermissionsPage() {
   return (
     <div className="space-y-6">
-      <h1 className="text-lg font-bold">기능별 계정권한</h1>
+      <PageHeader title="기능별 계정권한" />
 
       <Empty>
         <EmptyHeader>

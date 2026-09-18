@@ -12,6 +12,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import { Check, Info } from "lucide-react";
@@ -56,15 +57,11 @@ export default function Sales365ProductsPage() {
   return (
     <div className="space-y-6">
       {/* ── 페이지 헤더 ── */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-lg font-bold">제품 목록</h1>
-          <p className="text-sm text-secondary-foreground">
-            계약 항목에 담을 수 있는 제품과, 판매 단위로 묶은 패키지입니다
-          </p>
-        </div>
-        <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
-      </div>
+      <PageHeader
+        title="제품 목록"
+        description="계약 항목에 담을 수 있는 제품과, 판매 단위로 묶은 패키지입니다"
+        actions={<StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />}
+      />
 
       {view === "loading" && <TableSkeleton />}
       {view === "progress" && (

@@ -16,6 +16,7 @@
 import * as React from "react";
 import { useSearchParams } from "next/navigation";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import {
@@ -157,10 +158,10 @@ function CompatibilityBody() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-lg font-bold">{SUB_LABEL[sub]}</h1>
-        <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
-      </div>
+      <PageHeader
+        title={SUB_LABEL[sub]}
+        actions={<StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />}
+      />
 
       {view === "loading" && <TableSkeleton />}
       {view === "progress" && (

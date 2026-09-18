@@ -26,6 +26,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
 import { Skeleton, TableSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
@@ -303,12 +304,10 @@ export default function Sales365ContractsPage() {
   return (
     <div className="space-y-6">
       {/* ── 페이지 헤더 ── */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-lg font-bold">계약</h1>
-        </div>
-        <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
-      </div>
+      <PageHeader
+        title="계약"
+        actions={<StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />}
+      />
 
       {/* ── 툴바 — 새 규칙(2026-08-26): 필터는 전부 여기, 헤더는 정렬만 ── */}
       <FilterBar

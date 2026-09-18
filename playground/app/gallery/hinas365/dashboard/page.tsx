@@ -14,6 +14,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
 import { CardGridSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
@@ -125,16 +126,18 @@ export default function DashboardPage() {
     <TooltipProvider>
       {/* 섹션 리듬 — 전 페이지 공통 24px(사용자 확정). shadow-card 55%는 토큰에 정식 등재됨 */}
       <div className="space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-lg font-bold">대시보드</h1>
-          <div className="flex items-center gap-2">
-            <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
-            <span className="text-sm text-secondary-foreground">업데이트 15:43:02 (KST)</span>
-            <Button variant="ghost" size="sm">
-              <RefreshCw className="size-4" /> 새로고침
-            </Button>
-          </div>
-        </div>
+        <PageHeader
+          title="대시보드"
+          actions={
+            <>
+              <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
+              <span className="text-sm text-secondary-foreground">업데이트 15:43:02 (KST)</span>
+              <Button variant="ghost" size="sm">
+                <RefreshCw className="size-4" /> 새로고침
+              </Button>
+            </>
+          }
+        />
 
         {view === "loading" && <CardGridSkeleton />}
         {view === "progress" && (

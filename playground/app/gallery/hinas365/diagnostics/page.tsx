@@ -16,6 +16,7 @@
 import * as React from "react";
 import { ListFooter } from "@ds/ui/ui/list-footer";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
@@ -457,9 +458,9 @@ function DiagnosticsBody() {
     <TooltipProvider>
       <div className="space-y-6">
         {/* ── 페이지 헤더 ── */}
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="flex items-center gap-2 text-lg font-bold">
-            시스템 진단 호선
+        <PageHeader
+          title="시스템 진단 호선"
+          addon={
             <Tooltip>
               <TooltipTrigger asChild>
                 <button type="button" aria-label="설명">
@@ -468,9 +469,9 @@ function DiagnosticsBody() {
               </TooltipTrigger>
               <TooltipContent>호선별 자가 진단 결과와 해결 상태를 관리합니다.</TooltipContent>
             </Tooltip>
-          </h1>
-          <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
-        </div>
+          }
+          actions={<StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />}
+        />
 
         {/* ── 툴바 — header-filter 시스템(FilterBar 시안) ── */}
         <FilterBar

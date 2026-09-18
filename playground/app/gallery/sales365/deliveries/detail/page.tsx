@@ -18,6 +18,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
@@ -136,21 +137,23 @@ export default function Sales365DeliveryDetailPage() {
     // Jira 문법: 콘텐츠 컬럼은 풀스크린에서도 max-width 캡(계약 상세와 동일 1280)
     <div className="mx-auto w-full max-w-7xl space-y-6">
       {/* ── 페이지 헤더 — 타이틀 단독, 메타(계약 항목·이행 종류)는 우측 Details 패널 소유 ── */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <h1 className="text-lg font-bold">Hull 1001 · Control</h1>
-        <div className="flex items-center gap-2">
-          <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
-          {/* 취소 시나리오 토글 (와이어프레임: 정상/취소 상태 시연) */}
-          <Button
-            variant="destructive-outline"
-            size="sm"
-            className="rounded-sm"
-            onClick={() => setCancelled((c) => !c)}
-          >
-            {cancelled ? "취소 해제" : "✕ 취소"}
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title="Hull 1001 · Control"
+        actions={
+          <>
+            <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
+            {/* 취소 시나리오 토글 (와이어프레임: 정상/취소 상태 시연) */}
+            <Button
+              variant="destructive-outline"
+              size="sm"
+              className="rounded-sm"
+              onClick={() => setCancelled((c) => !c)}
+            >
+              {cancelled ? "취소 해제" : "✕ 취소"}
+            </Button>
+          </>
+        }
+      />
 
       {/* 취소 배너 — 예정일 수정·도면 등록 차단. 배너 표준 양식: variant destructive + /5 틴트 */}
       {cancelled && (

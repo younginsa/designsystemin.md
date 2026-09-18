@@ -42,6 +42,7 @@ import { contractName, itemFromPackage } from "../../_detail/contract-name";
 import { ErrorState } from "@ds/ui/ui/error-state";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import { DEFAULT_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import {
   Table,
   TableBody,
@@ -257,13 +258,11 @@ export default function SubscriptionListPage() {
   return (
     <div className="space-y-6">
       {/* ── 페이지 헤더 ── */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-lg font-bold">구독 만료 임박</h1>
-        </div>
-        {/* 조회 전용 — CTA 없음. 상태 미리보기만 */}
-        <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={DEFAULT_STATES} />
-      </div>
+      {/* 조회 전용 — CTA 없음. 상태 미리보기만 */}
+      <PageHeader
+        title="구독 만료 임박"
+        actions={<StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={DEFAULT_STATES} />}
+      />
 
       {/* ── 필터 — FilterBar 상세 조건 층(스펙 6.4): 검색 + 기본 칩 상태 + 추가 칩(만료까지 기본 켜짐).
           바의 [초기화]는 DS 문법대로 조건 없음 ── */}

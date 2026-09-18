@@ -25,6 +25,7 @@ import { Calendar as CalendarIcon, ChevronsUpDown, Plus, Trash2 } from "lucide-r
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import { Card } from "@ds/ui/ui/card";
 import { DEFAULT_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Badge } from "@ds/ui/ui/badge";
 import { Checkbox } from "@ds/ui/ui/checkbox";
 import { Button } from "@ds/ui/ui/button";
@@ -325,10 +326,10 @@ export default function Sales365ContractCreatePage() {
   return (
     <div className="mx-auto w-full max-w-4xl space-y-6">
       {/* ── 페이지 헤더 ── */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-lg font-bold">계약 생성</h1>
-        <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={DEFAULT_STATES} />
-      </div>
+      <PageHeader
+        title="계약 생성"
+        actions={<StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={DEFAULT_STATES} />}
+      />
 
       {view === "loading" && <BlockSkeleton />}
       {view === "error" && (

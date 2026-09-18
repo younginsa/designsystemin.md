@@ -19,6 +19,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
 import { BlockSkeleton } from "@ds/ui/ui/skeleton";
 import Link from "next/link";
@@ -126,36 +127,36 @@ export default function Sales365UserDetailPage() {
     <TooltipProvider>
     <div className="mx-auto w-full max-w-7xl space-y-6">
       {/* ── 페이지 헤더 — 타이틀(사람 표기 + 상태) 단독, 메타(팀·이메일)는 우측 Details 패널 소유 ── */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <PersonAvatar name={USER.name} size="default" />
-          <h1 className="flex items-center gap-2 text-lg font-bold">
-            {USER.name}
-            {active ? (
-              <StatusBadge label="활성" tone="success" bg={false} className="font-normal" />
-            ) : (
-              <StatusBadge label="비활성" tone="neutral" bg={false} className="font-normal" />
-            )}
-          </h1>
-        </div>
-        <div className="flex items-center gap-2">
-          <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
-          {active ? (
-            <Button
-              variant="destructive-outline"
-              size="sm"
-              className="rounded-sm"
-              onClick={() => setDeactivateOpen(true)}
-            >
-              비활성 처리
-            </Button>
+      <PageHeader
+        leading={<PersonAvatar name={USER.name} size="default" />}
+        title={USER.name}
+        addon={
+          active ? (
+            <StatusBadge label="활성" tone="success" bg={false} className="font-normal" />
           ) : (
-            <Button variant="outline" size="sm" className="rounded-sm" onClick={() => setActive(true)}>
-              활성화
-            </Button>
-          )}
-        </div>
-      </div>
+            <StatusBadge label="비활성" tone="neutral" bg={false} className="font-normal" />
+          )
+        }
+        actions={
+          <>
+            <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
+            {active ? (
+              <Button
+                variant="destructive-outline"
+                size="sm"
+                className="rounded-sm"
+                onClick={() => setDeactivateOpen(true)}
+              >
+                비활성 처리
+              </Button>
+            ) : (
+              <Button variant="outline" size="sm" className="rounded-sm" onClick={() => setActive(true)}>
+                활성화
+              </Button>
+            )}
+          </>
+        }
+      />
 
       {view === "loading" && <BlockSkeleton />}
       {view === "progress" && (

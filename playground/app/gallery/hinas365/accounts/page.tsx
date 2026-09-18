@@ -14,6 +14,7 @@
 
 import * as React from "react";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
+import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
 import { Check, Info, Plus, Search, Trash2, X } from "lucide-react";
@@ -93,9 +94,10 @@ export default function AccountsPage() {
   return (
     <div className="space-y-6">
       {/* ── 페이지 헤더 ── */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-lg font-bold">계정 권한 관리</h1>
-        <div className="flex items-center gap-2">
+      <PageHeader
+        title="계정 권한 관리"
+        actions={
+          <>
           <StatePreview value={view} onChange={(v) => setView(v as ViewState)} states={LOADING_STATES} />
           {/* CTA 순서 관례: Primary는 맨 오른쪽 */}
           <Button
@@ -118,8 +120,9 @@ export default function AccountsPage() {
           >
             <Check className="size-4" /> 저장
           </Button>
-        </div>
-      </div>
+          </>
+        }
+      />
 
       <InputGroup variant="filled" className="w-72">
         <InputGroupAddon>

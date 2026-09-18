@@ -1,7 +1,7 @@
 {
   "$description": "어휘 슬러그 → 실제 컴포넌트 파일 매핑. ds-registry.json 에서 생성(직접 편집 금지 — pnpm registry).",
   "$usage": "가용성 확인 = 이 파일에서 파일명을 찾는다(키 이름 추측 금지).",
-  "$note": "files는 components/src/ui/<name>.tsx 기준. 여러 파일을 쓰는 조합 어휘는 전부 나열한다. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지.",
+  "$note": "files는 components/src/ui/<name>.tsx 기준. 여러 파일을 쓰는 조합 어휘는 전부 나열한다. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지. ds-registry.json 에서 생성(pnpm registry) — 직접 편집 금지.",
   "updated": "2026-09-18 — ds-registry.json 에서 생성(pnpm registry)",
   "vocab": {
     "app-shell": { "name": "앱 셸", "files": ["sidebar"] },
@@ -62,7 +62,7 @@
     "viz-line": { "name": "라인 차트", "files": ["chart"] }
   },
   "$infrastructure": "어휘가 직접 가리키지 않지만 컴포넌트들이 내부에서 쓰거나 조합 부품으로 쓰는 파일(레지스트리 role=infrastructure). ds:build 게이트가 이 배열을 읽는다.",
-  "infrastructure": ["avatar","label","scroll-area","separator","state-preview","toggle"],
+  "infrastructure": ["avatar","scroll-area","separator","state-preview","toggle"],
   "$unadopted": "실물은 있으나 채택 어휘가 없는 것(role=unadopted) + 은퇴(retired). 쓰려면 채택 절차를 밟아야 한다.",
   "unadopted": ["toggle-group"]
 }
