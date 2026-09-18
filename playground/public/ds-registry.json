@@ -1,7 +1,7 @@
 {
-  "$note": "DS 컴포넌트 레지스트리 — 단일 원천(2026-09-15). 항목 키 = 스토리 파일. status: adopted(= Storybook 에 있다 = DS) · primitive(shadcn 대체 전용, 스토리 없음) · retired. approved.json · vocab-map.json 은 pnpm registry 가 여기서 생성한다(직접 편집 금지). figma = Component 페이지 세트 id. 파이프라인: 레지스트리 → Storybook → 생성(shadcn 대체 + Jira 자동 발행), 2026-09-16.",
+  "$note": "DS 컴포넌트 레지스트리 — 단일 원천(2026-09-15). 항목 키 = 스토리 파일. status: adopted(= Storybook 에 있다 = DS) · primitive(shadcn 대체 전용, 스토리 없음) · retired. approved.json · vocab-map.json 은 pnpm registry 가 여기서 생성한다(직접 편집 금지). figma = 피그마 Component 페이지 세트 id + built(제작일) — 링크·주간 갭 판정(pnpm registry --figma-gap)용이며 필수 아님(피그마는 다운스트림, 2026-09-18). 파이프라인: 레지스트리 → Storybook → 생성(shadcn 대체 + Jira 자동 발행), 2026-09-16.",
   "fileKey": "9bDM5hVObGhrFM6vLyeL3K",
-  "updated": "2026-09-16",
+  "updated": "2026-09-18",
   "components": {
     "accordion": {
       "name": {
@@ -34,12 +34,14 @@
         {
           "id": "590:3057",
           "name": "AccordionItem",
-          "variants": 6
+          "variants": 6,
+          "built": "2026-09-15"
         },
         {
           "id": "590:3058",
           "name": "Accordion",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -78,7 +80,8 @@
         {
           "id": "620:3006",
           "name": "Alert",
-          "variants": 2
+          "variants": 2,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -102,7 +105,8 @@
         {
           "id": "597:3000",
           "name": "AlertDialog / destructive",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -171,7 +175,8 @@
         {
           "id": "586:2914",
           "name": "Badge",
-          "variants": 24
+          "variants": 24,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -208,7 +213,8 @@
         {
           "id": "624:2995",
           "name": "Breadcrumb",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -302,7 +308,8 @@
         {
           "id": "460:2092",
           "name": "Button",
-          "variants": 216
+          "variants": 216,
+          "built": "2026-09-15"
         }
       ],
       "note": "아웃라인 버튼(이전·취소·필터 등) 그림자 제거 — 플랫 규칙 확장. 렌더 차이 없음 — 재캡처 생략\n\n파괴 아웃라인 정식 변형 destructive-outline 신설 — 테두리 40%(텍스트보다 연하게)·hover bg 10%. 손 조합(border-destructive text-destructive) 금지 · 2026-08-28 destructive-ghost 신설 — 파괴 보조 액션(항목·행 레벨): text-destructive + hover destructive/10 잉크, 텍스트/아이콘 동형. Control 제외(CTA ④ — Control 파괴 보조는 destructive-outline). FilterBar 필터초기화가 이 variant로 교체",
@@ -341,7 +348,8 @@
         {
           "id": "624:3065",
           "name": "ButtonGroup",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -378,7 +386,8 @@
         {
           "id": "572:3104",
           "name": "Calendar",
-          "variants": 2
+          "variants": 2,
+          "built": "2026-09-15"
         }
       ],
       "note": "shadcn Calendar(range) 조합 — @ds/ui/ui/calendar. 기간 선택 표준 = 프리셋 레일 + range 캘린더 두 달(피그마 209-36201). 어휘 키는 허브 카드와 맞춘 form-daterange다(calendar 아님 — approved.json 키 = 허브 data-comp)",
@@ -415,17 +424,20 @@
         {
           "id": "589:3036",
           "name": "Card / stat",
-          "variants": 2
+          "variants": 2,
+          "built": "2026-09-15"
         },
         {
           "id": "589:3037",
           "name": "Card / full",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         },
         {
           "id": "738:3160",
           "name": "Card / flat",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -475,12 +487,14 @@
         {
           "id": "592:2951",
           "name": "Chart / donut",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         },
         {
           "id": "592:2956",
           "name": "Chart / line",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -521,7 +535,8 @@
         {
           "id": "560:2865",
           "name": "Checkbox",
-          "variants": 6
+          "variants": 6,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -558,7 +573,8 @@
         {
           "id": "590:3071",
           "name": "Collapsible / tree",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -582,12 +598,14 @@
         {
           "id": "563:2936",
           "name": "CommandItem",
-          "variants": 3
+          "variants": 3,
+          "built": "2026-09-15"
         },
         {
           "id": "563:2937",
           "name": "Command / palette",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -625,7 +643,8 @@
         {
           "id": "624:3132",
           "name": "DetailPanel / open",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": "조합 제작 — @ds/ui/ui/detail-panel. Sheet 프리셋: 폭 md(요약)·4xl(상세), 스크림 basic black-20(overlayClassName 노출), overflow-y-auto 기본, 헤더 스캐폴드(①컨트롤 ②타이틀+보조링크 ③메타 ④유틸 ghost — X 왼쪽 고정). 본문 섹션 = 타이틀 + 표준 Table, 섹션 박스로 감싸지 않음(이중 테두리 금지). 모션 500/300 유지 — 손 구현 금지",
@@ -663,7 +682,8 @@
         {
           "id": "597:2976",
           "name": "Dialog / open",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -703,12 +723,14 @@
         {
           "id": "596:2993",
           "name": "DropdownMenuItem",
-          "variants": 6
+          "variants": 6,
+          "built": "2026-09-15"
         },
         {
           "id": "596:2994",
           "name": "DropdownMenu / open",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -745,12 +767,14 @@
         {
           "id": "620:3024",
           "name": "Empty",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         },
         {
           "id": "739:3160",
           "name": "Empty / inline",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": "빈 상태 타이틀 강등 — shadcn 순정 text-lg(18px)는 페이지 타이틀·모달 타이틀과 동급이라 빈 상태 메시지가 헤딩을 넘봤다. text-base(16px)로 내려 카드 타이틀(14) < 빈 타이틀(16) < 페이지·모달(18) 위계 정렬. 설명은 text-sm 유지. size=\"sm\" 인라인 변형(2026-09-15 신설): 첨부 슬롯·메모·드롭존 한 줄 — rounded-md · 점선 border · p-3 · text-sm secondary-foreground, 아이콘·우측 액션 선택(갤러리 38곳 손 점선 박스 대체). 스토리 Inline · 피그마 Empty / inline",
@@ -785,7 +809,8 @@
         {
           "id": "620:3072",
           "name": "ErrorConsole",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": "스토리 전용 패턴(error-console.stories.tsx 안의 로컬 ErrorConsole) — 전용 컴포넌트 파일 없음. 어휘 files 는 빈 배열(손 조합 패턴).",
@@ -823,7 +848,8 @@
         {
           "id": "620:3007",
           "name": "ErrorState",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": "조합 제작 — @ds/ui/ui/error-state. Alert 프리셋(4상태 계약의 에러 표준): 라운드·테두리 없음·bg-destructive/5 틴트(2026-09-02 /10→/5 완화 — 과하게 붉음, 배너 표면 표준), filled CircleAlert 18px(원 destructive·획 card — filled 아이콘은 Lucide Circle 계열만 허용), 타이틀 검정 semibold, CTA ghost sm /10 틴트(hover /20) '재시도' — /10 유지로 연해진 표면 위 위계. success/warning/info 톤 확장은 추후 — 손 구현 금지",
@@ -861,7 +887,8 @@
         {
           "id": "564:2882",
           "name": "Field",
-          "variants": 3
+          "variants": 3,
+          "built": "2026-09-15"
         }
       ],
       "note": "폼 컨트롤 플랫 규칙 — 인풋·셀렉트·검색 박스·드롭다운 트리거 그림자 제거(shadow-xs 삭제). 플로팅 패널의 elevation 그림자는 유지. 카드 축척에서 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — 캔버스 무관 흰색). 피그마 Input fill General/background · 반경 8(md) · 링 11",
@@ -898,37 +925,44 @@
         {
           "id": "467:2244",
           "name": "AddFilterPopover",
-          "variants": 2
+          "variants": 2,
+          "built": "2026-09-15"
         },
         {
           "id": "472:2266",
           "name": "DatePanel",
-          "variants": 3
+          "variants": 3,
+          "built": "2026-09-15"
         },
         {
           "id": "465:2293",
           "name": "OptionPanel",
-          "variants": 10
+          "variants": 10,
+          "built": "2026-09-15"
         },
         {
           "id": "463:2150",
           "name": "FilterChip",
-          "variants": 8
+          "variants": 8,
+          "built": "2026-09-15"
         },
         {
           "id": "464:2160",
           "name": "OptionRow",
-          "variants": 8
+          "variants": 8,
+          "built": "2026-09-15"
         },
         {
           "id": "464:2127",
           "name": "RadioRow",
-          "variants": 4
+          "variants": 4,
+          "built": "2026-09-15"
         },
         {
           "id": "488:2857",
           "name": "FilterBar",
-          "variants": 9
+          "variants": 9,
+          "built": "2026-09-15"
         }
       ],
       "note": "조합 제작 — @ds/ui/ui/filter-bar (FilterBar·FilterChip·DateRangePanel·resolveDateRange·DATE_PRESETS). 피그마 209-17188 구조 · 날짜 패널 209-36201. 행 = 검색(InputGroup filled 상시 좌측 — 검색 제안이 필요한 화면만 searchSlot 으로 SearchBox 옵트인(2026-09-11 확정: 기본 승격 안 함, 현재 납품 호선만). 스토리 SearchSuggest · 피그마 FilterBar state=search-open) → 필터 칩(한 줄 고정 — 2026-09-09 확정, 종전 '최대 2줄' 폐기: 칩이 남은 폭을 쓰고 넘치면 값 말줄임 + title, 검색창·[+ 필터 추가]·[필터초기화]·액션은 줄지 않음. Input 은 긴 placeholder·값 truncate, 2026-09-08) → [+ 필터 추가] │ 우측 액션 슬롯. 칩 문법 2종: 기본(base)=✕ 없이 꺾쇠만 / 추가=✕만(꺾쇠 없음). 칩 면은 전 상태 bg-muted, 비활성 border-transparent·text-foreground / 활성 border-primary·text-primary. 칩 hover는 비활성만 accent(활성 hover는 primary×accent 미선언이라 보류). 값 해제는 드롭다운 우하단 [초기화] — \"전체\" 항목 금지. 정렬은 이 바에 없다(테이블 컬럼 헤더 전담). 손 조합 금지. 행 매처 4종(passText · passSelect · passDate · passDateSpan)은 filter-bar.tsx 가 소유(2026-09-14 승격 — 종전 갤러리 _detail/filter-match.ts, 두 앱 목록 9면 + AuditLog 공용). now 기본값은 실제 시계, 시안 기준일은 호출부가 넘긴다",
@@ -965,7 +999,8 @@
         {
           "id": "814:3206",
           "name": "HeatmapGrid",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-16"
         }
       ],
       "note": "원본 재현 — @ds/ui/ui/heatmap-grid(2026-09-16, 시스템 진단 상세 Camera Status · Pod Status 에서 추출). HeatmapGrid(columns · rows{name, group?, cells} · rowLabel · cellTitle) + HeatmapLegend(items{label, tone}). 셀 톤 4종뿐 — success · primary · destructive · none(bg-muted opacity-40); DES-206 노랑·파랑 계열은 primary 대체. 셀 h-5 min-w-8 rounded-sm, 행 이름 font-mono text-sm(그룹 행 + 접두), 열 헤더 text-xs. 카드 셸(제목·설명·Expand All)은 화면의 Card variant=\"flat\" — 컴포넌트 밖.",
@@ -1002,7 +1037,8 @@
         {
           "id": "574:2894",
           "name": "IconSelect",
-          "variants": 2
+          "variants": 2,
+          "built": "2026-09-15"
         }
       ],
       "note": "조합 제작 — @ds/ui/ui/icon-select. shadcn DropdownMenu 프리셋. 타입 3종: 아이콘형(icon 지정)·텍스트형(icon 생략)·다중형(multiple — 왼쪽 Checkbox 상시, 토글해도 안 닫힘, 값은 items 순서 \", \" 병합). 단일 ✓는 오른쪽 ml-auto(2026-08-26 select-grammar 개정). h-9(36px)·아이콘 간격 8px·그림자 없음(플랫) — 손 구현 금지",
@@ -1055,7 +1091,8 @@
         {
           "id": "559:2853",
           "name": "Input",
-          "variants": 5
+          "variants": 5,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -1094,17 +1131,20 @@
         {
           "id": "572:2890",
           "name": "InputGroup",
-          "variants": 5
+          "variants": 5,
+          "built": "2026-09-15"
         },
         {
           "id": "572:2891",
           "name": "InputGroup / clear",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         },
         {
           "id": "572:2900",
           "name": "InputGroup / prefix suffix",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": "폼 컨트롤 플랫 규칙 — 검색 박스 그림자 제거. filled 변형 추가(variant=\"filled\" = bg-card) — 회색 캔버스(bg-background) 위 시인성용, 흰 카드 위는 기본형. 렌더 차이 없음 — 재캡처 생략. 2026-09-14: 필드 표면 = bg-card 상시 규칙으로 filled 가 기본이 됨(prop 은 호환용 무해 — 클론·갤러리 수정 불필요). 피그마 InputGroup fill General/background · 반경 8 · 링 11",
@@ -1154,17 +1194,20 @@
         {
           "id": "590:2994",
           "name": "Item",
-          "variants": 6
+          "variants": 6,
+          "built": "2026-09-15"
         },
         {
           "id": "590:2995",
           "name": "Item / key value",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         },
         {
           "id": "590:3008",
           "name": "Item / list row",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": "행 좌측 패딩 제거 — 타이틀과 좌측 정렬",
@@ -1186,7 +1229,8 @@
         {
           "id": "564:2862",
           "name": "Label",
-          "variants": 3
+          "variants": 3,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -1225,7 +1269,8 @@
         {
           "id": "633:3124",
           "name": "ListFooter",
-          "variants": 3
+          "variants": 3,
+          "built": "2026-09-15"
         }
       ],
       "note": "조합 제작 — @ds/ui/ui/list-footer(2026-09-10 신설, 채택 55종째). body-patterns A 리스트 「푸터」 규칙의 컴포넌트판: 좌 RowsPerPage(페이지당 · │ · 전체 N건) + 우 Pagination, flex justify-between 한 행. 창 규칙 Previous · 1 · … · p−1 p p+1 · … · N · Next(간격 있을 때만 …), 양 끝 Previous/Next aria-disabled(흐림 50%·클릭 차단 — PaginationLink 공통). 단일 페이지면 페이지네이션 생략·건수는 남는다. 행 수 변경 시 1페이지 리셋 내장. pageCount 생략 시 total÷pageSize. summary 생략 시 '전체 {total}{unit}'(천 단위 구분) — 리치 표기는 summary 노드. 손 조합(ships-view·updates·diagnostics 등 갤러리 9면) → 이 프리셋으로 치환 예정(클론 프롬프트)",
@@ -1262,7 +1307,8 @@
         {
           "id": "597:3095",
           "name": "NotificationPanel",
-          "variants": 2
+          "variants": 2,
+          "built": "2026-09-15"
         }
       ],
       "note": "조합 제작 — @ds/ui/ui/notification-panel(어휘 ov-notif의 실물). Bell ghost 트리거 + unread 도트 배지(destructive), 패널 w-80, 헤더 알림·모두 읽음 양끝 대칭(py-0.5), 아이템 도트 슬롯 상시 렌더(unread=primary·read=투명 — 제목 좌정렬 유지) + 시간 pl-3.5. 헤더 우측 버튼(=모두 읽음 액션) 라벨은 상태 전이(2026-08-28 확정): unread 있음 '새 알림 (N)' primary 파랑(hover 동형 — contrast-pairs primary×popover aux) → 클릭(전체 읽음)·없음 '모두 읽음' 비활성. '모두 보기' 푸터는 onViewAll 예약(NotificationCenter 2단계). 손 조합 금지",
@@ -1299,7 +1345,8 @@
         {
           "id": "812:3207",
           "name": "PageHeader",
-          "variants": 3
+          "variants": 3,
+          "built": "2026-09-16"
         }
       ],
       "note": "조합 제작 — @ds/ui/ui/page-header(2026-09-16 신설). 갤러리 22면의 타이틀 행 손 조합(flex flex-wrap items-center justify-between gap-4 + h1 text-lg font-bold)을 한 프리셋으로. props: title(h1 text-lg font-bold) · description(부제 — 있을 때만 items-start, design.md §4) · addon(제목 옆 인라인: StatusBadge·Info 툴팁) · leading(제목 앞: 아바타) · actions(우측 페이지 레벨 액션 — 파괴적 액션·StatePreview). 목록 액션·CTA는 여기가 아니라 FilterBar actions 슬롯, \"총 N건\" 부제 금지(ListFooter 소유). 손 조합 금지 — 갤러리 22면 치환은 클론 프롬프트.",
@@ -1338,12 +1385,14 @@
         {
           "id": "586:2981",
           "name": "PaginationLink",
-          "variants": 5
+          "variants": 5,
+          "built": "2026-09-15"
         },
         {
           "id": "586:2982",
           "name": "Pagination",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": "선택 페이지 = 테두리·배경 없이 텍스트 강조 + 기본색, 비선택·Previous·Next = font-medium + muted. 원형(hover)은 outline 활성 재구성. 기존 생성 화면의 className 오버라이드(클론 5곳)는 소급 제거 대상",
@@ -1383,7 +1432,8 @@
         {
           "id": "596:3025",
           "name": "Popover / open",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -1420,7 +1470,8 @@
         {
           "id": "586:2963",
           "name": "Progress",
-          "variants": 5
+          "variants": 5,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -1444,7 +1495,8 @@
         {
           "id": "560:2872",
           "name": "RadioGroupItem",
-          "variants": 4
+          "variants": 4,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -1485,7 +1537,8 @@
         {
           "id": "624:3054",
           "name": "RowsPerPage",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": "조합 제작 — @ds/ui/ui/rows-per-page. 목록 푸터 문법: 좌측 '페이지당: [15 ˅] │ 전체 N척' · 우측 페이지네이션. 라벨 연한 톤 + 숫자만 든 고스트 트리거 + 세로 구분선 + 전체 건수. 기본 15행 · 옵션 10/15/30/50 · 드롭업(side=top) · ✓ 오른쪽. 'Page x of y'·'표시' 라벨 기각. summary는 ReactNode — 건수 하나만(보조 카운트 병기 '● 미입력 N' 규칙은 2026-09-10 폐기). 행 수 변경 시 소비자는 1페이지 리셋. 건수는 푸터가 소유 — 제목 부제 총 N건 표기 폐기(design.md §4)",
@@ -1540,7 +1593,8 @@
         {
           "id": "464:2108",
           "name": "Search",
-          "variants": 6
+          "variants": 6,
+          "built": "2026-09-15"
         }
       ],
       "note": "조합 제작 — @ds/ui/ui/search-box. 검색 제안 프리셋(피그마 237-51963 focused2): 입력창은 현행 InputGroup(filled·w-64) 그대로(포커스 링 DS 기본), 패널은 분리 플로팅(ov-popover·PopoverAnchor)·폭 w-64·px-2 pt-3 pb-4(하단만 +4px — 면 있는 칩이 붙어 보임 방지). 빠른검색 칩 hover는 bg-border(muted 바탕 위 accent 6%는 동톤 1.035:1로 감지 불가 — foreground×border hover 한정 선언). 타이핑 = 자동완성 최대 5(돋보기·매칭 볼드·보조줄), 비어 있음 = 최근 검색 3(시계·hover ✕ 삭제) + 빠른검색 칩 최대 5. 패널 줄 아이콘(돋보기·시계)은 size-3.5·text-input — 장식 아이콘은 한 단계 연하게(본문 텍스트 아님, contrast-pairs input×popover 장식 전용 선언). 선택 = 즉시 적용·닫힘·최근 편입. 값 있을 때 입력창 우측 ✕(지우면 포커스 유지·빈 상태 패널로 복귀 — FilterBar 기본 검색도 동일 문법). 적용은 페이지 옵트인(FilterBar searchSlot) — 기본 검색 불변. 빠른검색(최다 검색)·최근검색은 시안 목데이터 — 실제 집계·저장은 제품 백엔드 몫. 빈 상태(2026-09-11 확정): 결과 없음(입력 중 후보 0) = ''{값}'에 맞는 후보가 없습니다' 한 줄 — 목록 행과 같은 문법(items-center · 돋보기 size-3.5 text-input), secondary-foreground, 캡션 없음(Empty 프리셋은 섹션 규모라 미사용). 종전엔 최근 검색으로 되돌아가 매칭처럼 보였다. 기록 없음(최근·빠른검색 둘 다 없음)은 상태가 아니다 — 보여줄 게 없으면 패널이 안 열린다(종전 빈 흰 패널 제거). 스토리 NoMatch, 허브 카드 2패널. 피그마(2026-09-14 병합): 별도 SearchBox 세트 은퇴 — Form/Search 세트 한 계보, state 6종 = default · filled · focused · focused-suggest · typing · no-match(입력은 InputGroup filled 하나, 패널은 옵트인). FilterBar 검색 인스턴스 9개가 같은 세트를 본다",
@@ -1580,22 +1634,26 @@
         {
           "id": "563:2904",
           "name": "SelectItem",
-          "variants": 5
+          "variants": 5,
+          "built": "2026-09-15"
         },
         {
           "id": "563:2893",
           "name": "SelectTrigger",
-          "variants": 12
+          "variants": 12,
+          "built": "2026-09-15"
         },
         {
           "id": "732:3161",
           "name": "Select / closed",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         },
         {
           "id": "563:2909",
           "name": "Select / open",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": "폼 컨트롤 플랫 규칙 — 트리거 그림자 제거. 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — Search 와 같은 흰색, hover 는 accent 로 교체). 피그마: SelectTrigger(size×state 12) fill General/background · 반경 8, SelectItem 5상태(selected-focus 신설 = 체크 + accent) · 반경 6, 예시 Select / closed · open, Form 섹션으로 편입",
@@ -1650,7 +1708,8 @@
         {
           "id": "597:3014",
           "name": "Sheet / right",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -1700,22 +1759,26 @@
         {
           "id": "624:3096",
           "name": "SidebarMenuButton",
-          "variants": 2
+          "variants": 2,
+          "built": "2026-09-15"
         },
         {
           "id": "624:3097",
           "name": "Sidebar / nav",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         },
         {
           "id": "741:3162",
           "name": "Sidebar / nav (하위 페이지)",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         },
         {
           "id": "741:3204",
           "name": "Sidebar / rail (접힘)",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -1752,12 +1815,14 @@
         {
           "id": "620:3043",
           "name": "Skeleton",
-          "variants": 3
+          "variants": 3,
+          "built": "2026-09-15"
         },
         {
           "id": "620:3044",
           "name": "TableSkeleton",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": "shadcn 기성품 그대로 — @ds/ui/ui/skeleton(animate-pulse · rounded-md · bg-accent). 조정·재현 없음(등재만). 로딩 상태 표준 = 스켈레톤이고, 프로그레스 바(data-progress)는 실제 진행률 표시 전용(업데이트 파이프라인 등) — 로딩 자리표시에 프로그레스 바를 쓰지 않는다. accent light 교정(9701b17 · #FBFBFB→#ECEDF0) 이전에는 흰 카드 위 대비가 1.035:1이라 사실상 비가시였고, 교정 후 1.171:1을 확보해 로딩 표준으로 쓸 수 있게 됐다",
@@ -1794,7 +1859,8 @@
         {
           "id": "596:3057",
           "name": "Toast / success",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -1818,7 +1884,8 @@
         {
           "id": "620:3071",
           "name": "Spinner",
-          "variants": 2
+          "variants": 2,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -1872,7 +1939,8 @@
         {
           "id": "619:3054",
           "name": "StatusBadge",
-          "variants": 24
+          "variants": 24,
+          "built": "2026-09-15"
         }
       ],
       "note": "라운드 필 통일. 정상·중립 대표 = bg-muted 필, 동의어 보조 상태(Ready 등)는 배경 없이 도트+텍스트. 위험·에러 = 도트+텍스트 destructive + bg 12% — 도트만 착색 금지. 원형(hover)은 순정 shadcn Badge",
@@ -1909,12 +1977,14 @@
         {
           "id": "813:3205",
           "name": "StepperItem",
-          "variants": 3
+          "variants": 3,
+          "built": "2026-09-16"
         },
         {
           "id": "813:3206",
           "name": "Stepper",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-16"
         }
       ],
       "note": "원본 재현 완료 — @ds/ui/ui/stepper(2026-09-16 채택 — 종전 unadopted, 스토리 신설). Stepper(ol flex gap-2) + StepperItem(step · state completed|current|upcoming). 완료 = primary 채움 + Check(size-4) · 현재 = primary 테두리 + 굵은 라벨(aria-current=step) · 미래 = border + secondary-foreground. 원 size-7 text-xs semibold, 라벨 text-sm, 연결선 h-px(완료 구간 primary, 나머지 border), 마지막 단계 연결선 없음. body-patterns C 위저드 상단 — 3단계 미만이면 쓰지 않는다. 손 조합(update-wizard 갤러리) 치환은 클론 프롬프트.",
@@ -1938,7 +2008,8 @@
         {
           "id": "560:2889",
           "name": "Switch",
-          "variants": 8
+          "variants": 8,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -2002,22 +2073,26 @@
         {
           "id": "589:2909",
           "name": "Table / basic",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         },
         {
           "id": "589:2963",
           "name": "Table / matrix",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         },
         {
           "id": "589:2994",
           "name": "Table / permissions",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         },
         {
           "id": "599:3018",
           "name": "TableRow",
-          "variants": 3
+          "variants": 3,
+          "built": "2026-09-15"
         }
       ],
       "note": "셀 좌우 패딩 16px · 상하 패딩 12px(1줄 행 ≈48px — 페이지별 표 밀도 제각각 해소) · 아웃라인·헤더 배경을 컴포넌트에 내장(세션별 래퍼 제각각 문제 해소) · 헤더 폰트는 본문보다 흐리게. variant=\"plain\" 추가(D 대시보드 카드 내부용 경량 표 — 외곽선·헤더 배경 없음, 손 unwind 금지). 원형(hover)은 내장 조정을 되돌린 순정 재구성 · 2026-08-28 래퍼 overflow-y-hidden 추가 — thead·행 배경이 둥근 모서리를 뚫는 클리핑 버그 교정(x축 스크롤 유지)",
@@ -2054,12 +2129,14 @@
         {
           "id": "590:3101",
           "name": "TabsTrigger",
-          "variants": 4
+          "variants": 4,
+          "built": "2026-09-15"
         },
         {
           "id": "590:3102",
           "name": "Tabs / two kinds",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -2096,7 +2173,8 @@
         {
           "id": "560:2850",
           "name": "Textarea",
-          "variants": 4
+          "variants": 4,
+          "built": "2026-09-15"
         }
       ],
       "note": "폼 컨트롤 플랫 규칙 — 텍스트에어리어 그림자 제거. 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — 캔버스 무관 흰색). 피그마 Textarea fill General/background · 반경 8(md)",
@@ -2133,12 +2211,14 @@
         {
           "id": "624:3031",
           "name": "TimelineItem",
-          "variants": 4
+          "variants": 4,
+          "built": "2026-09-15"
         },
         {
           "id": "624:3032",
           "name": "Timeline",
-          "variants": 1
+          "variants": 1,
+          "built": "2026-09-15"
         }
       ],
       "note": "원본 재현 완료 — @ds/ui/ui/timeline. 점·선 마커 컬럼 정렬(구조적 고정)",
@@ -2207,7 +2287,8 @@
         {
           "id": "596:3056",
           "name": "Tooltip",
-          "variants": 4
+          "variants": 4,
+          "built": "2026-09-15"
         }
       ],
       "note": null,
@@ -2247,7 +2328,8 @@
         {
           "id": "574:3005",
           "name": "VersionFilterChip",
-          "variants": 4
+          "variants": 4,
+          "built": "2026-09-15"
         }
       ],
       "note": "조합 제작 — @ds/ui/ui/version-filter-chip. 계층 캐스케이드 필터 칩(구 필터 모달 폐기 → 칩 아래 패널): 제품 선택 → 공통버전 등장 → 제품버전 등장 순차 노출. 다중 조건 [+ 추가] — 제품 간 AND · 같은 제품 OR(구 모달 규칙 승계). 칩 = FilterChip 기본형 문법(h-9 · muted 면 · 꺾쇠 · 활성 = 파란 테두리+글자). 라벨 기본 '제품'(한국어 헤더 규칙) · 적용 요약 = 버전 포함 '제품 · navigation · 1.2.0 · 1.5.2', 2건 이상은 '첫 조건 외 N건'(2026-08-26 개정). 패널 = 드래프트 편집 → [적용] 확정 · [취소] 폐기 · [초기화] 좌하단 · 풀블리드 구분선. 내부는 채택분 조합(ov-popover·form-select·btn-basic) — 손 구현 금지",

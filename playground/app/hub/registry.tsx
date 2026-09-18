@@ -105,7 +105,7 @@ export function RegistryRail() {
       <div className="k">피그마</div><div className="v">세트 {sets} · 변형 {variants} · <a href={`https://www.figma.com/design/${reg.fileKey}/`} target="_blank" rel="noreferrer">Component 페이지</a></div>
       <div className="k">원천</div><div className="v mono">playground/public/ds-registry.json</div>
       <div className="k">파생</div><div className="v mono">approved.json · vocab-map.json ← pnpm registry</div>
-      <div className="k">대조</div><div className="v mono">pnpm registry --audit</div>
+      <div className="k">피그마 갭</div><div className="v mono">pnpm registry --figma-gap — 주간, 저장소 → 피그마 한 방향</div>
     </div>
   );
 }

@@ -185,107 +185,8 @@ for (const f of readdirSync(join(ROOT, "dstk/products")).filter((f) => f.endsWit
   writeFileSync(join(ROOT, `dist/products/${name}.css`), parts.join("\n\n") + "\n");
 }
 
-// ── 피그마 스냅샷 대조 게이트 + THEME-MAP.md 자동 생성 ──
-// 스냅샷(dstk/figma-theme-snapshot.json) = 피그마의 마지막 확인 상태. 해석값 불일치 = 빌드 실패.
-const snapPath = join(ROOT, "dstk/figma-theme-snapshot.json");
-if (existsSync(snapPath)) {
-  const snap: any = readJson("dstk/figma-theme-snapshot.json");
-  // 갈림 매핑: 토큰이 모드에 따라 다른 Theme 변수에 대응할 수 있다(예: primary-foreground)
-  type TokenMap = { t: string; modes?: ThemeMode[]; note?: string };
-  const one = (t: string): TokenMap[] => [{ t }];
-  const T2D: Record<string, TokenMap[]> = {
-    "General/background": [
-      { t: "background" },
-      { t: "card" },
-      { t: "popover" },
-      { t: "primary-foreground", modes: ["control"], note: "(Control만)" },
-    ],
-    "General/on-color": [
-      { t: "primary-foreground", modes: ["light", "dark"], note: "(Light·Dark)" },
-      { t: "destructive-foreground" },
-    ],
-    // 기본 글자 번들 — 2026-08-21 통합으로 General/accent-foreground 변수가 삭제되고
-    // 이 변수 하나가 코드 토큰 4종을 덮는다(3모드 값 동일). sidebar-accent-foreground는 예정.
-    "General/foreground": [
-      { t: "foreground" },
-      { t: "card-foreground" },
-      { t: "popover-foreground" },
-      { t: "accent-foreground" },
-    ],
-    "General/primary": one("primary"),
-    "General/success": one("success"),
-    "General/secondary": one("secondary"),
-    "General/secondary-foreground": one("secondary-foreground"),
-    "General/muted": one("muted"),
-    "General/muted-foreground": one("muted-foreground"),
-    "General/accent": one("accent"),
-    "General/destructive": one("destructive"),
-    "General/border": one("border"),
-    "General/input": one("input"),
-    "General/ring": one("ring"),
-    "Chart/chart-1": one("chart-1"),
-    "Chart/chart-2": one("chart-2"),
-    "Chart/chart-3": one("chart-3"),
-    "Chart/chart-4": one("chart-4"),
-    "Chart/chart-5": one("chart-5"),
-  };
-  const errs: string[] = [];
-  for (const entry of snap.theme) {
-    const maps = T2D[entry.name];
-    if (!maps) continue; // Product 2종 — 참조로만 사용
-    for (const m of maps) {
-      for (const mode of THEME_MODES) {
-        if (m.modes && !m.modes.includes(mode)) continue;
-        const want = String(entry[mode].hex).toUpperCase();
-        const got = (resolveToken(m.t, semantic[m.t], mode) || "").toUpperCase();
-        if (got !== want) errs.push(`${m.t}(${mode}): snapshot ${want} ≠ semantic ${got}`);
-      }
-    }
-  }
-  const CMODE: Record<string, Lighting> = { "Day mode": "day", "Dusk mode": "dusk", "Night mode": "night" };
-  const CFAM: Record<string, string> = {
-    Gray: "gray", SemanticRed: "red", SemanticOrange: "orange", SemanticYellow: "yellow",
-    SemanticGreen: "green", SemanticBlue: "blue", Magenta: "magenta", Olive: "olive",
-  };
-  for (const [cname, hexv] of Object.entries<any>(snap.colors)) {
-    const p = cname.split("/");
-    if (p[0] === "Basic Foreground") {
-      const got = palette.basic?.[p[1].toLowerCase()]?.[p[2]]?.$value?.toUpperCase();
-      if (got !== String(hexv).toUpperCase()) errs.push(`basic.${p[1].toLowerCase()}.${p[2]}: snapshot ${hexv} ≠ palette ${got}`);
-      continue;
-    }
-    if (!(p[0] in CMODE)) continue;
-    const got = palette[CFAM[p[1]]]?.[p[2]]?.$value?.[CMODE[p[0]]]?.toUpperCase();
-    if (got !== String(hexv).toUpperCase()) errs.push(`${CFAM[p[1]]}.${p[2]}.${CMODE[p[0]]}: snapshot ${hexv} ≠ palette ${got}`);
-  }
-  // ── 틴트 게이트 — snapshot.tints(피그마 Tint 그룹) ↔ contrast-pairs tints.allowed 1:1,
-  //    값 = 시맨틱 base 해석값 × alpha(N/100) 3모드 전수. 코드엔 틴트 토큰이 없어(Tailwind /N 변형)
-  //    피그마만 RGBA를 따로 저장한다 — base가 바뀌면 여기서 드리프트가 잡힌다(2026-09-09).
-  {
-    const cpTint: any = existsSync(join(ROOT, "dstk/contrast-pairs.json")) ? readJson("dstk/contrast-pairs.json") : {};
-    const allowed: string[] = (cpTint.tints?.allowed ?? []).map((t: any) => String(t.class));
-    const tints: any[] = Array.isArray(snap.tints) ? snap.tints : [];
-    const have = tints.map((t) => String(t.class));
-    for (const c of allowed) if (!have.includes(c)) errs.push(`tint ${c}: contrast-pairs 허용 목록에 있으나 snapshot.tints에 없음`);
-    for (const t of tints) {
-      const cls = String(t.class);
-      if (!allowed.includes(cls)) errs.push(`tint ${cls}: snapshot.tints에 있으나 허용 목록 밖`);
-      const [base, n] = cls.split("/");
-      const alpha = Number(n) / 100;
-      if (t.name !== `Tint/${base}/${n}`) errs.push(`tint ${cls}: 변수 이름 ${t.name} ≠ Tint/${base}/${n}`);
-      if (!semantic[base]) { errs.push(`tint ${cls}: 시맨틱 토큰 ${base} 없음`); continue; }
-      for (const mode of THEME_MODES) {
-        const want = String(t[mode]?.hex ?? "").toUpperCase();
-        const got = (resolveToken(base, semantic[base], mode) || "").toUpperCase();
-        if (got !== want) errs.push(`tint ${cls}(${mode}): snapshot ${want} ≠ semantic ${base} ${got}`);
-        if (Math.abs(Number(t[mode]?.alpha) - alpha) > 1e-9) errs.push(`tint ${cls}(${mode}): alpha ${t[mode]?.alpha} ≠ ${alpha}`);
-      }
-    }
-  }
-  if (errs.length) {
-    throw new Error(`피그마 스냅샷 대조 실패 ${errs.length}건:\n  ` + errs.slice(0, 20).join("\n  "));
-  }
-
+// ── 빌드 게이트(가독성·어휘) + Storybook 시맨틱 표 데이터 — 피그마 스냅샷 대조는 2026-09-18 은퇴(저장소가 원천, 피그마는 다운스트림) ──
+{
   // ── 가독성 게이트 — contrast-pairs.json의 글자×면 조합을 3모드 전수 WCAG 검사 ──
   const cpPath = join(ROOT, "dstk/contrast-pairs.json");
   if (existsSync(cpPath)) {
@@ -376,66 +277,31 @@ if (existsSync(snapPath)) {
     }
   }
 
-  const md: string[] = [
-    "# Theme × dstk 대조표",
-    "",
-    "자동 생성 — `pnpm ds:build`가 `dstk/figma-theme-snapshot.json`에서 만든다. 손 편집 금지.",
-    "피그마 원본: 「Theme × dstk 대조표」 노드 2807:24 (fileKey i5IhnacRAjg6NJdmtctfn2).",
-    `마지막 업데이트: ${snap.$meta?.updated ?? "미상"}`,
-    "",
-    "| Theme 변수 | Light (Cloud) | Dark (SVM·NAS) | Control | dstk 토큰 |",
-    "|---|---|---|---|---|",
-  ];
-  const disp = (name: string) => (T2D[name] ?? []).map((m) => m.t + (m.note ? " " + m.note : ""));
-  for (const entry of snap.theme) {
-    const cell = (m: ThemeMode) => `${entry[m].alias ?? "(고유값)"} ${entry[m].hex}`;
-    const tokens = disp(entry.name);
-    const note = entry.note ? ` — ${entry.note}` : "";
-    md.push(`| ${entry.name}${note} | ${cell("light")} | ${cell("dark")} | ${cell("control")} | ${tokens.length ? tokens.join(" · ") : "(참조 전용)"} |`);
-  }
-  if (Array.isArray(snap.tints) && snap.tints.length) {
-    md.push("", "## Tint 그룹 (투명도 변형 — contrast-pairs tints.allowed 1:1)", "",
-      "코드엔 틴트 토큰이 없다 — Tailwind 투명도 변형(`bg-primary/5`)이 전부. 피그마만 모드별 RGBA로 저장하고 ds:build가 base × alpha 대조.", "",
-      "| Tint 변수 | 클래스 | Light | Dark | Control |", "|---|---|---|---|---|");
-    for (const t of snap.tints) {
-      const cell = (m: ThemeMode) => `${t[m].hex} @${Math.round(Number(t[m].alpha) * 100)}%`;
-      md.push(`| ${t.name} | \`bg-${t.class}\` | ${cell("light")} | ${cell("dark")} | ${cell("control")} |`);
-    }
-  }
-  md.push("", "## Theme 외 dstk 토큰 (상태 축·램프·비색상)", "", "| 토큰 | 참조 | 비고 |", "|---|---|---|");
-  const covered = new Set(Object.values(T2D).flat().map((m) => m.t));
-  for (const [name, tok] of Object.entries<any>(semantic)) {
-    if (name.startsWith("$") || covered.has(name)) continue;
-    const v = typeof tok.$value === "string" ? tok.$value : JSON.stringify(tok.$value);
-    md.push(`| ${name} | \`${v}\` | ${tok.$note ?? ""} |`);
-  }
-  writeFileSync(join(ROOT, "dstk/THEME-MAP.md"), md.join("\n") + "\n");
-
-  // 허브 게시용 대조 데이터(JSON) — 공통 DS > Theme × dstk 대조표가 렌더
+  // ── 시맨틱 표 데이터(JSON) — Storybook Foundations/Semantic 가 렌더. 원천 = semantic.json + palette.json 뿐 ──
   if (existsSync(join(ROOT, "playground", "public"))) {
-    const mapRows = snap.theme.map((entry: any) => {
-      const tokens = disp(entry.name);
-      return {
-        theme: entry.name,
-        light: entry.light,
-        dark: entry.dark,
-        control: entry.control,
-        tokens: tokens.length ? tokens : null,
-        note: entry.note ?? null,
-      };
+    const rows = Object.entries<any>(semantic)
+      .filter(([name]) => !name.startsWith("$"))
+      .map(([name, tok]) => {
+        const row: any = { name, note: tok.$note ?? null };
+        for (const mode of THEME_MODES) {
+          const v = tok.$value;
+          const ref = typeof v === "string" ? v : v?.[mode];
+          if (ref === undefined) { row[mode] = null; continue; }
+          row[mode] = tok.$type === "color" ? { ref, hex: resolveToken(name, tok, mode) } : { ref: String(ref), hex: null };
+        }
+        return row;
+      });
+    const cpT: any = existsSync(join(ROOT, "dstk/contrast-pairs.json")) ? readJson("dstk/contrast-pairs.json") : {};
+    const tints = (cpT.tints?.allowed ?? []).map((t: any) => {
+      const cls = String(t.class); const [base, n] = cls.split("/"); const alpha = Number(n) / 100;
+      const out: any = { class: cls };
+      for (const mode of THEME_MODES) out[mode] = { hex: semantic[base] ? resolveToken(base, semantic[base], mode) : null, alpha };
+      return out;
     });
-    const extras = Object.entries<any>(semantic)
-      .filter(([name]) => !name.startsWith("$") && !covered.has(name))
-      .map(([name, tok]) => ({
-        name,
-        ref: typeof tok.$value === "string" ? tok.$value : JSON.stringify(tok.$value),
-        note: tok.$note ?? "",
-      }));
+    let updated: string | null = null;
+    try { updated = execSync("git log -1 --format=%cs -- dstk/semantic.json dstk/palette.json dstk/contrast-pairs.json", { cwd: ROOT }).toString().trim() || null; } catch { updated = null; }
     mkdirSync(join(ROOT, "playground", "public", "dstk"), { recursive: true });
-    writeFileSync(
-      join(ROOT, "playground", "public", "dstk", "theme-map.json"),
-      JSON.stringify({ updated: snap.$meta?.updated ?? null, rows: mapRows, extras }, null, 2)
-    );
+    writeFileSync(join(ROOT, "playground", "public", "dstk", "semantic-map.json"), JSON.stringify({ updated, rows, tints }, null, 2));
   }
 }
 
@@ -446,7 +312,7 @@ if (existsSync(dirname(pgCss))) copyFileSync(join(ROOT, "dist/dstk.css"), pgCss)
 const pubDstk = join(ROOT, "playground", "public", "dstk");
 if (existsSync(join(ROOT, "playground", "public"))) {
   mkdirSync(join(pubDstk, "products"), { recursive: true });
-  for (const f of ["palette.json", "semantic.json", "typography.json", "figma-theme-snapshot.json"]) {
+  for (const f of ["palette.json", "semantic.json", "typography.json"]) {
     if (existsSync(join(ROOT, "dstk", f))) copyFileSync(join(ROOT, "dstk", f), join(pubDstk, f));
   }
   for (const f of readdirSync(join(ROOT, "dstk/products")).filter((x) => x.endsWith(".json"))) {

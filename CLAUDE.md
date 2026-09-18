@@ -78,7 +78,7 @@ AI 친화 디자인 시스템 저장소다.
    `status: adopted`가 곧 채택이고 `figma`에 Component 페이지 세트 id, `aliases`에 구 슬러그가 있다.
    approved.json·vocab-map.json은 `pnpm registry`가 여기서 생성하는 호환 뷰다(직접 편집 금지 —
    클론은 이 두 파일을 그대로 읽어도 된다). 채택·은퇴는 관리자가 레지스트리의 status를 바꾸고
-   `pnpm registry`를 돌린다. 피그마 대조는 `pnpm registry --audit`(인벤토리 scripts/figma-inventory.json).
+   `pnpm registry`를 돌린다. 피그마 갭 확인은 `pnpm registry --figma-gap`(주간 — § 피그마).
    **가용성 확인은 `vocab-map.json` 조회로 한다 — 키 이름 추측 금지.**
    어휘 슬러그·카드 이름은 한국어 패턴명이라("드롭다운 메뉴", "배너 · 결과 카드")
    특정 컴포넌트가 어휘에 있는지 이름만 보고는 알 수 없다. "X 쓸 수 있나?"는
@@ -201,30 +201,21 @@ AI 친화 디자인 시스템 저장소다.
 - 반드시 `--use-system-ca`(Node 22.15+)로 실행한다(사내 TLS 검사 대응).
   실패 시 IT 보안팀 문의를 안내한다.
 
-## 피그마 토큰 동기화 (Avikus Design library)
+## 피그마 — 다운스트림 (Storybook 을 따른다, 2026-09-18 확정)
 
-- 원천: 라이브러리 변수 **Theme(21종 × 제품 3모드)** · **Colors(244종)**.
-  (Theme는 2026-08-21 상태색 통합으로 29종 → 21종. primary-accent·Sidebar 7종 삭제,
-  accent-foreground는 General/foreground 번들로 편입.) 저장소의
-  "피그마 마지막 확인 상태"는 `dstk/figma-theme-snapshot.json`(스냅샷)이다.
-  `dstk/THEME-MAP.md`는 ds:build가 스냅샷에서 자동 생성하는 대조표다.
-- **검사 시점**: ① 세션 시작 ② 태스크 시작 ③ 세션 중 1시간 경과(훅이 리마인더 출력).
-  검사 방법 = Figma MCP `use_figma`로 **Theme 컬렉션의 라이브 변수를 직접 열람**해
-  (`figma.variables.getLocalVariableCollectionsAsync` → `getLocalVariablesAsync('COLOR')`,
-  모드별 값 해석) 스냅샷과 **이름·값 양쪽** 전수 diff. fileKey i5IhnacRAjg6NJdmtctfn2.
-  **값만 비교하지 않는다** — 이름 변경·변수 삭제는 값 비교로는 잡히지 않는다
-  (2026-08-25 사고: 대조표 텍스트 파싱으로 "63값 전수 일치"가 나왔지만 실제로는
-  구명 2건·유령 항목 1건이 남아 있었다).
-  대조표 노드 2807:24는 **사람이 읽는 문서**로 유지 — 손으로 쓰는 표라 자동 검사의
-  원천으로 삼지 않는다(행 누락·구명 잔존이 그대로 통과한다).
-  ⚠ `search_design_system`은 **게시된(published) 라이브러리**를 반환한다 — 파일에서
-  이미 삭제된 변수가 계속 조회되므로 감사에 쓰지 말 것.
-  (Variables REST API는 Enterprise 전용이라 훅에서 직접 호출 불가 — 위 Plugin API
-  경로는 제한 없음. 검사는 Figma MCP가 연결된 세션이 수행.)
-- **변경 발견 시**: 보고 → 승인 후 semantic/palette 반영 + 스냅샷 갱신을 **같은 커밋**으로.
-  **무단 반영 금지** — 값 해석·매핑 판단이 필요한 변경은 질문이 먼저다.
-- **빌드 게이트**: ds:build가 스냅샷 ↔ semantic·palette 해석값을 전수 대조한다 —
-  불일치 = 빌드 실패(스냅샷만 고치고 시맨틱을 안 고치면, 또는 그 반대면 빌드가 막는다).
+- **원천은 저장소다.** 색은 `dstk/*.json`, 컴포넌트는 Storybook(= 레지스트리). 피그마는 스케치·FE 초기 셋업용이고
+  **저장소 → 피그마 한 방향**으로만 맞춘다. 피그마에서 값을 읽어 저장소를 검사하던 장치는 전부 은퇴했다
+  (스냅샷 `figma-theme-snapshot.json`·THEME-MAP·1시간 리마인더·ds:build 스냅샷 대조·`registry --audit`·인벤토리).
+- **주간 동기화** — 관리자 세션이 Figma MCP 를 연결해 수행한다(훅이 7일 경과 시 리마인더 출력, 스탬프
+  `.git/FIGMA_SYNC_STAMP` — 동기화 후 touch):
+  ① `pnpm registry --figma-gap` — 채택인데 피그마 세트가 없는 항목(missing)과 세트 제작일(`figma[].built`)보다
+  스토리가 나중에 바뀐 항목(stale)을 나열한다.
+  ② 나열된 항목의 세트를 `use_figma`로 Component 페이지(fileKey 9bDM5hVObGhrFM6vLyeL3K)에 만들거나 갱신하고,
+  레지스트리 `figma`에 id·`built`(오늘)를 적는다. 스토리가 원문이다 — 피그마에서 새로 발명하지 않는다.
+  ③ 색이 바뀌었으면 라이브러리(i5IhnacRAjg6NJdmtctfn2) Theme 변수에 저장소 해석값을 써 넣는다
+  (`setValueForMode`, 이름·값 전수). 저장소 값이 항상 이긴다.
+- **갭은 오류가 아니라 할 일이다.** 피그마 세트가 없어도 채택·생성·Storybook 에는 아무 영향이 없다.
+  게시(Publish)는 관리자가 피그마에서 직접 한다 — API 로는 못 한다.
 
 ## 금지
 

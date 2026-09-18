@@ -1,12 +1,11 @@
 import * as React from "react"
 
-// Foundations — 팔레트 · 시맨틱(Theme × dstk 대조표) · 타이포. 원천 = public/dstk/*.json(ds:build 가 dstk/ 에서 복사).
-// 365 허브 「공통 DS」의 같은 데이터를 Storybook 안에서 본다(2026-09-16, 배치 1). 값을 손으로 적지 않는다 — 전부 JSON 에서 그린다.
+// Foundations — 팔레트 · 시맨틱 · 타이포. 원천 = public/dstk/*.json(ds:build 가 dstk/ 에서 복사·해석).
+// 값을 손으로 적지 않는다 — 전부 JSON 에서 그린다. 피그마와 무관 — 저장소가 원천이고 피그마가 따른다(2026-09-18).
 
 import palette from "../public/dstk/palette.json"
 import typography from "../public/dstk/typography.json"
-import themeMap from "../public/dstk/theme-map.json"
-import snapshot from "../public/dstk/figma-theme-snapshot.json"
+import semanticMap from "../public/dstk/semantic-map.json"
 
 export default {
   title: "Foundations/Overview",
@@ -78,11 +77,9 @@ export const Palette = {
   render: (args: { lighting: Lighting }) => <PaletteView lighting={args.lighting} />,
 }
 
-/* ── 시맨틱 — Theme × dstk 대조표 한 장(허브와 같은 규칙) ───────────── */
+/* ── 시맨틱 — dstk 토큰 표(원천 semantic.json + palette.json, ds:build 가 semantic-map.json 으로 해석) ───────────── */
 const MODES = ["light", "dark", "control"] as const
-const shortName = (theme: string) => theme.replace(/^(General|Tint|Chart|Product)\//, "")
-const groupOf = (theme: string) => (theme.match(/^(Tint|Chart|Product)\//) || [])[1] || ""
-const chipName = (a: string | null) => (a ? a.replace(" mode/", " ").replace("Basic Foreground/", "") : "(고유값)")
+const chipName = (ref: string | null) => (ref && !ref.startsWith("#") ? ref.replace(/[{}]/g, "").replace(/^palette\./, "") : "(고유값)")
 const rgba = (hex: string, a: number) => { const n = parseInt(hex.slice(1), 16); return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})` }
 
 function Cell({ bg, label, hex }: { bg: string; label: string; hex: string }) {
@@ -95,46 +92,36 @@ function Cell({ bg, label, hex }: { bg: string; label: string; hex: string }) {
 }
 
 function SemanticView() {
-  const map = themeMap as any
-  const tints = ((snapshot as any).tints || []) as any[]
+  const map = semanticMap as any
+  const rows = (map.rows || []) as any[]
+  const tints = (map.tints || []) as any[]
   return (
     <div className="text-sm">
       <p className="mb-3 text-secondary-foreground">
-        이름 = dstk 토큰 = Tailwind 클래스(피그마 폴더 General/ 제거) · 셀 = 스와치 + 팔레트 칩 이름 + hex · 비고 = 피그마 그룹·번들. 원천 figma-theme-snapshot.json, ds:build 가 시맨틱과 대조 검증. 마지막 업데이트 {map.updated}
+        이름 = dstk 토큰 = Tailwind 클래스 · 셀 = 스와치 + 팔레트 참조 + 해석 hex(제품 모드 Light=Cloud · Dark=SVM·NAS · Control). 원천 dstk/semantic.json + palette.json — ds:build 가 해석한다. 틴트(/N)는 contrast-pairs 허용 목록. 갱신 {map.updated}
       </p>
       <table className="w-full border-collapse">
         <thead><tr className="text-left font-mono text-[11px] font-medium text-secondary-foreground">{["이름", "Light (Cloud)", "Dark (SVM·NAS)", "Control", "비고"].map((h) => <th key={h} className="border-b border-border py-2 pr-3">{h}</th>)}</tr></thead>
         <tbody>
-          {map.rows.map((r: any) => {
-            const tokens: string[] = r.tokens || []
-            const name = tokens[0] || shortName(r.theme)
-            const note = [groupOf(r.theme), tokens.length > 1 ? tokens.slice(1).join(" · ") + " 번들" : "", r.note || ""].filter(Boolean).join(" · ")
-            return (
-              <tr key={r.theme}>
-                <td className="border-b border-border py-2 pr-3 font-mono text-xs">{name}</td>
-                {MODES.map((m) => <Cell key={m} bg={r[m].hex} label={chipName(r[m].alias)} hex={r[m].hex} />)}
-                <td className="border-b border-border py-2 text-xs text-secondary-foreground">{note}</td>
-              </tr>
-            )
-          })}
-          {tints.map((t: any) => {
-            const name = t.class || t.name.replace(/^Tint\//, "")
-            const base = name.replace(/\/\d+$/, "")
-            return (
-              <tr key={t.name}>
-                <td className="border-b border-border py-2 pr-3 font-mono text-xs">{name}</td>
-                {MODES.map((m) => { const v = t[m]; const pct = Math.round(v.alpha * 100) + "%"; return <Cell key={m} bg={rgba(v.hex, v.alpha)} label={base + " " + pct} hex={v.hex + " @" + pct} /> })}
-                <td className="border-b border-border py-2 text-xs text-secondary-foreground">Tint · {t.name}</td>
-              </tr>
-            )
-          })}
-          {(map.extras || []).map((e: any) => (
-            <tr key={e.name}>
-              <td className="border-b border-border py-2 pr-3 font-mono text-xs">{e.name}</td>
-              <td className="border-b border-border py-2 pr-3 font-mono text-xs text-secondary-foreground" colSpan={3}>{e.ref}</td>
-              <td className="border-b border-border py-2 text-xs text-secondary-foreground">Theme 밖 · {e.note}</td>
+          {rows.map((r: any) => (
+            <tr key={r.name}>
+              <td className="border-b border-border py-2 pr-3 font-mono text-xs">{r.name}</td>
+              {MODES.map((m) => r[m] && r[m].hex
+                ? <Cell key={m} bg={r[m].hex} label={chipName(r[m].ref)} hex={r[m].hex} />
+                : <td key={m} className="border-b border-border py-2 pr-3 font-mono text-xs text-secondary-foreground">{r[m] ? r[m].ref : "—"}</td>)}
+              <td className="border-b border-border py-2 text-xs text-secondary-foreground">{r.note || ""}</td>
             </tr>
           ))}
+          {tints.map((t: any) => {
+            const base = String(t.class).replace(/\/\d+$/, "")
+            return (
+              <tr key={t.class}>
+                <td className="border-b border-border py-2 pr-3 font-mono text-xs">{t.class}</td>
+                {MODES.map((m) => { const v = t[m]; const pct = Math.round(v.alpha * 100) + "%"; return <Cell key={m} bg={rgba(v.hex, v.alpha)} label={base + " " + pct} hex={v.hex + " @" + pct} /> })}
+                <td className="border-b border-border py-2 text-xs text-secondary-foreground">틴트 — Tailwind 투명도 변형(bg-{t.class})</td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
     </div>
