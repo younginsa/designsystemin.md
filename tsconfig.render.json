@@ -1,0 +1,17 @@
+{
+  "_note": "스토리 SSR 렌더(playground/scripts/render-stories.tsx, pnpm mcp:artifacts) 전용 — tsx 가 components/src 까지 자동 JSX 런타임으로 변환하게 include 를 저장소 전체로 잡는다(playground/tsconfig.json 은 playground 안만 포함해 React 미임포트 스토리가 깨졌다, 2026-09-18).",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "paths": { "@ds/ui/*": ["./components/src/*"] }
+  },
+  "include": ["components/src/**/*.ts", "components/src/**/*.tsx", "playground/scripts/**/*.ts", "playground/scripts/**/*.tsx"]
+}

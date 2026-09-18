@@ -12,3 +12,10 @@ node_modules/
 # pull이 막힌다(2026-09-03 사고 — 갤러리 사본을 여기 커밋했다가 클론이 16커밋 뒤처짐).
 # 갤러리 전시분은 playground/app/gallery/ 로 분리 보관한다.
 playground/app/generated/
+
+# MCP 산출물(pnpm mcp:artifacts) — 빌드 시 생성, 배포 사이트가 서빙. 커밋하지 않는다(2026-09-18)
+playground/public/story-html/
+playground/public/ds.css
+playground/public/docs/
+playground/public/dstk/contrast-pairs.json
+playground/scripts/.ds-safelist.html
