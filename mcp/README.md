@@ -18,6 +18,22 @@ claude.ai 앱(웹·데스크톱)이 DS 를 읽고 **단독 HTML 한 장**으로 
 원천 파일(전부 `pnpm build` 산출): `/ds-registry.json` · `/dstk/semantic-map.json` · `/dstk/typography.json` · `/dstk/contrast-pairs.json` ·
 `/docs/*`(CLAUDE.md·design.md·layout·regulations) · `/ui-src/*.txt` · `/story-html/*` · `/ds.css`.
 
+## /render — 스토리 라이브 렌더 (2026-09-21 Phase 1)
+
+같은 Vercel 프로젝트의 두 번째 함수(`api/render.ts`). 접근 값 없이 열린다 — 정적 스니펫과 같은 내용이고, claude.ai 채팅은 헤더를 못 붙인다.
+
+| 주소 | 답 |
+|---|---|
+| `GET /render` | 컴포넌트 키 목록 + 번들 생성일 |
+| `GET /render/<컴포넌트>` | 그 컴포넌트의 스토리 목록(경로 포함) |
+| `GET /render/<컴포넌트>/<스토리>` | 렌더된 HTML(`text/html`). 스토리 이름은 PascalCase·kebab 둘 다. 부품(스토리 없음)은 404 |
+
+동작: `buildCommand`(`scripts/bundle-stories.mjs`)가 `components/src/ui/*.stories.tsx` 전부 + 렌더 코어(`playground/scripts/story-render-core.tsx`)를
+esbuild 로 `dist/stories.mjs` 한 파일(약 4.5 MB, React 한 벌)에 묶고, 함수가 요청마다 거기서 스토리를 꺼내 `renderToStaticMarkup` 한다.
+정적 스니펫(`/story-html`)과 **같은 함수**를 쓰므로 결과는 바이트 단위로 같아야 한다 — `pnpm mcp:test:render`(로컬)와
+`pnpm audit:published` F 섹션(배포)이 159편 전수 대조한다. 왜 두 경로인가: 정적 스니펫은 "한 상태의 사진"이라 값이 있을 때만 나오는 UI 가 안 찍힌다.
+Phase 2 에서 `?args=` 로 프롭을 바꿔 그 천장을 넘는다(이 엔드포인트가 그 자리다).
+
 ## 배포 (Vercel 두 번째 프로젝트 — 관리자 1회)
 
 1. Vercel → Add New Project → 같은 저장소(designsystemin.md) 선택.
@@ -52,11 +68,14 @@ Settings → Connectors → **Add custom connector** → URL 입력.
 pnpm mcp:artifacts                      # docs · ds.css · story-html 생성(빌드 전 단계와 동일)
 pnpm dev                                # :3000 이 산출물을 서빙
 DS_BASE=http://localhost:3000 pnpm mcp:test   # 인메모리 전송으로 도구 7종 실제 호출
-DS_MCP_ACCESS=test DS_BASE=http://localhost:3000 pnpm --filter @ds/mcp dev   # http://localhost:8787/mcp/test
+DS_MCP_ACCESS=test DS_BASE=http://localhost:3000 pnpm --filter @ds/mcp dev   # http://localhost:8787/mcp/test · /render/<컴포넌트>/<스토리>
+pnpm mcp:bundle                          # dist/stories.mjs 생성(/render 전제, Vercel 은 buildCommand 로 자동)
+DS_BASE=http://localhost:3000 pnpm mcp:test:render   # 번들 렌더 ↔ 정적 스니펫 159편 바이트 대조
 ```
 
 ## 경계
 
 - 읽기 전용. 저장소·피그마·Jira 를 쓰지 않는다(Jira 자동 발행은 다음 배치).
 - 커넥터가 여는 것은 사이트에 이미 공개된 문서·코드뿐 — 공유 값은 무단 사용을 막는 문턱이지 비밀 자료 보호가 아니다.
+- `/render` 는 공유 값 없이 열린다(정적 스니펫과 같은 내용). Phase 2 의 `?args=` 가 붙으면 남용 시 문턱을 다시 판단한다.
 - 클론·세션(Claude Code) 경로는 그대로다 — 이 서버는 claude.ai 앱 경로 전용.

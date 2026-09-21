@@ -72,6 +72,9 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.17.0
         version: 1.30.0(zod@3.25.76)
+      esbuild:
+        specifier: ^0.28.1
+        version: 0.28.1
       zod:
         specifier: ^3.25.76
         version: 3.25.76

@@ -3,11 +3,11 @@
 // claude.ai 생성이 이 스니펫을 조립한다 — 오버레이(Dialog·Sheet·Popover 등)는 포털이라 트리거만 렌더된다(index 에 표시).
 // 실행: pnpm mcp:artifacts (빌드 전 단계). 산출물은 커밋하지 않는다(.gitignore) — 배포 사이트가 최신을 서빙한다.
 
-import * as React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+
+import { kebab, renderStory, storyNames } from "./story-render-core";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "../..");
@@ -17,7 +17,8 @@ const OUT = join(ROOT, "playground/public/story-html");
 type Registry = { components: Record<string, { name: { ko: string; en: string }; stories: string | null; file: string | null; note: string | null }> };
 const registry: Registry = JSON.parse(readFileSync(join(ROOT, "playground/public/ds-registry.json"), "utf8"));
 
-const kebab = (s: string) => s.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+// 라이브 렌더 주소(mcp 프로젝트) — 정적 스니펫과 같은 함수로 요청 시 렌더한다(Phase 1). index.json 에 적어 소비자가 찾게 한다.
+const RENDER_BASE = (process.env.DS_RENDER_BASE || "https://mcp-one-fawn.vercel.app").replace(/\/$/, "");
 
 /** 스토리 export **바로 위** 줄에 붙은 JSDoc 만 설명으로 수집.
  *  종전 정규식은 주석과 export 가 멀면 그 사이를 통째로 삼켰다 —
@@ -90,8 +91,7 @@ async function main() {
     const src = readFileSync(file, "utf8");
     const docs = docComments(src);
     const mod: any = await import(pathToFileURL(file).href);
-    const order: string[] = mod.__namedExportsOrder ?? Object.keys(mod).filter((k) => k !== "default");
-    const Comp = mod.default?.component;
+    const order = storyNames(mod);
     const compFile = join(UI, `${key}.tsx`);
     const conditional = existsSync(compFile) ? conditionalOf(readFileSync(compFile, "utf8")) : [];
     const entry: (typeof index)[string] = { name: registry.components[key].name, stories: [], ...(conditional.length ? { conditional } : {}) };
@@ -102,9 +102,7 @@ async function main() {
       if (!story || typeof story !== "object") continue;
       const out = `${key}/${kebab(name)}.html`;
       try {
-        const el = story.render ? story.render(story.args ?? {}) : Comp ? React.createElement(Comp, story.args ?? {}) : null;
-        if (!el) throw new Error("render 도 component 도 없음");
-        const html = renderToStaticMarkup(el);
+        const html = renderStory(mod, name);
         writeFileSync(join(OUT, out), html + "\n");
         const { slots, filled } = slotsOf(html);
         entry.stories.push({ name, file: out, description: docs[name] ?? "", portal: PORTAL_HINT.test(key), slots, filled });
@@ -117,7 +115,8 @@ async function main() {
     index[key] = entry;
   }
   writeFileSync(join(OUT, "index.json"), JSON.stringify({
-    $note: "스토리 → 정적 HTML 스니펫(pnpm mcp:artifacts). 각 스니펫은 한 상태의 사진이다 — slots = 그 안에 찍힌 data-slot, filled = 값 채워진 입력이 있나. conditional = 원문에서 값이 있을 때만 나오는 슬롯(사진에 없을 수 있다 — 그 상태의 스토리를 고르거나 원문을 본다). portal=true 는 열린 오버레이가 SSR 에 안 나온다. 클래스는 /ds.css.",
+    $note: "스토리 → 정적 HTML 스니펫(pnpm mcp:artifacts). 각 스니펫은 한 상태의 사진이다 — slots = 그 안에 찍힌 data-slot, filled = 값 채워진 입력이 있나. conditional = 원문에서 값이 있을 때만 나오는 슬롯(사진에 없을 수 있다 — 그 상태의 스토리를 고르거나 원문을 본다). portal=true 는 열린 오버레이가 SSR 에 안 나온다. 클래스는 /ds.css. 라이브 렌더 = renderBase + /render/<key>/<story-kebab> — 같은 함수(story-render-core)로 요청 시 렌더, 이 정적 파일과 동일(Phase 2 에서 ?args= 추가 예정).",
+    renderBase: RENDER_BASE,
     generated: new Date().toISOString().slice(0, 10),
     components: index,
   })); // 압축 출력 — 소비자는 기계(claude.ai 가 URL 로 읽는다). 들여쓰기만으로 58KB → 31KB(2026-09-21).

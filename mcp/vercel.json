@@ -1,9 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "cd .. && pnpm install --frozen-lockfile --filter @ds/mcp",
-  "buildCommand": "",
+  "installCommand": "cd .. && pnpm install --frozen-lockfile --filter @ds/mcp --filter @ds/ui",
+  "buildCommand": "node scripts/bundle-stories.mjs",
   "rewrites": [
     { "source": "/mcp", "destination": "/api/mcp" },
-    { "source": "/mcp/:access", "destination": "/api/mcp?access=:access" }
+    { "source": "/mcp/:access", "destination": "/api/mcp?access=:access" },
+    { "source": "/render", "destination": "/api/render" },
+    { "source": "/render/:component", "destination": "/api/render?component=:component" },
+    { "source": "/render/:component/:story", "destination": "/api/render?component=:component&story=:story" }
   ]
 }

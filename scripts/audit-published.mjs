@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // 배포면 감사 — 소비자(claude.ai 스킬·MCP·클론)가 실제로 받는 파일끼리 아귀가 맞는지 본다.
 //
-//   pnpm audit:published [주소]     기본 https://designsystemin-md.vercel.app
+//   pnpm audit:published [주소] [--render=주소]   기본 https://designsystemin-md.vercel.app · 라이브 렌더는 index.json 의 renderBase
+//   (주소가 localhost 면 F 는 건너뛴다 — 로컬 산출물과 배포 /render 는 다른 빌드일 수 있다. --render=http://localhost:8787 로 지정하면 본다)
 //
 // 이 스크립트는 배포된 URL 만 본다.
 // 저장소 파일을 import 하지 않는다 — 소비자 시점을 잃으면 존재 이유가 없다.
@@ -11,7 +12,9 @@
 // 저장소를 아무리 봐도 깨끗했는데, 배포된 스니펫이 쓰는 클래스가 ds.css 에 0개였다.
 // 복사하면 무색이 되는 버그를 잡을 수 있는 자리는 여기뿐이다.
 
-const BASE = (process.argv[2] || process.env.DS_BASE || "https://designsystemin-md.vercel.app").replace(/\/$/, "");
+const ARGS = process.argv.slice(2);
+const BASE = (ARGS.find((a) => !a.startsWith("--")) || process.env.DS_BASE || "https://designsystemin-md.vercel.app").replace(/\/$/, "");
+const RENDER_ARG = (ARGS.find((a) => a.startsWith("--render=")) || "").slice("--render=".length).replace(/\/$/, "");
 const findings = [];
 const add = (level, rule, detail) => findings.push({ level, rule, detail });
 
@@ -124,6 +127,32 @@ async function main() {
   const sem = await json("/dstk/semantic-map.json");
   if (sem && classList && Array.isArray(sem.tints) && Array.isArray(classList.tints)) {
     add("warn", "중복 개념", `틴트 목록이 semantic-map.json(${sem.tints.length}) 과 ds-classes.json(${classList.tints.length}) 양쪽에 있다`);
+  }
+
+  // ── F. 라이브 렌더 ↔ 정적 스니펫 (2026-09-21 Phase 1) ──
+  // /render 는 같은 함수(story-render-core)로 요청 시 렌더한다. 한 편이라도 다르면 mcp 번들이 다른 빌드거나 깨진 것이다.
+  const renderBase = RENDER_ARG || (/localhost|127\.0\.0\.1/.test(BASE) ? "" : (idx && idx.renderBase) || "https://mcp-one-fawn.vercel.app");
+  if (!renderBase) {
+    console.log("  라이브 렌더(F) 건너뜀 — 로컬 주소. --render=http://localhost:8787 로 지정하면 본다");
+  } else if (idx) {
+    const root = await (async () => { try { const r = await fetch(renderBase + "/render"); return r.ok ? await r.json() : null; } catch { return null; } })();
+    const idxKeys = Object.keys(idx.components);
+    if (!root) add("error", "라이브 렌더 불가", `${renderBase}/render 응답 없음`);
+    else if ((root.components || []).length !== idxKeys.length) add("warn", "라이브 렌더 빌드 불일치", `/render 컴포넌트 ${(root.components || []).length} · idx.json ${idxKeys.length} — 다른 빌드`);
+    const jobs = [];
+    for (const [key, entry] of Object.entries(idx.components)) for (const s of entry.stories) if (!s.error) jobs.push({ key, s });
+    let same = 0, diff = 0, fail = 0;
+    const run = async ({ key, s }) => {
+      const stat = await get("/story-html/" + s.file);
+      let live;
+      try { const r = await fetch(`${renderBase}/render/${s.file.replace(/\.html$/, "")}`); live = { ok: r.ok, status: r.status, body: r.ok ? await r.text() : "" }; }
+      catch (e) { live = { ok: false, status: 0, body: "", error: String(e.message || e) }; }
+      if (!stat.ok || !live.ok) { fail++; add("error", "라이브 렌더 실패", `${key}/${s.name} — 정적 ${stat.status} · 라이브 ${live.status}${live.error ? " " + live.error : ""}`); return; }
+      if (stat.body === live.body) same++;
+      else { diff++; add("error", "라이브≠정적", `${key}/${s.name} — 정적 ${stat.body.length}자 · 라이브 ${live.body.length}자`); }
+    };
+    if (root) for (let i = 0; i < jobs.length; i += 8) await Promise.all(jobs.slice(i, i + 8).map(run));
+    if (root) console.log(`  라이브 렌더 ${jobs.length}편 대조(${renderBase}) — 같음 ${same} · 다름 ${diff} · 실패 ${fail}`);
   }
 
   // ── 보고 ──

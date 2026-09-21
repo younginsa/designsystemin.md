@@ -10,6 +10,8 @@
     "build": "pnpm ds:build && pnpm mcp:artifacts && pnpm --filter playground build && pnpm --filter playground build-storybook -o out/storybook",
     "mcp:artifacts": "node playground/scripts/mcp-artifacts.mjs && node playground/scripts/build-ds-css.mjs && tsx --tsconfig tsconfig.render.json playground/scripts/render-stories.tsx",
     "mcp:test": "pnpm --filter @ds/mcp test",
+    "mcp:bundle": "pnpm --filter @ds/mcp bundle",
+    "mcp:test:render": "pnpm --filter @ds/mcp test:render",
     "audit:published": "node scripts/audit-published.mjs",
     "audit:rules": "node scripts/audit-rules.mjs"
   },

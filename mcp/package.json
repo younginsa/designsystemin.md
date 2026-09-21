@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "HiNAS 365 DS — MCP 서버(claude.ai 커넥터). 배포 사이트의 정적 파일(레지스트리·토큰·문서·스토리 HTML·ds.css)만 읽는다.",
+  "description": "HiNAS 365 DS — MCP 서버(claude.ai 커넥터) + /render(스토리 라이브 렌더). MCP 도구는 배포 사이트의 정적 파일만 읽고, /render 는 빌드 시 묶은 스토리 번들(dist/stories.mjs)을 렌더한다.",
   "scripts": {
     "test": "tsx test.ts",
+    "test:render": "tsx test-render.ts",
+    "bundle": "node scripts/bundle-stories.mjs",
     "dev": "tsx dev.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.0",
+    "esbuild": "^0.28.1",
     "zod": "^3.25.76"
   },
   "devDependencies": {
