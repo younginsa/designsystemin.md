@@ -27,7 +27,7 @@ console.log("get_tokens light: colors", tok.colors.length, "tints", tok.tints.le
 const lay = await call("get_layout", {});
 console.log("get_layout chars", lay.length, "has body-patterns", lay.includes("## A"));
 const con = await call("get_generation_contract", {});
-console.log("contract chars", con.length, "has HTML rules", con.includes("단독 HTML 출력 규약"), "has 절차", con.includes("페이지 생성 요청을 받으면"));
+console.log("contract chars", con.length, "has HTML rules", con.includes("HTML 규약"), "has 절차", con.includes("페이지 생성 요청을 받으면"));
 const css = JSON.parse(await call("get_css_bundle", {}));
 console.log("css bytes", css.bytes);
 const sample = `<html><head><link rel="stylesheet" href="${css.url}"></head><body class="bg-background text-foreground"><div class="flex items-center gap-2 bg-primary/5 text-[13px]" style="color:#ff0000"><span class="text-foo">x</span></div><section data-state="default"></section></body></html>`;
@@ -37,6 +37,13 @@ const good = `<html><head><link rel="stylesheet" href="${css.url}"></head><body 
 const chk2 = JSON.parse(await call("check_html", { html: good }));
 console.log("check_html(good) violations", chk2.violations, JSON.stringify(chk2.byRule), chk2.violations ? JSON.stringify(chk2.details.slice(0, 12)) : "");
 if (chk2.violations) { console.error("스니펫 그대로 넣은 HTML 이 위반이면 검사기가 틀린 것"); process.exit(1); }
+// 역산 검사 — 스토리 없는 부품(separator)을 손으로 조립한 HTML 은 위반, 값 채운 search-box 의 조건부 ✕ 존재 여부를 보고한다(2026-09-21 Phase 0)
+const bad = good.replace("<section data-state=\"empty\"", '<div data-slot="separator" class="bg-border h-px w-full"></div><div data-slot="search-box"><input data-slot="input-group-control" value="HN-2031" class="text-sm"></div><section data-state="empty"');
+const chk3 = JSON.parse(await call("check_html", { html: bad }));
+console.log("check_html(backcheck) usedComponents", JSON.stringify(chk3.usedComponents), "byRule", JSON.stringify(chk3.byRule), "conditional", JSON.stringify(chk3.conditional));
+if (!chk3.byRule["no-story-component"]) { console.error("스토리 없는 separator 를 못 잡으면 역산 검사가 틀린 것"); process.exit(1); }
+const sbCond = (chk3.conditional ?? []).find((c: any) => c.component === "search-box");
+if (!sbCond || sbCond.items.some((i: any) => i.when === "value" && i.present)) { console.error("값 채운 search-box 에 ✕ 가 없는데 present=true 면 조건부 보고가 틀린 것"); process.exit(1); }
 const res = await client.listResources();
 console.log("resources:", res.resources.map((r) => r.uri).join(", "));
 await client.close();

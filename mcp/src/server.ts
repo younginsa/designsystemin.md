@@ -99,7 +99,7 @@ export function createServer() {
 
   server.registerTool("check_html", {
     title: "HTML 자가 검사",
-    description: "생성한 HTML 의 DS 위반을 찾는다 — 임의 hex·임의 값(-[…])·인라인 style·ds.css 에 없는 클래스(투명도 변형 포함)·4상태 섹션 누락·상태 필 누락. DS 밖 마커(data-ds=fallback) 목록도 뽑는다. 위반 0 이 될 때까지 고친다.",
+    description: "생성한 HTML 의 DS 위반을 찾는다 — 임의 hex·임의 값(-[…])·인라인 style·ds.css 에 없는 클래스(투명도 변형 포함)·4상태 섹션 누락·상태 필 누락·스토리 없는 컴포넌트 사용(data-slot 역산). 실제로 들어간 컴포넌트 목록과 조건부 UI(값이 있을 때만 나오는 ✕ 등) 존재 여부도 돌려준다 — 스펙 섹션에 그대로 적는다. 위반 0 이 될 때까지 고친다.",
     inputSchema: { html: z.string().describe("검사할 HTML 전문") },
   }, async ({ html }) => {
     const css = await text("/ds.css");
@@ -130,7 +130,41 @@ export function createServer() {
     if (!html.includes("/ds.css")) v.push({ rule: "missing-css-link", detail: `<link rel="stylesheet" href="${BASE}/ds.css">` });
     const fallbacks = [...html.matchAll(/data-ds="fallback"[\s\S]*?(?:DS에 없음|미채택):\s*([^<]+)</g)].map((m) => m[1].trim());
     const unknown = v.filter((x) => x.rule === "unknown-class").length;
-    return ok(JSON.stringify({ violations: v.length, byRule: v.reduce((a: any, x) => (a[x.rule] = (a[x.rule] || 0) + 1, a), {}), details: v.slice(0, 120), unknownClassNote: unknown ? "ds.css 에 없는 클래스는 스타일이 안 먹는다 — 스니펫의 클래스 조합으로 되돌리거나 토큰 클래스로 바꾼다" : undefined, fallbacks, fallbackNote: fallbacks.length ? "보고 끝에 DS 에 없어서 직접 만든 것(컴포넌트 · 자리 · 이유)을 적는다 — 디자이너가 Jira DES 로 판정" : undefined }, null, 1));
+
+    // ── data-slot 역산 — 화면에 실제로 들어간 컴포넌트(2026-09-21 Phase 0) ──
+    // Claude 가 "무엇을 썼다"고 인지했는지와 무관하게 HTML 에 박힌 슬롯으로 센다.
+    // 어제 사고 둘 다 여기서 걸린다: 스토리 없는 Separator 를 손으로 조립한 것, 값 채운 검색창에 ✕ 가 빠진 것.
+    const reg = await registry();
+    const idx = await storyIndex().catch(() => null);
+    const compKeys = Object.keys(reg.components).sort((a, b) => b.length - a.length); // 긴 이름 우선 — input-group 이 input 보다 먼저
+    const usedSlots = [...new Set([...html.matchAll(/data-slot="([^"]+)"/g)].map((m) => m[1]))];
+    const used = new Map<string, string[]>();
+    for (const s of usedSlots) {
+      const k = compKeys.find((c) => s === c || s.startsWith(c + "-"));
+      if (!k) continue;
+      if (!used.has(k)) used.set(k, []);
+      used.get(k)!.push(s);
+    }
+    for (const k of used.keys()) if (!reg.components[k].stories) v.push({ rule: "no-story-component", detail: `${k} — 스토리 없는 부품을 화면에 직접 썼다(DS 아님). DS 컴포넌트로 바꾸거나 data-ds="fallback" 마커로 감싼다` });
+    const filledInputs = [...html.matchAll(/<input\b[^>]*\bvalue="([^"]+)"/g)].length;
+    const conditional = [...used.keys()].map((k) => {
+      const cond: any[] = idx?.components?.[k]?.conditional ?? [];
+      if (!cond.length) return null;
+      return { component: k, items: cond.map((c) => ({ when: c.when, present: [...(c.slots ?? []), ...(c.labels ?? [])].some((t: string) => html.includes(`data-slot="${t}"`) || html.includes(`aria-label="${t}"`)) })) };
+    }).filter(Boolean);
+
+    return ok(JSON.stringify({
+      violations: v.length,
+      byRule: v.reduce((a: any, x) => (a[x.rule] = (a[x.rule] || 0) + 1, a), {}),
+      details: v.slice(0, 120),
+      unknownClassNote: unknown ? "ds.css 에 없는 클래스는 스타일이 안 먹는다 — 스니펫의 클래스 조합으로 되돌리거나 토큰 클래스로 바꾼다" : undefined,
+      fallbacks,
+      fallbackNote: fallbacks.length ? "스펙 섹션 맨 위에 DS 밖 요소로 적고 배너를 띄운다 — 디자이너가 Jira DES 로 판정" : undefined,
+      usedComponents: [...used.keys()].sort(),
+      filledInputs,
+      conditional,
+      conditionalNote: conditional.length ? "값이 있을 때만 나오는 UI 다. 그 값을 채웠는데 present=false 면 빠진 것이다 — 그 상태의 스토리(index.json 의 slots·filled)를 고르거나 원문을 확인한다. 확인한 컴포넌트는 스펙 섹션 '값 채운 컨트롤' 줄에 적는다" : undefined,
+    }, null, 1));
   });
 
   server.registerResource("registry", "ds://registry", { title: "DS 레지스트리", mimeType: "application/json" }, async (uri) => ({ contents: [{ uri: uri.href, mimeType: "application/json", text: await text("/ds-registry.json") }] }));

@@ -26,7 +26,8 @@ export type Entry = {
   note: string | null;
 };
 export type Registry = { $note: string; fileKey: string; updated: string; components: Record<string, Entry> };
-export type StoryIndex = { generated: string; components: Record<string, { name: { ko: string; en: string }; stories: { name: string; file: string; description: string; portal: boolean; error?: string }[] }> };
+export type Conditional = { when: string; slots: string[]; labels: string[]; tags: string[] };
+export type StoryIndex = { generated: string; components: Record<string, { name: { ko: string; en: string }; stories: { name: string; file: string; description: string; portal: boolean; slots: string[]; filled: boolean; error?: string }[]; conditional?: Conditional[] }> };
 
 export const registry = () => json<Registry>("/ds-registry.json");
 export const storyIndex = () => json<StoryIndex>("/story-html/index.json");

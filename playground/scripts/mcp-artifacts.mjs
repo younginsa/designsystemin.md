@@ -11,7 +11,7 @@ rmSync(DOCS, { recursive: true, force: true });
 mkdirSync(join(DOCS, "layout"), { recursive: true });
 mkdirSync(join(DOCS, "regulations"), { recursive: true });
 const copied = [];
-for (const f of ["CLAUDE.md", "design.md"]) { copyFileSync(join(ROOT, f), join(DOCS, f)); copied.push(f); }
+for (const f of ["CLAUDE.md", "design.md", "review-checklist.md"]) { copyFileSync(join(ROOT, f), join(DOCS, f)); copied.push(f); }
 for (const dir of ["layout", "regulations"]) {
   for (const f of readdirSync(join(ROOT, dir)).filter((x) => x.endsWith(".md"))) { copyFileSync(join(ROOT, dir, f), join(DOCS, dir, f)); copied.push(`${dir}/${f}`); }
 }

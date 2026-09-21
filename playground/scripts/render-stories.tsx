@@ -5,7 +5,7 @@
 
 import * as React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -46,10 +46,42 @@ function docComments(src: string): Record<string, string> {
 
 const PORTAL_HINT = /(dialog|sheet|popover|dropdown-menu|tooltip|command|sonner|alert-dialog|detail-panel|notification-panel|select|icon-select|search-box|filter-bar|version-filter-chip)/;
 
+/** 스니펫 HTML 안의 data-slot 집합 + 값이 채워진 입력이 있는지 — "이 사진에 무엇이 찍혀 있나"(2026-09-21 Phase 0).
+ *  어제 사고: 필터바 사진만 보고 검색창 사진(Typing)은 안 봤다. 사진 안에 뭐가 있는지 목차에 있으면 부품 단위로 찾아간다. */
+function slotsOf(html: string): { slots: string[]; filled: boolean } {
+  const slots = [...new Set([...html.matchAll(/data-slot="([^"]+)"/g)].map((m) => m[1]))].sort();
+  const filled = [...html.matchAll(/<input\b[^>]*\bvalue="([^"]*)"/g)].some((m) => m[1] !== "");
+  return { slots, filled };
+}
+
+/** 컴포넌트 원문에서 조건부 렌더 블록(`{값 && (` · `{값 ? (`) 안에 무엇이 그려지는지 뽑는다.
+ *  사진(한 상태의 SSR)에 안 찍힐 수 있는 UI 의 목록 — 값이 있을 때만 나오는 ✕ 같은 것.
+ *  원문에는 data-slot 이 직접 안 적히고 <InputGroupAddon> 같은 태그로 나오므로 세 가지를 같이 기록한다:
+ *  data-slot(있으면) · aria-label(렌더 HTML 에 그대로 남는다) · JSX 태그 이름. 검사는 aria-label·slot 으로 대조한다. */
+type Conditional = { when: string; slots: string[]; labels: string[]; tags: string[] };
+function conditionalOf(src: string): Conditional[] {
+  const out: Conditional[] = [];
+  const re = /\{\s*([A-Za-z_][\w.]*(?:\s*(?:&&|\|\|)\s*[A-Za-z_!][\w.]*)*)\s*(?:&&|\?)\s*\(/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(src))) {
+    // 블록 끝 = 여는 괄호에 맞는 닫는 괄호(대략) — 900자 상한
+    const block = src.slice(m.index, m.index + 900);
+    const slots = [...new Set([...block.matchAll(/data-slot="([^"]+)"/g)].map((x) => x[1]))];
+    const labels = [...new Set([...block.matchAll(/aria-label="([^"]+)"/g)].map((x) => x[1]))];
+    const tags = [...new Set([...block.matchAll(/<([A-Z][A-Za-z]+)/g)].map((x) => x[1]))].slice(0, 6);
+    if (slots.length || labels.length || tags.length) out.push({ when: m[1].replace(/\s+/g, " "), slots, labels, tags });
+  }
+  return out.slice(0, 12);
+}
+
 async function main() {
   rmSync(OUT, { recursive: true, force: true });
   mkdirSync(OUT, { recursive: true });
-  const index: Record<string, { name: { ko: string; en: string }; stories: { name: string; file: string; description: string; portal: boolean; error?: string }[] }> = {};
+  const index: Record<string, {
+    name: { ko: string; en: string };
+    stories: { name: string; file: string; description: string; portal: boolean; slots?: string[]; filled?: boolean; error?: string }[];
+    conditional?: Conditional[];
+  }> = {};
   let ok = 0, failed = 0;
   // 스토리가 있으면 DS — 사람이 켜는 채택 단계는 없다(2026-09-18)
   const keys = Object.keys(registry.components).filter((k) => registry.components[k].stories).sort();
@@ -60,7 +92,9 @@ async function main() {
     const mod: any = await import(pathToFileURL(file).href);
     const order: string[] = mod.__namedExportsOrder ?? Object.keys(mod).filter((k) => k !== "default");
     const Comp = mod.default?.component;
-    const entry = { name: registry.components[key].name, stories: [] as any[] };
+    const compFile = join(UI, `${key}.tsx`);
+    const conditional = existsSync(compFile) ? conditionalOf(readFileSync(compFile, "utf8")) : [];
+    const entry: (typeof index)[string] = { name: registry.components[key].name, stories: [], ...(conditional.length ? { conditional } : {}) };
     mkdirSync(join(OUT, key), { recursive: true });
     for (const name of order) {
       if (name === "default" || name === "__namedExportsOrder") continue;
@@ -72,7 +106,8 @@ async function main() {
         if (!el) throw new Error("render 도 component 도 없음");
         const html = renderToStaticMarkup(el);
         writeFileSync(join(OUT, out), html + "\n");
-        entry.stories.push({ name, file: out, description: docs[name] ?? "", portal: PORTAL_HINT.test(key) });
+        const { slots, filled } = slotsOf(html);
+        entry.stories.push({ name, file: out, description: docs[name] ?? "", portal: PORTAL_HINT.test(key), slots, filled });
         ok++;
       } catch (e: any) {
         entry.stories.push({ name, file: out, description: docs[name] ?? "", portal: PORTAL_HINT.test(key), error: String(e?.message ?? e).slice(0, 200) });
@@ -82,10 +117,10 @@ async function main() {
     index[key] = entry;
   }
   writeFileSync(join(OUT, "index.json"), JSON.stringify({
-    $note: "스토리 → 정적 HTML 스니펫(pnpm mcp:artifacts). portal=true 인 컴포넌트는 열린 오버레이가 SSR 에 안 나온다 — 스토리 원문(ui-src) 참고. 클래스는 /ds.css 로 스타일링.",
+    $note: "스토리 → 정적 HTML 스니펫(pnpm mcp:artifacts). 각 스니펫은 한 상태의 사진이다 — slots = 그 안에 찍힌 data-slot, filled = 값 채워진 입력이 있나. conditional = 원문에서 값이 있을 때만 나오는 슬롯(사진에 없을 수 있다 — 그 상태의 스토리를 고르거나 원문을 본다). portal=true 는 열린 오버레이가 SSR 에 안 나온다. 클래스는 /ds.css.",
     generated: new Date().toISOString().slice(0, 10),
     components: index,
-  }, null, 2));
+  })); // 압축 출력 — 소비자는 기계(claude.ai 가 URL 로 읽는다). 들여쓰기만으로 58KB → 31KB(2026-09-21).
   console.log(`[story-html] 컴포넌트 ${keys.length} · 스니펫 ${ok} · 실패 ${failed} → playground/public/story-html/`);
   if (failed) for (const [k, e] of Object.entries(index)) for (const s of e.stories) if (s.error) console.log(`  실패: ${k}/${s.name} — ${s.error}`);
 }

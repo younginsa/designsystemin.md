@@ -12,7 +12,7 @@
 
 | 무엇 | 주소 |
 |---|---|
-| 컴포넌트 목록 | `BASE/story-html/index.json` — 여기 있으면 쓸 수 있다(스토리가 있다 = DS 다) |
+| 컴포넌트 목록 | `BASE/story-html/index.json` — 여기 있으면 쓸 수 있다(스토리가 있다 = DS 다). 스토리마다 `slots`(그 사진에 찍힌 부품)·`filled`(값 채워진 입력이 있나), 컴포넌트마다 `conditional`(값이 있을 때만 나오는 UI — 사진에 없을 수 있다) |
 | 관리 기록 | `BASE/ds-registry.json` — 피그마 세트·설계 노트. 생성에 꼭 필요하진 않다 |
 | 스니펫 본문 | `BASE/story-html/<키>/<스토리>.html` — 렌더된 HTML, 복사해서 쓴다 |
 | 컴포넌트 원문 | `BASE/ui-src/<키>.tsx.txt` · 스토리 원문 `BASE/ui-src/<키>.stories.tsx.txt` |
@@ -23,6 +23,7 @@
 | 본문 패턴 | `BASE/docs/layout/body-patterns.md` — A 리스트 · B 상세 · C 위저드 · D 대시보드 · E 폼 |
 | 규칙서 **(필독 — 절차 0번)** | `BASE/docs/design.md` — 스니펫에 안 담기는 사용 규칙·금지 목록 |
 | 제품 규정 | `BASE/docs/regulations/<제품>.md` — 해당 제품 화면이면 먼저 읽는다 |
+| 검토 체크리스트 | `BASE/docs/review-checklist.md` — 디자이너가 결과물에서 보는 것(스펙 섹션 5줄) |
 | CSS 번들 | `BASE/ds.css` — 만드는 HTML 이 링크할 단 하나의 스타일시트 |
 
 ## 2. 절차 (순서 고정)
@@ -37,10 +38,20 @@
    본문 유형이 뚜렷하면 같이 선언한다. 예: "① 프레임 + A 리스트 본문".
 2. **필요한 컴포넌트를 정한다.** `story-html/index.json` 에 있으면 쓸 수 있다(스토리가 있다 = DS 다).
    이름만 보고 짐작하지 않는다.
-3. **스니펫을 가져온다.** 쓰려는 컴포넌트마다 `story-html/index.json` 에서 알맞은 스토리를 고르고 그 HTML 을 읽어 **그대로 복사**한 뒤 글자·숫자만 바꾼다. 클래스 조합을 새로 만들지 않는다.
-4. **HTML 한 장을 쓴다.** 3장의 규약을 따른다.
+3. **스니펫을 가져온다 — 모양은 사진, 규칙은 원문.**
+   (a) 쓰려는 컴포넌트마다 `story-html/index.json` 에서 **내가 만들 상태에 맞는 스토리**를 고른다. 고르는 기준은 이름이 아니라
+       `slots` 와 `filled` 다 — 값이 들어간 검색창을 만들면 `filled: true` 인 스토리를, 칩이 붙은 필터바를 만들면 `slots` 에 칩이 있는 스토리를 고른다.
+   (b) **부품은 부품의 스토리를 본다.** 필터바 안의 검색창을 채우려면 필터바 사진이 아니라 `search-box` 의 스토리를 본다.
+       화면 단위로 고르다 부품 단위를 건너뛰면 ✕ 같은 조건부 UI 가 빠진다(2026-09-20 사고).
+   (c) 그 HTML 을 읽어 **그대로 복사**한 뒤 글자·숫자만 바꾼다. 클래스 조합을 새로 만들지 않는다.
+   (d) 값·개수·선택 상태를 사진과 **다르게** 넣으면, 그 컴포넌트의 `conditional` 목록을 본다. 거기 적힌 UI(클리어 ✕, 칩 제거 ✕,
+       카운트 배지, 비활성 처리)는 값이 있을 때만 나오므로 사진에 안 찍혀 있다. 맞는 스토리가 없으면 `ui-src/<키>.tsx.txt` 원문에서
+       그 값이 켜는 요소를 확인하고, **그 컴포넌트 이름을 스펙 섹션 "원문까지 읽은 컴포넌트" 줄에 적는다**(스토리 누락 신고).
+   (e) `index.json` 에 없는 컴포넌트는 DS 가 아니다. 스토리가 없는 부품(separator·avatar·scroll-area·toggle)도 마찬가지 —
+       클래스가 ds.css 에 있어도 직접 조립하지 않는다. 필요하면 DS 밖 요소로 표시한다.
+4. **HTML 한 장을 쓴다.** 3장의 규약을 따른다. 흐름(목록 → 상세 → 다이얼로그)이면 한 파일에 `data-view` 섹션으로 담는다.
 5. **자가 검사한다.** 4장 체크리스트를 통과할 때까지 고친다.
-6. **보고한다.** 파일을 주고, 끝에 **DS에 없어서 직접 만든 것**(컴포넌트 · 쓰인 자리 · 이유)을 적는다. 없으면 "전부 DS 안에서 해결". 그리고 **프로그레스 포함 여부와 이유**를 한 줄 적는다.
+6. **보고한다.** 파일 안의 **스펙 섹션**(8장)이 보고서다. 채팅에는 파일과 스펙 섹션 맨 위 5줄만 옮겨 적는다.
 
 ## 3. HTML 규약
 
@@ -79,8 +90,9 @@
   ```
   그리고 `</body>` 앞에:
   ```html
-  <script>document.querySelectorAll("[data-pick]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-state]").forEach(function(s){s.hidden=s.dataset.state!==b.dataset.pick});document.querySelectorAll("[data-pick]").forEach(function(x){x.className=(x===b?"rounded-full px-3 py-1 text-xs font-medium bg-primary text-primary-foreground":"rounded-full px-3 py-1 text-xs text-secondary-foreground hover:bg-accent")})})})</script>
+  <script>document.querySelectorAll("[data-pick]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("section[data-state]").forEach(function(s){s.hidden=s.dataset.state!==b.dataset.pick});document.querySelectorAll("[data-pick]").forEach(function(x){x.className=(x===b?"rounded-full px-3 py-1 text-xs font-medium bg-primary text-primary-foreground":"rounded-full px-3 py-1 text-xs text-secondary-foreground hover:bg-accent")})})})</script>
   ```
+  선택자는 반드시 `section[data-state]` 다. `[data-state]` 만 쓰면 탭·팝오버 트리거(같은 속성을 쓴다)까지 숨긴다.
 - **DS 에 없는 요소**는 만들되 반드시 표시한다.
   ```html
   <div data-ds="fallback" class="rounded-md border border-dashed border-muted-foreground/40 p-2">
@@ -106,6 +118,10 @@
 8. 보고서에 프로그레스 포함 여부와 이유를 한 줄 적었는가.
 9. 규칙서(§0 에서 읽은 `docs/design.md`)의 금지 목록에 걸리는 것이 없는가 —
    Label 없는 Input · 카드 안 카드 · 클릭되는 Badge · 페이지당 primary 2개 이상 · 본문 text-xs · placeholder 로 라벨 대체.
+10. **역산 검사.** 완성된 HTML 의 `data-slot` 값을 전부 뽑아 컴포넌트 이름으로 묶는다(`input-group-control` → input-group).
+    그 목록의 컴포넌트가 전부 `index.json` 에 있는가. 없는 것(separator 등)을 썼으면 위반이다.
+11. 값을 채운 컨트롤마다 그 컴포넌트의 `conditional` 에 적힌 UI 가 HTML 에 있는가. 없으면 3(d) 로 돌아간다.
+12. 스펙 섹션(8장)이 있고 맨 위 5줄이 채워져 있는가.
 
 ## 5. 레이아웃 요약
 
@@ -130,4 +146,47 @@
 - 프레임 질문을 건너뛰고 바로 만들지 않는다.
 - 스니펫을 안 읽고 기억으로 마크업을 쓰지 않는다.
 - DS 에 없는 요소를 조용히 넣지 않는다. 반드시 마커와 목록에 남긴다.
+- 스니펫에 없다는 이유로 "그 UI 는 DS 에 없다"고 단정하지 않는다. 스니펫은 한 상태만 찍혀 있다. 없다고 말하기 전에 `conditional` 과 원문을 본다.
 - 값이 안 읽히면 지어내지 않는다. "주소를 읽지 못했다"고 말하고 멈춘다.
+- **"최신이냐"고 물으면** 기억으로 답하지 않는다. `index.json` 의 `generated` 와 `ds-registry.json` 의 `updated` 를 읽어
+  "컴포넌트 목록 YYYY-MM-DD · 스니펫 YYYY-MM-DD" 형식으로만 답한다.
+
+## 8. 스펙 섹션 — 파일 안의 보고서
+
+산출물 HTML 에 `<section data-view="spec" hidden>` 을 하나 둔다. 화면 우상단의 「스펙」 버튼으로 연다.
+이 섹션이 보고서다. 엔지니어는 이걸로 개발 요청을 받고, 디자이너는 맨 위 5줄만 본다.
+
+**맨 위 5줄(순서 고정)** — 검토자가 이것만 읽는다.
+```html
+<section data-view="spec" hidden class="space-y-6">
+  <dl class="grid grid-cols-[12rem_1fr] gap-x-6 gap-y-2 text-sm">
+    <dt class="text-secondary-foreground">DS 갱신일</dt><dd>컴포넌트 목록 2026-09-21 · 스니펫 2026-09-21</dd>
+    <dt class="text-secondary-foreground">DS 밖 요소</dt><dd>0개</dd>
+    <dt class="text-secondary-foreground">원문까지 읽은 컴포넌트</dt><dd>0개</dd>
+    <dt class="text-secondary-foreground">값 채운 컨트롤</dt><dd>2개 · 조건부 확인됨(search-box ✕, filter-chip ✕)</dd>
+    <dt class="text-secondary-foreground">프로그레스</dt><dd>제외 — 목록 화면, 진행률 없음</dd>
+  </dl>
+  …
+</section>
+```
+- **DS 갱신일**: `index.json.generated` · `ds-registry.json.updated`.
+- **DS 밖 요소**: `data-ds="fallback"` 개수. 0 이 아니면 아래 표에 "컴포넌트 · 쓰인 자리 · 이유"를 적고,
+  파일 상단에 배너 `DS 밖 요소 N개 — 개발 전 디자이너 확인` 을 띄운다.
+- **원문까지 읽은 컴포넌트**: 3(d) 에서 스토리가 없어 원문을 본 것. 0 이 아니면 스토리 누락 신고다.
+- **값 채운 컨트롤**: 값·선택을 넣은 컨트롤 수와, 각각 `conditional` UI 를 확인했다는 표시.
+- **프로그레스**: 포함/제외와 이유 한 줄.
+
+**그 아래(엔지니어용)**
+- 화면 목록(흐름이면 각 `data-view` 이름과 역할)
+- 필드 표: 이름 · 타입 · 필수 · 예시 값(샘플 표시) — BE 가 데이터 모델을 여기서 읽는다
+- 상태: 기본·빈·로딩·에러(·프로그레스) 각각 무엇을 보여주나
+- 액션: 버튼·링크마다 "누르면 무엇이 일어나나"
+- 내가 정한 것: 컬럼 선택·상태 이름·정보 위계처럼 규칙이 아니라 판단으로 정한 항목과 그 이유
+- 원본 프롬프트
+
+**뷰 전환** — 알약 옆에 「스펙」 버튼 하나. `data-view` 섹션은 상태 섹션과 별개로 동작한다.
+```html
+<button data-view-pick="spec" class="fixed top-4 right-4 z-50 rounded-full border border-border bg-card px-3 py-1 text-xs text-secondary-foreground hover:bg-accent">스펙</button>
+<script>document.querySelectorAll("[data-view-pick]").forEach(function(b){b.addEventListener("click",function(){var on=document.querySelector('section[data-view="'+b.dataset.viewPick+'"]');if(!on)return;var show=on.hidden;document.querySelectorAll("section[data-view]").forEach(function(s){s.hidden=true});on.hidden=!show;if(!show){var d=document.querySelector('section[data-view="default"]');if(d)d.hidden=false}})})</script>
+```
+흐름의 화면들은 `section[data-view="list"]`, `"detail"` 처럼 이름을 붙이고, 기본 화면 하나는 `data-view="default"` 로 둔다.
