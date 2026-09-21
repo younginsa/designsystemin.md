@@ -38,7 +38,9 @@ Phase 2 에서 `?args=` 로 프롭을 바꿔 그 천장을 넘는다(이 엔드�
 
 1. Vercel → Add New Project → 같은 저장소(designsystemin.md) 선택.
 2. **Root Directory = `mcp`** (Include source files outside of the Root Directory 켜짐 유지).
-3. Framework Preset = Other. Build Command 비움(함수만 배포). Install Command 는 `mcp/vercel.json` 이 지정한다.
+3. Framework Preset = Other. 대시보드 Override 는 전부 끈다 — Install·Build Command·Output Directory 는 `mcp/vercel.json` 이 지정한다
+   (2026-09-21: buildCommand = 스토리 번들, outputDirectory = `public`). **Other 프레임워크에 Build Command 가 있으면 Output Directory 가
+   있어야 한다** — 없으면 빌드가 실패하고 이전 배포가 그대로 남아 새 함수만 404 로 보인다(Phase 1 첫 배포에서 30분 헤맴).
 4. Environment Variables:
    - `DS_MCP_ACCESS` = 공유 값(팀만 아는 문자열, 길게). 미설정이면 503 으로 닫혀 있다(fail-closed).
    - `DS_BASE` (선택) = 원천 사이트. 기본 `https://designsystemin-md.vercel.app`.
