@@ -39,7 +39,7 @@
 | `popover` / `popover-foreground` | 팝오버·드롭다운 표면 |
 | `primary` / `primary-foreground` | 주요 액션 (페이지당 1개 원칙) |
 | `secondary`, `accent` | 보조 액션, hover 표면 |
-| `muted` / `muted-foreground` | 비활성 표면 / 보조 텍스트 |
+| `muted` / `muted-foreground` | 비활성 표면 / 흐림 톤 전용(플레이스홀더·비활성) — 읽는 보조 텍스트는 `secondary-foreground` |
 | `destructive` | 삭제·위험 액션 |
 | `success` | 성공 상태 |
 | `border`, `input`, `ring` | 테두리, 입력 테두리, 포커스 링 |

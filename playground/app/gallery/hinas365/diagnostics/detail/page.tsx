@@ -241,7 +241,7 @@ export default function DiagnosticDetailPage() {
                     <AccordionContent className="space-y-3">
                       {d.key === "SYSTEM" ? (
                         <>
-                          <p className="text-xs font-medium uppercase text-secondary-foreground">
+                          <p className="text-xs font-semibold uppercase text-secondary-foreground">
                             주요 진단 정보
                           </p>
                           <ItemGroup>
@@ -467,7 +467,7 @@ export default function DiagnosticDetailPage() {
         onOpenChange={setQuickOpen}
         size="md"
         control={
-          <span className="text-xs font-medium uppercase text-secondary-foreground">
+          <span className="text-xs font-semibold uppercase text-secondary-foreground">
             Product Quick View
           </span>
         }

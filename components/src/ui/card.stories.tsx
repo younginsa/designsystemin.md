@@ -57,7 +57,7 @@ export const FlatPanel = {
   parameters: { vocab: "data-stat" },
   render: () => (
     <Card variant="flat" className="p-6">
-      <p className="text-sm font-medium">계약 정보</p>
+      <p className="text-sm font-medium text-secondary-foreground">계약 정보</p>
       <p className="mt-2 text-sm text-secondary-foreground">대양해운 · Control 신규 납품 · 2026-01-15</p>
     </Card>
   ),

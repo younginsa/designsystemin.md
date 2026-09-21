@@ -127,6 +127,7 @@
 
 - **메인 레이아웃**: 좌측 사이드바(`w-64 border-r bg-card p-4`) + 우측 본문(`p-8`). 상단바는 사이드바 우측부터 화면 끝까지, `bg-card`.
 - **페이지 제목**: `text-lg font-bold`. 제목 행은 좌측 제목 + 우측 페이지 액션. 목록의 필터·내보내기 버튼은 제목 행이 아니라 FilterBar 쪽에 둔다.
+- **섹션·카드 타이틀**: `text-sm font-medium text-secondary-foreground`, 그 아래 설명 `text-xs text-secondary-foreground`. 정보 패널 uppercase 라벨은 `text-xs font-semibold uppercase text-secondary-foreground`. `text-muted-foreground` 는 읽는 글자에 쓰지 않는다(흐림 톤 전용).
 - **세로 리듬**: 섹션 사이 `space-y-6`, 카드 그리드 `gap-4`, 폼 필드 `space-y-4`.
 - **A 리스트 본문 순서**: 제목 행 → FilterBar → Table → ListFooter.
 - **B 상세**: 제목 행 → 좌측 요약 패널 + 우측 본문. 패널은 `Card variant="flat"`.

@@ -15,9 +15,14 @@
 - **카드 종류 혼용 금지** — A·B·C 본문의 카드 = 보더 카드(`rounded-lg border bg-card`).
   그림자 카드(`shadow-card`)는 **D 대시보드 전용**.
 - **섹션 타이틀·설명 위계** — 카드/섹션 타이틀 = `text-sm font-medium
-  text-muted-foreground`(14px 회색), 타이틀 바로 아래 설명 = `text-xs
-  text-muted-foreground`(12px). 예외: 문서 본문 대제목(릴리즈 노트 What's Changed류)과
-  정보 패널의 `text-xs uppercase` 라벨은 별개 요소.
+  text-secondary-foreground`(14px, gray-600), 타이틀 바로 아래 설명 = `text-xs
+  text-secondary-foreground`(12px). `text-muted-foreground` 는 흐림 톤 전용(플레이스홀더·
+  비활성)이라 읽는 글자에 쓰지 않는다(dstk/contrast-pairs.json $status-rule, 2026-08-21 —
+  이 문서가 하루 먼저 쓰여 muted 로 남아 있던 것을 2026-09-21 교정, 갤러리 실사용 secondary 43·muted 0).
+  예외: 문서 본문 대제목(릴리즈 노트 What's Changed류)은 별개 요소.
+- **정보 패널 uppercase 라벨** = `text-xs font-semibold uppercase text-secondary-foreground`
+  (카드 타이틀과 별개 요소 — 2026-09-21 갤러리 semibold 다수파로 잠금). 사이드바 내비 그룹
+  라벨(`tracking-wide`)과 목록 아사이드 제목은 다른 요소라 이 규칙 대상이 아니다.
 
 ## A — 리스트 (2026-09-02 개정 — 확정 문법 반영)
 
@@ -82,7 +87,7 @@
 - **간격**: 카드 그리드 `gap-4`, 섹션 리듬 `space-y-6`(공통 규칙과 동일).
 - **적용 범위**: 그림자 카드는 대시보드 전용 — 다른 본문(A/B/C)에 가져가지 않는다.
 - **카드 형식 ① 타이틀 카드**: 헤더 `px-4 py-3`(밑줄 없음), 타이틀 `text-sm
-  font-medium text-muted-foreground` + 우측 정보 아이콘 슬롯.
+  font-medium text-secondary-foreground` + 우측 정보 아이콘 슬롯.
 - **카드 형식 ② 타이틀+테이블 카드**: 같은 헤더 + **`Table variant="plain"`**(경량 표 —
   외곽선·헤더 배경 없음, 행 구분선 마지막 제외, 셀 `px-4 py-3`). 손 unwind 금지 — variant만.
 - **스탯 카드**: 항목 `flex-1` 균등, 첫 항목 `pl-4`, 구분 항목 `border-l pl-8`,
