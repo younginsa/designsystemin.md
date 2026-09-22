@@ -733,10 +733,8 @@ export default function Sales365ContractCreatePage() {
             </div>
           )}
 
-          {/* ── 하단 고정 완료 바 — 본문 컬럼 안에서만 ── */}
-          {/* 하단 고정 완료 바 — 셸 본문면(bg-secondary)과 동일 토큰: 줄무늬 없이 비침만 차단 */}
-          {/* 액션 바 면 = 페이지 바닥(bg-background) — 회색 캔버스 시절의 bg-secondary는 흰 바닥에서 띠로 보였다(2026-09-10) */}
-          <div className="sticky bottom-0 flex items-center justify-between bg-background py-3">
+          {/* ── 하단 고정 완료 바 — 본문 컬럼 안에서만. 면 = 캔버스(bg-background, 띠 금지) · 경계 = border-t 한 줄(background = card 라 선 없이는 분리도 0, 2026-09-22 body-patterns E) ── */}
+          <div className="sticky bottom-0 flex items-center justify-between border-t bg-background py-3">
             <Button asChild variant="outline">
               <Link href={`${BASE}/contracts`}>취소</Link>
             </Button>
