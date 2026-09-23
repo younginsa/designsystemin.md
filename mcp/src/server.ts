@@ -163,7 +163,7 @@ export function createServer() {
       usedComponents: [...used.keys()].sort(),
       filledInputs,
       conditional,
-      conditionalNote: conditional.length ? "값이 있을 때만 나오는 UI 다. 그 값을 채웠는데 present=false 면 빠진 것이다 — 그 상태의 스토리(index.json 의 slots·filled)를 고르거나 원문을 확인한다. 확인한 컴포넌트는 스펙 섹션 '값 채운 컨트롤' 줄에 적는다" : undefined,
+      conditionalNote: conditional.length ? "값이 있을 때만 나오는 UI 다. 그 값을 채웠는데 present=false 면 빠진 것이다 — 그 상태의 스토리(index.json 의 slots·filled)를 고르거나, argsAware 스토리를 /render/<키>/<스토리>?args={…} 로 그 상태로 렌더해 확인한다(허용 이름 = 스토리 args + /props/<키>.json). 확인한 컴포넌트는 스펙 섹션 '값 채운 컨트롤' 줄에 적는다" : undefined,
     }, null, 1));
   });
 

@@ -18,6 +18,7 @@
 | 스니펫 본문(라이브) | `RENDER/render/<키>/<스토리>` — 저장소 스토리를 요청 시 렌더한 HTML. 먼저 이걸 읽는다 |
 | 스니펫 본문(정적) | `BASE/story-html/<키>/<스토리>.html` — 같은 HTML 의 빌드 시 사본. 라이브가 안 열릴 때 폴백 |
 | 컴포넌트 원문 | `BASE/ui-src/<키>.tsx.txt` · 스토리 원문 `BASE/ui-src/<키>.stories.tsx.txt` |
+| 컴포넌트 프롭 | `BASE/props/<키>.json` — 원문에 선언된 프롭(이름·타입·enum 값·기본값·설명). `?args=` 에 쓸 수 있는 이름 |
 | 색 토큰 | `BASE/dstk/semantic-map.json` — 토큰 이름 = Tailwind 클래스 이름 |
 | 타이포 | `BASE/dstk/typography.json` |
 | 허용 클래스 | `BASE/ds-classes.json` — 자가 검사용 전체 클래스 목록 |
@@ -49,8 +50,12 @@
        로 폴백한다(내용은 같다). 어느 쪽을 몇 편 썼는지 스펙 섹션 "스니펫 출처" 줄에 적는다.
        읽은 HTML 을 **그대로 복사**한 뒤 글자·숫자만 바꾼다. 클래스 조합을 새로 만들지 않는다.
    (d) 값·개수·선택 상태를 사진과 **다르게** 넣으면, 그 컴포넌트의 `conditional` 목록을 본다. 거기 적힌 UI(클리어 ✕, 칩 제거 ✕,
-       카운트 배지, 비활성 처리)는 값이 있을 때만 나오므로 사진에 안 찍혀 있다. 맞는 스토리가 없으면 `ui-src/<키>.tsx.txt` 원문에서
-       그 값이 켜는 요소를 확인하고, **그 컴포넌트 이름을 스펙 섹션 "원문까지 읽은 컴포넌트" 줄에 적는다**(스토리 누락 신고).
+       카운트 배지, 비활성 처리)는 값이 있을 때만 나오므로 사진에 안 찍혀 있다. 맞는 스토리가 없으면 **그 상태를 직접 렌더한다** —
+       `index.json` 에서 `argsAware: true` 인 스토리를 고르고 `RENDER/render/<키>/<스토리>?args={…}` 를 읽는다. 쓸 수 있는 이름은
+       그 스토리의 `args` 목록과 `BASE/props/<키>.json` 의 `propNames` 다(예: `/render/search-box/typing?args={"initial":"HN-2031"}`,
+       `/render/filter-bar/contract-list?args={"keyword":"부산"}`). 거부(400)되면 응답의 `allowed` 목록을 보고 고친다.
+       그래도 안 되면 `ui-src/<키>.tsx.txt` 원문에서 그 값이 켜는 요소를 확인하고, **그 컴포넌트 이름을 스펙 섹션
+       "원문까지 읽은 컴포넌트" 줄에 적는다**(스토리 누락 신고).
    (e) `index.json` 에 없는 컴포넌트는 DS 가 아니다. 스토리가 없는 부품(separator·avatar·scroll-area·toggle)도 마찬가지 —
        클래스가 ds.css 에 있어도 직접 조립하지 않는다. 필요하면 DS 밖 요소로 표시한다.
 4. **HTML 한 장을 쓴다.** 3장의 규약을 따른다. 흐름(목록 → 상세 → 다이얼로그)이면 한 파일에 `data-view` 섹션으로 담는다.
