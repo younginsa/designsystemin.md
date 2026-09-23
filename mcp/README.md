@@ -16,7 +16,7 @@ claude.ai 앱(웹·데스크톱)이 DS 를 읽고 **단독 HTML 한 장**으로 
 | `check_html` | 자가 검사 — 임의 hex·임의 값·인라인 style·없는 클래스·틴트·4상태·상태 필 + 미채택 마커 목록 |
 
 원천 파일(전부 `pnpm build` 산출): `/ds-registry.json` · `/dstk/semantic-map.json` · `/dstk/typography.json` · `/dstk/contrast-pairs.json` ·
-`/docs/*`(CLAUDE.md·design.md·layout·regulations) · `/ui-src/*.txt` · `/story-html/*` · `/ds.css`.
+`/docs/*`(CLAUDE.md·design.md·layout·regulations) · `/ui-src/*.txt` · `/story-html/*` · `/props/*`(컴포넌트 프롭, react-docgen-typescript) · `/ds.css`.
 
 ## /render — 스토리 라이브 렌더 (2026-09-21 Phase 1)
 
@@ -27,6 +27,7 @@ claude.ai 앱(웹·데스크톱)이 DS 를 읽고 **단독 HTML 한 장**으로 
 | `GET /render` | 컴포넌트 키 목록 + 번들 생성일 |
 | `GET /render/<컴포넌트>` | 그 컴포넌트의 스토리 목록(경로 포함) |
 | `GET /render/<컴포넌트>/<스토리>` | 렌더된 HTML(`text/html`). 스토리 이름은 PascalCase·kebab 둘 다. 부품(스토리 없음)은 404 |
+| `GET /render/<컴포넌트>/<스토리>?args={…}` | (Phase 2) 스토리 args 위에 덮어 다른 상태를 렌더. 허용 키 = 스토리 args 키 ∪ `/props/<키>.json` 의 propNames ∪ children(문자열). className·style·on* 거부, 4KB 상한, args 를 안 받는 스토리(render: () => …)는 400 |
 
 동작: `buildCommand`(`scripts/bundle-stories.mjs`)가 `components/src/ui/*.stories.tsx` 전부 + 렌더 코어(`playground/scripts/story-render-core.tsx`)를
 esbuild 로 `dist/stories.mjs` 한 파일(약 4.5 MB, React 한 벌)에 묶고, 함수가 요청마다 거기서 스토리를 꺼내 `renderToStaticMarkup` 한다.

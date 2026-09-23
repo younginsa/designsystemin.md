@@ -4,6 +4,8 @@
 // 실행: pnpm --filter @ds/mcp bundle (Vercel buildCommand · 로컬 test:render 전). 산출물(dist/·.gen/)은 커밋하지 않는다.
 
 import { build } from "esbuild";
+
+import { collectProps } from "./build-props.mjs";
 import { mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -19,9 +21,16 @@ const ident = (k) => "m_" + k.replace(/-/g, "_");
 
 const GEN = join(MCP, ".gen");
 mkdirSync(GEN, { recursive: true });
+// ?args= 허용 목록 — 원문에 선언된 프롭 이름만(react-docgen-typescript). 번들에 같이 실어 요청 시 네트워크 없이 검사한다.
+const t0 = Date.now();
+const props = collectProps(keys);
+const propNames = Object.fromEntries(keys.map((k) => [k, props[k]?.propNames ?? []]));
+console.log(`[bundle] 프롭 목록 ${Object.values(propNames).reduce((n, a) => n + a.length, 0)}개 (${((Date.now() - t0) / 1000).toFixed(1)}s)`);
+
 const entry = [
   "// 자동 생성(scripts/bundle-stories.mjs) — 편집 금지",
-  'export { kebab, renderStory, resolveStoryName, storyNames } from "../../playground/scripts/story-render-core";',
+  'export { kebab, renderStory, resolveStoryName, storyArgsAware, storyNames } from "../../playground/scripts/story-render-core";',
+  `export const propNames = ${JSON.stringify(propNames)};`,
   ...keys.map((k) => `import * as ${ident(k)} from "../../components/src/ui/${k}.stories";`),
   "export const modules = {",
   ...keys.map((k) => `  "${k}": ${ident(k)},`),

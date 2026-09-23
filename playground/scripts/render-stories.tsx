@@ -7,7 +7,7 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-import { kebab, renderStory, storyNames } from "./story-render-core";
+import { kebab, renderStory, storyArgsAware, storyNames } from "./story-render-core";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "../..");
@@ -80,8 +80,9 @@ async function main() {
   mkdirSync(OUT, { recursive: true });
   const index: Record<string, {
     name: { ko: string; en: string };
-    stories: { name: string; file: string; description: string; portal: boolean; slots?: string[]; filled?: boolean; error?: string }[];
+    stories: { name: string; file: string; description: string; portal: boolean; slots?: string[]; filled?: boolean; argsAware?: boolean; args?: string[]; error?: string }[];
     conditional?: Conditional[];
+    props?: string;
   }> = {};
   let ok = 0, failed = 0;
   // 스토리가 있으면 DS — 사람이 켜는 채택 단계는 없다(2026-09-18)
@@ -94,7 +95,7 @@ async function main() {
     const order = storyNames(mod);
     const compFile = join(UI, `${key}.tsx`);
     const conditional = existsSync(compFile) ? conditionalOf(readFileSync(compFile, "utf8")) : [];
-    const entry: (typeof index)[string] = { name: registry.components[key].name, stories: [], ...(conditional.length ? { conditional } : {}) };
+    const entry: (typeof index)[string] = { name: registry.components[key].name, stories: [], ...(conditional.length ? { conditional } : {}), props: `props/${key}.json` };
     mkdirSync(join(OUT, key), { recursive: true });
     for (const name of order) {
       if (name === "default" || name === "__namedExportsOrder") continue;
@@ -105,7 +106,8 @@ async function main() {
         const html = renderStory(mod, name);
         writeFileSync(join(OUT, out), html + "\n");
         const { slots, filled } = slotsOf(html);
-        entry.stories.push({ name, file: out, description: docs[name] ?? "", portal: PORTAL_HINT.test(key), slots, filled });
+        const argsAware = storyArgsAware(mod, name);
+        entry.stories.push({ name, file: out, description: docs[name] ?? "", portal: PORTAL_HINT.test(key), slots, filled, argsAware, ...(argsAware ? { args: Object.keys(story.args ?? {}) } : {}) });
         ok++;
       } catch (e: any) {
         entry.stories.push({ name, file: out, description: docs[name] ?? "", portal: PORTAL_HINT.test(key), error: String(e?.message ?? e).slice(0, 200) });
@@ -115,7 +117,7 @@ async function main() {
     index[key] = entry;
   }
   writeFileSync(join(OUT, "index.json"), JSON.stringify({
-    $note: "스토리 → 정적 HTML 스니펫(pnpm mcp:artifacts). 각 스니펫은 한 상태의 사진이다 — slots = 그 안에 찍힌 data-slot, filled = 값 채워진 입력이 있나. conditional = 원문에서 값이 있을 때만 나오는 슬롯(사진에 없을 수 있다 — 그 상태의 스토리를 고르거나 원문을 본다). portal=true 는 열린 오버레이가 SSR 에 안 나온다. 클래스는 /ds.css. 라이브 렌더 = renderBase + /render/<key>/<story-kebab> — 같은 함수(story-render-core)로 요청 시 렌더, 이 정적 파일과 동일(Phase 2 에서 ?args= 추가 예정).",
+    $note: "스토리 → 정적 HTML 스니펫(pnpm mcp:artifacts). 각 스니펫은 한 상태의 사진이다 — slots = 그 안에 찍힌 data-slot, filled = 값 채워진 입력이 있나. conditional = 원문에서 값이 있을 때만 나오는 슬롯(사진에 없을 수 있다 — 그 상태의 스토리를 고르거나 원문을 본다). portal=true 는 열린 오버레이가 SSR 에 안 나온다. 클래스는 /ds.css. 라이브 렌더 = renderBase + /render/<key>/<story-kebab> — 같은 함수(story-render-core)로 요청 시 렌더, 이 정적 파일과 동일. argsAware=true 인 스토리는 ?args={…} 로 프롭을 바꿔 다른 상태를 받을 수 있다(args = 스토리가 선언한 키, 그 밖의 허용 키는 props 의 propNames). 사진에 없는 조건부 UI 는 그렇게 확인한다.",
     renderBase: RENDER_BASE,
     generated: new Date().toISOString().slice(0, 10),
     components: index,

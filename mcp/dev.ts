@@ -12,7 +12,7 @@ httpServer(async (req, res) => {
     const r: any = req; r.body = raw ? JSON.parse(raw) : undefined;
     const u = new URL(req.url ?? "/", "http://x");
     const rm = u.pathname.match(/^\/render(?:\/([^/]+))?(?:\/([^/]+))?\/?$/);
-    if (rm) { r.url = "/api/render?component=" + encodeURIComponent(rm[1] ?? "") + "&story=" + encodeURIComponent(rm[2] ?? ""); await renderHandler(r, res); return; }
+    if (rm) { r.url = "/api/render?component=" + encodeURIComponent(rm[1] ?? "") + "&story=" + encodeURIComponent(rm[2] ?? "") + (u.searchParams.has("args") ? "&args=" + encodeURIComponent(u.searchParams.get("args") ?? "") : ""); await renderHandler(r, res); return; }
     const m = u.pathname.match(/^\/mcp\/([^/]+)$/); if (m) { r.url = "/api/mcp?access=" + encodeURIComponent(m[1]); }
     else if (u.pathname === "/mcp") r.url = "/api/mcp" + u.search;
     await handler(r, res);

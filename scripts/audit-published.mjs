@@ -83,6 +83,12 @@ async function main() {
     console.log(`  목록 대조 — 레지스트리 스토리 ${regKeys.size} · 스니펫 ${idxKeys.size}`);
   }
 
+  // ── B2. 프롭 목록(/props) — ?args= 의 허용 목록이 스니펫 목록과 같은 빌드인가 (2026-09-23 Phase 2) ──
+  const propsIdx = await json("/props/index.json");
+  if (!propsIdx) add("error", "프롭 목록 없음", "/props/index.json — ?args= 허용 목록이 없다");
+  else if (idx && Object.keys(propsIdx.components).length !== Object.keys(idx.components).length) add("warn", "프롭 목록 수 불일치", `/props ${Object.keys(propsIdx.components).length} · 스니펫 ${Object.keys(idx.components).length}`);
+  else if (idx) console.log(`  프롭 목록 — 컴포넌트 ${Object.keys(propsIdx.components).length} · 프롭 ${Object.values(propsIdx.components).reduce((n, c) => n + c.propNames.length, 0)}`);
+
   // ── C. 스니펫 클래스 ↔ ds.css (제일 값어치 있는 검사) ──
   const classList = await json("/ds-classes.json");
   if (!classList) add("error", "클래스 목록 없음", "/ds-classes.json");

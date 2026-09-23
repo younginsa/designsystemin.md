@@ -1,5 +1,6 @@
 // 스토리 한 편 → HTML 문자열. 정적 스니펫(render-stories.tsx, 빌드 시)과 라이브 /render(mcp/api/render.ts, 요청 시)가
 // 이 한 함수를 같이 쓴다 — 두 경로의 결과가 바이트 단위로 같아야 감사(audit-published F · mcp test:render)가 통과한다(2026-09-21 Phase 1).
+// Phase 2(2026-09-23): args 병합 — 스토리 args 위에 요청 args 를 덮어 "한 상태의 사진" 천장을 넘는다. render: () => … 스토리는 args 를 못 받는다.
 import * as React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
@@ -18,11 +19,21 @@ export function resolveStoryName(mod: any, name: string): string | null {
   return names.find((n) => n === name) ?? names.find((n) => kebab(n) === lower || n.toLowerCase() === lower) ?? null;
 }
 
-export function renderStory(mod: any, name: string): string {
+/** args 를 받는 스토리인가 — args 객체가 있거나 render 가 인자를 선언했거나(render: (args) => …), render 없이 component 로 그리거나. */
+export function storyArgsAware(mod: any, name: string): boolean {
+  const story = mod[name];
+  if (!story || typeof story !== "object") return false;
+  if (story.args && typeof story.args === "object") return true;
+  if (typeof story.render === "function") return story.render.length >= 1;
+  return !!mod.default?.component;
+}
+
+export function renderStory(mod: any, name: string, args?: Record<string, unknown>): string {
   const story = mod[name];
   if (!story || typeof story !== "object") throw new Error(`스토리 없음: ${name}`);
   const Comp = mod.default?.component;
-  const el = story.render ? story.render(story.args ?? {}) : Comp ? React.createElement(Comp, story.args ?? {}) : null;
+  const merged = { ...(story.args ?? {}), ...(args ?? {}) };
+  const el = story.render ? story.render(merged) : Comp ? React.createElement(Comp, merged) : null;
   if (!el) throw new Error("render 도 component 도 없음");
   return renderToStaticMarkup(el);
 }
