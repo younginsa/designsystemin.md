@@ -294,6 +294,22 @@ export default function Sales365ContractCreatePage() {
     }
   }, [basicComplete, items.length, nextId]);
 
+  // 하단 고정 바 경계선 — 바가 뷰포트 바닥에 붙어 있는 동안에만 border-t(body-patterns E, 2026-09-23).
+  // 판정 = 바 바닥 ≥ 뷰포트 높이. scroll·resize + body ResizeObserver(상태 전환으로 높이만 바뀔 때). IntersectionObserver 는 렌더가 멈춘 창에서 발화하지 않아 쓰지 않는다.
+  const barRef = React.useRef<HTMLDivElement>(null);
+  const [stuck, setStuck] = React.useState(false);
+  React.useEffect(() => {
+    const el = barRef.current;
+    if (!el) return;
+    const read = () => setStuck(el.getBoundingClientRect().bottom >= document.documentElement.clientHeight - 1);
+    read();
+    window.addEventListener("scroll", read, { passive: true });
+    window.addEventListener("resize", read);
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(read) : null;
+    ro?.observe(document.body);
+    return () => { window.removeEventListener("scroll", read); window.removeEventListener("resize", read); ro?.disconnect(); };
+  }, []);
+
   const addItem = () => {
     setItems((prev) => [...prev, { id: nextId, pkg: null, slotCount: 0, assigns: [] }]);
     setNextId((n) => n + 1);
@@ -733,8 +749,8 @@ export default function Sales365ContractCreatePage() {
             </div>
           )}
 
-          {/* ── 하단 고정 완료 바 — 본문 컬럼 안에서만. 면 = 캔버스(bg-background, 띠 금지) · 경계 = border-t 한 줄(background = card 라 선 없이는 분리도 0, 2026-09-22 body-patterns E) ── */}
-          <div className="sticky bottom-0 flex items-center justify-between border-t bg-background py-3">
+          {/* ── 하단 고정 완료 바 — 본문 컬럼 안에서만. 면 = 캔버스(bg-background, 띠 금지) · 경계 = 붙어 있을 때만 border-t(stuck, body-patterns E 2026-09-23) ── */}
+          <div ref={barRef} data-sticky-bar className={"sticky bottom-0 flex items-center justify-between bg-background py-3" + (stuck ? " border-t" : "")}>
             <Button asChild variant="outline">
               <Link href={`${BASE}/contracts`}>취소</Link>
             </Button>

@@ -141,6 +141,7 @@
 - **A 리스트 본문 순서**: 제목 행 → FilterBar → Table → ListFooter.
 - **B 상세**: 제목 행 → 좌측 요약 패널 + 우측 본문. 패널은 `Card variant="flat"`.
 - **D 대시보드**: 스탯 카드 행(`grid-cols-3` 또는 4) + 그 아래 표 카드.
+- **C 위저드·E 폼 하단 고정 바**: `sticky bottom-0 bg-background py-3` + `data-sticky-bar`. `border-t` 는 바가 뷰포트 바닥에 붙어 있을 때만 — 스크롤이 없으면 선도 없다. 판정 스크립트 한 줄은 `docs/layout/body-patterns.md` E 항에 있다(그대로 복사).
 - 더 필요하면 `BASE/docs/layout/body-patterns.md` 를 읽는다.
 
 ## 6. 자주 쓰는 컴포넌트 키
