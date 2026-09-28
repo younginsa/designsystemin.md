@@ -24,8 +24,10 @@ export type Entry = {
   file: string | null;
   figma: { id: string; name: string; variants: number; built?: string }[];
   note: string | null;
+  /** FE 스토리북 항목(2026-09-28 이관) — 있으면 스니펫·프롭·링크의 원천이 FE 다 */
+  fe?: { id: string; docs: string } | null;
 };
-export type Registry = { $note: string; fileKey: string; updated: string; components: Record<string, Entry> };
+export type Registry = { $note: string; $storybook?: { fe?: { base: string; since?: string; note?: string } }; fileKey: string; updated: string; components: Record<string, Entry> };
 export type Conditional = { when: string; slots: string[]; labels: string[]; tags: string[] };
 export type StoryIndex = { generated: string; components: Record<string, { name: { ko: string; en: string }; stories: { name: string; file: string; description: string; portal: boolean; slots: string[]; filled: boolean; error?: string }[]; conditional?: Conditional[] }> };
 
@@ -35,4 +37,5 @@ export const semanticMap = () => json<any>("/dstk/semantic-map.json");
 export const typography = () => json<any>("/dstk/typography.json");
 export const contrastPairs = () => json<any>("/dstk/contrast-pairs.json");
 export const doc = (name: string) => text("/docs/" + name);
-export const storybookDocsUrl = (key: string) => `${BASE}/storybook/?path=/docs/ds-${key.replace(/-/g, "")}--docs`;
+export const storybookDocsUrl = (key: string, e?: Entry, reg?: Registry) => e?.fe && reg?.$storybook?.fe?.base ? reg.$storybook.fe.base + e.fe.docs : `${BASE}/storybook/?path=/docs/ds-${key.replace(/-/g, "")}--docs`;
+export const isDs = (e: Entry) => !!(e.stories || e.fe);

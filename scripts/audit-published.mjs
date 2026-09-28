@@ -76,7 +76,7 @@ async function main() {
   if (!reg) add("error", "레지스트리 없음", "/ds-registry.json");
   if (!idx) add("error", "스니펫 목록 없음", "/story-html/index.json");
   if (reg && idx) {
-    const regKeys = new Set(Object.keys(reg.components).filter((k) => reg.components[k].stories));
+    const regKeys = new Set(Object.keys(reg.components).filter((k) => reg.components[k].stories || reg.components[k].fe));
     const idxKeys = new Set(Object.keys(idx.components));
     for (const k of regKeys) if (!idxKeys.has(k)) add("error", "스니펫 누락", `${k} 는 스토리가 있다고 적혀 있는데 스니펫이 없다`);
     for (const k of idxKeys) if (!regKeys.has(k)) add("error", "목록 밖 스니펫", `${k} 스니펫은 있는데 레지스트리에 스토리가 없다`);

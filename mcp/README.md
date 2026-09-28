@@ -35,6 +35,18 @@ esbuild 로 `dist/stories.mjs` 한 파일(약 4.5 MB, React 한 벌)에 묶고, 
 `pnpm audit:published` F 섹션(배포)이 159편 전수 대조한다. 왜 두 경로인가: 정적 스니펫은 "한 상태의 사진"이라 값이 있을 때만 나오는 UI 가 안 찍힌다.
 Phase 2 에서 `?args=` 로 프롭을 바꿔 그 천장을 넘는다(이 엔드포인트가 그 자리다).
 
+## FE 스토리북 이관 (2026-09-28)
+
+FE 팀이 자기 Storybook(Chromatic 브랜치 permalink, 레지스트리 `$storybook.fe.base`)을 만들었다. 겹치는 컴포넌트는 **FE 스토리북이 원천**이다.
+FE 코드는 작업 브랜치가 로컬에만 있고 배포 뒤에도 계속 바뀌어 "스토리북과 같은 코드"가 없으므로, 코드 대신 **배포된 스토리북을 렌더해** 가져온다.
+
+- 레지스트리 항목에 `fe: { id, docs }` 가 있으면 FE 원천. `pnpm fe:sync [key]` 가 Storybook 공식 URL(`iframe.html?id=…&args=…`)을
+  헤드리스 브라우저로 열어 `playground/fe-stories/` 에 스냅샷을 쓴다(커밋 — Vercel 빌드에는 브라우저가 없다). FE 가 재배포하면 다시 돌린다.
+- 스니펫(`/story-html`)·프롭(`/props`, argTypes 에서)·`/render`·허브 링크·MCP 링크가 전부 그 스냅샷을 쓴다. index.json 에 `source: "fe"`, `feBuild`(Chromatic 빌드 도장).
+- `/render/<키>/<스토리>?args=` 는 요청 시 렌더가 안 되므로 `states`(select 옵션·boolean 을 하나씩 바꿔 미리 렌더)에 있는 조합만 돌려주고, 없으면 400 + `available`.
+- `pnpm fe:parity [key]` 가 우리 ds.css 위의 스니펫과 FE iframe 의 계산 스타일을 요소 단위로 대조한다. FE 고유 유틸리티(text-title-xs 등)는 fe-utilities.css 로 ds.css 에 덧붙는다.
+- FE CSS 에 규칙이 없는 죽은 클래스(text-medium)는 스냅샷에서 떼고 json 에 `strippedClasses` 로 남긴다.
+
 ## 배포 (Vercel 두 번째 프로젝트 — 관리자 1회)
 
 1. Vercel → Add New Project → 같은 저장소(designsystemin.md) 선택.

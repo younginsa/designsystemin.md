@@ -15,8 +15,10 @@ export type Entry = {
   file: string | null;
   figma: FigmaRef[];
   note: string | null;
+  /** FE 스토리북 항목(2026-09-28 이관) — 스니펫·프롭·링크의 원천이 FE */
+  fe?: { id: string; docs: string } | null;
 };
-export type Registry = { fileKey: string; updated: string; components: Record<string, Entry> };
+export type Registry = { $storybook?: { fe?: { base: string; since?: string; note?: string } }; fileKey: string; updated: string; components: Record<string, Entry> };
 
 /** 스토리 docs 딥링크 — Storybook id 는 제목 "DS/<Pascal>" 의 소문자(sonner 파일의 제목은 Toaster) */
 export const storybookDocsUrl = (key: string) => "/storybook/?path=/docs/ds-" + (key === "sonner" ? "toaster" : key.replace(/-/g, "")) + "--docs";
@@ -34,7 +36,7 @@ export function useRegistry() {
 }
 
 const figmaUrl = figmaNodeUrl;
-const isDs = (e: Entry) => !!e.stories;
+const isDs = (e: Entry) => !!(e.stories || e.fe);
 
 export function RegistryPanel() {
   const reg = useRegistry();
@@ -44,13 +46,15 @@ export function RegistryPanel() {
   for (const e of entries) { const s = e[1].section || "—"; if (!bySection.has(s)) bySection.set(s, []); bySection.get(s)!.push(e); }
   const sections = [...bySection.keys()].sort((a, b) => SECTION_ORDER.indexOf(a) - SECTION_ORDER.indexOf(b));
   const ds = entries.filter(([, e]) => isDs(e)).length;
+  const feN = entries.filter(([, e]) => !!e.fe).length;
+  const feBase = reg.$storybook?.fe?.base;
   return (
     <>
       <h3>Storybook 컴포넌트 <span className="mono" style={{ fontSize: 12, color: "var(--doc-muted)" }}>ds-registry.json · {reg.updated}</span></h3>
       <p className="lead">
         <strong>스토리가 있으면 DS</strong>다. 사람이 켜고 끄는 채택 단계는 없다 — 스토리를 만들면 그 순간 쓸 수 있고, 지우면 아니다.
         스토리가 없는 항목은 다른 컴포넌트가 내부에서 쓰는 <strong>부품</strong>이라 화면에서 직접 쓰지 않는다.
-        DS <strong>{ds}</strong> · 부품 <strong>{entries.length - ds}</strong>.
+        DS <strong>{ds}</strong>{feN ? <> (그중 <a href={feBase} target="_blank" rel="noreferrer">FE Storybook</a> 원천 {feN})</> : null} · 부품 <strong>{entries.length - ds}</strong>.
         생성에 쓰이는 목록은 <span className="mono">/story-html/index.json</span>이고, 이 표는 관리 기록(피그마 세트·설계 노트)이다.
         보는 곳 = <a href="/storybook/" target="_blank" rel="noreferrer">Storybook</a>, 그리는 곳 = 피그마 Component 페이지(열의 딥링크).
       </p>
@@ -64,12 +68,12 @@ export function RegistryPanel() {
                 <tr key={key}>
                   <td>
                     {isDs(e)
-                      ? <a className="mono al" href={storybookDocsUrl(key)} target="_blank" rel="noreferrer">{key}</a>
+                      ? <a className="mono al" href={e.fe && feBase ? feBase + e.fe.docs : storybookDocsUrl(key)} target="_blank" rel="noreferrer">{key}</a>
                       : <span className="mono al">{key}</span>}
                     <br /><span className="hx" style={{ fontSize: 12 }}>{e.name.ko}{e.name.ko !== e.name.en ? " · " + e.name.en : ""}</span>
                   </td>
-                  <td><span className={"chip" + (isDs(e) ? " approve on" : "")}>{isDs(e) ? "DS" : "부품"}</span></td>
-                  <td className="mono hx" style={{ fontSize: 12 }}>{e.stories ? e.stories.replace("components/src/ui/", "") : "—"}</td>
+                  <td><span className={"chip" + (isDs(e) ? " approve on" : "")}>{isDs(e) ? (e.fe ? "DS · FE" : "DS") : "부품"}</span></td>
+                  <td className="mono hx" style={{ fontSize: 12 }}>{e.fe ? "FE " + e.fe.id : e.stories ? e.stories.replace("components/src/ui/", "") : "—"}</td>
                   <td className="mono" style={{ fontSize: 12 }}>
                     {e.figma.length ? e.figma.map((f) => (
                       <span key={f.id} style={{ display: "block" }}>

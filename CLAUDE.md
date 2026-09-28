@@ -72,6 +72,9 @@ AI 친화 디자인 시스템 저장소다.
    + `playground/public/dstk/semantic-map.json`(색 토큰 해석값)을 읽는다.
    **판정은 하나다 — 스토리가 있으면 DS다.** 레지스트리 항목의 `stories` 가 채워져 있으면
    화면에 쓸 수 있고, 비어 있으면 다른 컴포넌트가 내부에서 쓰는 **부품**이라 직접 쓰지 않는다.
+   **스토리는 두 곳에서 온다(2026-09-28 FE 이관)** — 우리 `components/src/ui/*.stories.tsx`, 또는 FE 팀 Storybook
+   (레지스트리 `fe` 항목, `$storybook.fe.base`). FE 쪽은 `pnpm fe:sync` 가 배포된 스토리북을 렌더해
+   `playground/fe-stories/` 에 스냅샷으로 두고(커밋됨), 스니펫·프롭·링크가 거기서 나온다. 코드 저장소는 안 받는다.
    사람이 켜고 끄는 채택 단계는 2026-09-18 폐기했다(`status`·`role`·`aliases`·approved.json·
    vocab-map.json 전부 은퇴 — label 이 스토리가 있는데도 목록에서 빠져 있던 사고가 근거).
    `ds:build` 의 **스토리 게이트**가 components/src/ui ↔ 레지스트리를 전수 대조한다.

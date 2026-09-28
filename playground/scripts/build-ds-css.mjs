@@ -4,7 +4,7 @@
 // 컴파일러는 playground 가 이미 쓰는 @tailwindcss/postcss(pnpm 격리 경로라 createRequire 로 해석) — 새 의존성 없음.
 
 import { createRequire } from "node:module";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -49,7 +49,7 @@ writeFileSync(safelist, `<!-- 자동 생성(build-ds-css.mjs) — Tailwind 스�
 
 // ── 입력 CSS — globals.css + 폰트 + 갤러리 스캔 + 안전 목록 ──
 const globals = readFileSync(join(PG, "app/globals.css"), "utf8")
-  .replace('@source "./generated";', '@source "./gallery";\n@source "../scripts/.ds-safelist.html";');
+  .replace('@source "./generated";', '@source "./gallery";\n@source "../scripts/.ds-safelist.html";\n@source "../fe-stories";');
 const input = [
   '@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap");',
   globals,
@@ -59,9 +59,13 @@ const input = [
 const from = join(PG, "app/ds-bundle.css"); // 가상 경로 — 상대 @import·@source 가 globals.css 와 같은 기준으로 풀린다
 const result = await postcss([tailwind({ base: join(PG, "app") })]).process(input, { from, map: false });
 const out = join(PG, "public/ds.css");
-const header = `/* DS CSS 번들 — 자동 생성(pnpm mcp:artifacts). 원천: dstk/*.json → dist/dstk.css + Tailwind(components/src · gallery · 안전 목록). 단독 HTML 은 <link rel="stylesheet" href="/ds.css"> 한 줄. */\n`;
-writeFileSync(out, header + result.css);
-const classes = new Set([...result.css.matchAll(/\.((?:\\.|[A-Za-z0-9_-])+)(?=[\s,:{.>[~+])/g)].map((m) => m[1].replace(/\\/g, "")));
+const header = `/* DS CSS 번들 — 자동 생성(pnpm mcp:artifacts). 원천: dstk/*.json → dist/dstk.css + Tailwind(components/src · gallery · fe-stories · 안전 목록) + FE 고유 유틸리티. 단독 HTML 은 <link rel="stylesheet" href="/ds.css"> 한 줄. */\n`;
+// FE 스토리북 고유 유틸리티(text-title-xs 등 타이포 토큰) — pnpm fe:sync 가 FE 빌드 CSS 에서 옮긴 것. 표준 유틸리티는 위 스캔이 컴파일한다(2026-09-28 이관).
+const feUtil = join(PG, "fe-stories/fe-utilities.css");
+const feCss = existsSync(feUtil) ? "\n" + readFileSync(feUtil, "utf8") : "";
+const css = result.css + feCss;
+writeFileSync(out, header + css);
+const classes = new Set([...css.matchAll(/\.((?:\\.|[A-Za-z0-9_-])+)(?=[\s,:{.>[~+])/g)].map((m) => m[1].replace(/\\/g, "")));
 // 자가 검사용 허용 클래스 목록 — claude.ai 스킬이 읽어 대조한다(도구 없이 검사하는 경로)
 writeFileSync(join(PG, "public/ds-classes.json"), JSON.stringify({
   $note: "ds.css 에 실제로 들어 있는 클래스 전부 + 허용 틴트. 생성 HTML 자가 검사용(pnpm mcp:artifacts).",
@@ -70,4 +74,4 @@ writeFileSync(join(PG, "public/ds-classes.json"), JSON.stringify({
   count: classes.size,
   classes: [...classes].sort(),
 }, null, 1));
-console.log(`[ds.css] ${(result.css.length / 1024).toFixed(0)} KB · 클래스 ${classes.size} · 안전 목록 ${list.length} → playground/public/ds.css`);
+console.log(`[ds.css] ${(css.length / 1024).toFixed(0)} KB · 클래스 ${classes.size} · 안전 목록 ${list.length} → playground/public/ds.css`);

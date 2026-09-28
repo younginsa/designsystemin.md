@@ -2,7 +2,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 
-import { BASE, doc, optional, registry, semanticMap, storyIndex, storybookDocsUrl, text, typography } from "./ds.js";
+import { BASE, doc, isDs, optional, registry, semanticMap, storyIndex, storybookDocsUrl, text, typography } from "./ds.js";
 
 const ok = (t: string) => ({ content: [{ type: "text" as const, text: t }] });
 const slice = (md: string, from: string, to: string) => { const a = md.indexOf(from); if (a < 0) return ""; const b = md.indexOf(to, a + from.length); return md.slice(a, b < 0 ? undefined : b); };
@@ -21,11 +21,11 @@ export function createServer() {
     const reg = await registry();
     let idx: any = null; try { idx = await storyIndex(); } catch { idx = null; }
     const rows = Object.entries(reg.components)
-      .filter(([, e]) => include_parts || !!e.stories)
+      .filter(([, e]) => include_parts || isDs(e))
       .map(([key, e]) => ({
-        key, name: e.name, kind: e.stories ? "ds" : "part", section: e.section,
+        key, name: e.name, kind: isDs(e) ? "ds" : "part", source: e.fe ? "fe" : "local", section: e.section,
         file: e.file, stories: idx?.components?.[key]?.stories?.map((s: any) => s.name) ?? [],
-        storybook: e.stories ? storybookDocsUrl(key) : null,
+        storybook: isDs(e) ? storybookDocsUrl(key, e, reg) : null,
         note: e.note ? e.note.slice(0, 240) : null,
       }));
     return ok(JSON.stringify({ base: BASE, updated: reg.updated, count: rows.length, components: rows }, null, 1));
@@ -42,7 +42,7 @@ export function createServer() {
     const idx = await storyIndex().catch(() => null);
     const stories = idx?.components?.[key]?.stories ?? [];
     const snippets = await Promise.all(stories.map(async (s: any) => ({ name: s.name, description: s.description, portal: s.portal, error: s.error ?? null, html: s.error ? null : await optional("/story-html/" + s.file) })));
-    const out: any = { key, name: e.name, kind: e.stories ? "ds" : "part", note: e.note, storybook: e.stories ? storybookDocsUrl(key) : null, figma: e.figma, snippets };
+    const out: any = { key, name: e.name, kind: isDs(e) ? "ds" : "part", source: e.fe ? "fe" : "local", note: e.note, storybook: isDs(e) ? storybookDocsUrl(key, e, reg) : null, figma: e.figma, snippets, ...(e.fe ? { feNote: "FE 스토리북 스냅샷 — 원문 없음. 다른 상태는 index.json 의 states 를 본다" } : {}) };
     if (include_source !== false) {
       out.componentSource = e.file ? await optional("/ui-src/" + key + ".tsx.txt") : null;
       out.storySource = e.stories ? await optional("/ui-src/" + key + ".stories.tsx.txt") : null;

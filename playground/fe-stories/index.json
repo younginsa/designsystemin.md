@@ -1,0 +1,18 @@
+{
+ "$note": "FE 스토리북 동기화 요약(pnpm fe:sync)",
+ "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com",
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-28",
+ "components": [
+  {
+   "key": "button",
+   "stories": 4,
+   "states": 18,
+   "classes": 75,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  }
+ ]
+}

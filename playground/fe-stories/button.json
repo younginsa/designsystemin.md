@@ -1,0 +1,298 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "button",
+ "fe": {
+  "id": "primitives-button",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/primitives-button--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-28",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "primitives-button--default",
+   "file": "button/default.html",
+   "initialArgs": {
+    "children": "Button",
+    "variant": "default",
+    "size": "default"
+   }
+  },
+  {
+   "name": "AllVariants",
+   "id": "primitives-button--all-variants",
+   "file": "button/all-variants.html",
+   "initialArgs": {}
+  },
+  {
+   "name": "AllSizes",
+   "id": "primitives-button--all-sizes",
+   "file": "button/all-sizes.html",
+   "initialArgs": {}
+  },
+  {
+   "name": "Disabled",
+   "id": "primitives-button--disabled",
+   "file": "button/disabled.html",
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "children": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  },
+  "variant": {
+   "type": "string",
+   "required": false,
+   "control": "select",
+   "options": [
+    "default",
+    "destructive",
+    "destructive-outline",
+    "destructive-ghost",
+    "primary-ghost",
+    "outline",
+    "secondary",
+    "ghost",
+    "link"
+   ]
+  },
+  "size": {
+   "type": "string",
+   "required": false,
+   "control": "select",
+   "options": [
+    "default",
+    "xs",
+    "sm",
+    "lg",
+    "icon",
+    "icon-xs",
+    "icon-sm",
+    "icon-lg"
+   ]
+  },
+  "asChild": {
+   "type": "boolean",
+   "required": false,
+   "control": "boolean",
+   "default": "false"
+  },
+  "disabled": {
+   "type": "boolean",
+   "required": false,
+   "control": "boolean"
+  }
+ },
+ "states": [
+  {
+   "story": "Default",
+   "args": {
+    "variant": "default"
+   },
+   "file": "button/states/default--variant-default.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "destructive"
+   },
+   "file": "button/states/default--variant-destructive.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "destructive-outline"
+   },
+   "file": "button/states/default--variant-destructive-outline.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "destructive-ghost"
+   },
+   "file": "button/states/default--variant-destructive-ghost.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "primary-ghost"
+   },
+   "file": "button/states/default--variant-primary-ghost.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "outline"
+   },
+   "file": "button/states/default--variant-outline.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "secondary"
+   },
+   "file": "button/states/default--variant-secondary.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "ghost"
+   },
+   "file": "button/states/default--variant-ghost.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "link"
+   },
+   "file": "button/states/default--variant-link.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "size": "default"
+   },
+   "file": "button/states/default--size-default.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "size": "xs"
+   },
+   "file": "button/states/default--size-xs.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "size": "sm"
+   },
+   "file": "button/states/default--size-sm.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "size": "lg"
+   },
+   "file": "button/states/default--size-lg.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "size": "icon"
+   },
+   "file": "button/states/default--size-icon.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "size": "icon-xs"
+   },
+   "file": "button/states/default--size-icon-xs.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "size": "icon-sm"
+   },
+   "file": "button/states/default--size-icon-sm.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "size": "icon-lg"
+   },
+   "file": "button/states/default--size-icon-lg.html"
+  },
+  {
+   "story": "Default",
+   "args": {
+    "disabled": true
+   },
+   "file": "button/states/default--disabled-true.html"
+  }
+ ],
+ "classes": [
+  "[&_svg:not([class*='size-'])]:size-3",
+  "[&_svg:not([class*='size-'])]:size-4",
+  "[&_svg]:pointer-events-none",
+  "[&_svg]:shrink-0",
+  "[&_svg]:size-4",
+  "bg-card",
+  "bg-destructive",
+  "bg-primary",
+  "bg-secondary",
+  "border",
+  "border-destructive/40",
+  "border-none",
+  "dark:bg-input/30",
+  "dark:border-border",
+  "dark:border-destructive/40",
+  "dark:focus-visible:ring-destructive/40",
+  "dark:hover:bg-accent/50",
+  "dark:hover:bg-input/50",
+  "disabled:opacity-50",
+  "disabled:pointer-events-none",
+  "flex",
+  "flex-wrap",
+  "focus-visible:outline-none",
+  "focus-visible:ring-1",
+  "focus-visible:ring-destructive/20",
+  "focus-visible:ring-ring",
+  "font-medium",
+  "gap-1",
+  "gap-1.5",
+  "gap-2",
+  "gap-3",
+  "h-10",
+  "h-6",
+  "h-8",
+  "h-9",
+  "has-[>svg]:px-1.5",
+  "has-[>svg]:px-2.5",
+  "has-[>svg]:px-3",
+  "has-[>svg]:px-4",
+  "hover:bg-accent",
+  "hover:bg-destructive/10",
+  "hover:bg-destructive/90",
+  "hover:bg-primary/10",
+  "hover:bg-primary/90",
+  "hover:text-accent-foreground",
+  "hover:text-destructive",
+  "hover:underline",
+  "inline-flex",
+  "items-center",
+  "justify-center",
+  "px-2",
+  "px-3",
+  "px-4",
+  "px-6",
+  "py-1",
+  "py-1.5",
+  "py-2",
+  "py-2.5",
+  "rounded-md",
+  "shadow",
+  "shadow-sm",
+  "text-caption-m",
+  "text-destructive",
+  "text-primary",
+  "text-primary-foreground",
+  "text-secondary-foreground",
+  "text-title-xs",
+  "text-white",
+  "transition-colors",
+  "underline-offset-4",
+  "w-10",
+  "w-6",
+  "w-8",
+  "w-9",
+  "whitespace-nowrap"
+ ],
+ "strippedClasses": [
+  "text-medium"
+ ]
+}
