@@ -14,6 +14,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSkeleton,
   SidebarProvider,
   SidebarTrigger,
 } from "./sidebar"
@@ -125,4 +126,32 @@ export const Nav = {
   ),
 }
 
-export const __namedExportsOrder = ["AppShell", "Nav"]
+type LoadingArgs = { showIcon: boolean }
+
+/** 로딩 — 메뉴 스켈레톤 4행. showIcon = 아이콘 자리(size-4)까지. 폭은 width 프롭으로 고정한다(기본은 무작위라 스니펫이 매번 달라진다).
+ *  조건부 커버: showIcon → Loading(true). args 형 — /render/sidebar/loading?args={"showIcon":false} */
+export const Loading = {
+  args: { showIcon: true } as LoadingArgs,
+  render: (args: LoadingArgs) => (
+    <SidebarProvider className="min-h-0 w-fit">
+      <Sidebar collapsible="none" style={{ height: 320 }}>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>운영</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {["72%", "56%", "84%", "64%"].map((w) => (
+                  <SidebarMenuItem key={w}>
+                    <SidebarMenuSkeleton showIcon={args.showIcon} width={w} />
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+    </SidebarProvider>
+  ),
+}
+
+export const __namedExportsOrder = ["AppShell", "Nav", "Loading"]

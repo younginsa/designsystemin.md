@@ -59,7 +59,7 @@ export const Open = {
       }
     >
       <section className="flex flex-col gap-2">
-        <h3 className="text-sm font-medium text-muted-foreground">업데이트 이력</h3>
+        <h3 className="text-sm font-medium text-secondary-foreground">업데이트 이력</h3>
         <Table>
           <TableHeader>
             <TableRow>

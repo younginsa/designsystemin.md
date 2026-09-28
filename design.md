@@ -19,7 +19,7 @@
 ## 1. 강제 규칙
 
 - 색·라운드·그림자는 **시맨틱 토큰만** 사용한다. Tailwind 클래스로는 `bg-background`,
-  `text-foreground`, `text-muted-foreground`, `bg-primary`, `border-border`,
+  `text-foreground`, `text-secondary-foreground`, `bg-primary`, `border-border`,
   `bg-destructive`, `ring-ring` 등.
 - **임의 값 금지**: `#3B82F6`, `bg-[#f00]`, `p-[13px]`, `rounded-[7px]`, `shadow-[...]` 전부 금지.
 - 간격·크기는 Tailwind 기본 스케일만 사용한다 (`p-4`, `gap-3`, `size-8`).
@@ -39,7 +39,7 @@
 | `popover` / `popover-foreground` | 팝오버·드롭다운 표면 |
 | `primary` / `primary-foreground` | 주요 액션 (페이지당 1개 원칙) |
 | `secondary`, `accent` | 보조 액션, hover 표면 |
-| `muted` / `muted-foreground` | 비활성 표면 / 흐림 톤 전용(플레이스홀더·비활성) — 읽는 보조 텍스트는 `secondary-foreground` |
+| `muted` / `muted-foreground` | 비활성 표면 / 보조 텍스트(2026-09-28 부터 `secondary-foreground` 와 같은 값 — 플레이스홀더·힌트·장식 아이콘용, 타이틀·라벨은 `secondary-foreground` 로) |
 | `destructive` | 삭제·위험 액션 |
 | `success` | 성공 상태 |
 | `border`, `input`, `ring` | 테두리, 입력 테두리, 포커스 링 |

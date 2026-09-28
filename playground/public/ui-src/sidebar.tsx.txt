@@ -602,14 +602,17 @@ function SidebarMenuBadge({
 function SidebarMenuSkeleton({
   className,
   showIcon = false,
+  width: fixedWidth,
   ...props
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean
+  /** 텍스트 자리 폭(예: "72%"). 미지정 = 50~90% 무작위 — 스토리·SSR 스니펫은 지정해서 결정적으로 만든다(2026-09-23) */
+  width?: string
 }) {
-  // Random width between 50 to 90%.
+  // Random width between 50 to 90% (width 프롭이 있으면 그 값).
   const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`
-  }, [])
+    return fixedWidth ?? `${Math.floor(Math.random() * 40) + 50}%`
+  }, [fixedWidth])
 
   return (
     <div

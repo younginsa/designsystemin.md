@@ -4,7 +4,9 @@ import { VersionFilterChip, type VersionRow } from "./version-filter-chip"
 
 /* VersionFilterChip 스토리 — 버전 조건 필터 칩(version-filter-chip 카드). 칩 클릭 → 캐스케이드 3단(제품 → 공통 버전 → 제품 버전) 패널,
  * 적용 요약 = "제품 · 공통 · 제품버전" (2건 이상은 "… 외 N건"). 허브 카드는 패널이 포털이라 /shadcn-preview/version-filter-chip 을 iframe 으로 담는다.
- * controlled — Demo 래퍼. @storybook import 0. */
+ * controlled — Demo 래퍼. @storybook import 0.
+ * args 형(2026-09-23 Phase 2): initial(적용된 조건 행) — /render/version-filter-chip/empty?args={"initial":[{"id":1,"product":"SVM","commonVersion":"v4.0.0","productVersion":"v1.2.0"}]}.
+ * 조건부 커버: active(value.length > 0 → 칩에 "· 요약" 노출) → Applied·Multiple / 미적용 → Empty. 패널 안 캐스케이드(row.product → 공통 → 제품 버전)는 포털이라 스니펫에 없다 — 원문 참조. */
 
 export default {
   title: "DS/VersionFilterChip",
@@ -19,7 +21,9 @@ const PRODUCT_VERSIONS: Record<string, string[]> = {
   SVM: ["v1.2.0", "v1.1.4"],
 }
 
-function Demo({ initial }: { initial: VersionRow[] }) {
+type DemoProps = { initial: VersionRow[] }
+
+function Demo({ initial }: DemoProps) {
   const [value, setValue] = React.useState<VersionRow[]>(initial)
   return (
     <VersionFilterChip
@@ -34,22 +38,23 @@ function Demo({ initial }: { initial: VersionRow[] }) {
 
 export const Applied = {
   parameters: { vocab: "version-filter-chip" },
-  render: () => <Demo initial={[{ id: 1, product: "Control", commonVersion: "v4.0.0", productVersion: "v2.1.0" }]} />,
+  args: { initial: [{ id: 1, product: "Control", commonVersion: "v4.0.0", productVersion: "v2.1.0" }] } as DemoProps,
+  render: (args: DemoProps) => <Demo {...args} />,
 }
 
 export const Empty = {
-  render: () => <Demo initial={[]} />,
+  args: { initial: [] } as DemoProps,
+  render: (args: DemoProps) => <Demo {...args} />,
 }
 
 export const Multiple = {
-  render: () => (
-    <Demo
-      initial={[
-        { id: 1, product: "Control", commonVersion: "v4.0.0", productVersion: "v2.1.0" },
-        { id: 2, product: "SVM", commonVersion: "v3.5.0", productVersion: "v1.2.0" },
-      ]}
-    />
-  ),
+  args: {
+    initial: [
+      { id: 1, product: "Control", commonVersion: "v4.0.0", productVersion: "v2.1.0" },
+      { id: 2, product: "SVM", commonVersion: "v3.5.0", productVersion: "v1.2.0" },
+    ],
+  } as DemoProps,
+  render: (args: DemoProps) => <Demo {...args} />,
 }
 
 export const __namedExportsOrder = ["Applied", "Empty", "Multiple"]

@@ -16,9 +16,10 @@
   그림자 카드(`shadow-card`)는 **D 대시보드 전용**.
 - **섹션 타이틀·설명 위계** — 카드/섹션 타이틀 = `text-sm font-medium
   text-secondary-foreground`(14px, gray-600), 타이틀 바로 아래 설명 = `text-xs
-  text-secondary-foreground`(12px). `text-muted-foreground` 는 흐림 톤 전용(플레이스홀더·
-  비활성)이라 읽는 글자에 쓰지 않는다(dstk/contrast-pairs.json $status-rule, 2026-08-21 —
-  이 문서가 하루 먼저 쓰여 muted 로 남아 있던 것을 2026-09-21 교정, 갤러리 실사용 secondary 43·muted 0).
+  text-secondary-foreground`(12px). `muted-foreground` 는 2026-09-28 부터 `secondary-foreground` 와 같은 값이다
+  (shadcn 호환 — FE 가 shadcn 컴포넌트에 우리 토큰을 얹어 쓴다). 둘 다 읽는 회색이지만 타이틀·설명·라벨은
+  `secondary-foreground` 로 적는다(갤러리 관례 43곳). muted-foreground 는 플레이스홀더·힌트·장식 아이콘·빈 값 대시 등
+  컴포넌트 내부 보조 요소에 쓴다.
   예외: 문서 본문 대제목(릴리즈 노트 What's Changed류)은 별개 요소.
 - **정보 패널 uppercase 라벨** = `text-xs font-semibold uppercase text-secondary-foreground`
   (카드 타이틀과 별개 요소 — 2026-09-21 갤러리 semibold 다수파로 잠금). 사이드바 내비 그룹
@@ -94,7 +95,7 @@
 - **카드 형식 ② 타이틀+테이블 카드**: 같은 헤더 + **`Table variant="plain"`**(경량 표 —
   외곽선·헤더 배경 없음, 행 구분선 마지막 제외, 셀 `px-4 py-3`). 손 unwind 금지 — variant만.
 - **스탯 카드**: 항목 `flex-1` 균등, 첫 항목 `pl-4`, 구분 항목 `border-l pl-8`,
-  숫자 `text-2xl font-bold`, 라벨 `mt-1 text-sm text-muted-foreground`.
+  숫자 `text-2xl font-bold`, 라벨 `mt-1 text-sm text-secondary-foreground`.
 
 ## E — 프로그레시브 폼 (조건 노출 단일 페이지 생성 폼 — 2026-09-02 신설)
 

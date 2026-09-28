@@ -54,7 +54,7 @@ export const File = {
 export const Tags = {
   parameters: { vocab: "form-tags" },
   render: () => (
-    <div className="flex w-full flex-wrap items-center gap-2 rounded-md border border-input px-3 py-2 shadow-xs">
+    <div className="flex w-full flex-wrap items-center gap-2 rounded-md border border-input px-3 py-2">
       <Badge variant="secondary">NAVIGATION <X className="size-3" /></Badge>
       <Badge variant="secondary">SVM <X className="size-3" /></Badge>
       <span className="text-sm text-muted-foreground">새 태그 입력…</span>

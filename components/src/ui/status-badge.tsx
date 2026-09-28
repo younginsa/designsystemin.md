@@ -10,7 +10,7 @@ import { cn } from "@ds/ui/lib/utils"
 export type StatusTone = "neutral" | "success" | "error" | "progress"
 
 export const STATUS_TONE_CLASS: Record<StatusTone, string> = {
-  // muted-foreground 는 흐림 톤 전용(가독 텍스트 금지)이지만 여기선 도트 색으로만 쓴다 — 라벨은 foreground
+  // neutral 도트 = muted-foreground(2026-09-28 부터 secondary-foreground 와 같은 값 #5D6275) — 라벨은 foreground
   neutral: "text-muted-foreground",
   success: "text-success",
   error: "text-destructive",

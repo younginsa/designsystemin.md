@@ -1,4 +1,4 @@
-/* 자동 생성 — 손 편집 금지 · commit d7aacbd · 2026-09-18 · 원천: dstk/*.json (git이 source of truth) */
+/* 자동 생성 — 손 편집 금지 · commit bc14e67 · 2026-09-28 · 원천: dstk/*.json (git이 source of truth) */
 
 /* semantic-token — 팔레트→시맨틱 매칭. 값은 primitives 참조(var 사슬 — dstk 갱신이 자동 전파), 주석=해석 hex. card·popover는 background와 별도 토큰 */
 
@@ -14,7 +14,7 @@
   --general-secondary: var(--gray-20); /* #F9FAFB */
   --general-secondary-foreground: var(--gray-600); /* #5D6275 */
   --general-muted: var(--gray-50); /* #F2F4F8 */
-  --general-muted-foreground: var(--black-20); /* #00000033 */
+  --general-muted-foreground: var(--gray-600); /* #5D6275 */
   --general-accent: var(--black-6); /* #0000000F */
   --general-accent-foreground: var(--gray-700); /* #3C3E47 */
   --general-destructive: var(--dusk-red-600); /* #FF5B5B */
@@ -26,7 +26,7 @@
   --chart-4: var(--blue-400); /* #78A9FF */
   --chart-5: var(--blue-200); /* #D0E2FF */
   --general-border: var(--gray-100); /* #ECEDF0 */
-  --general-input: var(--gray-500); /* #858998 */
+  --general-input: var(--gray-100); /* #ECEDF0 */
   --general-ring: var(--gray-200); /* #DBDEE8 */
   --general-on-color: var(--white-100); /* #FFFFFF — 피그마 General/on-color, 전 모드 동일 */
 }
@@ -43,7 +43,7 @@
   --general-secondary: var(--gray-300); /* #23252B */
   --general-secondary-foreground: var(--gray-800); /* #D0D2D9 */
   --general-muted: var(--gray-350); /* #2F323B */
-  --general-muted-foreground: var(--white-20); /* #FFFFFF33 */
+  --general-muted-foreground: var(--gray-800); /* #D0D2D9 */
   --general-accent: var(--white-12); /* #FFFFFF1F */
   --general-accent-foreground: var(--day-gray-50); /* #F2F4F8 */
   --general-destructive: var(--day-red-500); /* #FA454E */
@@ -55,7 +55,7 @@
   --chart-4: var(--day-blue-400); /* #78A9FF */
   --chart-5: var(--day-blue-200); /* #D0E2FF */
   --general-border: var(--white-8); /* #FFFFFF14 */
-  --general-input: var(--gray-600); /* #858998 */
+  --general-input: var(--white-8); /* #FFFFFF14 */
   --general-ring: var(--gray-400); /* #3C3E47 */
   --general-on-color: var(--white-100); /* #FFFFFF — 피그마 General/on-color, 전 모드 동일 */
 }
@@ -72,7 +72,7 @@
   --general-secondary: var(--dusk-gray-400); /* #3C3E47 */
   --general-secondary-foreground: var(--dusk-gray-800); /* #D0D2D9 */
   --general-muted: var(--dusk-gray-350); /* #2F323B */
-  --general-muted-foreground: var(--white-20); /* #FFFFFF33 */
+  --general-muted-foreground: var(--dusk-gray-800); /* #D0D2D9 */
   --general-accent: var(--white-12); /* #FFFFFF1F */
   --general-accent-foreground: var(--day-gray-50); /* #F2F4F8 */
   --general-destructive: var(--dusk-red-100); /* #A50000 */
@@ -84,7 +84,7 @@
   --chart-4: var(--day-blue-400); /* #78A9FF */
   --chart-5: var(--day-blue-200); /* #D0E2FF */
   --general-border: var(--white-8); /* #FFFFFF14 */
-  --general-input: var(--dusk-gray-600); /* #858998 */
+  --general-input: var(--white-8); /* #FFFFFF14 */
   --general-ring: var(--dusk-gray-400); /* #3C3E47 */
   --general-on-color: var(--white-100); /* #FFFFFF — 피그마 General/on-color, 전 모드 동일 */
 }

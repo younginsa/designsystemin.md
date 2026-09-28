@@ -181,16 +181,16 @@
       "name": "muted-foreground",
       "note": null,
       "light": {
-        "ref": "{palette.basic.black.20}",
-        "hex": "#00000033"
+        "ref": "{palette.gray.600@day}",
+        "hex": "#5D6275"
       },
       "dark": {
-        "ref": "{palette.basic.white.20}",
-        "hex": "#FFFFFF33"
+        "ref": "{palette.gray.800@dusk}",
+        "hex": "#D0D2D9"
       },
       "control": {
-        "ref": "{palette.basic.white.20}",
-        "hex": "#FFFFFF33"
+        "ref": "{palette.gray.800@dusk}",
+        "hex": "#D0D2D9"
       }
     },
     {
@@ -373,16 +373,16 @@
       "name": "input",
       "note": null,
       "light": {
-        "ref": "{palette.gray.500@day}",
-        "hex": "#858998"
+        "ref": "{palette.gray.100@day}",
+        "hex": "#ECEDF0"
       },
       "dark": {
-        "ref": "{palette.gray.600@dusk}",
-        "hex": "#858998"
+        "ref": "{palette.basic.white.8}",
+        "hex": "#FFFFFF14"
       },
       "control": {
-        "ref": "{palette.gray.600@dusk}",
-        "hex": "#858998"
+        "ref": "{palette.basic.white.8}",
+        "hex": "#FFFFFF14"
       }
     },
     {

@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { Timeline, TimelineItem, TimelineMeta, TimelineTitle } from "./timeline"
 
-/* Timeline 스토리 — 허브 카드 timeline 의 원문. TimelineItem status default(border-muted-foreground bg-background) · current(primary) · success · error(destructive, 제목도 destructive).
+/* Timeline 스토리 — 허브 카드 timeline 의 원문. TimelineItem status default(border-border bg-background — 2026-09-28 토큰 정합, 종전 border-muted-foreground) · current(primary) · success · error(destructive, 제목도 destructive).
  * 도트 size-2.5 border-2 + 세로선 w-px bg-border(마지막 항목 없음) · TimelineTitle text-sm medium · TimelineMeta mt-1.5 text-xs secondary-foreground · 항목 pb-6. @storybook import 0. */
 
 export default {

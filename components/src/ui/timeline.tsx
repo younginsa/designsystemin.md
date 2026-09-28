@@ -14,7 +14,7 @@ function Timeline({ className, ...props }: React.ComponentProps<"ol">) {
 type TimelineStatus = "default" | "current" | "success" | "error";
 
 const dotStyles: Record<TimelineStatus, string> = {
-  default: "border-muted-foreground bg-background",
+  default: "border-border bg-background",
   current: "border-primary bg-primary",
   success: "border-success bg-success",
   error: "border-destructive bg-destructive",

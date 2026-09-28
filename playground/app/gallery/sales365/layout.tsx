@@ -120,10 +120,10 @@ export default function Sales365Layout({ children }: { children: React.ReactNode
               >
                 세일즈포스 대체
               </Link>
-              {/* 버전 표기 — 셸 관례(로고 밑 작게, 2026-09-02). caption_xs 크기 dstk 변수 · text-input.
+              {/* 버전 표기 — 셸 관례(로고 밑 작게, 2026-09-02). caption_xs 크기 dstk 변수 · text-muted-foreground(2026-09-28 토큰 정합 — 종전 text-input 은 border 값이 돼 안 보인다).
                   input×card 쌍은 dstk/contrast-pairs.json에 선언됨(장식 표기 한정) */}
               <p
-                className="font-mono leading-3 text-input"
+                className="font-mono leading-3 text-muted-foreground"
                 style={{ fontSize: "var(--type-desktop-caption-xs-size)" }}
               >
                 v1.4.0

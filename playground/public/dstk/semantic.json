@@ -92,9 +92,9 @@
   "muted-foreground": {
     "$type": "color",
     "$value": {
-      "light": "{palette.basic.black.20}",
-      "dark": "{palette.basic.white.20}",
-      "control": "{palette.basic.white.20}"
+      "light": "{palette.gray.600@day}",
+      "dark": "{palette.gray.800@dusk}",
+      "control": "{palette.gray.800@dusk}"
     }
   },
   "accent": {
@@ -171,9 +171,9 @@
   "input": {
     "$type": "color",
     "$value": {
-      "light": "{palette.gray.500@day}",
-      "dark": "{palette.gray.600@dusk}",
-      "control": "{palette.gray.600@dusk}"
+      "light": "{palette.gray.100@day}",
+      "dark": "{palette.basic.white.8}",
+      "control": "{palette.basic.white.8}"
     }
   },
   "ring": {

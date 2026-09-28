@@ -451,9 +451,9 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
                 <span className="font-mono text-xs font-normal text-primary">({account.marker})</span>
               </Link>
               {/* 버전 표기 — 실제품은 사이드바 최하단, 로고 밑 이동 스펙(2026-09-02 확정). caption_xs 크기 dstk 변수 ·
-                  text-input(3모드 동일값). input×card 쌍은 dstk/contrast-pairs.json에 선언됨(장식 표기 한정) */}
+                  text-muted-foreground(2026-09-28 토큰 정합 — 종전 text-input 은 border 값이 돼 안 보인다. muted-foreground×card 쌍은 dstk/contrast-pairs.json 선언) */}
               <p
-                className="font-mono leading-3 text-input"
+                className="font-mono leading-3 text-muted-foreground"
                 style={{ fontSize: "var(--type-desktop-caption-xs-size)" }}
               >
                 v3.0.0-rc.26

@@ -24,7 +24,7 @@ export type SearchSuggestion = { label: string; sub?: string }
 function PanelEmpty({ title }: { title: string }) {
   return (
     <div className="flex items-center gap-2 px-2 py-1.5 text-sm text-secondary-foreground">
-      <Search className="size-3.5 shrink-0 text-input" />
+      <Search className="size-3.5 shrink-0 text-muted-foreground" />
       <span className="min-w-0 flex-1 truncate">{title}</span>
     </div>
   )
@@ -112,7 +112,7 @@ function SearchBox({
                   })
                 }}
               >
-                <X className="size-3.5 text-input hover:text-foreground" />
+                <X className="size-3.5 text-muted-foreground hover:text-foreground" />
               </button>
             </InputGroupAddon>
           )}
@@ -137,8 +137,8 @@ function SearchBox({
                 className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
                 onClick={() => commit(c.label)}
               >
-                {/* 장식 아이콘 — size-3.5(✕와 동일)·text-input(한 단계 연하게), 2026-08-26 확정 */}
-                <Search className="size-3.5 shrink-0 text-input" />
+                {/* 장식 아이콘 — size-3.5(✕와 동일)·text-muted-foreground(2026-09-28 토큰 정합 — 종전 input 톤 폐기) */}
+                <Search className="size-3.5 shrink-0 text-muted-foreground" />
                 <span className="min-w-0 flex-1 truncate text-left">{highlight(c.label)}</span>
                 {c.sub && <span className="shrink-0 text-xs text-secondary-foreground">{c.sub}</span>}
               </button>
@@ -157,7 +157,7 @@ function SearchBox({
                     key={r}
                     className="group flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
                   >
-                    <Clock className="size-3.5 shrink-0 text-input" />
+                    <Clock className="size-3.5 shrink-0 text-muted-foreground" />
                     <button
                       type="button"
                       className="min-w-0 flex-1 truncate text-left"
@@ -175,7 +175,7 @@ function SearchBox({
                         setRecent((list) => list.filter((x) => x !== r))
                       }}
                     >
-                      <X className="size-3.5 text-input hover:text-foreground" />
+                      <X className="size-3.5 text-muted-foreground hover:text-foreground" />
                     </button>
                   </div>
                 ))}

@@ -1,6 +1,6 @@
 /* 자동 생성 — 손으로 편집 금지. 원천: dstk/palette.json + semantic.json (Theme 정렬) */
 
-/* commit d7aacbd · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
+/* commit bc14e67 · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
 
 :root {
   --gray-10: #FBFBFB;
@@ -119,7 +119,7 @@
   --secondary: #F9FAFB;
   --secondary-foreground: #5D6275;
   --muted: #F2F4F8;
-  --muted-foreground: #00000033;
+  --muted-foreground: #5D6275;
   --accent: #0000000F;
   --accent-foreground: #3C3E47;
   --destructive: #FF5B5B;
@@ -131,7 +131,7 @@
   --chart-4: #78A9FF;
   --chart-5: #D0E2FF;
   --border: #ECEDF0;
-  --input: #858998;
+  --input: #ECEDF0;
   --ring: #DBDEE8;
   --radius: 0.625rem;
   --shadow-card: 0 0 12px 0 color-mix(in srgb, var(--border) 55%, transparent);
@@ -301,7 +301,7 @@
   --secondary: #23252B;
   --secondary-foreground: #D0D2D9;
   --muted: #2F323B;
-  --muted-foreground: #FFFFFF33;
+  --muted-foreground: #D0D2D9;
   --accent: #FFFFFF1F;
   --accent-foreground: #F2F4F8;
   --destructive: #FA454E;
@@ -313,7 +313,7 @@
   --chart-4: #78A9FF;
   --chart-5: #D0E2FF;
   --border: #FFFFFF14;
-  --input: #858998;
+  --input: #FFFFFF14;
   --ring: #3C3E47;
   --radius: 0.625rem;
   --shadow-card: 0 0 12px 0 color-mix(in srgb, var(--border) 55%, transparent);
@@ -438,7 +438,7 @@
   --secondary: #3C3E47;
   --secondary-foreground: #D0D2D9;
   --muted: #2F323B;
-  --muted-foreground: #FFFFFF33;
+  --muted-foreground: #D0D2D9;
   --accent: #FFFFFF1F;
   --accent-foreground: #F2F4F8;
   --destructive: #A50000;
@@ -450,7 +450,7 @@
   --chart-4: #78A9FF;
   --chart-5: #D0E2FF;
   --border: #FFFFFF14;
-  --input: #858998;
+  --input: #FFFFFF14;
   --ring: #3C3E47;
   --radius: 0.625rem;
   --shadow-card: 0 0 12px 0 color-mix(in srgb, var(--border) 55%, transparent);
