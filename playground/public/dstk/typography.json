@@ -13,6 +13,7 @@
   "desktop-mono-m":     { "$type": "typography", "$value": { "size": "12px", "lineHeight": "16px", "weight": "400" }, "$note": "모노(Roboto Mono) — 피그마 Desktop/mono_m · 코드 font-mono text-xs(날짜 · 버전 칩 · 클래스명). 2026-09-10 신설" },
   "desktop-mono-body":  { "$type": "typography", "$value": { "size": "13px", "lineHeight": "20px", "weight": "400" }, "$note": "모노 — 피그마 Desktop/mono_body · font-mono 13" },
   "desktop-mono-l":     { "$type": "typography", "$value": { "size": "14px", "lineHeight": "20px", "weight": "400" }, "$note": "모노 — 피그마 Desktop/mono_l · font-mono text-sm(StatusBadge mono · 표 셀)" },
+  "desktop-mono-l-medium": { "$type": "typography", "$value": { "size": "14px", "lineHeight": "20px", "weight": "500" }, "$note": "모노 중간 굵기 — 피그마 Desktop/mono_l/Medium · font-mono font-medium text-sm(표 안 계약 번호 링크 · 셸 버전 표기 · 차트 툴팁 값). 2026-09-29 신설 — 코드는 8곳에서 쓰고 있었는데 스타일·토큰만 없었다" },
   "2m-caption": { "$type": "typography", "$value": { "size": "31px" } },
   "2m-body1":   { "$type": "typography", "$value": { "size": "34px" } },
   "2m-body2":   { "$type": "typography", "$value": { "size": "38px", "weight": "700", "family": "mono" }, "$note": "Bold Mono" },

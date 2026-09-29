@@ -1,4 +1,4 @@
-/* 자동 생성 — 손 편집 금지 · commit bc14e67 · 2026-09-28 · 원천: dstk/*.json (git이 source of truth) */
+/* 자동 생성 — 손 편집 금지 · commit c3255b3 · 2026-09-29 · 원천: dstk/*.json (git이 source of truth) */
 
 /* index — DS 배선. 앱 index.css에서 tailwindcss import 뒤에 이 파일을 @import 하면 끝.
    앱 전용(point 컬러·keyframes·@custom-variant dark)은 앱 파일에 유지. 다크 전환 = 래퍼에 .dark */
@@ -180,4 +180,10 @@ body {
   font-size: var(--text-mono-l-size);
   line-height: var(--text-mono-l-line-height);
   font-weight: var(--font-weight-regular);
+}
+
+.text-mono-l-medium {
+  font-size: var(--text-mono-l-medium-size);
+  line-height: var(--text-mono-l-medium-line-height);
+  font-weight: var(--font-weight-medium);
 }
