@@ -1,0 +1,86 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "input",
+ "fe": {
+  "id": "primitives-input",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/primitives-input--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "primitives-input--default",
+   "file": "input/default.html",
+   "portal": false,
+   "initialArgs": {
+    "placeholder": "Enter text..."
+   }
+  },
+  {
+   "name": "WithValue",
+   "id": "primitives-input--with-value",
+   "file": "input/with-value.html",
+   "portal": false,
+   "initialArgs": {
+    "defaultValue": "Hello world"
+   }
+  },
+  {
+   "name": "Disabled",
+   "id": "primitives-input--disabled",
+   "file": "input/disabled.html",
+   "portal": false,
+   "initialArgs": {
+    "placeholder": "Disabled",
+    "disabled": true
+   }
+  },
+  {
+   "name": "AllStates",
+   "id": "primitives-input--all-states",
+   "file": "input/all-states.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "placeholder": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  }
+ },
+ "states": [],
+ "classes": [
+  "bg-transparent",
+  "border",
+  "border-input",
+  "disabled:cursor-not-allowed",
+  "disabled:opacity-50",
+  "file:bg-transparent",
+  "file:border-0",
+  "file:font-medium",
+  "file:text-foreground",
+  "file:text-sm",
+  "flex",
+  "flex-col",
+  "focus-visible:outline-none",
+  "focus-visible:ring-1",
+  "focus-visible:ring-ring",
+  "gap-3",
+  "h-9",
+  "md:text-sm",
+  "placeholder:text-muted-foreground",
+  "px-3",
+  "py-1",
+  "rounded-md",
+  "shadow-sm",
+  "text-base",
+  "transition-colors",
+  "w-72",
+  "w-full"
+ ],
+ "strippedClasses": []
+}

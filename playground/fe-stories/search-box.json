@@ -1,0 +1,230 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "search-box",
+ "fe": {
+  "id": "components-searchinput",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-searchinput--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-searchinput--default",
+   "file": "search-box/default.html",
+   "portal": false,
+   "initialArgs": {
+    "placeholder": "키워드 검색"
+   }
+  },
+  {
+   "name": "WithSuggestions",
+   "id": "components-searchinput--with-suggestions",
+   "file": "search-box/with-suggestions.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "WithHistory",
+   "id": "components-searchinput--with-history",
+   "file": "search-box/with-history.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "WithSuggestionHint",
+   "id": "components-searchinput--with-suggestion-hint",
+   "file": "search-box/with-suggestion-hint.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "WithDefaultValue",
+   "id": "components-searchinput--with-default-value",
+   "file": "search-box/with-default-value.html",
+   "portal": false,
+   "initialArgs": {
+    "defaultValue": "STAR VESSEL"
+   }
+  },
+  {
+   "name": "SearchOnEnterOnly",
+   "id": "components-searchinput--search-on-enter-only",
+   "file": "search-box/search-on-enter-only.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "onChange": {
+   "type": "function",
+   "required": true,
+   "control": null
+  },
+  "placeholder": {
+   "type": "string",
+   "required": false,
+   "control": "text",
+   "default": "\"키워드 검색\""
+  },
+  "onInputChange": {
+   "type": "function",
+   "required": false,
+   "control": null
+  },
+  "defaultValue": {
+   "type": "union",
+   "required": false,
+   "control": "object"
+  },
+  "suggestionGroups": {
+   "type": "array",
+   "required": false,
+   "control": "object"
+  },
+  "suggestionHint": {
+   "type": "other",
+   "required": false,
+   "control": "object"
+  },
+  "historyKey": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  },
+  "searchOnType": {
+   "type": "boolean",
+   "required": false,
+   "control": "boolean",
+   "default": "true"
+  },
+  "disablePanel": {
+   "type": "boolean",
+   "required": false,
+   "control": "boolean",
+   "default": "false"
+  },
+  "className": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  }
+ },
+ "states": [
+  {
+   "story": "Default",
+   "args": {
+    "searchOnType": true
+   },
+   "file": "search-box/states/default--searchOnType-true.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "disablePanel": true
+   },
+   "file": "search-box/states/default--disablePanel-true.html",
+   "portal": false
+  }
+ ],
+ "classes": [
+  "[&>kbd]:rounded-[calc(var(--radius)-5px)]",
+  "[&>svg:not([class*='size-'])]:size-4",
+  "[&_svg:not([class*='size-'])]:size-3",
+  "[&_svg]:pointer-events-none",
+  "[&_svg]:shrink-0",
+  "[&_svg]:size-4",
+  "bg-background",
+  "bg-transparent",
+  "border",
+  "border-0",
+  "border-border",
+  "border-input",
+  "cursor-text",
+  "dark:bg-input/30",
+  "dark:bg-transparent",
+  "dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40",
+  "dark:hover:bg-accent/50",
+  "disabled:cursor-not-allowed",
+  "disabled:opacity-50",
+  "disabled:pointer-events-none",
+  "file:bg-transparent",
+  "file:border-0",
+  "file:font-medium",
+  "file:text-foreground",
+  "file:text-sm",
+  "flex",
+  "flex-1",
+  "flex-col",
+  "focus-visible:outline-none",
+  "focus-visible:ring-0",
+  "focus-visible:ring-1",
+  "focus-visible:ring-ring",
+  "font-medium",
+  "gap-2",
+  "gap-4",
+  "group-data-[disabled=true]/input-group:opacity-50",
+  "group/input-group",
+  "h-6",
+  "h-9",
+  "h-auto",
+  "has-[>[data-align=block-end]]:[&>input]:pt-3",
+  "has-[>[data-align=block-end]]:flex-col",
+  "has-[>[data-align=block-end]]:h-auto",
+  "has-[>[data-align=block-start]]:[&>input]:pb-3",
+  "has-[>[data-align=block-start]]:flex-col",
+  "has-[>[data-align=block-start]]:h-auto",
+  "has-[>[data-align=inline-end]]:[&>input]:pr-2",
+  "has-[>[data-align=inline-start]]:[&>input]:pl-2",
+  "has-[>button]:ml-[-0.45rem]",
+  "has-[>button]:mr-[-0.4rem]",
+  "has-[>kbd]:ml-[-0.35rem]",
+  "has-[>kbd]:mr-[-0.35rem]",
+  "has-[>textarea]:h-auto",
+  "has-[[data-slot=input-group-control]:focus-visible]:ring-1",
+  "has-[[data-slot=input-group-control]:focus-visible]:ring-ring",
+  "has-[[data-slot][aria-invalid=true]]:border-destructive",
+  "has-[[data-slot][aria-invalid=true]]:ring-destructive/20",
+  "hover:bg-accent",
+  "hover:text-accent-foreground",
+  "inline-flex",
+  "items-center",
+  "justify-center",
+  "lucide",
+  "lucide-search",
+  "lucide-x",
+  "md:text-sm",
+  "md:w-[300px]",
+  "order-first",
+  "order-last",
+  "outline-none",
+  "p-8",
+  "pl-3",
+  "placeholder:text-muted-foreground",
+  "pr-3",
+  "px-3",
+  "py-1",
+  "py-1.5",
+  "relative",
+  "rounded-md",
+  "rounded-none",
+  "select-none",
+  "shadow-none",
+  "shadow-xs",
+  "size-4",
+  "text-muted-foreground",
+  "text-sm",
+  "text-title-xs",
+  "transition-[color,box-shadow]",
+  "transition-colors",
+  "w-6",
+  "w-[500px]",
+  "w-full",
+  "whitespace-nowrap"
+ ],
+ "strippedClasses": [
+  "text-medium"
+ ]
+}

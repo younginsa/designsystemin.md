@@ -1,0 +1,61 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "popover",
+ "fe": {
+  "id": "primitives-popover",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/primitives-popover--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "primitives-popover--default",
+   "file": "popover/default.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "WithForm",
+   "id": "primitives-popover--with-form",
+   "file": "popover/with-form.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {},
+ "states": [],
+ "classes": [
+  "[&_svg]:pointer-events-none",
+  "[&_svg]:shrink-0",
+  "[&_svg]:size-4",
+  "bg-card",
+  "border",
+  "dark:bg-input/30",
+  "dark:border-border",
+  "dark:hover:bg-input/50",
+  "disabled:opacity-50",
+  "disabled:pointer-events-none",
+  "focus-visible:outline-none",
+  "focus-visible:ring-1",
+  "focus-visible:ring-ring",
+  "font-medium",
+  "gap-2",
+  "has-[>svg]:px-3",
+  "hover:bg-accent",
+  "hover:text-accent-foreground",
+  "inline-flex",
+  "items-center",
+  "justify-center",
+  "px-4",
+  "py-2",
+  "rounded-md",
+  "text-title-xs",
+  "transition-colors",
+  "whitespace-nowrap"
+ ],
+ "strippedClasses": [
+  "text-medium"
+ ]
+}

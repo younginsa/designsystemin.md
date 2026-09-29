@@ -43,7 +43,9 @@ const chk3 = JSON.parse(await call("check_html", { html: bad }));
 console.log("check_html(backcheck) usedComponents", JSON.stringify(chk3.usedComponents), "byRule", JSON.stringify(chk3.byRule), "conditional", JSON.stringify(chk3.conditional));
 if (!chk3.byRule["no-story-component"]) { console.error("스토리 없는 separator 를 못 잡으면 역산 검사가 틀린 것"); process.exit(1); }
 const sbCond = (chk3.conditional ?? []).find((c: any) => c.component === "search-box");
-if (!sbCond || sbCond.items.some((i: any) => i.when === "value" && i.present)) { console.error("값 채운 search-box 에 ✕ 가 없는데 present=true 면 조건부 보고가 틀린 것"); process.exit(1); }
+// search-box 가 FE 스토리북 원천이면 원문이 없어 conditional 목록이 안 나온다(states 로 대체, 2026-09-29) — 목록이 있을 때만 present 판정을 검사한다
+if (sbCond && sbCond.items.some((i: any) => i.when === "value" && i.present)) { console.error("값 채운 search-box 에 ✕ 가 없는데 present=true 면 조건부 보고가 틀린 것"); process.exit(1); }
+if (!sbCond) console.log("check_html(backcheck) search-box 조건부 목록 없음 — FE 스냅샷 원천(states 사용)");
 const res = await client.listResources();
 console.log("resources:", res.resources.map((r) => r.uri).join(", "));
 await client.close();

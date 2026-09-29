@@ -1,0 +1,123 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "stepper",
+ "fe": {
+  "id": "components-stepindicator",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-stepindicator--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "FirstStep",
+   "id": "components-stepindicator--first-step",
+   "file": "stepper/first-step.html",
+   "portal": false,
+   "initialArgs": {
+    "steps": [
+     {
+      "label": "Basic Info"
+     },
+     {
+      "label": "Configuration"
+     },
+     {
+      "label": "Review"
+     }
+    ],
+    "currentIndex": 0
+   }
+  },
+  {
+   "name": "MiddleStep",
+   "id": "components-stepindicator--middle-step",
+   "file": "stepper/middle-step.html",
+   "portal": false,
+   "initialArgs": {
+    "steps": [
+     {
+      "label": "Basic Info"
+     },
+     {
+      "label": "Configuration"
+     },
+     {
+      "label": "Review"
+     }
+    ],
+    "currentIndex": 1
+   }
+  },
+  {
+   "name": "LastStep",
+   "id": "components-stepindicator--last-step",
+   "file": "stepper/last-step.html",
+   "portal": false,
+   "initialArgs": {
+    "steps": [
+     {
+      "label": "Basic Info"
+     },
+     {
+      "label": "Configuration"
+     },
+     {
+      "label": "Review"
+     }
+    ],
+    "currentIndex": 2
+   }
+  },
+  {
+   "name": "AllStates",
+   "id": "components-stepindicator--all-states",
+   "file": "stepper/all-states.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "steps": {
+   "type": "array",
+   "required": true,
+   "control": "object"
+  },
+  "currentIndex": {
+   "type": "number",
+   "required": true,
+   "control": "number"
+  }
+ },
+ "states": [],
+ "classes": [
+  "bg-emerald-500",
+  "bg-primary",
+  "bg-slate-200",
+  "flex",
+  "flex-col",
+  "font-medium",
+  "font-semibold",
+  "gap-2",
+  "gap-3",
+  "gap-6",
+  "h-px",
+  "items-center",
+  "justify-center",
+  "lucide",
+  "lucide-check",
+  "rounded-full",
+  "size-3.5",
+  "size-6",
+  "text-emerald-600",
+  "text-nowrap",
+  "text-primary",
+  "text-primary-foreground",
+  "text-slate-500",
+  "text-sm",
+  "text-white",
+  "text-xs",
+  "w-6"
+ ],
+ "strippedClasses": []
+}

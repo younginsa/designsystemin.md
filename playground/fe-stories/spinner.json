@@ -1,0 +1,75 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "spinner",
+ "fe": {
+  "id": "components-loadingspinner",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-loadingspinner--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-loadingspinner--default",
+   "file": "spinner/default.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "Sizes",
+   "id": "components-loadingspinner--sizes",
+   "file": "spinner/sizes.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "size": {
+   "type": "enum",
+   "required": false,
+   "control": "radio",
+   "options": [
+    "lg",
+    "sm"
+   ],
+   "default": "\"sm\""
+  },
+  "className": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  }
+ },
+ "states": [
+  {
+   "story": "Default",
+   "args": {
+    "size": "lg"
+   },
+   "file": "spinner/states/default--size-lg.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "size": "sm"
+   },
+   "file": "spinner/states/default--size-sm.html",
+   "portal": false
+  }
+ ],
+ "classes": [
+  "animate-spin",
+  "flex",
+  "gap-4",
+  "h-4",
+  "h-8",
+  "items-center",
+  "lucide",
+  "lucide-loader-circle",
+  "w-4",
+  "w-8"
+ ],
+ "strippedClasses": []
+}

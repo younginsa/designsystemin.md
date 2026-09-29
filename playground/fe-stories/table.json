@@ -1,0 +1,436 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "table",
+ "fe": {
+  "id": "components-datatable",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-datatable--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-datatable--default",
+   "file": "table/default.html",
+   "portal": false,
+   "initialArgs": {
+    "columns": [
+     {
+      "accessorKey": "name",
+      "header": "제품명"
+     },
+     {
+      "accessorKey": "version",
+      "header": "버전"
+     },
+     {
+      "accessorKey": "ships",
+      "header": "호선 수",
+      "meta": {
+       "headerClassName": "text-right",
+       "cellClassName": "text-right"
+      }
+     }
+    ],
+    "data": [
+     {
+      "id": "1",
+      "name": "Navigation",
+      "version": "v2.1.0",
+      "ships": 128,
+      "deprecated": false
+     },
+     {
+      "id": "2",
+      "name": "SVM",
+      "version": "v1.0.3",
+      "ships": 64,
+      "deprecated": false
+     },
+     {
+      "id": "3",
+      "name": "Control",
+      "version": "v3.0.0",
+      "ships": 42,
+      "deprecated": true
+     }
+    ]
+   }
+  },
+  {
+   "name": "Empty",
+   "id": "components-datatable--empty",
+   "file": "table/empty.html",
+   "portal": false,
+   "initialArgs": {
+    "columns": [
+     {
+      "accessorKey": "name",
+      "header": "제품명"
+     },
+     {
+      "accessorKey": "version",
+      "header": "버전"
+     },
+     {
+      "accessorKey": "ships",
+      "header": "호선 수",
+      "meta": {
+       "headerClassName": "text-right",
+       "cellClassName": "text-right"
+      }
+     }
+    ],
+    "data": []
+   }
+  },
+  {
+   "name": "FilteredEmpty",
+   "id": "components-datatable--filtered-empty",
+   "file": "table/filtered-empty.html",
+   "portal": false,
+   "initialArgs": {
+    "columns": [
+     {
+      "accessorKey": "name",
+      "header": "제품명"
+     },
+     {
+      "accessorKey": "version",
+      "header": "버전"
+     },
+     {
+      "accessorKey": "ships",
+      "header": "호선 수",
+      "meta": {
+       "headerClassName": "text-right",
+       "cellClassName": "text-right"
+      }
+     }
+    ],
+    "data": [],
+    "isFiltered": true
+   }
+  },
+  {
+   "name": "WithRowClick",
+   "id": "components-datatable--with-row-click",
+   "file": "table/with-row-click.html",
+   "portal": false,
+   "initialArgs": {
+    "columns": [
+     {
+      "accessorKey": "name",
+      "header": "제품명"
+     },
+     {
+      "accessorKey": "version",
+      "header": "버전"
+     },
+     {
+      "accessorKey": "ships",
+      "header": "호선 수",
+      "meta": {
+       "headerClassName": "text-right",
+       "cellClassName": "text-right"
+      }
+     }
+    ],
+    "data": [
+     {
+      "id": "1",
+      "name": "Navigation",
+      "version": "v2.1.0",
+      "ships": 128,
+      "deprecated": false
+     },
+     {
+      "id": "2",
+      "name": "SVM",
+      "version": "v1.0.3",
+      "ships": 64,
+      "deprecated": false
+     },
+     {
+      "id": "3",
+      "name": "Control",
+      "version": "v3.0.0",
+      "ships": 42,
+      "deprecated": true
+     }
+    ]
+   }
+  },
+  {
+   "name": "WithPagination",
+   "id": "components-datatable--with-pagination",
+   "file": "table/with-pagination.html",
+   "portal": false,
+   "initialArgs": {
+    "columns": [
+     {
+      "accessorKey": "name",
+      "header": "제품명"
+     },
+     {
+      "accessorKey": "version",
+      "header": "버전"
+     },
+     {
+      "accessorKey": "ships",
+      "header": "호선 수",
+      "meta": {
+       "headerClassName": "text-right",
+       "cellClassName": "text-right"
+      }
+     }
+    ],
+    "data": [
+     {
+      "id": "1",
+      "name": "Navigation",
+      "version": "v2.1.0",
+      "ships": 128,
+      "deprecated": false
+     },
+     {
+      "id": "2",
+      "name": "SVM",
+      "version": "v1.0.3",
+      "ships": 64,
+      "deprecated": false
+     },
+     {
+      "id": "3",
+      "name": "Control",
+      "version": "v3.0.0",
+      "ships": 42,
+      "deprecated": true
+     }
+    ]
+   }
+  },
+  {
+   "name": "WithFooterLeft",
+   "id": "components-datatable--with-footer-left",
+   "file": "table/with-footer-left.html",
+   "portal": false,
+   "initialArgs": {
+    "columns": [
+     {
+      "accessorKey": "name",
+      "header": "제품명"
+     },
+     {
+      "accessorKey": "version",
+      "header": "버전"
+     },
+     {
+      "accessorKey": "ships",
+      "header": "호선 수",
+      "meta": {
+       "headerClassName": "text-right",
+       "cellClassName": "text-right"
+      }
+     }
+    ],
+    "data": [
+     {
+      "id": "1",
+      "name": "Navigation",
+      "version": "v2.1.0",
+      "ships": 128,
+      "deprecated": false
+     },
+     {
+      "id": "2",
+      "name": "SVM",
+      "version": "v1.0.3",
+      "ships": 64,
+      "deprecated": false
+     },
+     {
+      "id": "3",
+      "name": "Control",
+      "version": "v3.0.0",
+      "ships": 42,
+      "deprecated": true
+     }
+    ]
+   }
+  },
+  {
+   "name": "WithGetRowClassName",
+   "id": "components-datatable--with-get-row-class-name",
+   "file": "table/with-get-row-class-name.html",
+   "portal": false,
+   "initialArgs": {
+    "columns": [
+     {
+      "accessorKey": "name",
+      "header": "제품명"
+     },
+     {
+      "accessorKey": "version",
+      "header": "버전"
+     },
+     {
+      "accessorKey": "ships",
+      "header": "호선 수",
+      "meta": {
+       "headerClassName": "text-right",
+       "cellClassName": "text-right"
+      }
+     }
+    ],
+    "data": [
+     {
+      "id": "1",
+      "name": "Navigation",
+      "version": "v2.1.0",
+      "ships": 128,
+      "deprecated": false
+     },
+     {
+      "id": "2",
+      "name": "SVM",
+      "version": "v1.0.3",
+      "ships": 64,
+      "deprecated": false
+     },
+     {
+      "id": "3",
+      "name": "Control",
+      "version": "v3.0.0",
+      "ships": 42,
+      "deprecated": true
+     }
+    ]
+   }
+  }
+ ],
+ "argTypes": {
+  "columns": {
+   "type": "array",
+   "required": false,
+   "control": "object"
+  },
+  "data": {
+   "type": "array",
+   "required": false,
+   "control": "object"
+  }
+ },
+ "states": [],
+ "classes": [
+  "[&:has([role=checkbox])]:pr-0",
+  "[&>[role=checkbox]]:translate-y-[2px]",
+  "[&>a:hover]:text-primary",
+  "[&>a]:underline",
+  "[&>a]:underline-offset-4",
+  "[&_svg]:pointer-events-none",
+  "[&_svg]:shrink-0",
+  "[&_svg]:size-4",
+  "[&_tr:last-child]:border-0",
+  "[&_tr]:border-b",
+  "align-middle",
+  "align-top",
+  "bg-background",
+  "bg-secondary",
+  "bg-transparent",
+  "border",
+  "border-b",
+  "border-dashed",
+  "border-none",
+  "caption-bottom",
+  "cursor-pointer",
+  "dark:bg-input/30",
+  "dark:border-border",
+  "dark:hover:bg-accent/50",
+  "dark:hover:bg-input/50",
+  "data-[state=selected]:bg-muted",
+  "disabled:opacity-50",
+  "disabled:pointer-events-none",
+  "flex",
+  "flex-1",
+  "flex-col",
+  "flex-row",
+  "focus-visible:outline-none",
+  "focus-visible:ring-1",
+  "focus-visible:ring-ring",
+  "font-medium",
+  "gap-1",
+  "gap-1.5",
+  "gap-2",
+  "gap-6",
+  "h-[40px]",
+  "has-[>svg]:px-2.5",
+  "has-[>svg]:px-3",
+  "hidden",
+  "hover:bg-accent",
+  "hover:bg-muted/50",
+  "hover:bg-secondary",
+  "hover:bg-transparent",
+  "hover:text-accent-foreground",
+  "inline-flex",
+  "items-center",
+  "justify-between",
+  "justify-center",
+  "justify-end",
+  "lucide",
+  "lucide-chevron-left",
+  "lucide-chevron-right",
+  "lucide-ellipsis",
+  "lucide-info",
+  "max-w-sm",
+  "mb-2",
+  "mb-5",
+  "md:p-12",
+  "min-w-0",
+  "mx-auto",
+  "opacity-50",
+  "opacity-60",
+  "overflow-hidden",
+  "overflow-x-auto",
+  "p-2",
+  "p-3",
+  "p-6",
+  "pointer-events-none",
+  "px-2.5",
+  "px-3",
+  "px-4",
+  "py-1.5",
+  "py-2",
+  "relative",
+  "rounded-lg",
+  "rounded-md",
+  "rounded-sm",
+  "shrink-0",
+  "size-4",
+  "size-5",
+  "size-9",
+  "sm:block",
+  "sm:pl-2.5",
+  "sm:pr-2.5",
+  "sr-only",
+  "text-balance",
+  "text-caption-m",
+  "text-center",
+  "text-left",
+  "text-right",
+  "text-secondary-foreground",
+  "text-sm",
+  "text-title-xs",
+  "text-xs",
+  "tracking-tight",
+  "transition-colors",
+  "uppercase",
+  "w-full",
+  "whitespace-nowrap",
+  "whitespace-pre"
+ ],
+ "strippedClasses": [
+  "text-medium"
+ ]
+}

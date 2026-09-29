@@ -1,0 +1,82 @@
+# FE 스토리북 스냅샷 자동 동기화 (2026-09-29)
+# 매시간 FE 스토리북(Chromatic 브랜치 permalink)의 빌드 도장을 보고, 바뀌었을 때만 pnpm fe:sync → ds.css 재생성 → pnpm fe:parity(FE 화면과 계산 스타일 대조)
+# → 통과하면 playground/fe-stories 를 봇이 커밋·푸시한다. 푸시되면 Vercel 이 평소처럼 배포한다.
+# 실패(빨간 X)는 두 가지뿐: FE 스토리북이 안 열림(다음 시간에 자연 회복) / 새 FE 빌드가 우리 ds.css 위에서 다르게 그려짐(사람이 고칠 것 — 커밋하지 않는다).
+# 수동 실행: Actions 탭 → FE Storybook sync → Run workflow.
+name: FE Storybook sync
+
+on:
+  schedule:
+    - cron: "7 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fe-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. 빌드 도장만 본다 — 같으면 여기서 끝(의존성 설치도 안 한다)
+      - name: FE 빌드 도장 대조
+        id: check
+        run: |
+          node --input-type=module - <<'EOF' >> "$GITHUB_OUTPUT"
+          import fs from "node:fs";
+          const reg = JSON.parse(fs.readFileSync("playground/public/ds-registry.json", "utf8"));
+          const base = reg.$storybook.fe.base.replace(/\/$/, "");
+          const html = await (await fetch(base + "/iframe.html")).text();
+          const css = (html.match(/href="([^"]+\.css)"/) || [])[1] || "";
+          const build = css.replace(/.*iframe-/, "").replace(/\.css$/, "") || "unknown";
+          const prev = fs.existsSync("playground/fe-stories/index.json") ? JSON.parse(fs.readFileSync("playground/fe-stories/index.json", "utf8")).feBuild : "";
+          console.error(`FE 빌드 ${build} · 스냅샷 ${prev || "(없음)"}`);
+          console.log(`build=${build}`);
+          console.log(`changed=${build !== prev && build !== "unknown"}`);
+          EOF
+
+      - if: steps.check.outputs.changed == 'true'
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - if: steps.check.outputs.changed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - if: steps.check.outputs.changed == 'true'
+        run: pnpm install --frozen-lockfile
+      - if: steps.check.outputs.changed == 'true'
+        name: Chromium
+        run: pnpm exec playwright-core install --with-deps chromium
+
+      # 2. 가져온다
+      - if: steps.check.outputs.changed == 'true'
+        run: pnpm fe:sync
+
+      # 3. 파일럿과 같은 검사 — 우리 ds.css 위에서 FE 화면과 같은가
+      - if: steps.check.outputs.changed == 'true'
+        name: ds.css + 정합 실측
+        run: |
+          node playground/scripts/mcp-artifacts.mjs
+          node playground/scripts/build-ds-css.mjs
+          (cd playground/public && python3 -m http.server 3000 --bind 127.0.0.1 > /tmp/http.log 2>&1 &)
+          sleep 2
+          DS_BASE=http://127.0.0.1:3000 pnpm fe:parity
+
+      # 4. 통과했으면 봇이 커밋·푸시 — Vercel 이 배포한다
+      - if: steps.check.outputs.changed == 'true'
+        name: 커밋
+        run: |
+          git config user.name "fe-sync[bot]"
+          git config user.email "fe-sync@users.noreply.github.com"
+          git add playground/fe-stories
+          if git diff --cached --quiet; then echo "변경 없음"; exit 0; fi
+          git commit -m "chore(fe): FE 스토리북 스냅샷 동기화 — 빌드 ${{ steps.check.outputs.build }}" -m "자동 실행(.github/workflows/fe-sync.yml). pnpm fe:sync → fe:parity 통과."
+          git push

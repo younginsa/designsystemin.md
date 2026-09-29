@@ -1,0 +1,133 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "badge",
+ "fe": {
+  "id": "primitives-badge",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/primitives-badge--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "primitives-badge--default",
+   "file": "badge/default.html",
+   "portal": false,
+   "initialArgs": {
+    "children": "Badge",
+    "variant": "default"
+   }
+  },
+  {
+   "name": "AllVariants",
+   "id": "primitives-badge--all-variants",
+   "file": "badge/all-variants.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "children": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  },
+  "variant": {
+   "type": "string",
+   "required": false,
+   "control": "select",
+   "options": [
+    "default",
+    "secondary",
+    "destructive",
+    "outline"
+   ]
+  },
+  "asChild": {
+   "type": "boolean",
+   "required": false,
+   "control": "boolean",
+   "default": "false"
+  }
+ },
+ "states": [
+  {
+   "story": "Default",
+   "args": {
+    "variant": "default"
+   },
+   "file": "badge/states/default--variant-default.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "secondary"
+   },
+   "file": "badge/states/default--variant-secondary.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "destructive"
+   },
+   "file": "badge/states/default--variant-destructive.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "outline"
+   },
+   "file": "badge/states/default--variant-outline.html",
+   "portal": false
+  }
+ ],
+ "classes": [
+  "[&>svg]:pointer-events-none",
+  "[&>svg]:size-3",
+  "[a&]:hover:bg-accent",
+  "[a&]:hover:bg-destructive/90",
+  "[a&]:hover:bg-primary/90",
+  "[a&]:hover:bg-secondary/90",
+  "[a&]:hover:text-accent-foreground",
+  "aria-invalid:border-destructive",
+  "aria-invalid:ring-destructive/20",
+  "bg-destructive",
+  "bg-primary",
+  "bg-secondary",
+  "border",
+  "border-transparent",
+  "dark:aria-invalid:ring-destructive/40",
+  "dark:bg-destructive/60",
+  "dark:focus-visible:ring-destructive/40",
+  "flex",
+  "flex-wrap",
+  "focus-visible:border-ring",
+  "focus-visible:ring-[3px]",
+  "focus-visible:ring-destructive/20",
+  "focus-visible:ring-ring/50",
+  "font-medium",
+  "gap-1",
+  "gap-3",
+  "inline-flex",
+  "items-center",
+  "justify-center",
+  "overflow-hidden",
+  "px-2",
+  "py-0.5",
+  "rounded-md",
+  "shrink-0",
+  "text-foreground",
+  "text-primary-foreground",
+  "text-secondary-foreground",
+  "text-white",
+  "text-xs",
+  "transition-[color,box-shadow]",
+  "w-fit",
+  "whitespace-nowrap"
+ ],
+ "strippedClasses": []
+}

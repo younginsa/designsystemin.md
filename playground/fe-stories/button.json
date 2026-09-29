@@ -1,5 +1,5 @@
 {
- "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
  "key": "button",
  "fe": {
   "id": "primitives-button",
@@ -7,12 +7,13 @@
   "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
  },
  "feBuild": "CpAORVUL",
- "synced": "2026-09-28",
+ "synced": "2026-09-29",
  "stories": [
   {
    "name": "Default",
    "id": "primitives-button--default",
    "file": "button/default.html",
+   "portal": false,
    "initialArgs": {
     "children": "Button",
     "variant": "default",
@@ -23,18 +24,21 @@
    "name": "AllVariants",
    "id": "primitives-button--all-variants",
    "file": "button/all-variants.html",
+   "portal": false,
    "initialArgs": {}
   },
   {
    "name": "AllSizes",
    "id": "primitives-button--all-sizes",
    "file": "button/all-sizes.html",
+   "portal": false,
    "initialArgs": {}
   },
   {
    "name": "Disabled",
    "id": "primitives-button--disabled",
    "file": "button/disabled.html",
+   "portal": false,
    "initialArgs": {}
   }
  ],
@@ -93,126 +97,144 @@
    "args": {
     "variant": "default"
    },
-   "file": "button/states/default--variant-default.html"
+   "file": "button/states/default--variant-default.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "variant": "destructive"
    },
-   "file": "button/states/default--variant-destructive.html"
+   "file": "button/states/default--variant-destructive.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "variant": "destructive-outline"
    },
-   "file": "button/states/default--variant-destructive-outline.html"
+   "file": "button/states/default--variant-destructive-outline.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "variant": "destructive-ghost"
    },
-   "file": "button/states/default--variant-destructive-ghost.html"
+   "file": "button/states/default--variant-destructive-ghost.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "variant": "primary-ghost"
    },
-   "file": "button/states/default--variant-primary-ghost.html"
+   "file": "button/states/default--variant-primary-ghost.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "variant": "outline"
    },
-   "file": "button/states/default--variant-outline.html"
+   "file": "button/states/default--variant-outline.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "variant": "secondary"
    },
-   "file": "button/states/default--variant-secondary.html"
+   "file": "button/states/default--variant-secondary.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "variant": "ghost"
    },
-   "file": "button/states/default--variant-ghost.html"
+   "file": "button/states/default--variant-ghost.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "variant": "link"
    },
-   "file": "button/states/default--variant-link.html"
+   "file": "button/states/default--variant-link.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "size": "default"
    },
-   "file": "button/states/default--size-default.html"
+   "file": "button/states/default--size-default.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "size": "xs"
    },
-   "file": "button/states/default--size-xs.html"
+   "file": "button/states/default--size-xs.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "size": "sm"
    },
-   "file": "button/states/default--size-sm.html"
+   "file": "button/states/default--size-sm.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "size": "lg"
    },
-   "file": "button/states/default--size-lg.html"
+   "file": "button/states/default--size-lg.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "size": "icon"
    },
-   "file": "button/states/default--size-icon.html"
+   "file": "button/states/default--size-icon.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "size": "icon-xs"
    },
-   "file": "button/states/default--size-icon-xs.html"
+   "file": "button/states/default--size-icon-xs.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "size": "icon-sm"
    },
-   "file": "button/states/default--size-icon-sm.html"
+   "file": "button/states/default--size-icon-sm.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "size": "icon-lg"
    },
-   "file": "button/states/default--size-icon-lg.html"
+   "file": "button/states/default--size-icon-lg.html",
+   "portal": false
   },
   {
    "story": "Default",
    "args": {
     "disabled": true
    },
-   "file": "button/states/default--disabled-true.html"
+   "file": "button/states/default--disabled-true.html",
+   "portal": false
   }
  ],
  "classes": [

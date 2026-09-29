@@ -1,7 +1,7 @@
 // MCP 산출물 — 문서 사본(public/docs) + contrast-pairs 사본. ds.css 와 story-html 은 package.json 의 mcp:artifacts 가 이어서 만든다.
 // 배포 사이트가 이 정적 파일을 서빙하고, MCP 서버(mcp/)는 저장소 없이 여기서만 읽는다(2026-09-18). 산출물은 커밋하지 않는다.
 
-import { copyFileSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -16,5 +16,11 @@ for (const dir of ["layout", "regulations"]) {
   for (const f of readdirSync(join(ROOT, dir)).filter((x) => x.endsWith(".md"))) { copyFileSync(join(ROOT, dir, f), join(DOCS, dir, f)); copied.push(`${dir}/${f}`); }
 }
 copyFileSync(join(ROOT, "dstk/contrast-pairs.json"), join(ROOT, "playground/public/dstk/contrast-pairs.json"));
+// FE 스니펫이 참조하는 자산(pnpm fe:sync 가 내려받은 로고 등) → /fe-assets/ 로 서빙(2026-09-29)
+{
+  const src = join(ROOT, "playground/fe-stories/assets"), dst = join(ROOT, "playground/public/fe-assets");
+  rmSync(dst, { recursive: true, force: true });
+  if (existsSync(src)) { mkdirSync(dst, { recursive: true }); for (const f of readdirSync(src)) copyFileSync(join(src, f), join(dst, f)); copied.push(`fe-assets/(${readdirSync(src).length})`); }
+}
 writeFileSync(join(DOCS, "index.json"), JSON.stringify({ $note: "MCP 가 읽는 문서 사본(pnpm mcp:artifacts). 원본은 저장소 루트·layout/·regulations/.", files: copied }, null, 2));
 console.log(`[docs] ${copied.length} 파일 → playground/public/docs/ · contrast-pairs.json → public/dstk/`);

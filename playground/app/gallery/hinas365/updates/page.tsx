@@ -279,7 +279,9 @@ function UpdatesBody() {
                 {PIPELINE.map((s) => {
                   const n = count([s.key]);
                   return (
-                    <TimelineItem key={s.key} status={n > 0 ? "current" : "default"}>
+                    // 점은 단계를 표시할 뿐 건수를 말하지 않는다 — 건수는 우측 숫자가 말한다.
+                    // 종전 n > 0 ? "current" 는 건수 있는 단계를 파랗게 칠해 "지금 이 단계"로 읽혔다(2026-09-29 교정)
+                    <TimelineItem key={s.key} status="neutral">
                       <div className="flex items-center justify-between gap-3">
                         <TimelineTitle className="font-normal">{s.label}</TimelineTitle>
                         <span className="font-mono text-sm">{n}</span>

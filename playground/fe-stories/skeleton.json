@@ -1,0 +1,69 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "skeleton",
+ "fe": {
+  "id": "primitives-skeleton",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/primitives-skeleton--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "primitives-skeleton--default",
+   "file": "skeleton/default.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "Shapes",
+   "id": "primitives-skeleton--shapes",
+   "file": "skeleton/shapes.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "CardSkeleton",
+   "id": "primitives-skeleton--card-skeleton",
+   "file": "skeleton/card-skeleton.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {},
+ "states": [],
+ "classes": [
+  "animate-pulse",
+  "bg-accent",
+  "border",
+  "border-border",
+  "flex",
+  "flex-1",
+  "flex-col",
+  "gap-2",
+  "gap-3",
+  "gap-4",
+  "h-10",
+  "h-24",
+  "h-3",
+  "h-4",
+  "items-center",
+  "p-4",
+  "rounded-full",
+  "rounded-md",
+  "rounded-xl",
+  "size-10",
+  "w-10",
+  "w-16",
+  "w-24",
+  "w-3/5",
+  "w-32",
+  "w-4/5",
+  "w-48",
+  "w-64",
+  "w-72",
+  "w-full"
+ ],
+ "strippedClasses": []
+}

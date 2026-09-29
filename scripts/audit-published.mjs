@@ -124,7 +124,8 @@ async function main() {
       }
     }
   }
-  for (const [p, kb] of [["/ds-registry.json", 40], ["/story-html/index.json", 40], ["/ds-skill.md", 20]]) {
+  // index.json 예산 60KB — FE 스냅샷 41종의 states 목록이 실리면서 43KB(2026-09-29). 소비자(claude.ai)가 한 번에 읽는 파일이라 계속 본다
+  for (const [p, kb] of [["/ds-registry.json", 40], ["/story-html/index.json", 60], ["/ds-skill.md", 20]]) {
     const r = await get(p);
     if (r.ok && r.body.length / 1024 > kb) add("warn", "크기 예산 초과", `${p} ${(r.body.length / 1024).toFixed(0)}KB (예산 ${kb}KB)`);
   }

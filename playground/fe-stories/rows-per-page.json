@@ -1,0 +1,123 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "rows-per-page",
+ "fe": {
+  "id": "components-pagesizeselect",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/story/components-pagesizeselect--default",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-pagesizeselect--default",
+   "file": "rows-per-page/default.html",
+   "portal": false,
+   "initialArgs": {
+    "pageSize": 40,
+    "total": 143,
+    "options": [
+     20,
+     40,
+     100
+    ]
+   }
+  },
+  {
+   "name": "Interactive",
+   "id": "components-pagesizeselect--interactive",
+   "file": "rows-per-page/interactive.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "pageSize": {
+   "type": "number",
+   "required": true,
+   "control": "number"
+  },
+  "total": {
+   "type": "number",
+   "required": true,
+   "control": "number"
+  },
+  "options": {
+   "type": "other",
+   "required": false,
+   "control": "object",
+   "default": "[20,    40,    100]"
+  },
+  "onPageSizeChange": {
+   "type": "function",
+   "required": true,
+   "control": null
+  },
+  "unit": {
+   "type": "string",
+   "required": false,
+   "control": "text",
+   "default": "\"척\""
+  }
+ },
+ "states": [],
+ "classes": [
+  "*:data-[slot=select-value]:flex",
+  "*:data-[slot=select-value]:gap-2",
+  "*:data-[slot=select-value]:items-center",
+  "*:data-[slot=select-value]:line-clamp-1",
+  "[&_svg:not([class*='size-'])]:size-4",
+  "[&_svg:not([class*='text-'])]:text-muted-foreground",
+  "[&_svg]:pointer-events-none",
+  "[&_svg]:shrink-0",
+  "aria-invalid:border-destructive",
+  "aria-invalid:ring-destructive/20",
+  "bg-border",
+  "bg-transparent",
+  "border",
+  "border-input",
+  "border-none",
+  "dark:aria-invalid:ring-destructive/40",
+  "dark:bg-input/30",
+  "dark:hover:bg-input/50",
+  "data-[placeholder]:text-muted-foreground",
+  "data-[size=default]:h-9",
+  "data-[size=sm]:h-8",
+  "disabled:cursor-not-allowed",
+  "disabled:opacity-50",
+  "flex",
+  "focus-visible:border-ring",
+  "focus-visible:ring-[3px]",
+  "focus-visible:ring-ring/50",
+  "focus:ring-0",
+  "font-medium",
+  "gap-1",
+  "gap-1.5",
+  "gap-2",
+  "h-4",
+  "h-8",
+  "items-center",
+  "justify-between",
+  "lucide",
+  "lucide-chevron-down",
+  "opacity-50",
+  "outline-none",
+  "px-3",
+  "py-2",
+  "rounded-md",
+  "shadow-none",
+  "shrink-0",
+  "size-4",
+  "text-caption-m",
+  "text-foreground",
+  "text-nowrap",
+  "text-secondary-foreground",
+  "text-title-xs",
+  "transition-[color,box-shadow]",
+  "w-[1px]",
+  "w-auto",
+  "whitespace-nowrap"
+ ],
+ "strippedClasses": []
+}

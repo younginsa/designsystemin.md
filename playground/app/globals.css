@@ -1,17 +1,49 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./dstk.css";
+/* 타이포 변수(--text-<스케일>-size · -line-height) — FE 핸드오프와 같은 파일. FE 는 이 이름으로 text-sm 등을 재정의하므로 우리도 같은 원천을 읽는다(2026-09-29 정합) */
+@import "../../dist/handoff/typography.css";
 
 @custom-variant dark (&:is(.dark *));
 @source "../../components/src";
 /* generated/는 .gitignore 경로라 Tailwind v4 자동 감지에서 빠진다 — 명시 선언(2026-09-04, h-16·-my-1.5 미생성 실측) */
 @source "./generated";
 
+/* 피그마 Desktop 스타일 이름의 유틸리티 — FE 스니펫이 text-title-xs 처럼 이 이름을 직접 쓴다(2026-09-29). Tailwind 유틸리티로 정의해야
+   leading-none 같은 다른 유틸리티와 같은 레이어에서 정해진 순서로 겹친다(FE 빌드 CSS 를 그대로 복사하면 레이어 밖에 놓여 leading-none 을 이긴다 — 캘린더 날짜 버튼 실측).
+   값은 dist/handoff/typography.css 의 같은 변수. text-sm 등 Tailwind 이름은 아래 @theme 이 같은 변수로 맞춘다. */
+@utility text-caption-xs { font-size: var(--text-caption-xs-size); line-height: var(--tw-leading, var(--text-caption-xs-line-height)); }
+@utility text-caption-s { font-size: var(--text-caption-s-size); line-height: var(--tw-leading, var(--text-caption-s-line-height)); }
+@utility text-caption-m { font-size: var(--text-caption-m-size); line-height: var(--tw-leading, var(--text-caption-m-line-height)); }
+@utility text-body { font-size: var(--text-body-size); line-height: var(--tw-leading, var(--text-body-line-height)); }
+@utility text-title-xs { font-size: var(--text-title-xs-size); line-height: var(--tw-leading, var(--text-title-xs-line-height)); }
+@utility text-title-s { font-size: var(--text-title-s-size); line-height: var(--tw-leading, var(--text-title-s-line-height)); }
+@utility text-title-m { font-size: var(--text-title-m-size); line-height: var(--tw-leading, var(--text-title-m-line-height)); }
+@utility text-title-l { font-size: var(--text-title-l-size); line-height: var(--tw-leading, var(--text-title-l-line-height)); }
+@utility text-title-xl { font-size: var(--text-title-xl-size); line-height: var(--tw-leading, var(--text-title-xl-line-height)); }
+@utility text-display-xs { font-size: var(--text-display-xs-size); line-height: var(--tw-leading, var(--text-display-xs-line-height)); }
+
 @theme inline {
   /* 서체 — Inter(라이브러리 정합), 한글은 시스템 폴백 */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", sans-serif;
   /* 모노 — Roboto Mono(피그마 Desktop/mono_* 정합, 2026-09-10). font-mono 클래스가 이 변수를 쓴다 */
   --font-mono: var(--font-roboto-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* 글자 크기 스케일 = 피그마 Desktop 텍스트 스타일(dstk/typography.json). Tailwind 기본(sm 14 · base 16 · lg 18)이 아니라
+     FE 제품과 같은 매핑이다(2026-09-29 — FE 스니펫 대조에서 text-sm 이 우리 14 · FE 13 으로 전수 어긋난 것이 발단).
+     text-xs=caption_m 12/16 · sm=body 13/20 · base=Title_XS 14/20 · lg=Title_S 16/24 · xl=Title_M 18/24 · 2xl=Title_L 20/24.
+     3xl 이상은 FE 도 재정의하지 않아 Tailwind 기본 그대로. */
+  --text-xs: var(--text-caption-m-size);
+  --text-xs--line-height: var(--text-caption-m-line-height);
+  --text-sm: var(--text-body-size);
+  --text-sm--line-height: var(--text-body-line-height);
+  --text-base: var(--text-title-xs-size);
+  --text-base--line-height: var(--text-title-xs-line-height);
+  --text-lg: var(--text-title-s-size);
+  --text-lg--line-height: var(--text-title-s-line-height);
+  --text-xl: var(--text-title-m-size);
+  --text-xl--line-height: var(--text-title-m-line-height);
+  --text-2xl: var(--text-title-l-size);
+  --text-2xl--line-height: var(--text-title-l-line-height);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -50,6 +82,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* 기본 글자 크기는 두지 않는다 — FE 스토리북 실측이 브라우저 기본(16/24)이라 그에 맞춘다(2026-09-29). 크기는 text-* 클래스가 정한다 */
   }
 }
 

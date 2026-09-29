@@ -1,0 +1,200 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "status-badge",
+ "fe": {
+  "id": "components-statusbadge",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-statusbadge--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-statusbadge--default",
+   "file": "status-badge/default.html",
+   "portal": false,
+   "initialArgs": {
+    "label": "활성화 완료",
+    "tone": "success"
+   }
+  },
+  {
+   "name": "AllTones",
+   "id": "components-statusbadge--all-tones",
+   "file": "status-badge/all-tones.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "WithDot",
+   "id": "components-statusbadge--with-dot",
+   "file": "status-badge/with-dot.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "WithoutBackground",
+   "id": "components-statusbadge--without-background",
+   "file": "status-badge/without-background.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "Mono",
+   "id": "components-statusbadge--mono",
+   "file": "status-badge/mono.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "label": {
+   "type": "other",
+   "required": true,
+   "control": "object"
+  },
+  "tone": {
+   "type": "other",
+   "required": false,
+   "control": "select",
+   "options": [
+    "success",
+    "error",
+    "progress",
+    "neutral"
+   ],
+   "default": "\"neutral\""
+  },
+  "toneClassName": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  },
+  "dot": {
+   "type": "boolean",
+   "required": false,
+   "control": "boolean",
+   "default": "true"
+  },
+  "bg": {
+   "type": "boolean",
+   "required": false,
+   "control": "boolean",
+   "default": "true"
+  },
+  "mono": {
+   "type": "boolean",
+   "required": false,
+   "control": "boolean",
+   "default": "false"
+  },
+  "className": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  }
+ },
+ "states": [
+  {
+   "story": "Default",
+   "args": {
+    "tone": "success"
+   },
+   "file": "status-badge/states/default--tone-success.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "tone": "error"
+   },
+   "file": "status-badge/states/default--tone-error.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "tone": "progress"
+   },
+   "file": "status-badge/states/default--tone-progress.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "tone": "neutral"
+   },
+   "file": "status-badge/states/default--tone-neutral.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "dot": true
+   },
+   "file": "status-badge/states/default--dot-true.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "bg": true
+   },
+   "file": "status-badge/states/default--bg-true.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "mono": true
+   },
+   "file": "status-badge/states/default--mono-true.html",
+   "portal": false
+  }
+ ],
+ "classes": [
+  "[&>svg]:pointer-events-none",
+  "[&>svg]:size-3",
+  "[a&]:hover:bg-accent",
+  "[a&]:hover:text-accent-foreground",
+  "aria-invalid:border-destructive",
+  "aria-invalid:ring-destructive/20",
+  "bg-current",
+  "bg-muted",
+  "bg-transparent",
+  "border",
+  "border-none",
+  "dark:aria-invalid:ring-destructive/40",
+  "flex",
+  "flex-wrap",
+  "focus-visible:border-ring",
+  "focus-visible:ring-[3px]",
+  "focus-visible:ring-ring/50",
+  "font-medium",
+  "font-mono",
+  "gap-1.5",
+  "gap-2",
+  "h-2",
+  "inline-flex",
+  "items-center",
+  "justify-center",
+  "overflow-hidden",
+  "px-2",
+  "py-0.5",
+  "rounded-full",
+  "rounded-md",
+  "shrink-0",
+  "text-destructive",
+  "text-foreground",
+  "text-muted-foreground",
+  "text-primary",
+  "text-success",
+  "text-title-xs",
+  "transition-[color,box-shadow]",
+  "w-2",
+  "w-fit",
+  "whitespace-nowrap"
+ ],
+ "strippedClasses": []
+}

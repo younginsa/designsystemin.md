@@ -1,0 +1,204 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "empty",
+ "fe": {
+  "id": "components-emptystate",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-emptystate--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-emptystate--default",
+   "file": "empty/default.html",
+   "portal": false,
+   "initialArgs": {
+    "icon": {
+     "displayName": "Ship"
+    },
+    "title": "등록된 호선이 없습니다",
+    "description": "새 호선을 추가하여 시작하세요.",
+    "actionButton": {
+     "type": {
+      "displayName": "Button",
+      "__docgenInfo": {
+       "description": "",
+       "methods": [],
+       "displayName": "Button",
+       "props": {
+        "asChild": {
+         "required": false,
+         "tsType": {
+          "name": "boolean"
+         },
+         "description": "",
+         "defaultValue": {
+          "value": "false",
+          "computed": false
+         }
+        }
+       },
+       "composes": [
+        "VariantProps"
+       ]
+      }
+     },
+     "key": null,
+     "ref": null,
+     "props": {
+      "children": "호선 추가"
+     }
+    }
+   }
+  },
+  {
+   "name": "WithoutAction",
+   "id": "components-emptystate--without-action",
+   "file": "empty/without-action.html",
+   "portal": false,
+   "initialArgs": {
+    "icon": {
+     "displayName": "Search"
+    },
+    "title": "검색 결과 없음",
+    "description": "다른 조건으로 검색해주세요."
+   }
+  },
+  {
+   "name": "TitleOnly",
+   "id": "components-emptystate--title-only",
+   "file": "empty/title-only.html",
+   "portal": false,
+   "initialArgs": {
+    "icon": {
+     "displayName": "Ship"
+    },
+    "title": "등록된 데이터가 없습니다."
+   }
+  },
+  {
+   "name": "AllVariants",
+   "id": "components-emptystate--all-variants",
+   "file": "empty/all-variants.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "icon": {
+   "type": "other",
+   "required": false,
+   "control": "object",
+   "default": "Info"
+  },
+  "title": {
+   "type": "string",
+   "required": true,
+   "control": "text"
+  },
+  "description": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  },
+  "actionButton": {
+   "type": "other",
+   "required": false,
+   "control": "object"
+  },
+  "className": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  },
+  "size": {
+   "type": "enum",
+   "required": false,
+   "control": "radio",
+   "options": [
+    "lg",
+    "base"
+   ],
+   "default": "\"base\""
+  }
+ },
+ "states": [
+  {
+   "story": "Default",
+   "args": {
+    "size": "lg"
+   },
+   "file": "empty/states/default--size-lg.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "size": "base"
+   },
+   "file": "empty/states/default--size-base.html",
+   "portal": false
+  }
+ ],
+ "classes": [
+  "[&>a:hover]:text-primary",
+  "[&>a]:underline",
+  "[&>a]:underline-offset-4",
+  "[&_svg]:pointer-events-none",
+  "[&_svg]:shrink-0",
+  "[&_svg]:size-4",
+  "bg-primary",
+  "bg-transparent",
+  "border-dashed",
+  "disabled:opacity-50",
+  "disabled:pointer-events-none",
+  "flex",
+  "flex-1",
+  "flex-col",
+  "focus-visible:outline-none",
+  "focus-visible:ring-1",
+  "focus-visible:ring-ring",
+  "font-medium",
+  "gap-2",
+  "gap-4",
+  "gap-6",
+  "has-[>svg]:px-3",
+  "hover:bg-primary/90",
+  "inline-flex",
+  "items-center",
+  "justify-center",
+  "lucide",
+  "lucide-plus",
+  "lucide-search",
+  "lucide-ship",
+  "max-w-sm",
+  "mb-2",
+  "md:p-12",
+  "min-w-0",
+  "p-6",
+  "px-4",
+  "py-2",
+  "rounded-lg",
+  "rounded-md",
+  "shadow",
+  "shrink-0",
+  "size-5",
+  "size-7",
+  "text-balance",
+  "text-center",
+  "text-lg",
+  "text-primary-foreground",
+  "text-secondary-foreground",
+  "text-sm",
+  "text-title-xs",
+  "text-xs",
+  "tracking-tight",
+  "transition-colors",
+  "w-full",
+  "whitespace-nowrap",
+  "whitespace-pre"
+ ],
+ "strippedClasses": []
+}

@@ -1,0 +1,61 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "tabs",
+ "fe": {
+  "id": "primitives-tabs",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/primitives-tabs--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "primitives-tabs--default",
+   "file": "tabs/default.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "DisabledTab",
+   "id": "primitives-tabs--disabled-tab",
+   "file": "tabs/disabled-tab.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {},
+ "states": [],
+ "classes": [
+  "bg-muted",
+  "data-[state=active]:bg-background",
+  "data-[state=active]:shadow",
+  "data-[state=active]:text-foreground",
+  "disabled:opacity-50",
+  "disabled:pointer-events-none",
+  "focus-visible:outline-none",
+  "focus-visible:ring-2",
+  "focus-visible:ring-offset-2",
+  "focus-visible:ring-ring",
+  "font-medium",
+  "h-11",
+  "inline-flex",
+  "items-center",
+  "justify-center",
+  "mt-2",
+  "p-1",
+  "px-3",
+  "py-1",
+  "ring-offset-background",
+  "rounded-lg",
+  "rounded-md",
+  "text-body",
+  "text-foreground",
+  "text-muted-foreground",
+  "text-sm",
+  "transition-all",
+  "w-80",
+  "whitespace-nowrap"
+ ],
+ "strippedClasses": []
+}

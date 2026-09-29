@@ -1,0 +1,17 @@
+[
+  {
+    "tag": "a",
+    "prop": "fontWeight",
+    "note": "FE 빌드 CSS 에 전역 a{font-weight:500} 이 있다(Vite 스타터 템플릿 기본값으로 보임). 컴포넌트가 아니라 FE 앱 전역 규칙이라 DS 에 옮기지 않고, FE 에 의도 여부를 묻는다(2026-09-29). FE 가 지우면 이 줄도 지운다."
+  },
+  {
+    "tag": "span",
+    "prop": "fontWeight",
+    "note": "위 a 규칙을 상속한 링크 안의 span·img 만 해당(사이드바 브랜드 링크). 같은 원인."
+  },
+  {
+    "tag": "img",
+    "prop": "fontWeight",
+    "note": "같은 원인 — a{font-weight:500} 상속."
+  }
+]

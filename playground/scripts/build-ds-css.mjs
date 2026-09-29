@@ -4,7 +4,7 @@
 // 컴파일러는 playground 가 이미 쓰는 @tailwindcss/postcss(pnpm 격리 경로라 createRequire 로 해석) — 새 의존성 없음.
 
 import { createRequire } from "node:module";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -60,10 +60,81 @@ const from = join(PG, "app/ds-bundle.css"); // 가상 경로 — 상대 @import�
 const result = await postcss([tailwind({ base: join(PG, "app") })]).process(input, { from, map: false });
 const out = join(PG, "public/ds.css");
 const header = `/* DS CSS 번들 — 자동 생성(pnpm mcp:artifacts). 원천: dstk/*.json → dist/dstk.css + Tailwind(components/src · gallery · fe-stories · 안전 목록) + FE 고유 유틸리티. 단독 HTML 은 <link rel="stylesheet" href="/ds.css"> 한 줄. */\n`;
-// FE 스토리북 고유 유틸리티(text-title-xs 등 타이포 토큰) — pnpm fe:sync 가 FE 빌드 CSS 에서 옮긴 것. 표준 유틸리티는 위 스캔이 컴파일한다(2026-09-28 이관).
-const feUtil = join(PG, "fe-stories/fe-utilities.css");
-const feCss = existsSync(feUtil) ? "\n" + readFileSync(feUtil, "utf8") : "";
-const css = result.css + feCss;
+// ── FE 고유 유틸리티 — FE 스니펫이 쓰는데 우리 Tailwind 가 만들지 못한 클래스만, pnpm fe:sync 가 보관한 FE 빌드 CSS(fe-stories/fe.css)에서 옮긴다(2026-09-29).
+// 기준은 "컴파일된 ds.css 에 그 클래스가 없다" 하나다(추측 없음). FE 가 우리 시맨틱 토큰을 --general-<이름> 으로 부르므로 var() 참조는 우리 이름으로 바꾸고,
+// 그래도 우리에게 없는 변수(--sidebar-* 같은 FE 전용)만 모드별(:root · .dark · .theme-control)로 같이 옮긴다. @layer 는 벗기고 @media·@supports 는 유지한다.
+const CLASS_RE = /\.((?:\\.|[A-Za-z0-9_-])+)(?=[\s,:{.>[~+])/g;
+const NO_STYLE = (c) => /^(group|peer)(\/|$)/.test(c) || /^lucide(-|$)/.test(c) || c === "sr-only" || /^(rdp|recharts)-/.test(c);
+const decodeAttr = (s) => s.replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"');
+function parseBlocks(css, wrap = []) {
+  const o2 = []; let i = 0;
+  while (i < css.length) {
+    const o = css.indexOf("{", i); if (o < 0) break;
+    const sel = css.slice(css.lastIndexOf("}", o) + 1, o).replace(/^[\s;]+/, "").trim();
+    let depth = 1, j = o + 1;
+    while (j < css.length && depth) { if (css[j] === "{") depth++; else if (css[j] === "}") depth--; j++; }
+    const body = css.slice(o + 1, j - 1);
+    if (/^@(layer|media|supports|container)/.test(sel)) o2.push(...parseBlocks(body, /^@layer/.test(sel) ? wrap : [...wrap, sel]));
+    else if (!sel.startsWith("@")) o2.push({ sel, body, wrap });
+    i = j;
+  }
+  return o2;
+}
+let feExtra = "";
+let feReport = "";
+const feCssPath = join(PG, "fe-stories/fe.css");
+if (existsSync(feCssPath)) {
+  const feCss = readFileSync(feCssPath, "utf8");
+  const have = new Set([...result.css.matchAll(CLASS_RE)].map((m) => m[1].replace(/\\/g, "")));
+  const used = new Set();
+  const walk = (d) => { for (const f of readdirSync(d, { withFileTypes: true })) { const p = join(d, f.name); if (f.isDirectory()) walk(p); else if (/\.html$/.test(f.name)) for (const m of readFileSync(p, "utf8").matchAll(/class="([^"]*)"/g)) for (const c of decodeAttr(m[1]).split(/\s+/)) if (c) used.add(c); } };
+  walk(join(PG, "fe-stories"));
+  const missing = [...used].filter((c) => !have.has(c) && !NO_STYLE(c));
+  if (missing.length) {
+    const missingSet = new Set(missing);
+    const ourVars = new Set([...result.css.matchAll(/(--[\w-]+)\s*:/g)].map((m) => m[1]));
+    const alias = (v) => { const m = v.match(/^--general-(.+)$/); return m && ourVars.has("--" + m[1]) ? "--" + m[1] : v; };
+    const rewrite = (s) => s.replace(/var\((--[\w-]+)/g, (m, v) => `var(${alias(v)}`);
+    const blocks = parseBlocks(feCss);
+    const rules = [];
+    const need = new Set();
+    for (const { sel, body, wrap } of blocks) {
+      if (!sel.startsWith(".")) continue;
+      const selClasses = [...sel.matchAll(/\.((?:\\.|[A-Za-z0-9_-])+)/g)].map((m) => m[1].replace(/\\(.)/g, "$1"));
+      if (!selClasses.some((c) => missingSet.has(c))) continue;
+      const b = rewrite(body.trim());
+      for (const m of b.matchAll(/var\((--[\w-]+)/g)) if (!ourVars.has(m[1]) && !/^--tw-/.test(m[1])) need.add(m[1]);
+      rules.push(wrap.reduceRight((acc, w) => `${w}{${acc}}`, `${sel}{${b}}`));
+    }
+    const declBlocks = {};
+    let frontier = [...need];
+    while (frontier.length) {
+      const next = [];
+      for (const { sel, body } of blocks) {
+        if (sel.startsWith(".") && !/^\.(dark|theme-|light)/.test(sel)) continue;
+        for (const m of body.matchAll(/(--[\w-]+)\s*:\s*([^;}]+)/g)) {
+          if (!frontier.includes(m[1])) continue;
+          const scope = sel.replace(/:host/g, "").replace(/,\s*$/, "").trim() || ":root";
+          const val = rewrite(m[2].trim());
+          (declBlocks[scope] ??= new Set()).add(`${m[1]}:${val};`);
+          for (const r of val.matchAll(/var\((--[\w-]+)/g)) if (!ourVars.has(r[1]) && !/^--tw-/.test(r[1]) && !need.has(r[1])) { need.add(r[1]); next.push(r[1]); }
+        }
+      }
+      frontier = next;
+    }
+    const covered = new Set(rules.flatMap((r) => [...r.matchAll(/\.((?:\\.|[A-Za-z0-9_-])+)/g)].map((m) => m[1].replace(/\\(.)/g, "$1"))));
+    const still = missing.filter((c) => !covered.has(c));
+    feExtra = [
+      ``,
+      `/* ── FE 고유 유틸리티 — FE 스니펫이 쓰는데 우리 Tailwind 가 만들지 못한 클래스 ${missing.length}종을 fe-stories/fe.css 에서 옮김(규칙 ${rules.length} · FE 전용 변수 ${need.size}). build-ds-css.mjs ── */`,
+      ...Object.entries(declBlocks).map(([scope, decls]) => `${scope}{${[...decls].join("")}}`),
+      ...[...new Set(rules)],
+      ``,
+    ].join("\n");
+    feReport = ` · FE 고유 ${missing.length}종(규칙 ${rules.length} · 변수 ${need.size}${still.length ? ` · 못 찾음 ${still.length}: ${still.slice(0, 4).join(" ")}` : ""})`;
+  } else feReport = " · FE 고유 0";
+}
+const css = result.css + feExtra;
 writeFileSync(out, header + css);
 const classes = new Set([...css.matchAll(/\.((?:\\.|[A-Za-z0-9_-])+)(?=[\s,:{.>[~+])/g)].map((m) => m[1].replace(/\\/g, "")));
 // 자가 검사용 허용 클래스 목록 — claude.ai 스킬이 읽어 대조한다(도구 없이 검사하는 경로)
@@ -74,4 +145,4 @@ writeFileSync(join(PG, "public/ds-classes.json"), JSON.stringify({
   count: classes.size,
   classes: [...classes].sort(),
 }, null, 1));
-console.log(`[ds.css] ${(css.length / 1024).toFixed(0)} KB · 클래스 ${classes.size} · 안전 목록 ${list.length} → playground/public/ds.css`);
+console.log(`[ds.css] ${(css.length / 1024).toFixed(0)} KB · 클래스 ${classes.size} · 안전 목록 ${list.length}${feReport} → playground/public/ds.css`);

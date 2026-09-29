@@ -1,0 +1,122 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "alert",
+ "fe": {
+  "id": "primitives-alert",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/primitives-alert--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "primitives-alert--default",
+   "file": "alert/default.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "Destructive",
+   "id": "primitives-alert--destructive",
+   "file": "alert/destructive.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "TitleOnly",
+   "id": "primitives-alert--title-only",
+   "file": "alert/title-only.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "DescriptionOnly",
+   "id": "primitives-alert--description-only",
+   "file": "alert/description-only.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "WithoutIcon",
+   "id": "primitives-alert--without-icon",
+   "file": "alert/without-icon.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "AllVariants",
+   "id": "primitives-alert--all-variants",
+   "file": "alert/all-variants.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "variant": {
+   "type": "",
+   "required": false,
+   "control": "select",
+   "options": [
+    "default",
+    "destructive"
+   ]
+  }
+ },
+ "states": [
+  {
+   "story": "Default",
+   "args": {
+    "variant": "default"
+   },
+   "file": "alert/states/default--variant-default.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "destructive"
+   },
+   "file": "alert/states/default--variant-destructive.html",
+   "portal": false
+  }
+ ],
+ "classes": [
+  "[&>svg+div]:translate-y-[-3px]",
+  "[&>svg]:absolute",
+  "[&>svg]:left-4",
+  "[&>svg]:text-destructive",
+  "[&>svg]:text-foreground",
+  "[&>svg]:top-4",
+  "[&>svg~*]:pl-7",
+  "[&_p]:leading-relaxed",
+  "bg-background",
+  "border",
+  "border-destructive/50",
+  "dark:border-destructive",
+  "flex",
+  "flex-col",
+  "font-medium",
+  "gap-3",
+  "leading-none",
+  "lucide",
+  "lucide-circle-alert",
+  "lucide-info",
+  "lucide-terminal",
+  "lucide-triangle-alert",
+  "max-w-xl",
+  "mb-1",
+  "p-8",
+  "px-4",
+  "py-3",
+  "relative",
+  "rounded-lg",
+  "size-4",
+  "text-destructive",
+  "text-foreground",
+  "text-sm",
+  "tracking-tight",
+  "w-full"
+ ],
+ "strippedClasses": []
+}

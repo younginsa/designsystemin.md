@@ -32,7 +32,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-accordion",
+    "docs": "/?path=/docs/primitives-accordion--docs"
+   }
   },
   "alert": {
    "name": {
@@ -50,7 +54,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-alert",
+    "docs": "/?path=/docs/primitives-alert--docs"
+   }
   },
   "alert-dialog": {
    "name": {
@@ -68,7 +76,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-alertdialog",
+    "docs": "/?path=/docs/primitives-alertdialog--docs"
+   }
   },
   "avatar": {
    "name": {
@@ -97,7 +109,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-badge",
+    "docs": "/?path=/docs/primitives-badge--docs"
+   }
   },
   "breadcrumb": {
    "name": {
@@ -115,7 +131,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-breadcrumb",
+    "docs": "/?path=/docs/primitives-breadcrumb--docs"
+   }
   },
   "button": {
    "name": {
@@ -155,7 +175,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-buttongroup",
+    "docs": "/?path=/docs/primitives-buttongroup--docs"
+   }
   },
   "calendar": {
    "name": {
@@ -173,7 +197,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "shadcn Calendar(range) 조합 — @ds/ui/ui/calendar. 기간 선택 표준 = 프리셋 레일 + range 캘린더 두 달(피그마 209-36201). 어휘 키는 허브 카드와 맞춘 form-daterange다(calendar 아님 — approved.json 키 = 허브 data-comp)"
+   "note": "shadcn Calendar(range) 조합 — @ds/ui/ui/calendar. 기간 선택 표준 = 프리셋 레일 + range 캘린더 두 달(피그마 209-36201). 어휘 키는 허브 카드와 맞춘 form-daterange다(calendar 아님 — approved.json 키 = 허브 data-comp)",
+   "fe": {
+    "id": "primitives-calendar",
+    "docs": "/?path=/docs/primitives-calendar--docs"
+   }
   },
   "card": {
    "name": {
@@ -203,7 +231,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-card",
+    "docs": "/?path=/docs/primitives-card--docs"
+   }
   },
   "chart": {
    "name": {
@@ -227,7 +259,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-chart",
+    "docs": "/?path=/docs/primitives-chart--docs"
+   }
   },
   "checkbox": {
    "name": {
@@ -245,7 +281,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-checkbox",
+    "docs": "/?path=/docs/primitives-checkbox--docs"
+   }
   },
   "collapsible": {
    "name": {
@@ -263,7 +303,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-collapsible",
+    "docs": "/?path=/docs/primitives-collapsible--docs"
+   }
   },
   "command": {
    "name": {
@@ -287,7 +331,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-command",
+    "docs": "/?path=/docs/primitives-command--docs"
+   }
   },
   "detail-panel": {
    "name": {
@@ -323,7 +371,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-dialog",
+    "docs": "/?path=/docs/primitives-dialog--docs"
+   }
   },
   "dropdown-menu": {
    "name": {
@@ -347,7 +399,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-dropdownmenu",
+    "docs": "/?path=/docs/primitives-dropdownmenu--docs"
+   }
   },
   "empty": {
    "name": {
@@ -371,7 +427,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "빈 상태 타이틀 강등 — shadcn 순정 text-lg(18px)는 페이지 타이틀·모달 타이틀과 동급이라 빈 상태 메시지가 헤딩을 넘봤다. text-base(16px)로 내려 카드 타이틀(14) < 빈 타이틀(16) < 페이지·모달(18) 위계 정렬. 설명은 text-sm 유지. size=\"sm\" 인라인 변형(2026-09-15 신설): 첨부 슬롯·메모·드롭존 한 줄 — rounded-md · 점선 border · p-3 · text-sm secondary-foreground, 아이콘·우측 액션 선택(갤러리 38곳 손 점선 박스 대체). 스토리 Inline · 피그마 Empty / inline"
+   "note": "빈 상태 타이틀 강등 — shadcn 순정 text-lg(18px)는 페이지 타이틀·모달 타이틀과 동급이라 빈 상태 메시지가 헤딩을 넘봤다. text-base(16px)로 내려 카드 타이틀(14) < 빈 타이틀(16) < 페이지·모달(18) 위계 정렬. 설명은 text-sm 유지. size=\"sm\" 인라인 변형(2026-09-15 신설): 첨부 슬롯·메모·드롭존 한 줄 — rounded-md · 점선 border · p-3 · text-sm secondary-foreground, 아이콘·우측 액션 선택(갤러리 38곳 손 점선 박스 대체). 스토리 Inline · 피그마 Empty / inline",
+   "fe": {
+    "id": "components-emptystate",
+    "docs": "/?path=/docs/components-emptystate--docs"
+   }
   },
   "error-console": {
    "name": {
@@ -425,7 +485,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "폼 컨트롤 플랫 규칙 — 인풋·셀렉트·검색 박스·드롭다운 트리거 그림자 제거(shadow-xs 삭제). 플로팅 패널의 elevation 그림자는 유지. 카드 축척에서 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — 캔버스 무관 흰색). 피그마 Input fill General/background · 반경 8(md) · 링 11"
+   "note": "폼 컨트롤 플랫 규칙 — 인풋·셀렉트·검색 박스·드롭다운 트리거 그림자 제거(shadow-xs 삭제). 플로팅 패널의 elevation 그림자는 유지. 카드 축척에서 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — 캔버스 무관 흰색). 피그마 Input fill General/background · 반경 8(md) · 링 11",
+   "fe": {
+    "id": "primitives-field",
+    "docs": "/?path=/docs/primitives-field--docs"
+   }
   },
   "filter-bar": {
    "name": {
@@ -479,7 +543,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "조합 제작 — @ds/ui/ui/filter-bar (FilterBar·FilterChip·DateRangePanel·resolveDateRange·DATE_PRESETS). 피그마 209-17188 구조 · 날짜 패널 209-36201. 행 = 검색(InputGroup filled 상시 좌측 — 검색 제안이 필요한 화면만 searchSlot 으로 SearchBox 옵트인(2026-09-11 확정: 기본 승격 안 함, 현재 납품 호선만). 스토리 SearchSuggest · 피그마 FilterBar state=search-open) → 필터 칩(한 줄 고정 — 2026-09-09 확정, 종전 '최대 2줄' 폐기: 칩이 남은 폭을 쓰고 넘치면 값 말줄임 + title, 검색창·[+ 필터 추가]·[필터초기화]·액션은 줄지 않음. Input 은 긴 placeholder·값 truncate, 2026-09-08) → [+ 필터 추가] │ 우측 액션 슬롯. 칩 문법 2종: 기본(base)=✕ 없이 꺾쇠만 / 추가=✕만(꺾쇠 없음). 칩 면은 전 상태 bg-muted, 비활성 border-transparent·text-foreground / 활성 border-primary·text-primary. 칩 hover는 비활성만 accent(활성 hover는 primary×accent 미선언이라 보류). 값 해제는 드롭다운 우하단 [초기화] — \"전체\" 항목 금지. 정렬은 이 바에 없다(테이블 컬럼 헤더 전담). 손 조합 금지. 행 매처 4종(passText · passSelect · passDate · passDateSpan)은 filter-bar.tsx 가 소유(2026-09-14 승격 — 종전 갤러리 _detail/filter-match.ts, 두 앱 목록 9면 + AuditLog 공용). now 기본값은 실제 시계, 시안 기준일은 호출부가 넘긴다"
+   "note": "조합 제작 — @ds/ui/ui/filter-bar (FilterBar·FilterChip·DateRangePanel·resolveDateRange·DATE_PRESETS). 피그마 209-17188 구조 · 날짜 패널 209-36201. 행 = 검색(InputGroup filled 상시 좌측 — 검색 제안이 필요한 화면만 searchSlot 으로 SearchBox 옵트인(2026-09-11 확정: 기본 승격 안 함, 현재 납품 호선만). 스토리 SearchSuggest · 피그마 FilterBar state=search-open) → 필터 칩(한 줄 고정 — 2026-09-09 확정, 종전 '최대 2줄' 폐기: 칩이 남은 폭을 쓰고 넘치면 값 말줄임 + title, 검색창·[+ 필터 추가]·[필터초기화]·액션은 줄지 않음. Input 은 긴 placeholder·값 truncate, 2026-09-08) → [+ 필터 추가] │ 우측 액션 슬롯. 칩 문법 2종: 기본(base)=✕ 없이 꺾쇠만 / 추가=✕만(꺾쇠 없음). 칩 면은 전 상태 bg-muted, 비활성 border-transparent·text-foreground / 활성 border-primary·text-primary. 칩 hover는 비활성만 accent(활성 hover는 primary×accent 미선언이라 보류). 값 해제는 드롭다운 우하단 [초기화] — \"전체\" 항목 금지. 정렬은 이 바에 없다(테이블 컬럼 헤더 전담). 손 조합 금지. 행 매처 4종(passText · passSelect · passDate · passDateSpan)은 filter-bar.tsx 가 소유(2026-09-14 승격 — 종전 갤러리 _detail/filter-match.ts, 두 앱 목록 9면 + AuditLog 공용). now 기본값은 실제 시계, 시안 기준일은 호출부가 넘긴다",
+   "fe": {
+    "id": "components-filter-filterbar",
+    "docs": "/?path=/docs/components-filter-filterbar--docs"
+   }
   },
   "heatmap-grid": {
    "name": {
@@ -533,7 +601,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-input",
+    "docs": "/?path=/docs/primitives-input--docs"
+   }
   },
   "input-group": {
    "name": {
@@ -563,7 +635,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "폼 컨트롤 플랫 규칙 — 검색 박스 그림자 제거. filled 변형 추가(variant=\"filled\" = bg-card) — 회색 캔버스(bg-background) 위 시인성용, 흰 카드 위는 기본형. 렌더 차이 없음 — 재캡처 생략. 2026-09-14: 필드 표면 = bg-card 상시 규칙으로 filled 가 기본이 됨(prop 은 호환용 무해 — 클론·갤러리 수정 불필요). 피그마 InputGroup fill General/background · 반경 8 · 링 11"
+   "note": "폼 컨트롤 플랫 규칙 — 검색 박스 그림자 제거. filled 변형 추가(variant=\"filled\" = bg-card) — 회색 캔버스(bg-background) 위 시인성용, 흰 카드 위는 기본형. 렌더 차이 없음 — 재캡처 생략. 2026-09-14: 필드 표면 = bg-card 상시 규칙으로 filled 가 기본이 됨(prop 은 호환용 무해 — 클론·갤러리 수정 불필요). 피그마 InputGroup fill General/background · 반경 8 · 링 11",
+   "fe": {
+    "id": "primitives-inputgroup",
+    "docs": "/?path=/docs/primitives-inputgroup--docs"
+   }
   },
   "item": {
    "name": {
@@ -593,7 +669,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "행 좌측 패딩 제거 — 타이틀과 좌측 정렬"
+   "note": "행 좌측 패딩 제거 — 타이틀과 좌측 정렬",
+   "fe": {
+    "id": "primitives-item",
+    "docs": "/?path=/docs/primitives-item--docs"
+   }
   },
   "label": {
    "name": {
@@ -611,7 +691,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "2026-09-18 교정 — 스토리 파일이 있는데 status 가 primitive 라 스니펫·배포 목록에서 빠져 있었다(audit:published 가 발견). \"스토리가 있으면 DS\" 규칙대로 정정."
+   "note": "2026-09-18 교정 — 스토리 파일이 있는데 status 가 primitive 라 스니펫·배포 목록에서 빠져 있었다(audit:published 가 발견). \"스토리가 있으면 DS\" 규칙대로 정정.",
+   "fe": {
+    "id": "primitives-label",
+    "docs": "/?path=/docs/primitives-label--docs"
+   }
   },
   "list-footer": {
    "name": {
@@ -689,7 +773,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "선택 페이지 = 테두리·배경 없이 텍스트 강조 + 기본색, 비선택·Previous·Next = font-medium + muted. 원형(hover)은 outline 활성 재구성. 기존 생성 화면의 className 오버라이드(클론 5곳)는 소급 제거 대상"
+   "note": "선택 페이지 = 테두리·배경 없이 텍스트 강조 + 기본색, 비선택·Previous·Next = font-medium + muted. 원형(hover)은 outline 활성 재구성. 기존 생성 화면의 className 오버라이드(클론 5곳)는 소급 제거 대상",
+   "fe": {
+    "id": "primitives-pagination",
+    "docs": "/?path=/docs/primitives-pagination--docs"
+   }
   },
   "popover": {
    "name": {
@@ -707,7 +795,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-popover",
+    "docs": "/?path=/docs/primitives-popover--docs"
+   }
   },
   "progress": {
    "name": {
@@ -725,7 +817,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-progress",
+    "docs": "/?path=/docs/primitives-progress--docs"
+   }
   },
   "radio-group": {
    "name": {
@@ -743,7 +839,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-radiogroup",
+    "docs": "/?path=/docs/primitives-radiogroup--docs"
+   }
   },
   "rows-per-page": {
    "name": {
@@ -761,7 +861,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "조합 제작 — @ds/ui/ui/rows-per-page. 목록 푸터 문법: 좌측 '페이지당: [15 ˅] │ 전체 N척' · 우측 페이지네이션. 라벨 연한 톤 + 숫자만 든 고스트 트리거 + 세로 구분선 + 전체 건수. 기본 15행 · 옵션 10/15/30/50 · 드롭업(side=top) · ✓ 오른쪽. 'Page x of y'·'표시' 라벨 기각. summary는 ReactNode — 건수 하나만(보조 카운트 병기 '● 미입력 N' 규칙은 2026-09-10 폐기). 행 수 변경 시 소비자는 1페이지 리셋. 건수는 푸터가 소유 — 제목 부제 총 N건 표기 폐기(design.md §4)"
+   "note": "조합 제작 — @ds/ui/ui/rows-per-page. 목록 푸터 문법: 좌측 '페이지당: [15 ˅] │ 전체 N척' · 우측 페이지네이션. 라벨 연한 톤 + 숫자만 든 고스트 트리거 + 세로 구분선 + 전체 건수. 기본 15행 · 옵션 10/15/30/50 · 드롭업(side=top) · ✓ 오른쪽. 'Page x of y'·'표시' 라벨 기각. summary는 ReactNode — 건수 하나만(보조 카운트 병기 '● 미입력 N' 규칙은 2026-09-10 폐기). 행 수 변경 시 소비자는 1페이지 리셋. 건수는 푸터가 소유 — 제목 부제 총 N건 표기 폐기(design.md §4)",
+   "fe": {
+    "id": "components-pagesizeselect",
+    "docs": "/?path=/story/components-pagesizeselect--default"
+   }
   },
   "scroll-area": {
    "name": {
@@ -790,7 +894,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "조합 제작 — @ds/ui/ui/search-box. 검색 제안 프리셋(피그마 237-51963 focused2): 입력창은 현행 InputGroup(filled·w-64) 그대로(포커스 링 DS 기본), 패널은 분리 플로팅(ov-popover·PopoverAnchor)·폭 w-64·px-2 pt-3 pb-4(하단만 +4px — 면 있는 칩이 붙어 보임 방지). 빠른검색 칩 hover는 bg-border(muted 바탕 위 accent 6%는 동톤 1.035:1로 감지 불가 — foreground×border hover 한정 선언). 타이핑 = 자동완성 최대 5(돋보기·매칭 볼드·보조줄), 비어 있음 = 최근 검색 3(시계·hover ✕ 삭제) + 빠른검색 칩 최대 5. 패널 줄 아이콘(돋보기·시계)은 size-3.5·text-input — 장식 아이콘은 한 단계 연하게(본문 텍스트 아님, contrast-pairs input×popover 장식 전용 선언). 선택 = 즉시 적용·닫힘·최근 편입. 값 있을 때 입력창 우측 ✕(지우면 포커스 유지·빈 상태 패널로 복귀 — FilterBar 기본 검색도 동일 문법). 적용은 페이지 옵트인(FilterBar searchSlot) — 기본 검색 불변. 빠른검색(최다 검색)·최근검색은 시안 목데이터 — 실제 집계·저장은 제품 백엔드 몫. 빈 상태(2026-09-11 확정): 결과 없음(입력 중 후보 0) = ''{값}'에 맞는 후보가 없습니다' 한 줄 — 목록 행과 같은 문법(items-center · 돋보기 size-3.5 text-input), secondary-foreground, 캡션 없음(Empty 프리셋은 섹션 규모라 미사용). 종전엔 최근 검색으로 되돌아가 매칭처럼 보였다. 기록 없음(최근·빠른검색 둘 다 없음)은 상태가 아니다 — 보여줄 게 없으면 패널이 안 열린다(종전 빈 흰 패널 제거). 스토리 NoMatch, 허브 카드 2패널. 피그마(2026-09-14 병합): 별도 SearchBox 세트 은퇴 — Form/Search 세트 한 계보, state 6종 = default · filled · focused · focused-suggest · typing · no-match(입력은 InputGroup filled 하나, 패널은 옵트인). FilterBar 검색 인스턴스 9개가 같은 세트를 본다"
+   "note": "조합 제작 — @ds/ui/ui/search-box. 검색 제안 프리셋(피그마 237-51963 focused2): 입력창은 현행 InputGroup(filled·w-64) 그대로(포커스 링 DS 기본), 패널은 분리 플로팅(ov-popover·PopoverAnchor)·폭 w-64·px-2 pt-3 pb-4(하단만 +4px — 면 있는 칩이 붙어 보임 방지). 빠른검색 칩 hover는 bg-border(muted 바탕 위 accent 6%는 동톤 1.035:1로 감지 불가 — foreground×border hover 한정 선언). 타이핑 = 자동완성 최대 5(돋보기·매칭 볼드·보조줄), 비어 있음 = 최근 검색 3(시계·hover ✕ 삭제) + 빠른검색 칩 최대 5. 패널 줄 아이콘(돋보기·시계)은 size-3.5·text-input — 장식 아이콘은 한 단계 연하게(본문 텍스트 아님, contrast-pairs input×popover 장식 전용 선언). 선택 = 즉시 적용·닫힘·최근 편입. 값 있을 때 입력창 우측 ✕(지우면 포커스 유지·빈 상태 패널로 복귀 — FilterBar 기본 검색도 동일 문법). 적용은 페이지 옵트인(FilterBar searchSlot) — 기본 검색 불변. 빠른검색(최다 검색)·최근검색은 시안 목데이터 — 실제 집계·저장은 제품 백엔드 몫. 빈 상태(2026-09-11 확정): 결과 없음(입력 중 후보 0) = ''{값}'에 맞는 후보가 없습니다' 한 줄 — 목록 행과 같은 문법(items-center · 돋보기 size-3.5 text-input), secondary-foreground, 캡션 없음(Empty 프리셋은 섹션 규모라 미사용). 종전엔 최근 검색으로 되돌아가 매칭처럼 보였다. 기록 없음(최근·빠른검색 둘 다 없음)은 상태가 아니다 — 보여줄 게 없으면 패널이 안 열린다(종전 빈 흰 패널 제거). 스토리 NoMatch, 허브 카드 2패널. 피그마(2026-09-14 병합): 별도 SearchBox 세트 은퇴 — Form/Search 세트 한 계보, state 6종 = default · filled · focused · focused-suggest · typing · no-match(입력은 InputGroup filled 하나, 패널은 옵트인). FilterBar 검색 인스턴스 9개가 같은 세트를 본다",
+   "fe": {
+    "id": "components-searchinput",
+    "docs": "/?path=/docs/components-searchinput--docs"
+   }
   },
   "select": {
    "name": {
@@ -826,7 +934,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "폼 컨트롤 플랫 규칙 — 트리거 그림자 제거. 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — Search 와 같은 흰색, hover 는 accent 로 교체). 피그마: SelectTrigger(size×state 12) fill General/background · 반경 8, SelectItem 5상태(selected-focus 신설 = 체크 + accent) · 반경 6, 예시 Select / closed · open, Form 섹션으로 편입"
+   "note": "폼 컨트롤 플랫 규칙 — 트리거 그림자 제거. 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — Search 와 같은 흰색, hover 는 accent 로 교체). 피그마: SelectTrigger(size×state 12) fill General/background · 반경 8, SelectItem 5상태(selected-focus 신설 = 체크 + accent) · 반경 6, 예시 Select / closed · open, Form 섹션으로 편입",
+   "fe": {
+    "id": "primitives-select",
+    "docs": "/?path=/docs/primitives-select--docs"
+   }
   },
   "separator": {
    "name": {
@@ -855,7 +967,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-sheet",
+    "docs": "/?path=/docs/primitives-sheet--docs"
+   }
   },
   "sidebar": {
    "name": {
@@ -891,7 +1007,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "layout-appshell",
+    "docs": "/?path=/story/layout-appshell--default"
+   }
   },
   "skeleton": {
    "name": {
@@ -915,7 +1035,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "shadcn 기성품 그대로 — @ds/ui/ui/skeleton(animate-pulse · rounded-md · bg-accent). 조정·재현 없음(등재만). 로딩 상태 표준 = 스켈레톤이고, 프로그레스 바(data-progress)는 실제 진행률 표시 전용(업데이트 파이프라인 등) — 로딩 자리표시에 프로그레스 바를 쓰지 않는다. accent light 교정(9701b17 · #FBFBFB→#ECEDF0) 이전에는 흰 카드 위 대비가 1.035:1이라 사실상 비가시였고, 교정 후 1.171:1을 확보해 로딩 표준으로 쓸 수 있게 됐다"
+   "note": "shadcn 기성품 그대로 — @ds/ui/ui/skeleton(animate-pulse · rounded-md · bg-accent). 조정·재현 없음(등재만). 로딩 상태 표준 = 스켈레톤이고, 프로그레스 바(data-progress)는 실제 진행률 표시 전용(업데이트 파이프라인 등) — 로딩 자리표시에 프로그레스 바를 쓰지 않는다. accent light 교정(9701b17 · #FBFBFB→#ECEDF0) 이전에는 흰 카드 위 대비가 1.035:1이라 사실상 비가시였고, 교정 후 1.171:1을 확보해 로딩 표준으로 쓸 수 있게 됐다",
+   "fe": {
+    "id": "primitives-skeleton",
+    "docs": "/?path=/docs/primitives-skeleton--docs"
+   }
   },
   "sonner": {
    "name": {
@@ -933,7 +1057,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-toast",
+    "docs": "/?path=/docs/primitives-toast--docs"
+   }
   },
   "spinner": {
    "name": {
@@ -951,7 +1079,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "components-loadingspinner",
+    "docs": "/?path=/docs/components-loadingspinner--docs"
+   }
   },
   "state-preview": {
    "name": {
@@ -980,7 +1112,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "라운드 필 통일. 정상·중립 대표 = bg-muted 필, 동의어 보조 상태(Ready 등)는 배경 없이 도트+텍스트. 위험·에러 = 도트+텍스트 destructive + bg 12% — 도트만 착색 금지. 원형(hover)은 순정 shadcn Badge"
+   "note": "라운드 필 통일. 정상·중립 대표 = bg-muted 필, 동의어 보조 상태(Ready 등)는 배경 없이 도트+텍스트. 위험·에러 = 도트+텍스트 destructive + bg 12% — 도트만 착색 금지. 원형(hover)은 순정 shadcn Badge",
+   "fe": {
+    "id": "components-statusbadge",
+    "docs": "/?path=/docs/components-statusbadge--docs"
+   }
   },
   "stepper": {
    "name": {
@@ -1004,7 +1140,11 @@
      "built": "2026-09-16"
     }
    ],
-   "note": "원본 재현 완료 — @ds/ui/ui/stepper(2026-09-16 채택 — 종전 unadopted, 스토리 신설). Stepper(ol flex gap-2) + StepperItem(step · state completed|current|upcoming). 완료 = primary 채움 + Check(size-4) · 현재 = primary 테두리 + 굵은 라벨(aria-current=step) · 미래 = border + secondary-foreground. 원 size-7 text-xs semibold, 라벨 text-sm, 연결선 h-px(완료 구간 primary, 나머지 border), 마지막 단계 연결선 없음. body-patterns C 위저드 상단 — 3단계 미만이면 쓰지 않는다. 손 조합(update-wizard 갤러리) 치환은 클론 프롬프트."
+   "note": "원본 재현 완료 — @ds/ui/ui/stepper(2026-09-16 채택 — 종전 unadopted, 스토리 신설). Stepper(ol flex gap-2) + StepperItem(step · state completed|current|upcoming). 완료 = primary 채움 + Check(size-4) · 현재 = primary 테두리 + 굵은 라벨(aria-current=step) · 미래 = border + secondary-foreground. 원 size-7 text-xs semibold, 라벨 text-sm, 연결선 h-px(완료 구간 primary, 나머지 border), 마지막 단계 연결선 없음. body-patterns C 위저드 상단 — 3단계 미만이면 쓰지 않는다. 손 조합(update-wizard 갤러리) 치환은 클론 프롬프트.",
+   "fe": {
+    "id": "components-stepindicator",
+    "docs": "/?path=/docs/components-stepindicator--docs"
+   }
   },
   "switch": {
    "name": {
@@ -1022,7 +1162,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-switch",
+    "docs": "/?path=/docs/primitives-switch--docs"
+   }
   },
   "table": {
    "name": {
@@ -1058,7 +1202,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "셀 좌우 패딩 16px · 상하 패딩 12px(1줄 행 ≈48px — 페이지별 표 밀도 제각각 해소) · 아웃라인·헤더 배경을 컴포넌트에 내장(세션별 래퍼 제각각 문제 해소) · 헤더 폰트는 본문보다 흐리게. variant=\"plain\" 추가(D 대시보드 카드 내부용 경량 표 — 외곽선·헤더 배경 없음, 손 unwind 금지). 원형(hover)은 내장 조정을 되돌린 순정 재구성 · 2026-08-28 래퍼 overflow-y-hidden 추가 — thead·행 배경이 둥근 모서리를 뚫는 클리핑 버그 교정(x축 스크롤 유지)"
+   "note": "셀 좌우 패딩 16px · 상하 패딩 12px(1줄 행 ≈48px — 페이지별 표 밀도 제각각 해소) · 아웃라인·헤더 배경을 컴포넌트에 내장(세션별 래퍼 제각각 문제 해소) · 헤더 폰트는 본문보다 흐리게. variant=\"plain\" 추가(D 대시보드 카드 내부용 경량 표 — 외곽선·헤더 배경 없음, 손 unwind 금지). 원형(hover)은 내장 조정을 되돌린 순정 재구성 · 2026-08-28 래퍼 overflow-y-hidden 추가 — thead·행 배경이 둥근 모서리를 뚫는 클리핑 버그 교정(x축 스크롤 유지)",
+   "fe": {
+    "id": "components-datatable",
+    "docs": "/?path=/docs/components-datatable--docs"
+   }
   },
   "tabs": {
    "name": {
@@ -1082,7 +1230,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-tabs",
+    "docs": "/?path=/docs/primitives-tabs--docs"
+   }
   },
   "textarea": {
    "name": {
@@ -1100,7 +1252,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "폼 컨트롤 플랫 규칙 — 텍스트에어리어 그림자 제거. 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — 캔버스 무관 흰색). 피그마 Textarea fill General/background · 반경 8(md)"
+   "note": "폼 컨트롤 플랫 규칙 — 텍스트에어리어 그림자 제거. 렌더 차이 없음 — 재캡처 생략. 필드 표면 = bg-card 상시(2026-09-14 확정, 종전 bg-transparent — 캔버스 무관 흰색). 피그마 Textarea fill General/background · 반경 8(md)",
+   "fe": {
+    "id": "primitives-textarea",
+    "docs": "/?path=/docs/primitives-textarea--docs"
+   }
   },
   "timeline": {
    "name": {
@@ -1124,7 +1280,7 @@
      "built": "2026-09-15"
     }
    ],
-   "note": "원본 재현 완료 — @ds/ui/ui/timeline. 점·선 마커 컬럼 정렬(구조적 고정)"
+   "note": "원본 재현 완료 — @ds/ui/ui/timeline. 점·선 마커 컬럼 정렬(구조적 고정)\n\nneutral 점 신설(2026-09-29) — border-muted-foreground bg-muted-foreground. \"값은 있지만 의미색을 붙일 수 없는\" 단계용. current 는 \"지금 이 단계\"라 건수가 있다는 이유로 쓰지 않는다(업데이트 현황 패널이 그렇게 써서 파란 점이 여러 개 생김). StatusBadge neutral 톤과 같은 회색."
   },
   "toggle": {
    "name": {
@@ -1164,7 +1320,11 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null
+   "note": null,
+   "fe": {
+    "id": "primitives-tooltip",
+    "docs": "/?path=/docs/primitives-tooltip--docs"
+   }
   },
   "version-filter-chip": {
    "name": {

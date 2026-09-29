@@ -12,10 +12,13 @@
 - **폼 인풋 폭**: 텍스트 인풋·셀렉트·숫자 인풋은 최대 `max-w-sm`(384px).
   좌우로 나란히 둘 때는 2열 그리드.
 - **섹션 리듬** = `space-y-6`(24px) — 전 페이지 공통(피그마 실측 40px에서 조정, 사용자 확정).
+- **글자 크기** — Tailwind 크기 이름은 피그마 Desktop 텍스트 스타일에 매핑돼 있다(FE 제품과 동일, 2026-09-29):
+  `text-xs` 12/16(caption_m) · `text-sm` 13/20(body) · `text-base` 14/20(Title_XS) · `text-lg` 16/24(Title_S) ·
+  `text-xl` 18/24(Title_M) · `text-2xl` 20/24(Title_L). Tailwind 기본(sm 14 · base 16 · lg 18)이 아니다.
 - **카드 종류 혼용 금지** — A·B·C 본문의 카드 = 보더 카드(`rounded-lg border bg-card`).
   그림자 카드(`shadow-card`)는 **D 대시보드 전용**.
 - **섹션 타이틀·설명 위계** — 카드/섹션 타이틀 = `text-sm font-medium
-  text-secondary-foreground`(14px, gray-600), 타이틀 바로 아래 설명 = `text-xs
+  text-secondary-foreground`(13px body, gray-600), 타이틀 바로 아래 설명 = `text-xs
   text-secondary-foreground`(12px). `muted-foreground` 는 2026-09-28 부터 `secondary-foreground` 와 같은 값이다
   (shadcn 호환 — FE 가 shadcn 컴포넌트에 우리 토큰을 얹어 쓴다). 둘 다 읽는 회색이지만 타이틀·설명·라벨은
   `secondary-foreground` 로 적는다(갤러리 관례 43곳). muted-foreground 는 플레이스홀더·힌트·장식 아이콘·빈 값 대시 등

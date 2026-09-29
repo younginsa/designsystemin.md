@@ -1,0 +1,76 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "accordion",
+ "fe": {
+  "id": "primitives-accordion",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/primitives-accordion--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "primitives-accordion--default",
+   "file": "accordion/default.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "Multiple",
+   "id": "primitives-accordion--multiple",
+   "file": "accordion/multiple.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "IconLeft",
+   "id": "primitives-accordion--icon-left",
+   "file": "accordion/icon-left.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {},
+ "states": [],
+ "classes": [
+  "[&[data-state=closed]>svg]:rotate-270",
+  "[&[data-state=open]>svg]:rotate-180",
+  "[&[data-state=open]>svg]:rotate-360",
+  "border-b",
+  "data-[state=closed]:animate-accordion-up",
+  "data-[state=open]:animate-accordion-down",
+  "disabled:opacity-50",
+  "disabled:pointer-events-none",
+  "duration-200",
+  "flex",
+  "flex-1",
+  "focus-visible:border-ring",
+  "focus-visible:ring-[3px]",
+  "focus-visible:ring-ring/50",
+  "font-medium",
+  "gap-4",
+  "hover:underline",
+  "items-start",
+  "justify-between",
+  "justify-start",
+  "last:border-b-0",
+  "lucide",
+  "lucide-chevron-down",
+  "outline-none",
+  "overflow-hidden",
+  "pointer-events-none",
+  "py-4",
+  "rounded-md",
+  "shrink-0",
+  "size-4",
+  "text-left",
+  "text-muted-foreground",
+  "text-sm",
+  "transition-all",
+  "transition-transform",
+  "translate-y-0.5",
+  "w-80"
+ ],
+ "strippedClasses": []
+}

@@ -45,7 +45,11 @@ FE 코드는 작업 브랜치가 로컬에만 있고 배포 뒤에도 계속 바
 - 스니펫(`/story-html`)·프롭(`/props`, argTypes 에서)·`/render`·허브 링크·MCP 링크가 전부 그 스냅샷을 쓴다. index.json 에 `source: "fe"`, `feBuild`(Chromatic 빌드 도장).
 - `/render/<키>/<스토리>?args=` 는 요청 시 렌더가 안 되므로 `states`(select 옵션·boolean 을 하나씩 바꿔 미리 렌더)에 있는 조합만 돌려주고, 없으면 400 + `available`.
 - `pnpm fe:parity [key]` 가 우리 ds.css 위의 스니펫과 FE iframe 의 계산 스타일을 요소 단위로 대조한다. FE 고유 유틸리티(text-title-xs 등)는 fe-utilities.css 로 ds.css 에 덧붙는다.
-- FE CSS 에 규칙이 없는 죽은 클래스(text-medium)는 스냅샷에서 떼고 json 에 `strippedClasses` 로 남긴다.
+- FE CSS 에 규칙이 없는 죽은 클래스(text-medium)와 우리가 못 만드는 RTL 전용 클래스는 스냅샷에서 떼고 json 에 `strippedClasses` 로 남긴다. 오버레이(Dialog·Sheet·Popover 등)가 포털로 body 에 나간 것은 `<!-- portal -->` 뒤에 붙는다(`portal: true`).
+- **글자 크기 스케일은 FE 와 같은 매핑이다(2026-09-29).** `text-sm`=body 13/20 · `text-base`=Title_XS 14/20 · `text-lg`=Title_S 16/24 처럼 Tailwind 크기 이름을 피그마 Desktop 스타일(`dist/handoff/typography.css`)에 붙인다(`globals.css` @theme). 41종 대조에서 `text-sm` 이 우리 14 · FE 13 으로 전수 어긋난 것이 발단 — 우리 typography.json 은 원래 body 13 이었고 FE 가 그걸 구현한 것이었다.
+- FE 고유 유틸리티(사이드바 색 등 우리 Tailwind 가 못 만드는 클래스)는 `fe:sync` 가 보관한 FE 빌드 CSS(`fe-stories/fe.css`)에서 **build-ds-css.mjs 가 컴파일 뒤 "ds.css 에 없는 클래스"만** 옮긴다(추측 없음). FE 가 우리 시맨틱 토큰을 `--general-<이름>` 으로 부르므로 var() 는 우리 이름으로 바꾼다. 표준 유틸리티는 스캔으로 우리가 만든다.
+- 컴포넌트의 원천은 FE Storybook 하나다. FE 에 없는 것은 `pnpm fe:request` 가 `fe-requests/` 에 요청서(우리 구현 = 사양서)를 만든다. FE 가 만들어 배포하면 자동 동기화가 원천을 넘긴다.
+- **자동 동기화**: `.github/workflows/fe-sync.yml` 이 매시간 FE 빌드 도장을 보고, 바뀌었을 때만 `fe:sync` → ds.css → `fe:parity` → 통과 시 봇 커밋·푸시(→ Vercel 배포). 빨간 X 는 FE 스토리북 불통(다음 시간 회복) 또는 새 빌드가 우리 ds.css 위에서 다르게 그려짐(사람이 고침, 커밋 안 함). 수동은 Actions 탭 Run workflow. `pnpm fe:sync --if-changed` 가 같은 판정을 로컬에서 한다.
 
 ## 배포 (Vercel 두 번째 프로젝트 — 관리자 1회)
 

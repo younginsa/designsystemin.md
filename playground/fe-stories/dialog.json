@@ -1,0 +1,191 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "dialog",
+ "fe": {
+  "id": "primitives-dialog",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/primitives-dialog--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Small",
+   "id": "primitives-dialog--small",
+   "file": "dialog/small.html",
+   "portal": true,
+   "initialArgs": {}
+  },
+  {
+   "name": "Medium",
+   "id": "primitives-dialog--medium",
+   "file": "dialog/medium.html",
+   "portal": true,
+   "initialArgs": {}
+  },
+  {
+   "name": "Large",
+   "id": "primitives-dialog--large",
+   "file": "dialog/large.html",
+   "portal": true,
+   "initialArgs": {}
+  },
+  {
+   "name": "ExtraLarge",
+   "id": "primitives-dialog--extra-large",
+   "file": "dialog/extra-large.html",
+   "portal": true,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "showCloseButton": {
+   "type": "boolean",
+   "required": false,
+   "control": null,
+   "default": "true"
+  },
+  "size": {
+   "type": "",
+   "required": false,
+   "control": "select",
+   "options": [
+    "sm",
+    "md",
+    "lg",
+    "xl"
+   ]
+  }
+ },
+ "states": [
+  {
+   "story": "Small",
+   "args": {
+    "showCloseButton": true
+   },
+   "file": "dialog/states/small--showCloseButton-true.html",
+   "portal": true
+  },
+  {
+   "story": "Small",
+   "args": {
+    "size": "sm"
+   },
+   "file": "dialog/states/small--size-sm.html",
+   "portal": true
+  },
+  {
+   "story": "Small",
+   "args": {
+    "size": "md"
+   },
+   "file": "dialog/states/small--size-md.html",
+   "portal": true
+  },
+  {
+   "story": "Small",
+   "args": {
+    "size": "lg"
+   },
+   "file": "dialog/states/small--size-lg.html",
+   "portal": true
+  },
+  {
+   "story": "Small",
+   "args": {
+    "size": "xl"
+   },
+   "file": "dialog/states/small--size-xl.html",
+   "portal": true
+  }
+ ],
+ "classes": [
+  "[&_svg:not([class*='size-'])]:size-4",
+  "[&_svg]:pointer-events-none",
+  "[&_svg]:shrink-0",
+  "[&_svg]:size-4",
+  "absolute",
+  "bg-background",
+  "bg-black/50",
+  "bg-card",
+  "border",
+  "dark:bg-input/30",
+  "dark:border-border",
+  "dark:hover:bg-input/50",
+  "data-[state=closed]:animate-out",
+  "data-[state=closed]:fade-out-0",
+  "data-[state=closed]:zoom-out-95",
+  "data-[state=open]:animate-in",
+  "data-[state=open]:bg-accent",
+  "data-[state=open]:fade-in-0",
+  "data-[state=open]:text-secondary-foreground",
+  "data-[state=open]:zoom-in-95",
+  "disabled:opacity-50",
+  "disabled:pointer-events-none",
+  "duration-200",
+  "fixed",
+  "flex",
+  "flex-col",
+  "flex-col-reverse",
+  "focus-visible:outline-none",
+  "focus-visible:ring-1",
+  "focus-visible:ring-ring",
+  "focus:outline-hidden",
+  "focus:ring-2",
+  "focus:ring-offset-2",
+  "focus:ring-ring",
+  "font-medium",
+  "font-semibold",
+  "gap-2",
+  "gap-4",
+  "grid",
+  "has-[>svg]:px-3",
+  "hover:bg-accent",
+  "hover:opacity-100",
+  "hover:text-accent-foreground",
+  "inline-flex",
+  "inset-0",
+  "items-center",
+  "justify-center",
+  "leading-none",
+  "left-[50%]",
+  "lucide",
+  "lucide-x",
+  "max-w-[calc(100%-2rem)]",
+  "opacity-70",
+  "p-6",
+  "px-4",
+  "py-2",
+  "right-4",
+  "ring-offset-background",
+  "rounded-lg",
+  "rounded-md",
+  "rounded-xs",
+  "shadow-lg",
+  "sm:flex-row",
+  "sm:justify-end",
+  "sm:max-w-2xl",
+  "sm:max-w-5xl",
+  "sm:max-w-lg",
+  "sm:max-w-md",
+  "sm:text-left",
+  "sr-only",
+  "text-center",
+  "text-lg",
+  "text-secondary-foreground",
+  "text-sm",
+  "text-title-xs",
+  "top-4",
+  "top-[50%]",
+  "transition-colors",
+  "transition-opacity",
+  "translate-x-[-50%]",
+  "translate-y-[-50%]",
+  "w-full",
+  "whitespace-nowrap",
+  "z-50"
+ ],
+ "strippedClasses": [
+  "text-medium"
+ ]
+}

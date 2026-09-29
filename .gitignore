@@ -24,3 +24,5 @@ playground/scripts/.ds-safelist.html
 mcp/dist/
 mcp/.gen/
 playground/public/props/
+# FE 스니펫 자산 사본(pnpm mcp:artifacts 가 fe-stories/assets 에서 복사) — 커밋하지 않는다(2026-09-29)
+playground/public/fe-assets/

@@ -11,10 +11,14 @@ function Timeline({ className, ...props }: React.ComponentProps<"ol">) {
   );
 }
 
-type TimelineStatus = "default" | "current" | "success" | "error";
+type TimelineStatus = "default" | "neutral" | "current" | "success" | "error";
 
+// 점 = 단계의 상태. 빈 동그라미(default) → 회색 채움(neutral) → 의미색 채움(current·success·error).
+// neutral 은 "값은 있지만 의미색을 붙일 수 없는" 단계 — StatusBadge 의 neutral 톤과 같은 회색(muted-foreground)이다.
+// current 는 "지금 이 단계"라는 뜻이라 건수가 있다는 이유로 쓰지 않는다(2026-09-29 — 업데이트 현황 패널이 그렇게 써서 파란 점이 여러 개 생겼다).
 const dotStyles: Record<TimelineStatus, string> = {
   default: "border-border bg-background",
+  neutral: "border-muted-foreground bg-muted-foreground",
   current: "border-primary bg-primary",
   success: "border-success bg-success",
   error: "border-destructive bg-destructive",

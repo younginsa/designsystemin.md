@@ -1,0 +1,107 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "checkbox",
+ "fe": {
+  "id": "primitives-checkbox",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/primitives-checkbox--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "CpAORVUL",
+ "synced": "2026-09-29",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "primitives-checkbox--default",
+   "file": "checkbox/default.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "Checked",
+   "id": "primitives-checkbox--checked",
+   "file": "checkbox/checked.html",
+   "portal": false,
+   "initialArgs": {
+    "defaultChecked": true
+   }
+  },
+  {
+   "name": "Disabled",
+   "id": "primitives-checkbox--disabled",
+   "file": "checkbox/disabled.html",
+   "portal": false,
+   "initialArgs": {
+    "disabled": true
+   }
+  },
+  {
+   "name": "DisabledChecked",
+   "id": "primitives-checkbox--disabled-checked",
+   "file": "checkbox/disabled-checked.html",
+   "portal": false,
+   "initialArgs": {
+    "disabled": true,
+    "defaultChecked": true
+   }
+  },
+  {
+   "name": "WithLabel",
+   "id": "primitives-checkbox--with-label",
+   "file": "checkbox/with-label.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "AllStates",
+   "id": "primitives-checkbox--all-states",
+   "file": "checkbox/all-states.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {},
+ "states": [],
+ "classes": [
+  "aria-invalid:border-destructive",
+  "aria-invalid:ring-destructive/20",
+  "border",
+  "border-input",
+  "dark:aria-invalid:ring-destructive/40",
+  "dark:bg-input/30",
+  "dark:data-[state=checked]:bg-primary",
+  "data-[state=checked]:bg-primary",
+  "data-[state=checked]:border-primary",
+  "data-[state=checked]:text-primary-foreground",
+  "disabled:cursor-not-allowed",
+  "disabled:opacity-50",
+  "flex",
+  "flex-col",
+  "focus-visible:border-ring",
+  "focus-visible:ring-[3px]",
+  "focus-visible:ring-ring/50",
+  "font-medium",
+  "gap-2",
+  "gap-3",
+  "items-center",
+  "justify-center",
+  "leading-none",
+  "lucide",
+  "lucide-check",
+  "outline-none",
+  "peer",
+  "peer-disabled:cursor-not-allowed",
+  "peer-disabled:opacity-70",
+  "rounded-[4px]",
+  "shadow-xs",
+  "shrink-0",
+  "size-3.5",
+  "size-4",
+  "text-body",
+  "text-current",
+  "text-foreground",
+  "text-sm",
+  "transition-none",
+  "transition-shadow"
+ ],
+ "strippedClasses": []
+}

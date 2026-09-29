@@ -41,6 +41,10 @@ export const AllStatuses = {
         <TimelineTitle>APPLYING</TimelineTitle>
         <TimelineMeta>진행 중</TimelineMeta>
       </TimelineItem>
+      <TimelineItem status="neutral">
+        <TimelineTitle>PENDING</TimelineTitle>
+        <TimelineMeta>값은 있으나 의미색이 없는 단계 — 회색 채움</TimelineMeta>
+      </TimelineItem>
       <TimelineItem status="error">
         <TimelineTitle>ROLLBACK FAILED</TimelineTitle>
         <TimelineMeta>2026-09-09 08:02</TimelineMeta>

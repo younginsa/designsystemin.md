@@ -1,14 +1,375 @@
 {
- "$note": "FE 스토리북 동기화 요약(pnpm fe:sync)",
+ "$note": "FE 스토리북 동기화 요약(pnpm fe:sync). feBuild = 마지막으로 가져온 FE 빌드 도장 — --if-changed 가 이것과 대조한다",
  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com",
  "feBuild": "CpAORVUL",
- "synced": "2026-09-28",
+ "synced": "2026-09-29",
  "components": [
+  {
+   "key": "accordion",
+   "stories": 3,
+   "states": 0,
+   "classes": 37,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "alert",
+   "stories": 6,
+   "states": 2,
+   "classes": 35,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "alert-dialog",
+   "stories": 2,
+   "states": 0,
+   "classes": 32,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "badge",
+   "stories": 2,
+   "states": 4,
+   "classes": 42,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "breadcrumb",
+   "stories": 2,
+   "states": 0,
+   "classes": 16,
+   "stripped": [],
+   "errors": 0
+  },
   {
    "key": "button",
    "stories": 4,
    "states": 18,
    "classes": 75,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "button-group",
+   "stories": 4,
+   "states": 0,
+   "classes": 77,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "calendar",
+   "stories": 3,
+   "states": 0,
+   "classes": 106,
+   "stripped": [
+    "rtl:**:[.rdp-button\\_next>svg]:rotate-180",
+    "rtl:**:[.rdp-button\\_previous>svg]:rotate-180",
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "card",
+   "stories": 3,
+   "states": 0,
+   "classes": 56,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "chart",
+   "stories": 2,
+   "states": 0,
+   "classes": 50,
+   "stripped": [
+    "xAxis",
+    "yAxis"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "checkbox",
+   "stories": 6,
+   "states": 0,
+   "classes": 40,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "collapsible",
+   "stories": 1,
+   "states": 0,
+   "classes": 35,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "command",
+   "stories": 1,
+   "states": 0,
+   "classes": 69,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "dialog",
+   "stories": 4,
+   "states": 5,
+   "classes": 84,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "dropdown-menu",
+   "stories": 2,
+   "states": 0,
+   "classes": 34,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "empty",
+   "stories": 4,
+   "states": 2,
+   "classes": 56,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "field",
+   "stories": 2,
+   "states": 0,
+   "classes": 94,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "filter-bar",
+   "stories": 3,
+   "states": 0,
+   "classes": 49,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "input",
+   "stories": 4,
+   "states": 0,
+   "classes": 27,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "input-group",
+   "stories": 4,
+   "states": 0,
+   "classes": 97,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "item",
+   "stories": 3,
+   "states": 0,
+   "classes": 75,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "label",
+   "stories": 3,
+   "states": 0,
+   "classes": 54,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "pagination",
+   "stories": 2,
+   "states": 0,
+   "classes": 47,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "popover",
+   "stories": 2,
+   "states": 0,
+   "classes": 27,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "progress",
+   "stories": 2,
+   "states": 0,
+   "classes": 18,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "radio-group",
+   "stories": 3,
+   "states": 0,
+   "classes": 42,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "rows-per-page",
+   "stories": 2,
+   "states": 0,
+   "classes": 55,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "search-box",
+   "stories": 6,
+   "states": 2,
+   "classes": 93,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "select",
+   "stories": 4,
+   "states": 0,
+   "classes": 41,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "sheet",
+   "stories": 2,
+   "states": 0,
+   "classes": 27,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "sidebar",
+   "stories": 2,
+   "states": 0,
+   "classes": 212,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "skeleton",
+   "stories": 3,
+   "states": 0,
+   "classes": 30,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "sonner",
+   "stories": 4,
+   "states": 0,
+   "classes": 27,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "spinner",
+   "stories": 2,
+   "states": 2,
+   "classes": 10,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "status-badge",
+   "stories": 5,
+   "states": 7,
+   "classes": 41,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "stepper",
+   "stories": 4,
+   "states": 0,
+   "classes": 27,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "switch",
+   "stories": 5,
+   "states": 0,
+   "classes": 41,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "table",
+   "stories": 7,
+   "states": 0,
+   "classes": 105,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "tabs",
+   "stories": 2,
+   "states": 0,
+   "classes": 29,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "textarea",
+   "stories": 4,
+   "states": 0,
+   "classes": 21,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "tooltip",
+   "stories": 2,
+   "states": 0,
+   "classes": 35,
    "stripped": [
     "text-medium"
    ],
