@@ -139,7 +139,8 @@
    "key": "dropdown-menu",
    "stories": 2,
    "states": 0,
-   "classes": 34,
+   "opened": 2,
+   "classes": 95,
    "stripped": [
     "text-medium"
    ],
@@ -165,9 +166,12 @@
    "key": "filter-bar",
    "stories": 3,
    "states": 0,
-   "classes": 49,
+   "opened": 10,
+   "classes": 224,
    "stripped": [
-    "text-medium"
+    "text-medium",
+    "rtl:**:[.rdp-button\\_next>svg]:rotate-180",
+    "rtl:**:[.rdp-button\\_previous>svg]:rotate-180"
    ],
    "errors": 0
   },
@@ -232,7 +236,8 @@
    "key": "popover",
    "stories": 2,
    "states": 0,
-   "classes": 27,
+   "opened": 2,
+   "classes": 78,
    "stripped": [
     "text-medium"
    ],
@@ -258,7 +263,8 @@
    "key": "rows-per-page",
    "stories": 2,
    "states": 0,
-   "classes": 55,
+   "opened": 2,
+   "classes": 104,
    "stripped": [],
    "errors": 0
   },
@@ -276,7 +282,8 @@
    "key": "select",
    "stories": 4,
    "states": 0,
-   "classes": 41,
+   "opened": 3,
+   "classes": 96,
    "stripped": [],
    "errors": 0
   },
@@ -294,7 +301,8 @@
    "key": "sidebar",
    "stories": 2,
    "states": 0,
-   "classes": 212,
+   "opened": 10,
+   "classes": 320,
    "stripped": [
     "text-medium"
    ],

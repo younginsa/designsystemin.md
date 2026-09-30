@@ -9,7 +9,8 @@
 // 산출물(커밋한다 — Vercel 빌드에는 브라우저가 없어서 여기서 만든 것을 그대로 쓴다):
 //   playground/fe-stories/<key>/<story>.html               스토리 렌더 HTML(#storybook-root 안 + 포털로 나간 오버레이는 <!-- portal --> 뒤에)
 //   playground/fe-stories/<key>/states/<story>--<arg>-<v>.html  args 로 바꾼 상태별 렌더(select·boolean 컨트롤) — /render?args= 의 대체
-//   playground/fe-stories/<key>.json                      스토리 목록·initialArgs·argTypes·states·클래스·FE 빌드 도장
+//   playground/fe-stories/<key>/states/<story>--open.html   스토리의 첫 닫힌 트리거를 클릭해 연 상태(드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에)
+//   playground/fe-stories/<key>.json                      스토리 목록·initialArgs·argTypes·states·opened·클래스·FE 빌드 도장
 //   playground/fe-stories/fe-utilities.css                FE 고유 유틸리티(text-title-xs 등) — ds.css 에 덧붙인다
 //   playground/fe-stories/index.json                      동기화 요약(feBuild = 마지막으로 가져온 FE 빌드)
 // 브라우저: FE_CHROME → playwright-core 가 아는 설치 위치 → Playwright 캐시(mac·linux) → Google Chrome. Storybook 의 공식 URL 인자(&args=)만 쓴다.
@@ -83,18 +84,25 @@ const UNSUPPORTED = (c) => /^rtl:/.test(c);
 // 스토리북 화면에서만 의미가 있고 생성물에 복사되면 check_html 의 inline-style 위반이 된다(2026-09-30 파일럿 실측: tabs). CSS 변수 선언(--sidebar-width)은 남긴다.
 const RUNTIME_STYLE = /^(animation-duration|animation-name|outline|pointer-events)$/;
 
+const PORTAL_MARK = "\n<!-- portal -->\n";
+
 /** 죽은 클래스·런타임 인라인 style 을 뗀 HTML + 뗀 목록 */
 function strip(html, dead) {
   const removed = new Set();
-  let out = html.replace(/class="([^"]*)"/g, (m, v) => {
+  const out = html.replace(/class="([^"]*)"/g, (m, v) => {
     const kept = decode(v).split(/\s+/).filter((c) => { if (c && dead.has(c)) { removed.add(c); return false; } return !!c; });
     return `class="${encode(kept.join(" "))}"`;
   });
-  out = out.replace(/ style="([^"]*)"/g, (m, v) => {
-    const kept = v.split(";").map((d) => d.trim()).filter(Boolean).filter((d) => !RUNTIME_STYLE.test(d.split(":")[0].trim()));
+  const styleOf = (part, keep) => part.replace(/ style="([^"]*)"/g, (m, v) => {
+    const kept = v.split(";").map((d) => d.trim()).filter(Boolean).filter(keep);
     return kept.length ? ` style="${kept.join("; ")};"` : "";
   });
-  return { html: out, removed: [...removed].sort() };
+  const [root, portal] = out.split(PORTAL_MARK);
+  let res = styleOf(root, (d) => !RUNTIME_STYLE.test(d.split(":")[0].trim()));
+  // 포털(오버레이) 쪽은 CSS 변수만 남긴다 — position·transform·z-index 는 Radix popper 가 스토리북 화면 좌표로 계산한 값이라 생성물에선 틀리다.
+  // 위치는 ds.js 가 열 때 트리거 아래로 잡는다(2026-09-30 열린 상태 캡처와 함께 도입).
+  if (portal != null) res += PORTAL_MARK + styleOf(portal, (d) => d.startsWith("--"));
+  return { html: res, removed: [...removed].sort() };
 }
 
 const browser = await chromium.launch({ executablePath: chromePath(), headless: true });
@@ -113,6 +121,10 @@ async function render(id, args) {
     return [...document.body.children].some((el) => !/^storybook-/.test(el.id) && !/(^|\s)sb-/.test(el.className || "") && !/^(SCRIPT|STYLE|LINK|NOSCRIPT|SPAN)$/.test(el.tagName));
   }, null, { timeout: 20000 });
   await page.waitForTimeout(250); // play 함수·포털 마운트 여유
+  return extract();
+}
+/** 현재 페이지에서 스토리 루트 HTML·포털·argTypes 를 뽑는다 */
+function extract() {
   return page.evaluate(() => {
     const r = document.getElementById("storybook-root");
     const err = document.body.classList.contains("sb-show-errordisplay") ? (document.querySelector("#error-message")?.textContent || "story error").slice(0, 300) : null;
@@ -131,6 +143,29 @@ async function render(id, args) {
     }])) : {};
     return { html: (r ? r.innerHTML : "") + (portals ? "\n<!-- portal -->\n" + portals : ""), portal: !!portals, initialArgs: s?.initialArgs ?? {}, argTypes, error: err };
   });
+}
+// 열린 상태(2026-09-30 파일럿 교훈: 모든 FE 스토리가 닫힌 채 찍혀 드롭다운·팝오버·셀렉트 내용이 어디에도 없었다).
+// 스토리 루트 안의 닫힌 트리거(aria-haspopup 또는 role=combobox)를 하나씩 클릭해 포털이 생기면 states/<스토리>--open[-N].html 로 둔다
+// (트리거마다 한 장 — 사이드바처럼 메뉴가 여럿인 셸은 시계·계정 메뉴가 각각 필요하다. 상한 OPEN_MAX).
+// 생성물은 이 파일의 트리거+포털을 그대로 쓰고 ds.js 가 열고 닫는다(포털 쪽 인라인 style 은 strip 이 걷어내고 위치는 ds.js 가 잡는다).
+const TRIGGER_SEL = '#storybook-root [aria-haspopup]:not([disabled]), #storybook-root [role="combobox"]:not([disabled])';
+const OPEN_MAX = 8;
+async function countTriggers() { return page.$$eval(TRIGGER_SEL, (els) => els.length); }
+async function renderOpen(i) {
+  const trigs = await page.$$(TRIGGER_SEL);
+  const trig = trigs[i];
+  if (!trig) return null;
+  const closed = await trig.evaluate((e) => e.getAttribute("data-state") === "closed" || e.getAttribute("aria-expanded") === "false");
+  if (!closed) return null;
+  const trigger = await trig.evaluate((e) => (e.getAttribute("aria-label") || e.textContent || "").replace(/\s+/g, " ").trim().slice(0, 40));
+  try { await trig.click({ timeout: 3000 }); } catch { return null; } // 보이지 않는 트리거(접힌 셸의 숨은 버튼 등)는 건너뛴다
+  try {
+    await page.waitForFunction(() => [...document.body.children].some((el) => !/^storybook-/.test(el.id) && !/(^|\s)sb-/.test(el.className || "") && !/^(SCRIPT|STYLE|LINK|NOSCRIPT)$/.test(el.tagName)
+      && (el.matches('[data-state="open"], [role="menu"], [role="listbox"], [role="dialog"]') || el.querySelector('[data-state="open"], [role="menu"], [role="listbox"], [role="dialog"]'))), null, { timeout: 4000 });
+  } catch { return null; }
+  await page.waitForTimeout(400); // 열림 애니메이션
+  const r = await extract();
+  return r.portal && !r.error ? { html: r.html, trigger } : null;
 }
 const collect = (html, set) => { for (const m of html.matchAll(/class="([^"]*)"/g)) for (const c of decode(m[1]).split(/\s+/)) if (c) set.add(c); };
 
@@ -172,6 +207,14 @@ for (const key of keys) {
     const name = pascal(e.name);
     raw.push({ kind: "story", name, id: e.id, file: `${key}/${kebab(name)}.html`, html: r.html, portal: r.portal, initialArgs: r.initialArgs, error: r.error });
     if (r.error) errors++;
+    else if (!r.portal) {
+      let n = 0; try { n = Math.min(await countTriggers(), OPEN_MAX); } catch {}
+      for (let i = 0; i < n; i++) {
+        if (i > 0) { try { await render(e.id); } catch { break; } } // 이전 열림을 닫기 위해 스토리를 다시 연다
+        let o = null; try { o = await renderOpen(i); } catch {}
+        if (o) raw.push({ kind: "open", story: name, index: i, trigger: o.trigger, file: `${key}/states/${kebab(name)}--open${i ? "-" + i : ""}.html`, html: o.html, portal: true });
+      }
+    }
     if (!first && !r.error) { first = { id: e.id, name }; argTypes = r.argTypes; }
   }
   // 상태별 렌더 — 첫 스토리에 select 옵션·boolean 컨트롤을 하나씩 적용(Storybook 공식 &args=). 사진에 없는 상태를 미리 찍어 둔다.
@@ -193,7 +236,7 @@ for (const key of keys) {
   const dead = new Set([...all].filter((c) => UNSUPPORTED(c) || (!NO_STYLE(c) && !hasRule(c))));
   const stripped = new Set();
   const classes = new Set();
-  const stories = [], states = [];
+  const stories = [], states = [], opened = [];
   for (const r of raw) {
     const { html: stripped0, removed } = strip(r.html, dead);
     const html = await captureAssets(stripped0);
@@ -201,15 +244,16 @@ for (const key of keys) {
     writeFileSync(join(OUT, r.file), html + "\n");
     collect(html, classes);
     if (r.kind === "story") stories.push({ name: r.name, id: r.id, file: r.file, portal: r.portal, initialArgs: r.initialArgs, ...(r.error ? { error: r.error } : {}) });
+    else if (r.kind === "open") opened.push({ story: r.story, index: r.index, trigger: r.trigger, file: r.file });
     else states.push({ story: r.story, args: r.args, file: r.file, portal: r.portal });
   }
   writeFileSync(join(OUT, `${key}.json`), JSON.stringify({
-    $note: "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+    $note: "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
     key, fe: { id: fe.id, docs: FE + fe.docs, base: FE }, feBuild, synced,
-    stories, argTypes, states, classes: [...classes].sort(), strippedClasses: [...stripped].sort(),
+    stories, argTypes, states, opened, classes: [...classes].sort(), strippedClasses: [...stripped].sort(),
   }, null, 1) + "\n");
-  summary.push({ key, stories: stories.length, states: states.length, classes: classes.size, stripped: [...stripped], errors });
-  console.log(`  ${key}: 스토리 ${stories.length} · 상태 ${states.length} · 클래스 ${classes.size}${stories.some((s) => s.portal) ? " · 포털" : ""}${stripped.size ? ` · 죽은 클래스 뗌 ${[...stripped].join(",")}` : ""}${errors ? ` · 렌더 오류 ${errors}` : ""}`);
+  summary.push({ key, stories: stories.length, states: states.length, opened: opened.length, classes: classes.size, stripped: [...stripped], errors });
+  console.log(`  ${key}: 스토리 ${stories.length} · 상태 ${states.length}${opened.length ? ` · 열림 ${opened.length}(${opened.map((o) => o.trigger).join(",")})` : ""} · 클래스 ${classes.size}${stories.some((s) => s.portal) ? " · 포털" : ""}${stripped.size ? ` · 죽은 클래스 뗌 ${[...stripped].join(",")}` : ""}${errors ? ` · 렌더 오류 ${errors}` : ""}`);
 }
 await browser.close();
 

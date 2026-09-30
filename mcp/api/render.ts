@@ -68,9 +68,15 @@ export default async function handler(req: Req, res: ServerResponse) {
     const names = Object.keys(fe.stories);
     const list = names.map((k) => ({ name: fe.stories[k].name, path: `/render/${component}/${k}`, argsAware: false }));
     const states = fe.states.map((s) => ({ story: s.story, args: s.args, path: `/render/${component}/${s.story}?args=${encodeURIComponent(JSON.stringify(s.args))}` }));
-    if (!story) return send(res, 200, j({ component, source: "fe", docs: fe.docs, feBuild: fe.feBuild, props: `${DOCS_BASE}/props/${component}.json`, propNames: propNames[component] ?? [], stories: list, states, note: "FE 스토리북 스냅샷 — ?args= 는 states 에 있는 조합만 돌려준다" }));
+    const opened = (fe.opened ?? []).map((o) => ({ story: o.story, trigger: o.trigger, path: `/render/${component}/${o.story}?open=1` }));
+    if (!story) return send(res, 200, j({ component, source: "fe", docs: fe.docs, feBuild: fe.feBuild, props: `${DOCS_BASE}/props/${component}.json`, propNames: propNames[component] ?? [], stories: list, states, opened, note: "FE 스토리북 스냅샷 — ?args= 는 states 에 있는 조합만, ?open=1 은 opened 에 있는 스토리만(트리거를 클릭해 연 상태, 포털 포함) 돌려준다" }));
     const k = names.find((n) => n === story || n === kebab(story) || fe.stories[n].name === story || fe.stories[n].name.toLowerCase() === story.toLowerCase());
     if (!k) return send(res, 404, j({ error: `스토리 없음: ${component}/${story}`, stories: names }));
+    if (param(req, "open")) {
+      const o = (fe.opened ?? []).find((x) => x.story === k);
+      if (!o) return send(res, 400, j({ error: `열린 상태가 없다 — 이 스토리에는 닫힌 트리거가 없거나 클릭해도 포털이 안 생겼다`, opened: opened.map((x) => x.story) }));
+      return html(res, o.html, `${component}/${fe.stories[k].name} (open)`, { "x-ds-source": "fe", "x-ds-fe-build": fe.feBuild, "x-ds-open": encodeURIComponent(o.trigger) });
+    }
     const args = parseArgs(res, param(req, "args"));
     if (args === null) return;
     if (!args) return html(res, fe.stories[k].html, `${component}/${fe.stories[k].name}`, { "x-ds-source": "fe", "x-ds-fe-build": fe.feBuild });

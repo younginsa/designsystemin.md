@@ -29,6 +29,12 @@ for (const [key, e] of Object.entries(idx.components)) {
       if (stat == null || live == null) { missing++; bad.push(`${key} 상태 ${JSON.stringify(st.args)}: ${stat == null ? "정적 없음" : "번들 없음"}`); continue; }
       if (live === stat) feStates++; else { diff++; bad.push(`${key} 상태 ${JSON.stringify(st.args)}: 다름`); }
     }
+    for (const o of (e as any).opened ?? []) {
+      const stat = await fetchStatic(o.file);
+      const live = (fe as any).opened?.find((x: any) => x.story === bundle.kebab(o.story))?.html;
+      if (stat == null || live == null) { missing++; bad.push(`${key} 열림 ${o.story}: ${stat == null ? "정적 없음" : "번들 없음"}`); continue; }
+      if (live === stat) feStates++; else { diff++; bad.push(`${key} 열림 ${o.story}: 다름`); }
+    }
     continue;
   }
   const mod = bundle.modules[key];

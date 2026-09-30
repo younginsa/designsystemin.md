@@ -86,6 +86,7 @@ async function main() {
     props?: string;
     source?: "fe"; feDocs?: string; feBuild?: string;
     states?: { story: string; args: Record<string, unknown>; file: string }[];
+    opened?: { story: string; trigger: string; file: string }[];
   }> = {};
   let ok = 0, failed = 0;
   // 스토리가 있으면 DS — 사람이 켜는 채택 단계는 없다(2026-09-18)
@@ -96,7 +97,7 @@ async function main() {
       const metaPath = join(FE_DIR, `${key}.json`);
       if (!existsSync(metaPath)) { console.log(`  FE 스냅샷 없음: ${key} — pnpm fe:sync ${key}`); failed++; continue; }
       const meta = JSON.parse(readFileSync(metaPath, "utf8"));
-      const entry: (typeof index)[string] = { name: registry.components[key].name, source: "fe", feDocs: meta.fe.docs, feBuild: meta.feBuild, stories: [], props: `props/${key}.json`, states: [] };
+      const entry: (typeof index)[string] = { name: registry.components[key].name, source: "fe", feDocs: meta.fe.docs, feBuild: meta.feBuild, stories: [], props: `props/${key}.json`, states: [], opened: [] };
       mkdirSync(join(OUT, key, "states"), { recursive: true });
       for (const s of meta.stories) {
         const html = readFileSync(join(FE_DIR, s.file), "utf8");
@@ -106,6 +107,9 @@ async function main() {
         if (s.error) failed++; else ok++;
       }
       for (const st of meta.states) { writeFileSync(join(OUT, st.file), readFileSync(join(FE_DIR, st.file), "utf8")); entry.states!.push({ story: st.story, args: st.args, file: st.file }); }
+      // 열린 상태(트리거 클릭 후 포털 포함) — 열고 닫는 화면은 이 파일의 트리거+포털을 쓰고 ds.js 가 토글한다(2026-09-30)
+      for (const o of meta.opened ?? []) { writeFileSync(join(OUT, o.file), readFileSync(join(FE_DIR, o.file), "utf8")); entry.opened!.push({ story: o.story, trigger: o.trigger, file: o.file }); }
+      if (!entry.opened!.length) delete entry.opened;
       index[key] = entry;
       continue;
     }
@@ -138,7 +142,7 @@ async function main() {
     index[key] = entry;
   }
   writeFileSync(join(OUT, "index.json"), JSON.stringify({
-    $note: "스토리 → 정적 HTML 스니펫(pnpm mcp:artifacts). 각 스니펫은 한 상태의 사진이다 — slots = 그 안에 찍힌 data-slot, filled = 값 채워진 입력이 있나. conditional = 원문에서 값이 있을 때만 나오는 슬롯(사진에 없을 수 있다 — 그 상태의 스토리를 고르거나 원문을 본다). portal=true 는 열린 오버레이가 SSR 에 안 나온다. 클래스는 /ds.css. 라이브 렌더 = renderBase + /render/<key>/<story-kebab> — 같은 함수(story-render-core)로 요청 시 렌더, 이 정적 파일과 동일. argsAware=true 인 스토리는 ?args={…} 로 프롭을 바꿔 다른 상태를 받을 수 있다(args = 스토리가 선언한 키, 그 밖의 허용 키는 props 의 propNames). 사진에 없는 조건부 UI 는 그렇게 확인한다. source=fe 인 컴포넌트는 FE 스토리북 스냅샷(feDocs · feBuild)이라 argsAware=false — 다른 상태는 states(args 하나씩 바꿔 미리 렌더한 사진)에서 고른다.",
+    $note: "스토리 → 정적 HTML 스니펫(pnpm mcp:artifacts). 각 스니펫은 한 상태의 사진이다 — slots = 그 안에 찍힌 data-slot, filled = 값 채워진 입력이 있나. conditional = 원문에서 값이 있을 때만 나오는 슬롯(사진에 없을 수 있다 — 그 상태의 스토리를 고르거나 원문을 본다). portal=true 는 열린 오버레이가 SSR 에 안 나온다. 클래스는 /ds.css. 라이브 렌더 = renderBase + /render/<key>/<story-kebab> — 같은 함수(story-render-core)로 요청 시 렌더, 이 정적 파일과 동일. argsAware=true 인 스토리는 ?args={…} 로 프롭을 바꿔 다른 상태를 받을 수 있다(args = 스토리가 선언한 키, 그 밖의 허용 키는 props 의 propNames). 사진에 없는 조건부 UI 는 그렇게 확인한다. source=fe 인 컴포넌트는 FE 스토리북 스냅샷(feDocs · feBuild)이라 argsAware=false — 다른 상태는 states(args 하나씩 바꿔 미리 렌더한 사진)에서 고른다. opened = 스토리의 첫 트리거(trigger)를 클릭해 연 사진(드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에) — 열고 닫는 화면은 이 파일의 트리거+포털을 그대로 쓰고 /ds.js 가 토글한다.",
     renderBase: RENDER_BASE,
     generated: new Date().toISOString().slice(0, 10),
     components: index,

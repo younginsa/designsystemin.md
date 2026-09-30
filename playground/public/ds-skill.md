@@ -13,7 +13,7 @@
 
 | 무엇 | 주소 |
 |---|---|
-| 컴포넌트 목록 | `BASE/story-html/index.json` — 여기 있으면 쓸 수 있다(스토리가 있다 = DS 다). 스토리마다 `slots`(그 사진에 찍힌 부품)·`filled`(값 채워진 입력이 있나), 컴포넌트마다 `conditional`(값이 있을 때만 나오는 UI — 사진에 없을 수 있다). `source: "fe"` 인 컴포넌트는 FE 스토리북에서 가져온 스냅샷이라 원문이 없고, 다른 상태는 `states`(args 하나씩 바꿔 미리 렌더한 사진) 에서 고른다 |
+| 컴포넌트 목록 | `BASE/story-html/index.json` — 여기 있으면 쓸 수 있다(스토리가 있다 = DS 다). 스토리마다 `slots`(그 사진에 찍힌 부품)·`filled`(값 채워진 입력이 있나), 컴포넌트마다 `conditional`(값이 있을 때만 나오는 UI — 사진에 없을 수 있다). `source: "fe"` 인 컴포넌트는 FE 스토리북에서 가져온 스냅샷이라 원문이 없고, 다른 상태는 `states`(args 하나씩 바꿔 미리 렌더한 사진) 에서 고른다. `opened` 는 트리거를 클릭해 **연** 사진(드롭다운·팝오버·셀렉트의 내용이 `<!-- portal -->` 뒤에 있다) — 열고 닫는 화면은 닫힌 사진 대신 이 파일의 트리거+포털을 그대로 쓴다(§4 ds.js) |
 | 관리 기록 | `BASE/ds-registry.json` — 피그마 세트·설계 노트. 생성에 꼭 필요하진 않다 |
 | 스니펫 본문(라이브) | `RENDER/render/<키>/<스토리>` — 저장소 스토리를 요청 시 렌더한 HTML. 먼저 이걸 읽는다 |
 | 스니펫 본문(정적) | `BASE/story-html/<키>/<스토리>.html` — 같은 HTML 의 빌드 시 사본. 라이브가 안 열릴 때 폴백 |
@@ -55,6 +55,7 @@
        그 스토리의 `args` 목록과 `BASE/props/<키>.json` 의 `propNames` 다(예: `/render/search-box/typing?args={"initial":"HN-2031"}`,
        `/render/filter-bar/contract-list?args={"keyword":"부산"}`). 거부(400)되면 응답의 `allowed` 목록을 보고 고친다.
        `source: "fe"` 컴포넌트는 요청 시 렌더가 없다 — `states` 에 미리 렌더된 조합만 `?args=` 로 받을 수 있고(응답의 `available`), 그 밖의 상태는 없는 것으로 취급해 DS 밖 요소로 표시한다.
+       열리는 것(드롭다운·팝오버·셀렉트·다이얼로그)은 `?open=1`(= `opened` 의 파일)로 **연 상태**를 받는다 — 트리거의 `aria-controls` 와 포털의 `id` 가 이어져 있어 그대로 넣으면 `/ds.js` 가 열고 닫는다. 포털은 `hidden` 으로 두고, 같은 페이지에 둘 이상 넣을 때는 `id` 와 `aria-controls` 를 겹치지 않게 바꾼다(스냅샷마다 `radix-«r0»` 로 같다).
        그래도 안 되면 `ui-src/<키>.tsx.txt` 원문에서 그 값이 켜는 요소를 확인하고, **그 컴포넌트 이름을 스펙 섹션
        "원문까지 읽은 컴포넌트" 줄에 적는다**(스토리 누락 신고).
    (e) `index.json` 에 없는 컴포넌트는 DS 가 아니다. 스토리가 없는 부품(separator·avatar·scroll-area·toggle)도 마찬가지 —
@@ -103,6 +104,13 @@
   <script>document.querySelectorAll("[data-pick]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("section[data-state]").forEach(function(s){s.hidden=s.dataset.state!==b.dataset.pick});document.querySelectorAll("[data-pick]").forEach(function(x){x.className=(x===b?"rounded-full px-3 py-1 text-xs font-medium bg-primary text-primary-foreground":"rounded-full px-3 py-1 text-xs text-secondary-foreground hover:bg-accent")})})})</script>
   ```
   선택자는 반드시 `section[data-state]` 다. `[data-state]` 만 쓰면 탭·팝오버 트리거(같은 속성을 쓴다)까지 숨긴다.
+  **더 간단한 길(2026-09-30)** — 위 스크립트와 8장의 뷰 전환 스크립트 대신 `<head>` 에 한 줄:
+  ```html
+  <script src="BASE/ds.js" defer></script>
+  ```
+  `ds.js` 는 알약·「스펙」 전환에 더해 탭(`role="tab"`)·아코디언·오버레이(`opened` 파일의 드롭다운·팝오버·셀렉트·다이얼로그)를
+  FE 마크업 속성(`aria-controls`·`data-state`)만 보고 열고 닫는다. 데이터가 움직이는 동작(검색·정렬·페이지)은 하지 않는다 —
+  그건 미리 그려 둔 상태(`data-state`·`data-view`)로 보여준다.
 - **DS 에 없는 요소**는 만들되 반드시 표시한다.
   ```html
   <div data-ds="fallback" class="rounded-md border border-dashed border-muted-foreground/40 p-2">
@@ -172,12 +180,12 @@
 **맨 위 5줄(순서 고정)** — 검토자가 이것만 읽는다.
 ```html
 <section data-view="spec" hidden class="space-y-6">
-  <dl class="grid grid-cols-[12rem_1fr] gap-x-6 gap-y-2 text-sm">
-    <dt class="text-secondary-foreground">DS 갱신일</dt><dd>컴포넌트 목록 2026-09-21 · 스니펫 2026-09-21</dd>
-    <dt class="text-secondary-foreground">DS 밖 요소</dt><dd>0개</dd>
-    <dt class="text-secondary-foreground">원문까지 읽은 컴포넌트</dt><dd>0개</dd>
-    <dt class="text-secondary-foreground">값 채운 컨트롤</dt><dd>2개 · 조건부 확인됨(search-box ✕, filter-chip ✕)</dd>
-    <dt class="text-secondary-foreground">프로그레스</dt><dd>제외 — 목록 화면, 진행률 없음</dd>
+  <dl class="space-y-2 text-sm">
+    <div class="flex gap-6"><dt class="w-48 shrink-0 text-secondary-foreground">DS 갱신일</dt><dd>컴포넌트 목록 2026-09-21 · 스니펫 2026-09-21</dd></div>
+    <div class="flex gap-6"><dt class="w-48 shrink-0 text-secondary-foreground">DS 밖 요소</dt><dd>0개</dd></div>
+    <div class="flex gap-6"><dt class="w-48 shrink-0 text-secondary-foreground">원문까지 읽은 컴포넌트</dt><dd>0개</dd></div>
+    <div class="flex gap-6"><dt class="w-48 shrink-0 text-secondary-foreground">값 채운 컨트롤</dt><dd>2개 · 조건부 확인됨(search-box ✕, filter-chip ✕)</dd></div>
+    <div class="flex gap-6"><dt class="w-48 shrink-0 text-secondary-foreground">프로그레스</dt><dd>제외 — 목록 화면, 진행률 없음</dd></div>
   </dl>
   …
 </section>
