@@ -43,9 +43,10 @@ function usage(key) {
 }
 
 const targets = Object.entries(registry.components)
-  .filter(([k, e]) => e.stories && !e.fe && (!only.length || only.includes(k)))
+  .filter(([k, e]) => e.stories && !e.fe && !e.composition && (!only.length || only.includes(k)))
   .sort((a, b) => a[0].localeCompare(b[0]));
 const resolved = Object.entries(registry.components).filter(([, e]) => e.stories && e.fe).map(([k]) => k);
+const compositions = Object.entries(registry.components).filter(([, e]) => e.stories && !e.fe && e.composition).map(([k, e]) => `\`${k}\` — ${e.composition.replace(/^FE 판정 [\d-]+: /, "")}`);
 
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });
@@ -110,6 +111,10 @@ const index = [
   `## 이관 완료 ${resolved.length}건`,
   ``,
   resolved.map((k) => `\`${k}\``).join(" · "),
+  ``,
+  `## FE 판정: 공통 컴포넌트 아님 ${compositions.length}건 — 요청하지 않는다(우리 조합·레시피로 유지)`,
+  ``,
+  ...compositions.map((c) => `- ${c}`),
   ``,
 ].join("\n");
 writeFileSync(join(OUT, "INDEX.md"), index);

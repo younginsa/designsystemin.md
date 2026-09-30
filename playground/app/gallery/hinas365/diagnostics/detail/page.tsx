@@ -372,7 +372,7 @@ export default function DiagnosticDetailPage() {
 
             {/* 우하단 고정 — 본문 컬럼 내 sticky (전폭 고정 금지) */}
             <div className="sticky bottom-4 flex justify-end">
-              <div className="flex items-center gap-2 rounded-lg border bg-background p-2 shadow-sm">
+              <Card variant="flat" className="flex items-center gap-2 p-2">
                 <Select defaultValue="SVM">
                   <SelectTrigger size="sm" aria-label="제품 선택" className="w-28">
                     <span className="text-xs text-secondary-foreground">제품</span>
@@ -399,7 +399,7 @@ export default function DiagnosticDetailPage() {
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
+              </Card>
             </div>
           </div>
         </div>

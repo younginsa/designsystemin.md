@@ -2,7 +2,7 @@
  "$note": "FE 스토리북 동기화 요약(pnpm fe:sync). feBuild = 마지막으로 가져온 FE 빌드 도장 — --if-changed 가 이것과 대조한다",
  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com",
  "feBuild": "CpAORVUL",
- "synced": "2026-09-29",
+ "synced": "2026-09-30",
  "components": [
   {
    "key": "accordion",
@@ -205,6 +205,17 @@
    "states": 0,
    "classes": 54,
    "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "page-header",
+   "stories": 5,
+   "states": 0,
+   "classes": 63,
+   "stripped": [
+    "false",
+    "text-medium"
+   ],
    "errors": 0
   },
   {

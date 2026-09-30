@@ -653,7 +653,7 @@ export default function HiNAS365Layout({ children }: { children: React.ReactNode
             본문 배경 연회색 — 카드가 떠 보이는 바탕 (피그마 172-3899) */}
         {/* 본문 배경 — secondary 토큰(배경 2 =gray-20, 배경 1보다 반 톤 어두운 캔버스) */}
         {/* 본문 배경 흰색(2026-09-08 확정, 두 셸 공통) — sales365와 같은 이유·같은 값 */}
-        <main className="flex min-w-0 flex-1 flex-col bg-background p-8">{children}</main>
+        <main className="flex min-w-0 flex-1 flex-col bg-secondary p-8">{children}</main>
 
         {/* 토스트(어휘 ov-toast) — 셸에 한 번만. 위치 하단 오른쪽(2026-09-14 디자이너 확정, DS 스토리 기본과 동일).
             페이지는 sonner의 toast()만 부른다(첫 사용: 릴리즈 노트 개발자용 업데이트 결과).

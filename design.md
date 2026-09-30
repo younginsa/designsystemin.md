@@ -93,7 +93,7 @@ import 경로는 `@ds/ui/ui/<컴포넌트>` 형식이다. 예: `import { Button 
   사이드바는 **일반 토큰만 쓴다** — 면 `bg-card`, 구분선 `border-border`, hover `accent`.
   전용 sidebar 색 변수 8종은 2026-09-18 은퇴(shadcn 기본값 잔재였고 유틸리티가 생성되지도 않았다).
 - **인증 셸**: 중앙 정렬 단일 카드(`max-w-sm`), 배경 `bg-muted`.
-- 페이지 헤더: `PageHeader` 프리셋(2026-09-16) — 제목 `text-lg font-bold`(text-2xl 아님) + `actions`(우측 페이지 레벨 액션), 부제는 `description`, 제목 옆 배지·툴팁은 `addon`. 타이틀 행 손 조합 금지.
+- 페이지 헤더: FE Storybook **BoardBox**(2026-09-30 이관 — 제목 `text-title-m font-bold` 18/24, 우측 액션, 본문 상자). 갤러리의 `PageHeader` 프리셋은 같은 모양으로 맞춘 React 판 + `actions`(우측 페이지 레벨 액션), 부제는 `description`, 제목 옆 배지·툴팁은 `addon`. 타이틀 행 손 조합 금지.
 - 콘텐츠 최대폭: 테이블 페이지는 전체폭, 폼·문서형은 `max-w-2xl`.
 - 수직 리듬: 섹션 간 `space-y-6`, 폼 필드 간 `space-y-4`.
 

@@ -70,7 +70,7 @@
   ```html
   <link rel="stylesheet" href="https://designsystemin-md.vercel.app/ds.css">
   ```
-- `<body class="bg-background text-foreground antialiased">` 로 시작한다.
+- `<body class="bg-secondary text-foreground antialiased">` 로 시작한다(캔버스 = secondary 회색, 2026-09-30. 카드·표·필드는 흰 면이라 캔버스와 구분된다).
   다크는 `<html class="dark">`, Control 제품은 `<html class="theme-control">`.
 - **기본 4개 상태를 모두 담는다.** 기본·빈·로딩·에러를 각각 `<section data-state="...">` 로 만들고 기본만 보이게 한다.
   ```html
@@ -136,13 +136,14 @@
 ## 5. 레이아웃 요약
 
 - **메인 레이아웃**: 좌측 사이드바(`w-64 border-r bg-card p-4`) + 우측 본문(`p-8`). 상단바는 사이드바 우측부터 화면 끝까지, `bg-card`.
-- **페이지 제목**: `text-lg font-bold`. 제목 행은 좌측 제목 + 우측 페이지 액션. 목록의 필터·내보내기 버튼은 제목 행이 아니라 FilterBar 쪽에 둔다.
+- **페이지 제목 행 = `page-header` 스니펫(FE BoardBox)**: 제목 `text-title-m font-bold`(18/24) + 우측 페이지 액션. 스토리 안의 바깥 감싸개(높이 고정 상자)는 빼고 제목 행과 본문 상자만 쓴다. 목록의 필터·내보내기 버튼은 제목 행이 아니라 FilterBar 쪽에 둔다.
+- **캔버스**: 본문 `main` 은 `bg-secondary`(회색), 사이드바·상단바·카드·표·필드는 흰 면(`bg-card`). 단독 화면도 `<body class="bg-secondary …">`.
 - **섹션·카드 타이틀**: `text-sm font-medium text-secondary-foreground`, 그 아래 설명 `text-xs text-secondary-foreground`. 정보 패널 uppercase 라벨은 `text-xs font-semibold uppercase text-secondary-foreground`. `muted-foreground` 는 `secondary-foreground` 와 같은 값(플레이스홀더·힌트·장식 아이콘용)이고, `input` 은 `border` 와 같은 값(필드 테두리 전용)이라 글자에 쓰지 않는다.
 - **세로 리듬**: 섹션 사이 `space-y-6`, 카드 그리드 `gap-4`, 폼 필드 `space-y-4`.
 - **A 리스트 본문 순서**: 제목 행 → FilterBar → Table → ListFooter.
 - **B 상세**: 제목 행 → 좌측 요약 패널 + 우측 본문. 패널은 `Card variant="flat"`.
 - **D 대시보드**: 스탯 카드 행(`grid-cols-3` 또는 4) + 그 아래 표 카드.
-- **C 위저드·E 폼 하단 고정 바**: `sticky bottom-0 bg-background py-3` + `data-sticky-bar`. `border-t` 는 바가 뷰포트 바닥에 붙어 있을 때만 — 스크롤이 없으면 선도 없다. 판정 스크립트 한 줄은 `docs/layout/body-patterns.md` E 항에 있다(그대로 복사).
+- **C 위저드·E 폼 하단 고정 바**: `sticky bottom-0 bg-secondary py-3` + `data-sticky-bar`(면 = 캔버스와 같은 색). `border-t` 는 바가 뷰포트 바닥에 붙어 있을 때만 — 스크롤이 없으면 선도 없다. 판정 스크립트 한 줄은 `docs/layout/body-patterns.md` E 항에 있다(그대로 복사).
 - 더 필요하면 `BASE/docs/layout/body-patterns.md` 를 읽는다.
 
 ## 6. 자주 쓰는 컴포넌트 키

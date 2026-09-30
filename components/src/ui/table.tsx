@@ -17,7 +17,8 @@ function Table({
         variant === "plain"
           ? "relative w-full overflow-x-auto [&_thead]:bg-transparent"
           : // overflow-y-hidden — thead·행 배경이 둥근 모서리를 뚫는 클리핑 버그 방지(x축 스크롤 유지)
-            "relative w-full overflow-x-auto overflow-y-hidden rounded-md border"
+            // bg-card — 캔버스가 secondary(회색)가 되면서 표는 흰 면을 가진다(2026-09-30). FE DataTable 도 bg-background(흰색)를 깐다
+            "relative w-full overflow-x-auto overflow-y-hidden rounded-md border bg-card"
       }
     >
       <table

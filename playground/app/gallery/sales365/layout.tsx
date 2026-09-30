@@ -294,7 +294,7 @@ export default function Sales365Layout({ children }: { children: React.ReactNode
         {/* 본문 배경 — secondary 토큰(배경 2 — 배경 1보다 반 톤 어두운 캔버스) */}
         {/* 본문 배경 흰색(2026-09-08 확정, 두 셸 공통) — 상세는 평면 섹션 문법으로 갔고,
             회색 바닥은 카드 시절의 유물이다. 목록의 표·칩은 자체 테두리·채움이 있어 영향 없다 */}
-        <main className="flex min-w-0 flex-1 flex-col bg-background p-8">{children}</main>
+        <main className="flex min-w-0 flex-1 flex-col bg-secondary p-8">{children}</main>
       </div>
     </div>
   );

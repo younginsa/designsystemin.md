@@ -1,5 +1,5 @@
 # FE 요청 — 에러 상태 배너 (ErrorState)
-컴포넌트 키 `error-state` · 섹션 Feedback · 생성일 2026-09-29
+컴포넌트 키 `error-state` · 섹션 Feedback · 생성일 2026-09-30
 ## 무엇
 FE Storybook 에 `error-state` 가 없습니다. 만들어 주세요. 만들어지면 우리 쪽 원천이 자동으로 FE 로 바뀝니다(매시간 동기화).
 ## 왜

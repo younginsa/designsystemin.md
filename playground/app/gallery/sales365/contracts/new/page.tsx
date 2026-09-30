@@ -749,8 +749,8 @@ export default function Sales365ContractCreatePage() {
             </div>
           )}
 
-          {/* ── 하단 고정 완료 바 — 본문 컬럼 안에서만. 면 = 캔버스(bg-background, 띠 금지) · 경계 = 붙어 있을 때만 border-t(stuck, body-patterns E 2026-09-23) ── */}
-          <div ref={barRef} data-sticky-bar className={"sticky bottom-0 flex items-center justify-between bg-background py-3" + (stuck ? " border-t" : "")}>
+          {/* ── 하단 고정 완료 바 — 본문 컬럼 안에서만. 면 = 캔버스(bg-secondary, 띠 금지) · 경계 = 붙어 있을 때만 border-t(stuck, body-patterns E 2026-09-23) ── */}
+          <div ref={barRef} data-sticky-bar className={"sticky bottom-0 flex items-center justify-between bg-secondary py-3" + (stuck ? " border-t" : "")}>
             <Button asChild variant="outline">
               <Link href={`${BASE}/contracts`}>취소</Link>
             </Button>
