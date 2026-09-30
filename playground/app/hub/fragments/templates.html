@@ -85,3 +85,22 @@
           </div>
         </div>
 
+        <h3>파일럿 — 갤러리를 생성 HTML 로 다시 만들면 (2026-09-30)</h3>
+        <p class="lead">같은 화면 둘을 나란히 둔다. 왼쪽 링크는 지금의 <strong>React 갤러리</strong>, 오른쪽은 claude.ai 프로젝트가 만드는 방식 그대로
+        <strong>FE 스토리북 스니펫을 조립한 단독 HTML</strong>(<span class="mono">ds.css</span> + <span class="mono">ds.js</span> 한 줄, 4상태 알약 · 우상단 「스펙」).
+        검토 뒤 27면 전부를 이 방식으로 바꿀지 정한다 — 원천: <span class="mono">scripts/pilot-gen.mjs</span>.</p>
+        <div class="card-grid">
+          <div class="card tpl comp">
+            <div class="card-head"><span><span class="n">A</span> 계약 호선 목록</span></div>
+            <div class="tpl-desc">① 프레임 + A 리스트. 스니펫 11편(sidebar · page-header · search-box · filter-bar · table · badge · rows-per-page · pagination · empty · skeleton · error-state) · check_html 위반 0.<br>
+              <a class="chip" href="/gallery/sales365/vessels/" target="_blank" rel="noopener">React 갤러리</a>
+              <a class="chip p1" href="/pilot/vessels-list.html" target="_blank" rel="noopener">생성 HTML</a></div>
+          </div>
+          <div class="card tpl comp">
+            <div class="card-head"><span><span class="n">B</span> 호선 상세</span></div>
+            <div class="tpl-desc">① 프레임 + B 상세. 스니펫 13편(+ alert · card · status-badge · tabs · textarea · destructive-outline 버튼) · 탭 전환은 <span class="mono">ds.js</span> · check_html 위반 0.<br>
+              <a class="chip" href="/gallery/sales365/vessels/detail/" target="_blank" rel="noopener">React 갤러리</a>
+              <a class="chip p1" href="/pilot/vessel-detail.html" target="_blank" rel="noopener">생성 HTML</a></div>
+          </div>
+        </div>
+

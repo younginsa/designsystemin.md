@@ -110,13 +110,19 @@ export function createServer() {
     const classAttrs = [...html.matchAll(/class="([^"]*)"/g)].map((m) => decode(m[1]));
     const classes = new Set(classAttrs.flatMap((c) => c.split(/\s+/).filter(Boolean)));
     for (const c of classes) {
-      if (/^lucide(-|$)/.test(c)) continue; // 아이콘 마커 클래스 — 스타일 없음
+      // 스타일이 없는 마커 클래스 — 아이콘(lucide-*), Tailwind 의 group/peer(변형의 기준점, CSS 를 내지 않는다). FE 스니펫(sidebar·input-group)이 그대로 쓴다
+      if (/^lucide(-|$)/.test(c) || /^(group|peer)(\/|$)/.test(c) || c === "sr-only") continue;
       const known = allowed.has(c);
       // 컴포넌트가 쓰는 대괄호 변형([&_svg]:… · data-[state=open]:…)은 ds.css 에 있으니 통과 — 번들에 없는 임의 값(w-[300px] 등)만 위반
       if (!known && /-\[[^\]]+\]$/.test(c)) { v.push({ rule: "arbitrary-value", detail: c }); continue; }
       if (!known) v.push({ rule: "unknown-class", detail: c });
     }
-    for (const m of html.matchAll(/style="([^"]*)"/g)) v.push({ rule: "inline-style", detail: m[1].slice(0, 80) });
+    // 인라인 style 은 위반 — 단, CSS 변수 선언만 있는 것(--sidebar-width: 230px 처럼 FE 셸이 폭을 넘기는 자리)은 통과
+    for (const m of html.matchAll(/style="([^"]*)"/g)) {
+      const decls = m[1].split(";").map((d) => d.trim()).filter(Boolean);
+      if (decls.length && decls.every((d) => d.startsWith("--"))) continue;
+      v.push({ rule: "inline-style", detail: m[1].slice(0, 80) });
+    }
     // 임의 hex — 색이 들어갈 자리(style·fill·stroke·color 속성, <style> 블록)만 본다. href="#id" 같은 앵커는 제외
     const hexCtx = [...html.matchAll(/(?:style|fill|stroke|color|bgcolor)="([^"]*)"/g)].map((m) => m[1]).concat([...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]));
     for (const ctx of hexCtx) for (const m of ctx.matchAll(/#[0-9a-fA-F]{3,8}\b/g)) v.push({ rule: "raw-hex", detail: m[0] });

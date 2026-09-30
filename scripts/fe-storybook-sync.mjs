@@ -79,12 +79,20 @@ const NO_STYLE = (c) => /^(group|peer)(\/|$)/.test(c) || /^lucide(-|$)/.test(c) 
 // 우리 빌드가 만들 수 없는 클래스 — RTL(오른쪽→왼쪽 쓰기) 전용. 우리는 RTL 화면을 만들지 않으므로 떼어도 보이는 것이 같다.
 const UNSUPPORTED = (c) => /^rtl:/.test(c);
 
-/** 죽은 클래스를 뗀 HTML + 뗀 목록 */
+// Radix 런타임이 DOM 에 남기는 인라인 style — 열림/닫힘 애니메이션 억제(animation-duration: 0s)·포커스 가드(outline·pointer-events).
+// 스토리북 화면에서만 의미가 있고 생성물에 복사되면 check_html 의 inline-style 위반이 된다(2026-09-30 파일럿 실측: tabs). CSS 변수 선언(--sidebar-width)은 남긴다.
+const RUNTIME_STYLE = /^(animation-duration|animation-name|outline|pointer-events)$/;
+
+/** 죽은 클래스·런타임 인라인 style 을 뗀 HTML + 뗀 목록 */
 function strip(html, dead) {
   const removed = new Set();
-  const out = html.replace(/class="([^"]*)"/g, (m, v) => {
+  let out = html.replace(/class="([^"]*)"/g, (m, v) => {
     const kept = decode(v).split(/\s+/).filter((c) => { if (c && dead.has(c)) { removed.add(c); return false; } return !!c; });
     return `class="${encode(kept.join(" "))}"`;
+  });
+  out = out.replace(/ style="([^"]*)"/g, (m, v) => {
+    const kept = v.split(";").map((d) => d.trim()).filter(Boolean).filter((d) => !RUNTIME_STYLE.test(d.split(":")[0].trim()));
+    return kept.length ? ` style="${kept.join("; ")};"` : "";
   });
   return { html: out, removed: [...removed].sort() };
 }

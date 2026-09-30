@@ -16,7 +16,10 @@
     "mcp:test:render": "pnpm --filter @ds/mcp test:render",
     "audit:published": "node scripts/audit-published.mjs",
     "audit:rules": "node scripts/audit-rules.mjs",
-    "fe:request": "node scripts/fe-request.mjs"
+    "fe:request": "node scripts/fe-request.mjs",
+    "pilot:gen": "node scripts/pilot-gen.mjs",
+    "check:html": "pnpm --filter @ds/mcp check-html --",
+    "pilot:shot": "node scripts/pilot-shot.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.2",

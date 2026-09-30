@@ -8,7 +8,8 @@
     "test": "tsx test.ts",
     "test:render": "tsx test-render.ts",
     "bundle": "node scripts/bundle-stories.mjs",
-    "dev": "tsx dev.ts"
+    "dev": "tsx dev.ts",
+    "check-html": "tsx check-html.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.0",
