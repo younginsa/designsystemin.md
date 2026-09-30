@@ -86,7 +86,7 @@ async function main() {
     props?: string;
     source?: "fe"; feDocs?: string; feBuild?: string;
     states?: { story: string; args: Record<string, unknown>; file: string }[];
-    opened?: { story: string; trigger: string; file: string }[];
+    opened?: { story: string; index: number; trigger: string; file: string }[];
   }> = {};
   let ok = 0, failed = 0;
   // 스토리가 있으면 DS — 사람이 켜는 채택 단계는 없다(2026-09-18)
@@ -108,7 +108,7 @@ async function main() {
       }
       for (const st of meta.states) { writeFileSync(join(OUT, st.file), readFileSync(join(FE_DIR, st.file), "utf8")); entry.states!.push({ story: st.story, args: st.args, file: st.file }); }
       // 열린 상태(트리거 클릭 후 포털 포함) — 열고 닫는 화면은 이 파일의 트리거+포털을 쓰고 ds.js 가 토글한다(2026-09-30)
-      for (const o of meta.opened ?? []) { writeFileSync(join(OUT, o.file), readFileSync(join(FE_DIR, o.file), "utf8")); entry.opened!.push({ story: o.story, trigger: o.trigger, file: o.file }); }
+      for (const o of meta.opened ?? []) { writeFileSync(join(OUT, o.file), readFileSync(join(FE_DIR, o.file), "utf8")); entry.opened!.push({ story: o.story, index: o.index ?? 0, trigger: o.trigger, file: o.file }); }
       if (!entry.opened!.length) delete entry.opened;
       index[key] = entry;
       continue;

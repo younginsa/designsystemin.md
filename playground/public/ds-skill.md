@@ -55,7 +55,7 @@
        그 스토리의 `args` 목록과 `BASE/props/<키>.json` 의 `propNames` 다(예: `/render/search-box/typing?args={"initial":"HN-2031"}`,
        `/render/filter-bar/contract-list?args={"keyword":"부산"}`). 거부(400)되면 응답의 `allowed` 목록을 보고 고친다.
        `source: "fe"` 컴포넌트는 요청 시 렌더가 없다 — `states` 에 미리 렌더된 조합만 `?args=` 로 받을 수 있고(응답의 `available`), 그 밖의 상태는 없는 것으로 취급해 DS 밖 요소로 표시한다.
-       열리는 것(드롭다운·팝오버·셀렉트·다이얼로그)은 `?open=1`(= `opened` 의 파일)로 **연 상태**를 받는다 — 트리거의 `aria-controls` 와 포털의 `id` 가 이어져 있어 그대로 넣으면 `/ds.js` 가 열고 닫는다. 포털은 `hidden` 으로 두고, 같은 페이지에 둘 이상 넣을 때는 `id` 와 `aria-controls` 를 겹치지 않게 바꾼다(스냅샷마다 `radix-«r0»` 로 같다).
+       열리는 것(드롭다운·팝오버·셀렉트·다이얼로그)은 `?open=1`(= `opened` 의 파일, 트리거가 여럿이면 `&trigger=<index>`)로 **연 상태**를 받는다 — 트리거의 `aria-controls` 와 포털의 `id` 가 이어져 있어 그대로 넣으면 `/ds.js` 가 열고 닫는다. 포털은 `hidden` 으로 두고, 같은 페이지에 둘 이상 넣을 때는 `id` 와 `aria-controls` 를 겹치지 않게 바꾼다(스냅샷마다 `radix-«r0»` 로 같다).
        그래도 안 되면 `ui-src/<키>.tsx.txt` 원문에서 그 값이 켜는 요소를 확인하고, **그 컴포넌트 이름을 스펙 섹션
        "원문까지 읽은 컴포넌트" 줄에 적는다**(스토리 누락 신고).
    (e) `index.json` 에 없는 컴포넌트는 DS 가 아니다. 스토리가 없는 부품(separator·avatar·scroll-area·toggle)도 마찬가지 —

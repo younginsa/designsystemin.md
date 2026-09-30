@@ -31,7 +31,8 @@ for (const [key, e] of Object.entries(idx.components)) {
     }
     for (const o of (e as any).opened ?? []) {
       const stat = await fetchStatic(o.file);
-      const live = (fe as any).opened?.find((x: any) => x.story === bundle.kebab(o.story))?.html;
+      const oi = o.index ?? Number((o.file.match(/--open-(\d+)\.html$/) || [])[1] || 0); // 트리거 번호 — index.json 에 없으면 파일명에서
+      const live = (fe as any).opened?.find((x: any) => x.story === bundle.kebab(o.story) && (x.index ?? 0) === oi)?.html;
       if (stat == null || live == null) { missing++; bad.push(`${key} 열림 ${o.story}: ${stat == null ? "정적 없음" : "번들 없음"}`); continue; }
       if (live === stat) feStates++; else { diff++; bad.push(`${key} 열림 ${o.story}: 다름`); }
     }

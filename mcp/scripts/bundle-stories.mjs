@@ -32,7 +32,7 @@ for (const k of feKeys) {
     docs: meta.fe.docs, feBuild: meta.feBuild,
     stories: Object.fromEntries(meta.stories.filter((s) => !s.error).map((s) => [kebab(s.name), { name: s.name, html: readFileSync(join(FE_DIR, s.file), "utf8") }])),
     states: meta.states.map((st) => ({ story: kebab(st.story), args: st.args, html: readFileSync(join(FE_DIR, st.file), "utf8") })),
-    opened: (meta.opened ?? []).map((o) => ({ story: kebab(o.story), trigger: o.trigger, html: readFileSync(join(FE_DIR, o.file), "utf8") })),
+    opened: (meta.opened ?? []).map((o) => ({ story: kebab(o.story), index: o.index ?? 0, trigger: o.trigger, html: readFileSync(join(FE_DIR, o.file), "utf8") })),
   };
 }
 

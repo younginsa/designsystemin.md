@@ -9,8 +9,8 @@ export type FeSnippet = {
   stories: Record<string, { name: string; html: string }>;
   /** 미리 렌더한 상태(args 하나씩) — /render?args= 는 여기서 정확히 일치하는 것만 돌려준다 */
   states: FeState[];
-  /** 트리거를 클릭해 연 상태(포털 포함) — /render?open=1 이 돌려준다(2026-09-30) */
-  opened?: { story: string; trigger: string; html: string }[];
+  /** 트리거를 클릭해 연 상태(포털 포함) — /render?open=1[&trigger=<index>] 가 돌려준다(2026-09-30). index = 스토리 안 몇 번째 트리거인가 */
+  opened?: { story: string; index: number; trigger: string; html: string }[];
 };
 export type StoriesBundle = {
   /** 레지스트리 키 → 스토리 모듈(default = meta, 나머지 = 스토리) — 우리 스토리 컴포넌트만 */
