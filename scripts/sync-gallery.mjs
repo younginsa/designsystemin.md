@@ -10,6 +10,7 @@
 //   pnpm gallery:sync --check         변경 없이 대조 결과만 출력. 뒤처져 있으면 exit 1(세션 시작 점검용)
 //   pnpm gallery:sync --prune         원본에 없는 gallery 파일도 삭제
 //   pnpm gallery:sync --from <경로>   클론 저장소 경로 덮어쓰기(기본: ~/Documents/Claude/designsystem)
+//   pnpm gallery:sync --force         충돌(갤러리가 더 새로움) 파일도 클론 사본으로 덮어쓴다 — 갤러리 변경을 버려도 될 때만
 //
 // 규칙:
 //   - 관리자 저장소 전용(.ds-admin 없으면 중단). 클론은 본 저장소에 쓰지 않는다.
@@ -17,6 +18,7 @@
 //   - 복사한 텍스트 파일에 self-check(hex 리터럴·-[ 임의값) grep을 돌려 경고만 낸다 —
 //     사본은 실물 스냅샷이라 차단하지 않는다. 적용 후에는 tsc 1회가 필요하다.
 
+import { execSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -34,6 +36,24 @@ const SRC_ROOT = fromAt >= 0 && args[fromAt + 1] ? resolve(args[fromAt + 1]) : j
 const SRC = join(SRC_ROOT, "playground", "app", "generated");
 const CHECK = has("--check");
 const PRUNE = has("--prune");
+const FORCE = has("--force"); // 충돌 파일도 클론 사본으로 덮어쓴다 — 갤러리 쪽 변경을 버려도 된다고 확인했을 때만
+
+// 마지막 동기화 시각 — 충돌 판정의 기준점. 갤러리 파일이 이 시각 뒤에 관리자 저장소에서 바뀌었으면 "양쪽이 바뀐 것"이라 덮어쓰지 않는다.
+// (클론 mtime 과 비교하면 클론이 나중에 손댄 파일에서 관리자 변경이 조용히 사라진다 — 2026-09-30 실측.) 동기화가 실제로 쓰면 갱신된다.
+const STATE = join(ROOT, "playground", "app", "gallery", ".sync-state.json");
+const state = existsSync(STATE) ? JSON.parse(readFileSync(STATE, "utf8")) : { lastSync: "2026-09-18T00:00:00Z", note: "seed = 622ec18 갤러리 동기화 25파일" };
+const lastSyncMs = Date.parse(state.lastSync) || 0;
+
+/** 갤러리 파일이 마지막으로 바뀐 시각(ms) — 작업 트리에 수정이 있으면 mtime, 아니면 마지막 커밋 시각 */
+function galleryTime(p) {
+  const rel = p.slice(ROOT.length + 1);
+  try {
+    const dirty = execSync(`git status --porcelain -- "${rel}"`, { cwd: ROOT }).toString().trim() !== "";
+    if (dirty) return statSync(p).mtimeMs;
+    const ct = execSync(`git log -1 --format=%ct -- "${rel}"`, { cwd: ROOT }).toString().trim();
+    return ct ? Number(ct) * 1000 : 0;
+  } catch { return 0; }
+}
 
 const fail = (msg) => { console.error(`[gallery:sync] ${msg}`); process.exit(1); };
 if (!existsSync(join(ROOT, ".ds-admin"))) fail("관리자 저장소 표식(.ds-admin)이 없다 — 클론에서는 실행하지 않는다.");
@@ -52,7 +72,7 @@ function walk(dir, base = dir) {
 const ext = (p) => { const i = p.lastIndexOf("."); return i < 0 ? "" : p.slice(i).toLowerCase(); };
 const port = (text) => text.split("/generated/").join("/gallery/");
 
-const added = [], updated = [], same = [], gone = [], warns = [];
+const added = [], updated = [], same = [], gone = [], warns = [], conflict = [];
 
 for (const app of APPS) {
   const srcDir = join(SRC, app);
@@ -65,6 +85,9 @@ for (const app of APPS) {
     const cur = existsSync(d) ? (bin ? readFileSync(d) : readFileSync(d, "utf8")) : null;
     const equal = cur !== null && (bin ? cur.equals(next) : cur === next);
     if (equal) { same.push(id); continue; }
+    // 충돌 가드(2026-09-30): 갤러리 쪽이 클론 사본보다 나중에 바뀐 파일은 덮어쓰지 않는다 — 관리자 저장소가 규칙 변경(캔버스·타이틀 등)을
+    // gallery/ 에 직접 반영하는 일이 생겼고, 그걸 클론의 옛 사본으로 되돌리는 사고를 막는다. 클론이 pull 뒤 같은 변경을 적용하면 내용이 같아져 풀린다.
+    if (cur !== null && !FORCE && galleryTime(d) > lastSyncMs) { conflict.push(id); continue; }
     (cur === null ? added : updated).push(id);
     if (!CHECK) { mkdirSync(dirname(d), { recursive: true }); writeFileSync(d, next); }
     if (!bin) {
@@ -88,13 +111,20 @@ console.log(`[gallery:sync] 원본 ${SRC}${CHECK ? "  (--check: 변경 없음)" 
 console.log(`  추가 ${added.length} · 갱신 ${updated.length} · 동일 ${same.length} · 원본에 없음 ${gone.length}${gone.length ? (PRUNE && !CHECK ? " (삭제됨)" : " (--prune 시 삭제)") : ""}`);
 list("추가", added);
 list("갱신", updated);
+list("충돌 — 갤러리가 더 새로움(덮어쓰지 않음, 클론이 pull 뒤 같은 변경을 적용하면 풀림 · 버려도 되면 --force)", conflict);
 list("원본에 없음", gone);
 if (warns.length) console.log(`  self-check 경고 ${warns.length}건(hex 리터럴·-[ 임의값, 차단 없음): ${warns.slice(0, 12).join(", ")}${warns.length > 12 ? " …" : ""}`);
 
 const behind = added.length + updated.length + gone.length;
 if (CHECK) {
-  console.log(behind ? `  → gallery가 클론보다 ${behind}파일 뒤처짐. 적용: pnpm gallery:sync` : "  → 최신 상태");
+  const c = conflict.length ? ` · 충돌 ${conflict.length}(갤러리가 더 새로움 — 클론이 pull 후 적용할 것)` : "";
+  console.log(behind ? `  → gallery가 클론보다 ${behind}파일 뒤처짐${c}. 적용: pnpm gallery:sync` : conflict.length ? `  → 뒤처짐 없음${c}` : "  → 최신 상태");
   process.exit(behind ? 1 : 0);
 }
-if (added.length + updated.length) console.log("  → 적용됨. 다음: pnpm --filter playground exec tsc --noEmit");
-else console.log("  → 변경 없음");
+if (added.length + updated.length) {
+  // 기준점 갱신 — 이번에 가져온 내용은 이제 양쪽이 같으니, 이후 갤러리 변경만 충돌로 본다
+  let head = ""; try { head = execSync("git rev-parse --short HEAD", { cwd: ROOT }).toString().trim(); } catch {}
+  writeFileSync(STATE, JSON.stringify({ lastSync: new Date().toISOString(), head, note: "pnpm gallery:sync 가 쓴다 — 충돌 판정 기준점. 손으로 고치지 않는다" }, null, 2) + "\n");
+  console.log("  → 적용됨. 다음: pnpm --filter playground exec tsc --noEmit");
+} else console.log("  → 변경 없음");
+if (conflict.length) console.log(`  → 충돌 ${conflict.length}건은 건드리지 않았다. 클론이 pull 뒤 같은 변경을 적용하면 다음 동기화에서 풀린다`);
