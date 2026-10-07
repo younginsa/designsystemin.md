@@ -25,6 +25,11 @@
       all("section[data-view]").forEach(function (s) { s.hidden = true; });
       on.hidden = !show;
       if (!show) { var d = $('section[data-view="default"]'); if (d) d.hidden = false; }
+      // 알약 안의 「스펙」 버튼(2026-10-07 — 알약 마지막 자리)은 열려 있는 동안 활성 색. 알약 밖(구 우상단 고정)은 건드리지 않는다.
+      all("[data-view-pick]").forEach(function (x) {
+        if (!x.parentElement || !x.parentElement.querySelector("[data-pick]")) return;
+        x.className = (x === b && show) ? "rounded-full px-3 py-1 text-xs font-medium bg-primary text-primary-foreground" : "rounded-full px-3 py-1 text-xs text-secondary-foreground hover:bg-accent";
+      });
     });
   });
 

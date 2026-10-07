@@ -22,6 +22,7 @@
 | 색 토큰 | `BASE/dstk/semantic-map.json` — 토큰 이름 = Tailwind 클래스 이름 |
 | 타이포 | `BASE/dstk/typography.json` |
 | 허용 클래스 | `BASE/ds-classes.json` — 자가 검사용 전체 클래스 목록 |
+| 아이콘 | `BASE/icons/index.json`(이름 목록) · `BASE/icons/<이름>.svg` — 스니펫의 예시 아이콘을 의미에 맞게 바꿀 때 여기서 `<svg>` 를 통째로 가져온다(lucide, 2026-10-07) |
 | 레이아웃 프레임 | `BASE/docs/layout/README.md` · `BASE/docs/layout/admin-console.md` |
 | 본문 패턴 | `BASE/docs/layout/body-patterns.md` — A 리스트 · B 상세 · C 위저드 · D 대시보드 · E 폼 |
 | 규칙서 **(필독 — 절차 0번)** | `BASE/docs/design.md` — 스니펫에 안 담기는 사용 규칙·금지 목록 |
@@ -49,6 +50,18 @@
    (c) 스니펫은 `RENDER/render/<키>/<스토리>` 를 먼저 읽는다. 응답이 없거나 HTML 이 아니면 `BASE/story-html/<키>/<스토리>.html`
        로 폴백한다(내용은 같다). 어느 쪽을 몇 편 썼는지 스펙 섹션 "스니펫 출처" 줄에 적는다.
        읽은 HTML 을 **그대로 복사**한 뒤 글자·숫자만 바꾼다. 클래스 조합을 새로 만들지 않는다.
+       **"글자·숫자"에 드는 교체 4가지(2026-10-07 확정 — 파일럿 1차 검토에서 전부 걸렸던 것):**
+       ① **셸 브랜드** — `sidebar` 스니펫의 워드마크 `HiNAS 365` 는 프롬프트의 제품명으로 바꾼다. 로고 이미지(`<img alt="HiNAS 365" … logo.svg">`)는
+          그대로 둔다(FE AppShell 에 브랜드 프롭이 없다 — FE 요청 중). 스펙 섹션 "내가 정한 것"에 "로고 = HiNAS 마크 유지(FE 프롭 대기)" 한 줄을 적는다.
+       ② **셸 버전 자리** — 워드마크 옆 `<span class="font-normal text-caption-xs">()</span>` 는 스토리의 빈 자리다. 프롬프트에 버전이 있으면
+          `(v1.4.0)` 처럼 채우고, 없으면 그 span 을 통째로 뺀다. 빈 괄호 `()` 를 남기지 않는다.
+       ③ **아이콘** — 스니펫의 아이콘은 스토리의 예시다(alert 의 터미널 아이콘 등). 의미에 맞는 아이콘으로 바꾼다: `BASE/icons/index.json` 에서 이름을
+          고르고 `BASE/icons/<이름>.svg` 를 읽어 `<svg>` 를 통째로 교체한다. 크기 클래스(`size-4` 등)는 원래 것을 유지한다. 목록에 없는 아이콘은
+          쓰지 않는다 — 가장 가까운 것을 고르고 "내가 정한 것"에 적는다.
+       ④ **표 셀 분류 태그(선급처럼 한 셀에 여러 값)** — `badge` 의 outline 상태를 쓴다(`states` 의 `default--variant-outline`, 라이브는
+          `RENDER/render/badge/default?args={"variant":"outline"}`). 대표값(주선급) 칩에는 맨 앞에
+          `<span class="size-1.5 shrink-0 rounded-full bg-foreground"></span>` 점을 넣는다(2026-09-08 디자이너 결정). 면 있는 기본 뱃지는
+          상태·역할 태그용이다.
    (d) 값·개수·선택 상태를 사진과 **다르게** 넣으면, 그 컴포넌트의 `conditional` 목록을 본다. 거기 적힌 UI(클리어 ✕, 칩 제거 ✕,
        카운트 배지, 비활성 처리)는 값이 있을 때만 나오므로 사진에 안 찍혀 있다. 맞는 스토리가 없으면 **그 상태를 직접 렌더한다** —
        `index.json` 에서 `argsAware: true` 인 스토리를 고르고 `RENDER/render/<키>/<스토리>?args={…}` 를 읽는다. 쓸 수 있는 이름은
@@ -87,12 +100,15 @@
   섹션을 넣었으면 알약 버튼도 같이 넣는다. 한쪽만 있으면 자가 검사에서 걸린다.
   보고서 끝에 **"프로그레스 포함 여부와 이유"를 한 줄** 적는다. 앞 화면을 복사하다 진행률 없는 화면까지 막대가 번진 전례가 있다.
 - **상단 중앙 전환 알약**을 넣는다(상태를 눈으로 바꿔 보는 장치). 담은 섹션과 버튼이 1:1 이어야 한다.
+  「스펙」 버튼(8장)은 **이 알약의 마지막 자리**에 구분선 뒤로 둔다 — 우상단 고정 버튼은 셸 상단바의 시계·알림을 가려 폐기(2026-10-07).
   ```html
-  <div class="fixed top-4 left-1/2 z-50 flex -translate-x-1/2 gap-1 rounded-full border border-border bg-card p-1 shadow-card">
+  <div class="fixed top-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-1 rounded-full border border-border bg-card p-1 shadow-card">
     <button data-pick="default" class="rounded-full px-3 py-1 text-xs font-medium bg-primary text-primary-foreground">기본</button>
     <button data-pick="empty" class="rounded-full px-3 py-1 text-xs text-secondary-foreground hover:bg-accent">빈</button>
     <button data-pick="loading" class="rounded-full px-3 py-1 text-xs text-secondary-foreground hover:bg-accent">로딩</button>
     <button data-pick="error" class="rounded-full px-3 py-1 text-xs text-secondary-foreground hover:bg-accent">에러</button>
+    <span class="mx-1 h-4 w-px bg-border" aria-hidden="true"></span>
+    <button data-view-pick="spec" class="rounded-full px-3 py-1 text-xs text-secondary-foreground hover:bg-accent">스펙</button>
   </div>
   ```
   진행률 화면이면 로딩과 에러 사이에 이 버튼을 넣는다.
@@ -140,6 +156,8 @@
     그 목록의 컴포넌트가 전부 `index.json` 에 있는가. 없는 것(separator 등)을 썼으면 위반이다.
 11. 값을 채운 컨트롤마다 그 컴포넌트의 `conditional` 에 적힌 UI 가 HTML 에 있는가. 없으면 3(d) 로 돌아간다.
 12. 스펙 섹션(8장)이 있고 맨 위 5줄이 채워져 있는가.
+13. 셸에 빈 괄호 `()` 가 남아 있지 않은가(버전 자리 — 3(c)②). 워드마크가 제품명으로 바뀌었는가.
+14. 스니펫에서 가져온 아이콘이 의미에 맞는가 — 스토리 예시(터미널 등)를 그대로 둔 곳이 없는가(3(c)③). 분류 태그 칩이 outline 뱃지인가(3(c)④).
 
 ## 5. 레이아웃 요약
 
@@ -174,7 +192,7 @@
 
 ## 8. 스펙 섹션 — 파일 안의 보고서
 
-산출물 HTML 에 `<section data-view="spec" hidden>` 을 하나 둔다. 화면 우상단의 「스펙」 버튼으로 연다.
+산출물 HTML 에 `<section data-view="spec" hidden>` 을 하나 둔다. 상단 중앙 알약의 마지막 버튼 「스펙」으로 연다(3장 알약 마크업 — 우상단 고정 버튼은 2026-10-07 폐기).
 이 섹션이 보고서다. 엔지니어는 이걸로 개발 요청을 받고, 디자이너는 맨 위 5줄만 본다.
 
 **맨 위 5줄(순서 고정)** — 검토자가 이것만 읽는다.
@@ -206,9 +224,9 @@
 - 스니펫 출처: `/render`(라이브) N편 · `story-html`(정적 폴백) M편 — 폴백이 있었으면 어느 컴포넌트였는지
 - 원본 프롬프트
 
-**뷰 전환** — 알약 옆에 「스펙」 버튼 하나. `data-view` 섹션은 상태 섹션과 별개로 동작한다.
+**뷰 전환** — 「스펙」 버튼은 알약 안 마지막 자리(3장 마크업의 `data-view-pick="spec"` 버튼). `data-view` 섹션은 상태 섹션과 별개로 동작한다.
+`ds.js` 를 쓰면 아래 스크립트는 필요 없다. 안 쓸 때만 `</body>` 앞에:
 ```html
-<button data-view-pick="spec" class="fixed top-4 right-4 z-50 rounded-full border border-border bg-card px-3 py-1 text-xs text-secondary-foreground hover:bg-accent">스펙</button>
 <script>document.querySelectorAll("[data-view-pick]").forEach(function(b){b.addEventListener("click",function(){var on=document.querySelector('section[data-view="'+b.dataset.viewPick+'"]');if(!on)return;var show=on.hidden;document.querySelectorAll("section[data-view]").forEach(function(s){s.hidden=true});on.hidden=!show;if(!show){var d=document.querySelector('section[data-view="default"]');if(d)d.hidden=false}})})</script>
 ```
 흐름의 화면들은 `section[data-view="list"]`, `"detail"` 처럼 이름을 붙이고, 기본 화면 하나는 `data-view="default"` 로 둔다.

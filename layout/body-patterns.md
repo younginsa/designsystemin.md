@@ -42,6 +42,9 @@
   `actions` 슬롯 — 표 위 임시 배치 금지. 검색은 SearchBox(✕ 클리어).
 - **역할 분리**: 필터 = FilterBar 전담 · 헤더 = 정렬 전담(헤더에 칩·셀렉트 금지).
 - **Table**: 2줄 링크 셀·칩·상태 도트. 빈 결과 = `Empty`(조건 초기화 버튼).
+  **분류 태그 칩(선급처럼 한 셀에 여러 값) = `badge` outline 변형** — 대표값(주선급)에는 맨 앞에
+  `size-1.5 shrink-0 rounded-full bg-foreground` 점(2026-09-08 디자이너 결정, 2026-10-07 문서화). 면 있는 기본 뱃지는
+  상태·역할 태그용이고 분류 칩에 쓰지 않는다. 상태 셀은 `status-badge`.
 - **푸터 = 레시피(컴포넌트 아님, FE 판정 2026-09-30)**: 한 행 `flex items-center justify-between` — 좌 「페이지당: [`rows-per-page` 스니펫(FE PageSizeSelect)] │ 전체 N건」,
   우 `pagination` 스니펫(FE Pagination). 창 규칙 Previous · 1 · … · p−1 p p+1 · … · N · Next, 단일 페이지면
   페이지네이션 생략(건수는 남는다). 갤러리의 `ListFooter` 프리셋은 이 레시피의 React 판 — 생성 HTML 은 두 스니펫을 이 행에 놓는다.

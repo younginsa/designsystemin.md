@@ -109,7 +109,7 @@
      "built": "2026-09-15"
     }
    ],
-   "note": null,
+   "note": "분류 태그 칩(선급 등 한 셀에 여러 값) = outline 변형 + 대표값 앞 점(size-1.5 shrink-0 rounded-full bg-foreground) — 2026-09-08 디자이너 결정, 2026-10-07 문서화. 면 있는 기본형은 상태·역할 태그용. 클릭 액션 금지(design.md §3).",
    "fe": {
     "id": "primitives-badge",
     "docs": "/?path=/docs/primitives-badge--docs"
