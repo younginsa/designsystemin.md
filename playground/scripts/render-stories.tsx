@@ -56,6 +56,18 @@ function slotsOf(html: string): { slots: string[]; filled: boolean } {
   return { slots, filled };
 }
 
+/** .html 옆에 같은 이름의 .json({file, key, story, slots, filled, html}) 을 함께 쓴다(2026-10-08).
+ *  claude.ai 채팅의 텍스트 변환 fetch(web_fetch)는 .html 응답의 태그·class 를 걷어내고 글자만 주지만 JSON 은 원형으로 받는다 —
+ *  9/18 세션이 브라우저 창으로 우회했고 보고하지 않아 지침에 빠져 있던 것. 브라우저 없는 채팅은 이 파일을 읽는다(ds-skill 3(c) 읽는 방법). */
+function writeJsonTwin(rel: string, html: string, extra: Record<string, unknown> = {}): string {
+  const { slots, filled } = slotsOf(html);
+  const jsonRel = rel.replace(/\.html$/, ".json");
+  const p = join(OUT, jsonRel);
+  mkdirSync(dirname(p), { recursive: true });
+  writeFileSync(p, JSON.stringify({ file: rel, ...extra, slots, filled, html: html.endsWith("\n") ? html : html + "\n" }));
+  return jsonRel;
+}
+
 /** 컴포넌트 원문에서 조건부 렌더 블록(`{값 && (` · `{값 ? (`) 안에 무엇이 그려지는지 뽑는다.
  *  사진(한 상태의 SSR)에 안 찍힐 수 있는 UI 의 목록 — 값이 있을 때만 나오는 ✕ 같은 것.
  *  원문에는 data-slot 이 직접 안 적히고 <InputGroupAddon> 같은 태그로 나오므로 세 가지를 같이 기록한다:
@@ -81,12 +93,12 @@ async function main() {
   mkdirSync(OUT, { recursive: true });
   const index: Record<string, {
     name: { ko: string; en: string };
-    stories: { name: string; file: string; description: string; portal: boolean; slots?: string[]; filled?: boolean; argsAware?: boolean; args?: string[]; error?: string }[];
+    stories: { name: string; file: string; json?: string; description: string; portal: boolean; slots?: string[]; filled?: boolean; argsAware?: boolean; args?: string[]; error?: string }[];
     conditional?: Conditional[];
     props?: string;
     source?: "fe"; feDocs?: string; feBuild?: string;
-    states?: { story: string; args: Record<string, unknown>; file: string }[];
-    opened?: { story: string; index: number; trigger: string; file: string }[];
+    states?: { story: string; args: Record<string, unknown>; file: string; json?: string }[];
+    opened?: { story: string; index: number; trigger: string; file: string; json?: string }[];
   }> = {};
   let ok = 0, failed = 0;
   // 스토리가 있으면 DS — 사람이 켜는 채택 단계는 없다(2026-09-18)
@@ -102,13 +114,14 @@ async function main() {
       for (const s of meta.stories) {
         const html = readFileSync(join(FE_DIR, s.file), "utf8");
         writeFileSync(join(OUT, s.file), html);
+        const json = writeJsonTwin(s.file, html, { key, story: s.name, source: "fe" });
         const { slots, filled } = slotsOf(html);
-        entry.stories.push({ name: s.name, file: s.file, description: "", portal: PORTAL_HINT.test(key), slots, filled, argsAware: false, ...(s.error ? { error: s.error } : {}) });
+        entry.stories.push({ name: s.name, file: s.file, json, description: "", portal: PORTAL_HINT.test(key), slots, filled, argsAware: false, ...(s.error ? { error: s.error } : {}) });
         if (s.error) failed++; else ok++;
       }
-      for (const st of meta.states) { writeFileSync(join(OUT, st.file), readFileSync(join(FE_DIR, st.file), "utf8")); entry.states!.push({ story: st.story, args: st.args, file: st.file }); }
+      for (const st of meta.states) { const h = readFileSync(join(FE_DIR, st.file), "utf8"); writeFileSync(join(OUT, st.file), h); entry.states!.push({ story: st.story, args: st.args, file: st.file, json: writeJsonTwin(st.file, h, { key, story: st.story, args: st.args, source: "fe" }) }); }
       // 열린 상태(트리거 클릭 후 포털 포함) — 열고 닫는 화면은 이 파일의 트리거+포털을 쓰고 ds.js 가 토글한다(2026-09-30)
-      for (const o of meta.opened ?? []) { writeFileSync(join(OUT, o.file), readFileSync(join(FE_DIR, o.file), "utf8")); entry.opened!.push({ story: o.story, index: o.index ?? 0, trigger: o.trigger, file: o.file }); }
+      for (const o of meta.opened ?? []) { const h = readFileSync(join(FE_DIR, o.file), "utf8"); writeFileSync(join(OUT, o.file), h); entry.opened!.push({ story: o.story, index: o.index ?? 0, trigger: o.trigger, file: o.file, json: writeJsonTwin(o.file, h, { key, story: o.story, index: o.index ?? 0, trigger: o.trigger, source: "fe" }) }); }
       if (!entry.opened!.length) delete entry.opened;
       index[key] = entry;
       continue;
@@ -130,9 +143,10 @@ async function main() {
       try {
         const html = renderStory(mod, name);
         writeFileSync(join(OUT, out), html + "\n");
+        const json = writeJsonTwin(out, html, { key, story: name, source: "local" });
         const { slots, filled } = slotsOf(html);
         const argsAware = storyArgsAware(mod, name);
-        entry.stories.push({ name, file: out, description: docs[name] ?? "", portal: PORTAL_HINT.test(key), slots, filled, argsAware, ...(argsAware ? { args: Object.keys(story.args ?? {}) } : {}) });
+        entry.stories.push({ name, file: out, json, description: docs[name] ?? "", portal: PORTAL_HINT.test(key), slots, filled, argsAware, ...(argsAware ? { args: Object.keys(story.args ?? {}) } : {}) });
         ok++;
       } catch (e: any) {
         entry.stories.push({ name, file: out, description: docs[name] ?? "", portal: PORTAL_HINT.test(key), error: String(e?.message ?? e).slice(0, 200) });
@@ -142,7 +156,7 @@ async function main() {
     index[key] = entry;
   }
   writeFileSync(join(OUT, "index.json"), JSON.stringify({
-    $note: "스토리 → 정적 HTML 스니펫(pnpm mcp:artifacts). 각 스니펫은 한 상태의 사진이다 — slots = 그 안에 찍힌 data-slot, filled = 값 채워진 입력이 있나. conditional = 원문에서 값이 있을 때만 나오는 슬롯(사진에 없을 수 있다 — 그 상태의 스토리를 고르거나 원문을 본다). portal=true 는 열린 오버레이가 SSR 에 안 나온다. 클래스는 /ds.css. 라이브 렌더 = renderBase + /render/<key>/<story-kebab> — 같은 함수(story-render-core)로 요청 시 렌더, 이 정적 파일과 동일. argsAware=true 인 스토리는 ?args={…} 로 프롭을 바꿔 다른 상태를 받을 수 있다(args = 스토리가 선언한 키, 그 밖의 허용 키는 props 의 propNames). 사진에 없는 조건부 UI 는 그렇게 확인한다. source=fe 인 컴포넌트는 FE 스토리북 스냅샷(feDocs · feBuild)이라 argsAware=false — 다른 상태는 states(args 하나씩 바꿔 미리 렌더한 사진)에서 고른다. opened = 스토리의 첫 트리거(trigger)를 클릭해 연 사진(드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에) — 열고 닫는 화면은 이 파일의 트리거+포털을 그대로 쓰고 /ds.js 가 토글한다.",
+    $note: "스토리 → 정적 HTML 스니펫(pnpm mcp:artifacts). 각 스니펫은 한 상태의 사진이다 — slots = 그 안에 찍힌 data-slot, filled = 값 채워진 입력이 있나. conditional = 원문에서 값이 있을 때만 나오는 슬롯(사진에 없을 수 있다 — 그 상태의 스토리를 고르거나 원문을 본다). portal=true 는 열린 오버레이가 SSR 에 안 나온다. 클래스는 /ds.css. 라이브 렌더 = renderBase + /render/<key>/<story-kebab> — 같은 함수(story-render-core)로 요청 시 렌더, 이 정적 파일과 동일. argsAware=true 인 스토리는 ?args={…} 로 프롭을 바꿔 다른 상태를 받을 수 있다(args = 스토리가 선언한 키, 그 밖의 허용 키는 props 의 propNames). 사진에 없는 조건부 UI 는 그렇게 확인한다. source=fe 인 컴포넌트는 FE 스토리북 스냅샷(feDocs · feBuild)이라 argsAware=false — 다른 상태는 states(args 하나씩 바꿔 미리 렌더한 사진)에서 고른다. opened = 스토리의 첫 트리거(trigger)를 클릭해 연 사진(드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에) — 열고 닫는 화면은 이 파일의 트리거+포털을 그대로 쓰고 /ds.js 가 토글한다. json = 같은 스니펫을 {file, key, story, slots, filled, html} 로 감싼 파일(2026-10-08) — 텍스트 변환 fetch(claude.ai 채팅 web_fetch)는 .html 의 태그·class 를 걷어내므로 브라우저 없는 채팅은 .json 을 읽는다. 라이브도 /render/<key>/<story>?as=json 으로 같은 모양을 준다.",
     renderBase: RENDER_BASE,
     generated: new Date().toISOString().slice(0, 10),
     components: index,

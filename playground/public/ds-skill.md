@@ -7,36 +7,38 @@
 색·크기·간격을 눈대중으로 정하지 않는다. 전부 아래 주소의 값에서 가져온다.
 
 기준 주소(BASE): `https://designsystemin-md.vercel.app`
-라이브 렌더 주소(RENDER): `https://mcp-one-fawn.vercel.app` — `BASE/story-html/index.json` 의 `renderBase` 와 같다.
+라이브 렌더 주소(RENDER): `https://mcp-one-fawn.vercel.app` — `https://designsystemin-md.vercel.app/story-html/index.json` 의 `renderBase` 와 같다.
+**아래 주소는 전부 전체 주소로 적는다(2026-10-08).** claude.ai 채팅의 fetch 는 대화·문서에 전체 주소로 나온 것만 열고, 줄임꼴은 거부한다.
 
 ## 1. 원천 주소
 
 | 무엇 | 주소 |
 |---|---|
-| 컴포넌트 목록 | `BASE/story-html/index.json` — 여기 있으면 쓸 수 있다(스토리가 있다 = DS 다). 스토리마다 `slots`(그 사진에 찍힌 부품)·`filled`(값 채워진 입력이 있나), 컴포넌트마다 `conditional`(값이 있을 때만 나오는 UI — 사진에 없을 수 있다). `source: "fe"` 인 컴포넌트는 FE 스토리북에서 가져온 스냅샷이라 원문이 없고, 다른 상태는 `states`(args 하나씩 바꿔 미리 렌더한 사진) 에서 고른다. `opened` 는 트리거를 클릭해 **연** 사진(드롭다운·팝오버·셀렉트의 내용이 `<!-- portal -->` 뒤에 있다) — 열고 닫는 화면은 닫힌 사진 대신 이 파일의 트리거+포털을 그대로 쓴다(§4 ds.js) |
-| 관리 기록 | `BASE/ds-registry.json` — 피그마 세트·설계 노트. 생성에 꼭 필요하진 않다 |
-| 스니펫 본문(라이브) | `RENDER/render/<키>/<스토리>` — 저장소 스토리를 요청 시 렌더한 HTML. 먼저 이걸 읽는다 |
-| 스니펫 본문(정적) | `BASE/story-html/<키>/<스토리>.html` — 같은 HTML 의 빌드 시 사본. 라이브가 안 열릴 때 폴백 |
-| 컴포넌트 원문 | `BASE/ui-src/<키>.tsx.txt` · 스토리 원문 `BASE/ui-src/<키>.stories.tsx.txt` |
-| 컴포넌트 프롭 | `BASE/props/<키>.json` — 원문에 선언된 프롭(이름·타입·enum 값·기본값·설명). `?args=` 에 쓸 수 있는 이름 |
-| 색 토큰 | `BASE/dstk/semantic-map.json` — 토큰 이름 = Tailwind 클래스 이름 |
-| 타이포 | `BASE/dstk/typography.json` |
-| 허용 클래스 | `BASE/ds-classes.json` — 자가 검사용 전체 클래스 목록 |
-| 아이콘 | `BASE/icons/index.json`(이름 목록) · `BASE/icons/<이름>.svg` — 스니펫의 예시 아이콘을 의미에 맞게 바꿀 때 여기서 `<svg>` 를 통째로 가져온다(lucide, 2026-10-07) |
-| 레이아웃 프레임 | `BASE/docs/layout/README.md` · `BASE/docs/layout/admin-console.md` |
-| 본문 패턴 | `BASE/docs/layout/body-patterns.md` — A 리스트 · B 상세 · C 위저드 · D 대시보드 · E 폼 |
-| 규칙서 **(필독 — 절차 0번)** | `BASE/docs/design.md` — 스니펫에 안 담기는 사용 규칙·금지 목록 |
-| 제품 규정 | `BASE/docs/regulations/<제품>.md` — 해당 제품 화면이면 먼저 읽는다 |
-| 검토 체크리스트 | `BASE/docs/review-checklist.md` — 디자이너가 결과물에서 보는 것(스펙 섹션 5줄) |
-| CSS 번들 | `BASE/ds.css` — 만드는 HTML 이 링크할 단 하나의 스타일시트 |
+| 컴포넌트 목록 | `https://designsystemin-md.vercel.app/story-html/index.json` — 여기 있으면 쓸 수 있다(스토리가 있다 = DS 다). 스토리마다 `slots`(그 사진에 찍힌 부품)·`filled`(값 채워진 입력이 있나), 컴포넌트마다 `conditional`(값이 있을 때만 나오는 UI — 사진에 없을 수 있다). `source: "fe"` 인 컴포넌트는 FE 스토리북에서 가져온 스냅샷이라 원문이 없고, 다른 상태는 `states`(args 하나씩 바꿔 미리 렌더한 사진) 에서 고른다. `opened` 는 트리거를 클릭해 **연** 사진(드롭다운·팝오버·셀렉트의 내용이 `<!-- portal -->` 뒤에 있다) — 열고 닫는 화면은 닫힌 사진 대신 이 파일의 트리거+포털을 그대로 쓴다(§4 ds.js) |
+| 관리 기록 | `https://designsystemin-md.vercel.app/ds-registry.json` — 피그마 세트·설계 노트. 생성에 꼭 필요하진 않다 |
+| 스니펫 본문(라이브) | `https://mcp-one-fawn.vercel.app/render/<키>/<스토리>` — 저장소 스토리를 요청 시 렌더한 HTML. 먼저 이걸 읽는다 |
+| 스니펫 본문(정적) | `https://designsystemin-md.vercel.app/story-html/<키>/<스토리>.html` — 같은 HTML 의 빌드 시 사본. 라이브가 안 열릴 때 폴백 |
+| 스니펫 본문(JSON) | `https://designsystemin-md.vercel.app/story-html/<키>/<스토리>.json` — 같은 스니펫을 `{file, key, story, slots, filled, html}` 로 감싼 것. `states/`·`states/…--open` 파일도 같은 이름의 `.json` 이 있고, `index.json` 의 각 항목 `json` 필드가 그 경로다. 라이브는 `https://mcp-one-fawn.vercel.app/render/<키>/<스토리>?as=json`. **브라우저가 없는 채팅은 `.html` 이 아니라 이걸 읽는다** — 텍스트 변환 fetch 가 `.html` 의 태그·class 를 걷어내기 때문(2026-10-08, 3(c) 읽는 방법) |
+| 컴포넌트 원문 | `https://designsystemin-md.vercel.app/ui-src/<키>.tsx.txt` · 스토리 원문 `https://designsystemin-md.vercel.app/ui-src/<키>.stories.tsx.txt` |
+| 컴포넌트 프롭 | `https://designsystemin-md.vercel.app/props/<키>.json` — 원문에 선언된 프롭(이름·타입·enum 값·기본값·설명). `?args=` 에 쓸 수 있는 이름 |
+| 색 토큰 | `https://designsystemin-md.vercel.app/dstk/semantic-map.json` — 토큰 이름 = Tailwind 클래스 이름 |
+| 타이포 | `https://designsystemin-md.vercel.app/dstk/typography.json` |
+| 허용 클래스 | `https://designsystemin-md.vercel.app/ds-classes.json` — 자가 검사용 전체 클래스 목록 |
+| 아이콘 | `https://designsystemin-md.vercel.app/icons/index.json`(이름 목록) · `https://designsystemin-md.vercel.app/icons/<이름>.svg` — 스니펫의 예시 아이콘을 의미에 맞게 바꿀 때 여기서 `<svg>` 를 통째로 가져온다(lucide, 2026-10-07) |
+| 레이아웃 프레임 | `https://designsystemin-md.vercel.app/docs/layout/README.md` · `https://designsystemin-md.vercel.app/docs/layout/admin-console.md` |
+| 본문 패턴 | `https://designsystemin-md.vercel.app/docs/layout/body-patterns.md` — A 리스트 · B 상세 · C 위저드 · D 대시보드 · E 폼 |
+| 규칙서 **(필독 — 절차 0번)** | `https://designsystemin-md.vercel.app/docs/design.md` — 스니펫에 안 담기는 사용 규칙·금지 목록 |
+| 제품 규정 | `https://designsystemin-md.vercel.app/docs/regulations/<제품>.md` — 해당 제품 화면이면 먼저 읽는다 |
+| 검토 체크리스트 | `https://designsystemin-md.vercel.app/docs/review-checklist.md` — 디자이너가 결과물에서 보는 것(스펙 섹션 5줄) |
+| CSS 번들 | `https://designsystemin-md.vercel.app/ds.css` — 만드는 HTML 이 링크할 단 하나의 스타일시트 |
 
 ## 2. 절차 (순서 고정)
 
-0. **규칙서를 읽는다.** `BASE/docs/design.md` 를 먼저 읽는다. 여기에만 있는 규칙이 있다 —
+0. **규칙서를 읽는다.** `https://designsystemin-md.vercel.app/docs/design.md` 를 먼저 읽는다. 여기에만 있는 규칙이 있다 —
    Label 없는 Input 금지 · 카드 안에 카드 금지 · Badge 를 클릭 액션에 쓰지 않기 ·
    Select 는 선택지 4개 이상일 때 · Tabs 를 페이지 내비에 쓰지 않기 · 본문에 text-xs 금지 ·
    CTA 사이즈·간격·모서리 통일 · 페이지당 primary 1개. 스니펫에는 안 담기는 것들이다.
-   제품 화면이면 `BASE/docs/regulations/<제품>.md` 도 함께 읽는다(있으면 규칙서보다 우선).
+   제품 화면이면 `https://designsystemin-md.vercel.app/docs/regulations/<제품>.md` 도 함께 읽는다(있으면 규칙서보다 우선).
 1. **프레임을 묻는다.** 생성 전에 반드시 한 번 묻고, 답을 받기 전에는 만들지 않는다.
    번호 선택지로 제시한다: `① 메인 레이아웃(사이드바 + 상단바)의 본문` · `② 단독 화면(셸 없음)` · `③ 잘 모르겠다(설명 듣고 정하기)`.
    본문 유형이 뚜렷하면 같이 선언한다. 예: "① 프레임 + A 리스트 본문".
@@ -47,25 +49,31 @@
        `slots` 와 `filled` 다 — 값이 들어간 검색창을 만들면 `filled: true` 인 스토리를, 칩이 붙은 필터바를 만들면 `slots` 에 칩이 있는 스토리를 고른다.
    (b) **부품은 부품의 스토리를 본다.** 필터바 안의 검색창을 채우려면 필터바 사진이 아니라 `search-box` 의 스토리를 본다.
        화면 단위로 고르다 부품 단위를 건너뛰면 ✕ 같은 조건부 UI 가 빠진다(2026-09-20 사고).
-   (c) 스니펫은 `RENDER/render/<키>/<스토리>` 를 먼저 읽는다. 응답이 없거나 HTML 이 아니면 `BASE/story-html/<키>/<스토리>.html`
+   (c) 스니펫은 `https://mcp-one-fawn.vercel.app/render/<키>/<스토리>` 를 먼저 읽는다. 응답이 없거나 HTML 이 아니면 `https://designsystemin-md.vercel.app/story-html/<키>/<스토리>.html`
        로 폴백한다(내용은 같다). 어느 쪽을 몇 편 썼는지 스펙 섹션 "스니펫 출처" 줄에 적는다.
+       **읽는 방법(2026-10-08 — 9/18 세션이 겪고 보고하지 않아 지침에 빠져 있던 것):** 스니펫은 **마크업이 보존되는 방식**으로 읽는다.
+       텍스트 변환 fetch(web_fetch)는 `.html` 응답의 태그와 class 를 걷어내고 글자만 준다 — 그 글자로 마크업을 쓰면 클래스를 지어내는 것이다.
+       ① 브라우저 창이 있으면(데스크톱 앱 Cowork) 사이트를 띄우고 그 페이지 안에서 같은 출처 `fetch()` 로 원문을 받는다.
+       ② 브라우저가 없으면 `.html` 대신 **같은 이름의 `.json`**(`index.json` 각 항목의 `json` 필드, `{html, slots, filled}`)이나
+          `…?as=json` 을 읽고 `html` 필드를 쓴다 — JSON 은 원형으로 온다.
+       ③ 태그가 걷힌 글자만 왔다면 멈추고 "주소를 읽지 못했다"고 말한다. 어느 방식으로 읽었는지 스펙 섹션 "우회·대체한 것" 줄에 적는다.
        읽은 HTML 을 **그대로 복사**한 뒤 글자·숫자만 바꾼다. 클래스 조합을 새로 만들지 않는다.
        **"글자·숫자"에 드는 교체 4가지(2026-10-07 확정 — 파일럿 1차 검토에서 전부 걸렸던 것):**
        ① **셸 브랜드** — `sidebar` 스니펫의 워드마크 `HiNAS 365` 는 프롬프트의 제품명으로 바꾼다. 로고 이미지(`<img alt="HiNAS 365" … logo.svg">`)는
           그대로 둔다(FE AppShell 에 브랜드 프롭이 없다 — FE 요청 중). 스펙 섹션 "내가 정한 것"에 "로고 = HiNAS 마크 유지(FE 프롭 대기)" 한 줄을 적는다.
        ② **셸 버전 자리** — 워드마크 옆 `<span class="font-normal text-caption-xs">()</span>` 는 스토리의 빈 자리다. 프롬프트에 버전이 있으면
           `(v1.4.0)` 처럼 채우고, 없으면 그 span 을 통째로 뺀다. 빈 괄호 `()` 를 남기지 않는다.
-       ③ **아이콘** — 스니펫의 아이콘은 스토리의 예시다(alert 의 터미널 아이콘 등). 의미에 맞는 아이콘으로 바꾼다: `BASE/icons/index.json` 에서 이름을
-          고르고 `BASE/icons/<이름>.svg` 를 읽어 `<svg>` 를 통째로 교체한다. 크기 클래스(`size-4` 등)는 원래 것을 유지한다. 목록에 없는 아이콘은
+       ③ **아이콘** — 스니펫의 아이콘은 스토리의 예시다(alert 의 터미널 아이콘 등). 의미에 맞는 아이콘으로 바꾼다: `https://designsystemin-md.vercel.app/icons/index.json` 에서 이름을
+          고르고 `https://designsystemin-md.vercel.app/icons/<이름>.svg` 를 읽어 `<svg>` 를 통째로 교체한다. 크기 클래스(`size-4` 등)는 원래 것을 유지한다. 목록에 없는 아이콘은
           쓰지 않는다 — 가장 가까운 것을 고르고 "내가 정한 것"에 적는다.
        ④ **표 셀 분류 태그(선급처럼 한 셀에 여러 값)** — `badge` 의 outline 상태를 쓴다(`states` 의 `default--variant-outline`, 라이브는
-          `RENDER/render/badge/default?args={"variant":"outline"}`). 대표값(주선급) 칩에는 맨 앞에
+          `https://mcp-one-fawn.vercel.app/render/badge/default?args={"variant":"outline"}`). 대표값(주선급) 칩에는 맨 앞에
           `<span class="size-1.5 shrink-0 rounded-full bg-foreground"></span>` 점을 넣는다(2026-09-08 디자이너 결정). 면 있는 기본 뱃지는
           상태·역할 태그용이다.
    (d) 값·개수·선택 상태를 사진과 **다르게** 넣으면, 그 컴포넌트의 `conditional` 목록을 본다. 거기 적힌 UI(클리어 ✕, 칩 제거 ✕,
        카운트 배지, 비활성 처리)는 값이 있을 때만 나오므로 사진에 안 찍혀 있다. 맞는 스토리가 없으면 **그 상태를 직접 렌더한다** —
-       `index.json` 에서 `argsAware: true` 인 스토리를 고르고 `RENDER/render/<키>/<스토리>?args={…}` 를 읽는다. 쓸 수 있는 이름은
-       그 스토리의 `args` 목록과 `BASE/props/<키>.json` 의 `propNames` 다(예: `/render/search-box/typing?args={"initial":"HN-2031"}`,
+       `index.json` 에서 `argsAware: true` 인 스토리를 고르고 `https://mcp-one-fawn.vercel.app/render/<키>/<스토리>?args={…}` 를 읽는다. 쓸 수 있는 이름은
+       그 스토리의 `args` 목록과 `https://designsystemin-md.vercel.app/props/<키>.json` 의 `propNames` 다(예: `/render/search-box/typing?args={"initial":"HN-2031"}`,
        `/render/filter-bar/contract-list?args={"keyword":"부산"}`). 거부(400)되면 응답의 `allowed` 목록을 보고 고친다.
        `source: "fe"` 컴포넌트는 요청 시 렌더가 없다 — `states` 에 미리 렌더된 조합만 `?args=` 로 받을 수 있고(응답의 `available`), 그 밖의 상태는 없는 것으로 취급해 DS 밖 요소로 표시한다.
        열리는 것(드롭다운·팝오버·셀렉트·다이얼로그)은 `?open=1`(= `opened` 의 파일, 트리거가 여럿이면 `&trigger=<index>`)로 **연 상태**를 받는다 — 트리거의 `aria-controls` 와 포털의 `id` 가 이어져 있어 그대로 넣으면 `/ds.js` 가 열고 닫는다. 포털은 `hidden` 으로 두고, 같은 페이지에 둘 이상 넣을 때는 `id` 와 `aria-controls` 를 겹치지 않게 바꾼다(스냅샷마다 `radix-«r0»` 로 같다).
@@ -122,7 +130,7 @@
   선택자는 반드시 `section[data-state]` 다. `[data-state]` 만 쓰면 탭·팝오버 트리거(같은 속성을 쓴다)까지 숨긴다.
   **더 간단한 길(2026-09-30)** — 위 스크립트와 8장의 뷰 전환 스크립트 대신 `<head>` 에 한 줄:
   ```html
-  <script src="BASE/ds.js" defer></script>
+  <script src="https://designsystemin-md.vercel.app/ds.js" defer></script>
   ```
   `ds.js` 는 알약·「스펙」 전환에 더해 탭(`role="tab"`)·아코디언·오버레이(`opened` 파일의 드롭다운·팝오버·셀렉트·다이얼로그)를
   FE 마크업 속성(`aria-controls`·`data-state`)만 보고 열고 닫는다. 데이터가 움직이는 동작(검색·정렬·페이지)은 하지 않는다 —
@@ -140,13 +148,13 @@
 
 ## 4. 자가 검사 체크리스트
 
-`BASE/ds-classes.json` 을 읽어 대조한다. 아래가 전부 통과해야 완성이다.
+`https://designsystemin-md.vercel.app/ds-classes.json` 을 읽어 대조한다. 아래가 전부 통과해야 완성이다.
 
 1. 내가 쓴 모든 `class` 값의 낱개 클래스가 `ds-classes.json` 의 `classes` 안에 있는가. 없으면 스타일이 안 먹으므로 스니펫의 조합으로 되돌린다.
 2. `#색값`, 대괄호 임의 값, `style=` 이 하나도 없는가.
 3. `data-state` 가 default·empty·loading·error 네 개 다 있는가. 진행률이 실재하는 화면이면 progress 까지 다섯 개인가.
 4. 상단 전환 알약과 하단 스크립트가 있는가. 알약 버튼과 `data-state` 섹션이 1:1 로 맞는가.
-5. 스타일시트 링크가 `BASE/ds.css` 한 줄뿐인가.
+5. 스타일시트 링크가 `https://designsystemin-md.vercel.app/ds.css` 한 줄뿐인가.
 6. (1번 검사에 포함 — 투명도 변형도 클래스 목록으로 함께 판정한다)
 7. `data-ds="fallback"` 으로 감싼 것들을 전부 보고서에 적었는가.
 8. 보고서에 프로그레스 포함 여부와 이유를 한 줄 적었는가.
@@ -158,6 +166,7 @@
 12. 스펙 섹션(8장)이 있고 맨 위 5줄이 채워져 있는가.
 13. 셸에 빈 괄호 `()` 가 남아 있지 않은가(버전 자리 — 3(c)②). 워드마크가 제품명으로 바뀌었는가.
 14. 스니펫에서 가져온 아이콘이 의미에 맞는가 — 스토리 예시(터미널 등)를 그대로 둔 곳이 없는가(3(c)③). 분류 태그 칩이 outline 뱃지인가(3(c)④).
+15. 지침대로 안 되어 다른 방법을 쓴 것(읽기 방식 변경·주소 대체·선택지에 없는 값 등)을 스펙 섹션 "우회·대체한 것"에 전부 적었는가. 없으면 "없음"이라고 적었는가.
 
 ## 5. 레이아웃 요약
 
@@ -170,7 +179,7 @@
 - **B 상세**: 제목 행 → 좌측 요약 패널 + 우측 본문. 패널은 `Card variant="flat"`.
 - **D 대시보드**: 스탯 카드 행(`grid-cols-3` 또는 4) + 그 아래 표 카드.
 - **C 위저드·E 폼 하단 고정 바**: `sticky bottom-0 bg-secondary py-3` + `data-sticky-bar`(면 = 캔버스와 같은 색). `border-t` 는 바가 뷰포트 바닥에 붙어 있을 때만 — 스크롤이 없으면 선도 없다. 판정 스크립트 한 줄은 `docs/layout/body-patterns.md` E 항에 있다(그대로 복사).
-- 더 필요하면 `BASE/docs/layout/body-patterns.md` 를 읽는다.
+- 더 필요하면 `https://designsystemin-md.vercel.app/docs/layout/body-patterns.md` 를 읽는다.
 
 ## 6. 자주 쓰는 컴포넌트 키
 
@@ -184,6 +193,7 @@
 
 - 프레임 질문을 건너뛰고 바로 만들지 않는다.
 - 스니펫을 안 읽고 기억으로 마크업을 쓰지 않는다.
+- `.html` 주소를 텍스트 변환 fetch 로 읽고 그 글자만 보고 마크업을 쓰지 않는다 — 태그가 없으면 그것은 스니펫이 아니다(3(c) 읽는 방법: `.json` 또는 브라우저).
 - DS 에 없는 요소를 조용히 넣지 않는다. 반드시 마커와 목록에 남긴다.
 - 스니펫에 없다는 이유로 "그 UI 는 DS 에 없다"고 단정하지 않는다. 스니펫은 한 상태만 찍혀 있다. 없다고 말하기 전에 `conditional` 과 원문을 본다.
 - 값이 안 읽히면 지어내지 않는다. "주소를 읽지 못했다"고 말하고 멈춘다.
@@ -221,7 +231,8 @@
 - 상태: 기본·빈·로딩·에러(·프로그레스) 각각 무엇을 보여주나
 - 액션: 버튼·링크마다 "누르면 무엇이 일어나나"
 - 내가 정한 것: 컬럼 선택·상태 이름·정보 위계처럼 규칙이 아니라 판단으로 정한 항목과 그 이유
-- 스니펫 출처: `/render`(라이브) N편 · `story-html`(정적 폴백) M편 — 폴백이 있었으면 어느 컴포넌트였는지
+- 스니펫 출처: `/render`(라이브) N편 · `story-html`(정적 폴백) M편 — 폴백이 있었으면 어느 컴포넌트였는지. 읽은 방식(브라우저 · `.json` · `?as=json`)도 적는다
+- 우회·대체한 것: 지침대로 안 되어 다른 방법을 쓴 것(예: fetch 가 태그를 걷어내 브라우저로 읽음 · 주소가 안 열려 붙여넣기로 받음 · DS 선택지에 없는 값을 그대로 씀) — 무엇을 · 왜 · 어떻게. 없으면 "없음". **우회는 보고하지 않으면 아무 문서에도 남지 않는다** — 9/18 세션이 fetch 우회를 보고하지 않아 같은 문제가 10/7 에 재발했다
 - 원본 프롬프트
 
 **뷰 전환** — 「스펙」 버튼은 알약 안 마지막 자리(3장 마크업의 `data-view-pick="spec"` 버튼). `data-view` 섹션은 상태 섹션과 별개로 동작한다.

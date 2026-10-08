@@ -9,6 +9,8 @@
 //   /render/<컴포넌트>/<스토리>?args={"value":"HN-2031"}
 //        → 스토리 args 위에 덮어 렌더. 허용 키 = 스토리 args 키 ∪ /props/<키>.json 의 propNames ∪ children(문자열).
 //          className·style·on* 은 거부(생성물이 렌더 경로로 임의 클래스를 들여오지 못하게). 4KB 상한. args 를 안 받는 스토리는 400.
+//   …?as=json                                → 같은 HTML 을 {story, generated, slots, filled, html} JSON 으로(2026-10-08). claude.ai 채팅의 텍스트 변환 fetch 는
+//                                              text/html 응답의 태그·class 를 걷어내지만 JSON 은 원형으로 받는다 — 브라우저 없는 채팅은 이걸 읽는다(ds-skill 3(c)).
 import type { IncomingMessage, ServerResponse } from "node:http";
 
 import type { StoriesBundle } from "../src/stories-bundle.js";
@@ -47,18 +49,26 @@ function parseArgs(res: ServerResponse, rawArgs: string): Record<string, unknown
   return parsed as Record<string, unknown>;
 }
 
-function html(res: ServerResponse, body: string, story: string, extra?: Record<string, string>) {
+function html(res: ServerResponse, body: string, story: string, extra?: Record<string, string>, asJson = false) {
   res.setHeader("cache-control", "public, max-age=300, s-maxage=86400, stale-while-revalidate=604800");
   res.setHeader("x-ds-story", story);
   res.setHeader("x-ds-generated", generated);
   for (const [k, v] of Object.entries(extra ?? {})) res.setHeader(k, v);
-  return send(res, 200, body.endsWith("\n") ? body : body + "\n", "text/html; charset=utf-8");
+  const out = body.endsWith("\n") ? body : body + "\n";
+  if (asJson) {
+    // 정적 story-html/<key>/<story>.json 과 같은 모양(render-stories writeJsonTwin) — 소비자가 두 경로를 같은 코드로 읽게
+    const slots = [...new Set([...out.matchAll(/data-slot="([^"]+)"/g)].map((m) => m[1]))].sort();
+    const filled = [...out.matchAll(/<input\b[^>]*\bvalue="([^"]*)"/g)].some((m) => m[1] !== "");
+    return send(res, 200, j({ story, generated, ...(extra ?? {}), slots, filled, html: out }));
+  }
+  return send(res, 200, out, "text/html; charset=utf-8");
 }
 
 export default async function handler(req: Req, res: ServerResponse) {
   if (req.method !== "GET" && req.method !== "HEAD") { res.setHeader("allow", "GET"); return send(res, 405, j({ error: "GET only" })); }
   const component = param(req, "component");
   const story = param(req, "story");
+  const asJson = param(req, "as") === "json";
   const keys = [...new Set([...Object.keys(modules), ...Object.keys(feSnippets ?? {})])].sort();
   if (!component) return send(res, 200, j({ generated, usage: "/render/<component>/<story>[?args={…}]", props: `${DOCS_BASE}/props/<component>.json`, components: keys }));
 
@@ -76,14 +86,14 @@ export default async function handler(req: Req, res: ServerResponse) {
       const ti = Number(param(req, "trigger") || 0);
       const o = (fe.opened ?? []).find((x) => x.story === k && (x.index ?? 0) === ti);
       if (!o) return send(res, 400, j({ error: `열린 상태가 없다 — 이 스토리에는 닫힌 트리거가 없거나 클릭해도 포털이 안 생겼다(trigger=${ti})`, opened: opened.filter((x) => x.story === k) }));
-      return html(res, o.html, `${component}/${fe.stories[k].name} (open)`, { "x-ds-source": "fe", "x-ds-fe-build": fe.feBuild, "x-ds-open": encodeURIComponent(o.trigger) });
+      return html(res, o.html, `${component}/${fe.stories[k].name} (open)`, { "x-ds-source": "fe", "x-ds-fe-build": fe.feBuild, "x-ds-open": encodeURIComponent(o.trigger) }, asJson);
     }
     const args = parseArgs(res, param(req, "args"));
     if (args === null) return;
-    if (!args) return html(res, fe.stories[k].html, `${component}/${fe.stories[k].name}`, { "x-ds-source": "fe", "x-ds-fe-build": fe.feBuild });
+    if (!args) return html(res, fe.stories[k].html, `${component}/${fe.stories[k].name}`, { "x-ds-source": "fe", "x-ds-fe-build": fe.feBuild }, asJson);
     const hit = fe.states.find((s) => s.story === k && sameArgs(s.args, args));
     if (!hit) return send(res, 400, j({ error: `이 조합은 미리 렌더돼 있지 않다(FE 스토리북 스냅샷은 요청 시 렌더가 안 된다)`, available: states.filter((s) => s.story === k).map((s) => s.args) }));
-    return html(res, hit.html, `${component}/${fe.stories[k].name}`, { "x-ds-source": "fe", "x-ds-fe-build": fe.feBuild, "x-ds-args": Object.keys(args).join(",") });
+    return html(res, hit.html, `${component}/${fe.stories[k].name}`, { "x-ds-source": "fe", "x-ds-fe-build": fe.feBuild, "x-ds-args": Object.keys(args).join(",") }, asJson);
   }
 
   // ── 우리 스토리(번들 안 React) ──
@@ -105,7 +115,7 @@ export default async function handler(req: Req, res: ServerResponse) {
     if ("children" in args && typeof args.children !== "string") return send(res, 400, j({ error: "children 은 문자열만" }));
   }
   try {
-    return html(res, renderStory(mod, name, args), `${component}/${name}`, args ? { "x-ds-args": Object.keys(args).join(",") } : undefined);
+    return html(res, renderStory(mod, name, args), `${component}/${name}`, args ? { "x-ds-args": Object.keys(args).join(",") } : undefined, asJson);
   } catch (e: any) {
     return send(res, 500, j({ error: String(e?.message ?? e).slice(0, 300), story: `${component}/${name}`, args: args ? Object.keys(args) : undefined }));
   }
