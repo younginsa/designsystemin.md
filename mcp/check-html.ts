@@ -2,12 +2,14 @@
 //   pnpm check:html <file.html> [...]            (루트 스크립트 → pnpm --filter @ds/mcp check-html)
 //   DS_BASE=http://localhost:3000 … 로 원천을 로컬 dev 서버로 바꾼다(기본 배포 사이트)
 import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 
 import { createServer } from "./src/server.js";
 
-const files = process.argv.slice(2);
+// 루트 `pnpm check:html <file>` 는 pnpm 이 "--" 를 그대로 넘기고 mcp/ 에서 실행된다 — "--" 를 빼고 상대 경로는 명령을 친 폴더(INIT_CWD) 기준으로 푼다(2026-10-08)
+const files = process.argv.slice(2).filter((a) => a !== "--").map((f) => resolve(process.env.INIT_CWD || process.cwd(), f));
 if (!files.length) { console.error("사용법: pnpm check:html <file.html> [...]"); process.exit(2); }
 const [ct, st] = InMemoryTransport.createLinkedPair();
 const server = createServer(); await server.connect(st);
