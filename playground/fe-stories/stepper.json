@@ -1,78 +1,85 @@
 {
- "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
  "key": "stepper",
  "fe": {
-  "id": "components-stepindicator",
-  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-stepindicator--docs",
+  "id": "components-stepper",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-stepper--docs",
   "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
  },
- "feBuild": "CpAORVUL",
- "synced": "2026-09-29",
+ "feBuild": "ChyVgiXc",
+ "synced": "2026-10-08",
  "stories": [
   {
    "name": "FirstStep",
-   "id": "components-stepindicator--first-step",
+   "id": "components-stepper--first-step",
    "file": "stepper/first-step.html",
    "portal": false,
    "initialArgs": {
     "steps": [
-     {
-      "label": "Basic Info"
-     },
-     {
-      "label": "Configuration"
-     },
-     {
-      "label": "Review"
-     }
+     "기본 정보",
+     "버전 선택",
+     "다운로드",
+     "적용"
     ],
-    "currentIndex": 0
+    "current": 0
    }
   },
   {
    "name": "MiddleStep",
-   "id": "components-stepindicator--middle-step",
+   "id": "components-stepper--middle-step",
    "file": "stepper/middle-step.html",
    "portal": false,
    "initialArgs": {
     "steps": [
-     {
-      "label": "Basic Info"
-     },
-     {
-      "label": "Configuration"
-     },
-     {
-      "label": "Review"
-     }
+     "기본 정보",
+     "버전 선택",
+     "다운로드",
+     "적용"
     ],
-    "currentIndex": 1
+    "current": 2
    }
   },
   {
    "name": "LastStep",
-   "id": "components-stepindicator--last-step",
+   "id": "components-stepper--last-step",
    "file": "stepper/last-step.html",
    "portal": false,
    "initialArgs": {
     "steps": [
-     {
-      "label": "Basic Info"
-     },
-     {
-      "label": "Configuration"
-     },
-     {
-      "label": "Review"
-     }
+     "기본 정보",
+     "버전 선택",
+     "다운로드",
+     "적용"
     ],
-    "currentIndex": 2
+    "current": 3
+   }
+  },
+  {
+   "name": "NoActiveStep",
+   "id": "components-stepper--no-active-step",
+   "file": "stepper/no-active-step.html",
+   "portal": false,
+   "initialArgs": {
+    "steps": [
+     "기본 정보",
+     "버전 선택",
+     "다운로드",
+     "적용"
+    ],
+    "current": -1
    }
   },
   {
    "name": "AllStates",
-   "id": "components-stepindicator--all-states",
+   "id": "components-stepper--all-states",
    "file": "stepper/all-states.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "Clickable",
+   "id": "components-stepper--clickable",
+   "file": "stepper/clickable.html",
    "portal": false,
    "initialArgs": {}
   }
@@ -83,41 +90,65 @@
    "required": true,
    "control": "object"
   },
-  "currentIndex": {
+  "current": {
    "type": "number",
    "required": true,
    "control": "number"
+  },
+  "canMove": {
+   "type": "function",
+   "required": false,
+   "control": null
+  },
+  "onMove": {
+   "type": "function",
+   "required": false,
+   "control": null
   }
  },
  "states": [],
+ "opened": [],
  "classes": [
-  "bg-emerald-500",
+  "bg-background",
   "bg-primary",
-  "bg-slate-200",
+  "border",
+  "border-border",
+  "border-primary",
+  "border-t",
+  "cursor-default",
+  "cursor-pointer",
   "flex",
+  "flex-1",
   "flex-col",
-  "font-medium",
+  "font-bold",
   "font-semibold",
-  "gap-2",
-  "gap-3",
-  "gap-6",
+  "gap-1",
+  "gap-1.5",
+  "gap-4",
+  "gap-8",
+  "h-6",
   "h-px",
   "items-center",
   "justify-center",
   "lucide",
   "lucide-check",
+  "max-w-xl",
+  "min-w-0",
+  "mx-2",
   "rounded-full",
-  "size-3.5",
-  "size-6",
-  "text-emerald-600",
-  "text-nowrap",
+  "shrink-0",
+  "text-caption-m",
+  "text-caption-s",
+  "text-foreground",
+  "text-general-on-color",
+  "text-muted-foreground",
   "text-primary",
-  "text-primary-foreground",
-  "text-slate-500",
-  "text-sm",
-  "text-white",
-  "text-xs",
-  "w-6"
+  "text-secondary-foreground",
+  "text-title-xs",
+  "transition",
+  "w-6",
+  "w-full",
+  "whitespace-nowrap"
  ],
  "strippedClasses": []
 }

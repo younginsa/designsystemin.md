@@ -13,5 +13,65 @@
     "tag": "img",
     "prop": "fontWeight",
     "note": "같은 원인 — a{font-weight:500} 상속."
+  },
+  {
+    "tag": "div",
+    "prop": "fontWeight",
+    "story": "sidebar/Default",
+    "note": "같은 원인 — 브랜드 링크 안 버전 라벨(v1.3.0). FE 빌드 ChyVgiXc 에서 span → div 로 바뀌어 위 span 예외에서 빠졌다(2026-10-08). 이 스토리에서만."
+  },
+  {
+    "tag": "div",
+    "prop": "fontWeight",
+    "story": "sidebar/CollapsedSidebar",
+    "note": "같은 원인 — 브랜드 링크 안 버전 라벨(2026-10-08)."
+  },
+  {
+    "tag": "div",
+    "prop": "fontWeight",
+    "story": "sidebar/CustomBrand",
+    "note": "같은 원인 — 브랜드 링크 안 버전 라벨(v3.0.0)(2026-10-08)."
+  },
+  {
+    "tag": "svg",
+    "prop": "fontWeight",
+    "story": "sidebar/CustomBrand",
+    "note": "같은 원인 — 브랜드 링크 안 lucide 아이콘 로고. svg 에는 글자가 없어 굵기 효과 0(2026-10-08)."
+  },
+  {
+    "tag": "path",
+    "prop": "fontWeight",
+    "story": "sidebar/CustomBrand",
+    "note": "같은 원인 — 위 svg 의 path. 효과 0(2026-10-08)."
+  },
+  {
+    "tag": "span",
+    "prop": "borderColor",
+    "story": "chart/Area",
+    "note": "recharts_measurement_span — recharts 가 글자 폭을 재려고 body 에 붙이는 숨은 요소(aria-hidden, 화면 밖). 컴포넌트 렌더가 아니다(2026-10-08)."
+  },
+  {
+    "tag": "span",
+    "prop": "height",
+    "story": "chart/Area",
+    "note": "같은 측정용 span(2026-10-08)."
+  },
+  {
+    "tag": "span",
+    "prop": "fontSize",
+    "story": "chart/Area",
+    "note": "같은 측정용 span(2026-10-08)."
+  },
+  {
+    "tag": "span",
+    "prop": "lineHeight",
+    "story": "chart/Area",
+    "note": "같은 측정용 span(2026-10-08)."
+  },
+  {
+    "tag": "p",
+    "prop": "height",
+    "story": "page-header/VerticalAlign",
+    "note": "문단 높이 우리 20px · FE 21px(1px). 반올림 차이로 추정 — 원인 미확인. 사용자 결정으로 허용(2026-10-08). 원인이 밝혀지면 고치고 이 줄을 지운다."
   }
 ]

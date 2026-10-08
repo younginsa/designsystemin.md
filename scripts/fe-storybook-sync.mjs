@@ -16,6 +16,9 @@
 // 브라우저: FE_CHROME → playwright-core 가 아는 설치 위치 → Playwright 캐시(mac·linux) → Google Chrome. Storybook 의 공식 URL 인자(&args=)만 쓴다.
 // 죽은 클래스: FE 빌드 CSS 에 규칙이 없는 클래스(text-medium 처럼 이름만 남은 것)는 FE 화면에서도 아무 일도 안 하므로 스니펫에서 떼고
 // json 에 strippedClasses 로 남긴다 — 생성물이 그대로 복사해 자가 검사에 걸리는 것을 막는다. 렌더 동일 여부는 pnpm fe:parity 가 실측한다.
+// 스토리 없음(2026-10-08): 레지스트리 fe.id 가 FE 목차에 없으면(FE 가 스토리를 개명한 경우) 그 키만 건너뛰고 이전 스냅샷을 그대로 둔다 —
+// index.json 의 missing 목록에 적히고 실패시키지 않는다. 개명 2건(breadcrumb·stepper)이 3시간 연속 42키 전체 동기화를 막았던 것의 처방.
+// exit 1 은 렌더 오류가 있을 때뿐이다.
 
 import { chromium } from "playwright-core";
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -192,11 +195,19 @@ async function captureAssets(html) {
   return out;
 }
 
+const prevSummary = existsSync(join(OUT, "index.json")) ? JSON.parse(readFileSync(join(OUT, "index.json"), "utf8")).components ?? [] : [];
 const summary = [];
 for (const key of keys) {
   const fe = registry.components[key].fe;
   const storyEntries = Object.values(entries).filter((e) => e.type === "story" && e.id.startsWith(fe.id + "--"));
-  if (!storyEntries.length) { console.log(`  ${key}: FE 에 ${fe.id}--* 스토리 없음`); summary.push({ key, stories: 0, states: 0, classes: 0, stripped: [], errors: 1, missing: true }); continue; }
+  if (!storyEntries.length) {
+    // FE 목차에 없는 키(스토리 개명 등) — 실패시키지 않고 이전 스냅샷(파일·요약)을 그대로 둔다. missing 이 "레지스트리 fe.id 를 고칠 것" 신호다.
+    const prev = prevSummary.find((c) => c.key === key);
+    const prevJson = existsSync(join(OUT, `${key}.json`)) ? JSON.parse(readFileSync(join(OUT, `${key}.json`), "utf8")) : null;
+    console.log(`  ${key}: ⚠ FE 에 ${fe.id}--* 스토리 없음 — ${prevJson ? `이전 스냅샷 유지(빌드 ${prevJson.feBuild}, ${prevJson.synced})` : "스냅샷 없음"}`);
+    summary.push({ ...(prev ?? { key, stories: 0, states: 0, opened: 0, classes: 0, stripped: [] }), key, errors: 0, missing: true, missingId: fe.id, feBuild: prevJson?.feBuild ?? null });
+    continue;
+  }
   rmSync(join(OUT, key), { recursive: true, force: true });
   mkdirSync(join(OUT, key, "states"), { recursive: true });
   const raw = [];
@@ -263,10 +274,11 @@ await browser.close();
 // FE 가 우리 시맨틱 토큰을 --general-* 로 부르는 바람에 hover:bg-accent 같은 표준 유틸리티까지 35개 중복 복사했다).
 writeFileSync(join(OUT, "fe.css"), `/* FE 빌드 CSS 원본 사본(${cssRel || "?"}, 빌드 ${feBuild}, ${synced}) — build-ds-css.mjs 가 우리 ds.css 에 없는 클래스의 규칙을 여기서 옮긴다. 편집 금지 */\n` + feCss);
 try { rmSync(join(OUT, "fe-utilities.css"), { force: true }); } catch {}
-// 요약 — 부분 실행(키 지정)이면 기존 요약과 합친다
-const prevSummary = existsSync(join(OUT, "index.json")) ? JSON.parse(readFileSync(join(OUT, "index.json"), "utf8")).components ?? [] : [];
+// 요약 — 부분 실행(키 지정)이면 기존 요약과 합친다. missing = FE 목차에 스토리가 없어 이전 스냅샷을 둔 키(세션 시작 상태 줄·사람이 읽는 신호)
 const merged = only.length ? [...prevSummary.filter((c) => !keys.includes(c.key)), ...summary].sort((a, b) => a.key.localeCompare(b.key)) : summary;
-writeFileSync(join(OUT, "index.json"), JSON.stringify({ $note: "FE 스토리북 동기화 요약(pnpm fe:sync). feBuild = 마지막으로 가져온 FE 빌드 도장 — --if-changed 가 이것과 대조한다", base: FE, feBuild, synced, components: merged }, null, 1) + "\n");
+const missing = merged.filter((s) => s.missing);
+writeFileSync(join(OUT, "index.json"), JSON.stringify({ $note: "FE 스토리북 동기화 요약(pnpm fe:sync). feBuild = 마지막으로 가져온 FE 빌드 도장 — --if-changed 가 이것과 대조한다. missing = FE 목차에 스토리가 없어 이전 스냅샷을 그대로 둔 키 — ds-registry.json 의 fe.id 를 FE index.json 과 대조해 고칠 것(스토리 개명)", base: FE, feBuild, synced, missing: missing.map((s) => s.key), components: merged }, null, 1) + "\n");
 const errs = summary.filter((s) => s.errors).length;
-console.log(`[fe:sync] ${FE} · 빌드 ${feBuild} · 컴포넌트 ${summary.length}${errs ? ` · 오류 있는 컴포넌트 ${errs}` : ""} · FE CSS ${(feCss.length / 1024).toFixed(0)}KB 보관 → playground/fe-stories/`);
+console.log(`[fe:sync] ${FE} · 빌드 ${feBuild} · 컴포넌트 ${summary.length}${errs ? ` · 오류 있는 컴포넌트 ${errs}` : ""}${missing.length ? ` · 스토리 없음 ${missing.length}` : ""} · FE CSS ${(feCss.length / 1024).toFixed(0)}KB 보관 → playground/fe-stories/`);
+if (missing.length) console.log(`[fe:sync] ⚠ 주의 — FE 에 스토리가 없는 키 ${missing.length}: ${missing.map((s) => `${s.key}(${s.missingId})`).join(", ")} — 이전 스냅샷 유지. ${FE}/index.json 에서 새 id 를 찾아 ds-registry.json fe.id 를 고칠 것`);
 if (errs) process.exit(1);

@@ -43,10 +43,11 @@ const norm = (v) => String(v ?? "")
   .replace(/-?\d+\.\d+px/g, (m) => (Math.round(parseFloat(m) * 2) / 2) + "px");
 // 애니메이션·트랜지션을 멈춘 뒤 잰다 — dialog 의 fade-in, skeleton 의 pulse 가 양쪽에서 다른 순간에 잡혀 opacity 가 달라 보였다(2026-09-29)
 const FREEZE = `(function(){var s=document.createElement("style");s.setAttribute("data-parity","freeze");s.textContent="*,*::before,*::after{animation:none!important;transition:none!important}";document.head.appendChild(s);return true})()`;
-// 알려진 예외 — playground/fe-stories/parity-allow.json: [{ tag, prop, note }] 에 맞는 차이는 세지 않고 "예외" 로 집계한다(FE 전역 규칙 등 컴포넌트 밖 원인)
+// 알려진 예외 — playground/fe-stories/parity-allow.json: [{ tag, prop, story?, note }] 에 맞는 차이는 세지 않고 "예외" 로 집계한다(FE 전역 규칙 등 컴포넌트 밖 원인)
+// story(선택, 예 "sidebar/CustomBrand")가 있으면 그 스토리에서만 예외 — 태그 전체를 풀면 다른 곳의 진짜 차이를 놓친다(2026-10-08)
 const ALLOW_PATH = join(FE_DIR, "parity-allow.json");
 const ALLOW = existsSync(ALLOW_PATH) ? JSON.parse(readFileSync(ALLOW_PATH, "utf8")).filter((a) => a.tag && a.prop) : [];
-const allowed = (tag, prop) => ALLOW.find((a) => a.prop === prop && (a.tag === "*" || a.tag === tag));
+const allowed = (tag, prop, story) => ALLOW.find((a) => a.prop === prop && (a.tag === "*" || a.tag === tag) && (!a.story || a.story === story));
 const sheetInfo = `(function(){return JSON.stringify({sheets:[].slice.call(document.styleSheets).map(function(s){var n=0;try{n=s.cssRules.length}catch(e){n=-1}return {href:s.href,rules:n}}),bodyBg:getComputedStyle(document.body).backgroundColor,fonts:document.fonts.status})})()`;
 
 const browser = await chromium.launch({ executablePath: chromePath(), headless: true });
@@ -89,7 +90,7 @@ for (const key of keys) {
       const n = Math.min(mine.length, theirs.length);
       const diffs = [];
       for (let i = 0; i < n; i++) for (const p of PROPS) if (norm(mine[i][p]) !== norm(theirs[i][p])) {
-        if (allowed(theirs[i].tag, p)) { totalAllowed++; continue; }
+        if (allowed(theirs[i].tag, p, `${key}/${s.name}`)) { totalAllowed++; continue; }
         diffs.push(`${theirs[i].tag}[${i}].${p}: 우리 ${mine[i][p]} · FE ${theirs[i][p]}`); propCount[p] = (propCount[p] || 0) + 1;
       }
       totalDiff += diffs.length; totalEl += n; stories++;

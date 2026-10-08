@@ -2,6 +2,8 @@
 # 매시간 FE 스토리북(Chromatic 브랜치 permalink)의 빌드 도장을 보고, 바뀌었을 때만 pnpm fe:sync → ds.css 재생성 → pnpm fe:parity(FE 화면과 계산 스타일 대조)
 # → 통과하면 playground/fe-stories 를 봇이 커밋·푸시한다. 푸시되면 Vercel 이 평소처럼 배포한다.
 # 실패(빨간 X)는 두 가지뿐: FE 스토리북이 안 열림(다음 시간에 자연 회복) / 새 FE 빌드가 우리 ds.css 위에서 다르게 그려짐(사람이 고칠 것 — 커밋하지 않는다).
+# FE 가 스토리를 개명해 레지스트리 fe.id 가 목차에 없는 키는 실패가 아니다(2026-10-08) — 그 키만 이전 스냅샷을 두고 나머지를 커밋하며,
+# fe-stories/index.json 의 missing 목록에 남는다. 관리자가 ds-registry.json 의 fe.id 를 고치면 다음 시간에 채워진다.
 # 수동 실행: Actions 탭 → FE Storybook sync → Run workflow.
 name: FE Storybook sync
 
