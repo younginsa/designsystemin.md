@@ -3,14 +3,16 @@ import * as React from "react";
 import { cn } from "@ds/ui/lib/utils";
 
 // 원본 재현 — HiNAS 365 시스템 진단 상세의 상태 히트맵(Camera Status · Pod Status).
-// 행 = 항목(카메라·파드), 열 = 시간대. 셀 톤은 4종뿐(DES-206: 노랑·파랑 계열은 primary 로 대체):
-//   success(정상) · primary(판정 불가·완료·대기) · destructive(이상) · none(데이터 없음 — muted 40%).
+// 행 = 항목(카메라·파드), 열 = 시간대. 셀 톤 5종:
+//   success(정상) · caution(판정 불가 — 노랑, 2026-10-08 caution 토큰 추가로 DES-206 의 노랑 대체 해제) ·
+//   primary(완료·대기 — 파랑 계열) · destructive(이상) · none(데이터 없음 — muted 40%).
 // 카드 셸(제목·설명·Expand All)은 화면이 Card variant="flat" 로 감싼다 — 이 컴포넌트는 범례 + 표만.
 
-type HeatmapTone = "success" | "primary" | "destructive" | "none";
+type HeatmapTone = "success" | "caution" | "primary" | "destructive" | "none";
 
 const TONE_CLS: Record<HeatmapTone, string> = {
   success: "bg-success",
+  caution: "bg-caution",
   primary: "bg-primary",
   destructive: "bg-destructive",
   none: "bg-muted opacity-40",
@@ -18,6 +20,7 @@ const TONE_CLS: Record<HeatmapTone, string> = {
 
 const LEGEND_CLS: Record<HeatmapTone, string> = {
   success: "bg-success",
+  caution: "bg-caution",
   primary: "bg-primary",
   destructive: "bg-destructive",
   none: "bg-muted",

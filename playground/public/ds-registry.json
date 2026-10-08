@@ -567,7 +567,7 @@
      "built": "2026-09-16"
     }
    ],
-   "note": "원본 재현 — @ds/ui/ui/heatmap-grid(2026-09-16, 시스템 진단 상세 Camera Status · Pod Status 에서 추출). HeatmapGrid(columns · rows{name, group?, cells} · rowLabel · cellTitle) + HeatmapLegend(items{label, tone}). 셀 톤 4종뿐 — success · primary · destructive · none(bg-muted opacity-40); DES-206 노랑·파랑 계열은 primary 대체. 셀 h-5 min-w-8 rounded-sm, 행 이름 font-mono text-sm(그룹 행 + 접두), 열 헤더 text-xs. 카드 셸(제목·설명·Expand All)은 화면의 Card variant=\"flat\" — 컴포넌트 밖.",
+   "note": "원본 재현 — @ds/ui/ui/heatmap-grid(2026-09-16, 시스템 진단 상세 Camera Status · Pod Status 에서 추출). HeatmapGrid(columns · rows{name, group?, cells} · rowLabel · cellTitle) + HeatmapLegend(items{label, tone}). 셀 톤 5종 — success · caution(판정 불가 — 2026-10-08 caution 토큰 추가로 DES-206 노랑 대체 해제) · primary(완료·대기) · destructive · none(bg-muted opacity-40). 셀 h-5 min-w-8 rounded-sm, 행 이름 font-mono text-sm(그룹 행 + 접두), 열 헤더 text-xs. 카드 셸(제목·설명·Expand All)은 화면의 Card variant=\"flat\" — 컴포넌트 밖.",
    "composition": "FE 판정 2026-09-30: 공통 컴포넌트 아님 — 진단 상세 1면 — 우리 조합 유지. FE Storybook 요청 대상에서 제외(fe:request)."
   },
   "icon-select": {

@@ -61,7 +61,7 @@
   패딩은 자리로 정한다: 본문 섹션 `p-6`, 우측 레일 카드 `p-4`. 손으로 `rounded-lg border …`를 쓰지 않는다.
 - **인라인 빈 상태 = `Empty size="sm"`** — 첨부 슬롯·메모·드롭존의 한 줄 점선 박스. 손 점선 박스 금지.
 - **상태 히트맵 = `HeatmapGrid` + `HeatmapLegend`**(2026-09-16, 진단 상세에서 추출) — 행 항목 × 열 시간대,
-  셀 톤은 success·primary·destructive·none 4종뿐(DES-206). `Card variant="flat" p-4` 안에 제목·설명·범례·표. 손 조합 금지.
+  셀 톤은 success·caution(판정 불가)·primary(완료·대기)·destructive·none 5종(2026-10-08 caution 추가 — DES-206 노랑 대체 해제). `Card variant="flat" p-4` 안에 제목·설명·범례·표. 손 조합 금지.
 - **B-2 · 3컬럼 구분선 변형**(릴리즈 노트, 2026-09-11 확정 — 레퍼런스 Statsig): 카드 대신
   **세로 구분선 3컬럼**(목록 | 본문 | 정보)이 **뷰포트 바닥까지** 이어진다. 셸 여백(`p-8`) 안에서만,
   탭 행과 3컬럼은 간격 0 한 블록(구분선이 탭 `border-b`에 닿고 컬럼 안쪽 `pt-6`으로 숨 쉼).
