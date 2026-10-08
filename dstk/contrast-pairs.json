@@ -63,18 +63,21 @@
       "text": "caution",
       "bg": "background",
       "level": "body",
-      "note": "진단 CAUTION 글자(2026-10-08)"
+      "note": "진단 CAUTION 글자·점(2026-10-08)",
+      "waived": "2026-10-08 사용자 결정 — 노랑 식별성 우선. Light yellow-600 #E8A600 은 흰 바탕 약 2.1:1 로 미달을 수용한다(Dark·Control 은 통과). 점(도트)은 상태 이름 글자와 함께 쓰여 WCAG 1.4.11 대상이 아니다. 값을 바꾸면 이 줄을 다시 판단한다."
     },
     {
       "text": "caution",
       "bg": "card",
-      "level": "body"
+      "level": "body",
+      "waived": "위와 같은 사유(2026-10-08 사용자 결정)."
     },
     {
       "text": "caution",
       "bg": "muted",
       "level": "body",
-      "note": "FE StatusBadge 톤 — text-caution bg-muted"
+      "note": "FE StatusBadge 톤 — 점에 caution, 글자는 기본색",
+      "waived": "위와 같은 사유(2026-10-08 사용자 결정)."
     },
     {
       "text": "secondary-foreground",
@@ -143,7 +146,7 @@
       "note": "캔버스 = secondary(2026-09-30) — 캔버스 위 본문 글자"
     }
   ],
-  "$status-rule": "상태색 3단(2026-10-08 개정, 진단 레벨 부활 확정): WARNING = destructive(빨강) · CAUTION = caution(주황 — Light orange-700 Day · Dark·Control orange-700 Dusk) · NORMAL = success(초록). 종전 2026-08-21 '빨강 단일(warning 토큰 폐기, 주의 = 빨강 도트 + 기본 글자)'은 폐기 — 주의는 이제 caution 이다. 에러는 여전히 destructive. 2026-09-28 토큰 정합: muted-foreground 는 secondary-foreground 와 같은 값이다(shadcn 이 secondary·muted·accent 를 같은 값·다른 이름으로 두는 방식 — FE 가 shadcn 컴포넌트에 우리 토큰 파일을 얹어 쓰므로 이름의 역할을 shadcn 과 맞춘다). 둘 다 읽는 보조 회색이라 게이트 대상. input 은 border 와 같은 값(필드 테두리 전용)이라 글자·아이콘에 쓰지 않는다(종전 '한 단계 연하게' 단계는 폐기).",
+  "$status-rule": "상태색 3단(2026-10-08 개정, 진단 레벨 부활 확정): WARNING = destructive(빨강) · CAUTION = caution(노랑 — Light yellow-600 Day #E8A600 · Dark·Control yellow-600 Dusk #F0C000. 기본은 점·틴트만이고 글자는 foreground, 글자에 caution 은 선택 — Light 글자 대비는 waived) · NORMAL = success(초록). 종전 2026-08-21 '빨강 단일(warning 토큰 폐기, 주의 = 빨강 도트 + 기본 글자)'은 폐기 — 주의는 이제 caution 이다. 에러는 여전히 destructive. 2026-09-28 토큰 정합: muted-foreground 는 secondary-foreground 와 같은 값이다(shadcn 이 secondary·muted·accent 를 같은 값·다른 이름으로 두는 방식 — FE 가 shadcn 컴포넌트에 우리 토큰 파일을 얹어 쓰므로 이름의 역할을 shadcn 과 맞춘다). 둘 다 읽는 보조 회색이라 게이트 대상. input 은 border 와 같은 값(필드 테두리 전용)이라 글자·아이콘에 쓰지 않는다(종전 '한 단계 연하게' 단계는 폐기).",
   "tints": {
     "$note": "허용 틴트 목록 — 생성물의 /N 투명도 변형은 이 목록 안만 허용(클론 self-check 게이트). 목록 밖 = 차단 + 알림 + 통과 틴트 제안. ※ /generated/update-image-download는 레거시 유물로 감사 제외(자체 문법 7곳 — hinas365 업데이트 진행 상세 재제작 시 은퇴).",
     "allowed": [

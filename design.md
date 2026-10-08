@@ -42,7 +42,7 @@
 | `muted` / `muted-foreground` | 비활성 표면 / 보조 텍스트(2026-09-28 부터 `secondary-foreground` 와 같은 값 — 플레이스홀더·힌트·장식 아이콘용, 타이틀·라벨은 `secondary-foreground` 로) |
 | `destructive` | 삭제·위험 액션 |
 | `success` | 성공 상태 · 진단 NORMAL |
-| `caution` | 주의 상태 · 진단 CAUTION(2026-10-08 — 진단 3단 레벨 WARNING `destructive` · CAUTION `caution` · NORMAL `success`) |
+| `caution` | 주의 상태 · 진단 CAUTION(2026-10-08 — 진단 3단 레벨 WARNING `destructive` · CAUTION `caution` · NORMAL `success`). **기본은 점(도트)·틴트 배경(`bg-caution/12`)에만 쓰고 상태 이름 글자는 `text-foreground`** — FE StatusBadge 와 같다. 글자에 `text-caution` 은 선택(라이트 대비 약 2.1:1 — 짧은 강조에만) |
 | `border`, `input`, `ring` | 테두리, 입력 테두리, 포커스 링 |
 | `radius` | 라운드 기준값 (`rounded-lg`) |
 

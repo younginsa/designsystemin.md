@@ -1,6 +1,6 @@
 /* 자동 생성 — 손으로 편집 금지. 원천: dstk/palette.json + semantic.json (Theme 정렬) */
 
-/* commit 15f4b43 · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
+/* commit 40a58d2 · 시맨틱: :root=Light(Cloud) · .dark=Dark(SVM·NAS) · .theme-control=Control · 팔레트 조명: :root=Day · .dark=Dusk · .night=Night */
 
 :root {
   --gray-10: #FBFBFB;
@@ -125,7 +125,7 @@
   --destructive: #FF5B5B;
   --destructive-foreground: #FFFFFF;
   --success: #24A148;
-  --caution: #C34600;
+  --caution: #E8A600;
   --chart-1: #002D9C;
   --chart-2: #0043CE;
   --chart-3: #0F62FE;
@@ -311,7 +311,7 @@
   --destructive: #FA454E;
   --destructive-foreground: #FFFFFF;
   --success: #24A148;
-  --caution: #FE9A2E;
+  --caution: #F0C000;
   --chart-1: #002D9C;
   --chart-2: #0043CE;
   --chart-3: #0F62FE;
@@ -449,7 +449,7 @@
   --destructive: #A50000;
   --destructive-foreground: #FFFFFF;
   --success: #24A148;
-  --caution: #FE9A2E;
+  --caution: #F0C000;
   --chart-1: #002D9C;
   --chart-2: #0043CE;
   --chart-3: #0F62FE;
