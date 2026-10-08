@@ -143,7 +143,9 @@ export function createServer() {
     const reg = await registry();
     const idx = await storyIndex().catch(() => null);
     const compKeys = Object.keys(reg.components).sort((a, b) => b.length - a.length); // 긴 이름 우선 — input-group 이 input 보다 먼저
-    const usedSlots = [...new Set([...html.matchAll(/data-slot="([^"]+)"/g)].map((m) => m[1]))];
+    // FE AppShell 사이드바(빌드 ChyVgiXc~)는 data-slot 대신 shadcn 옛 표기 data-sidebar="menu-button" 을 쓴다 — sidebar-menu-button 으로 읽는다(2026-10-08)
+    const sidebarSlots = [...html.matchAll(/data-sidebar="([^"]+)"/g)].map((m) => (m[1] === "sidebar" ? "sidebar" : "sidebar-" + m[1]));
+    const usedSlots = [...new Set([...[...html.matchAll(/data-slot="([^"]+)"/g)].map((m) => m[1]), ...sidebarSlots])];
     const used = new Map<string, string[]>();
     for (const s of usedSlots) {
       const k = compKeys.find((c) => s === c || s.startsWith(c + "-"));
