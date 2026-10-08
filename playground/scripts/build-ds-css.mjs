@@ -20,7 +20,7 @@ const tailwind = req("@tailwindcss/postcss");
 // ── 안전 목록 — 생성 HTML 의 레이아웃·타이포·색 유틸리티(스토리에 안 나와도 번들에 포함) ──
 const SP = ["0", "0.5", "1", "1.5", "2", "2.5", "3", "4", "5", "6", "8", "10", "12", "16", "20", "24"];
 const SPACING = ["p", "px", "py", "pt", "pb", "pl", "pr", "m", "mx", "my", "mt", "mb", "ml", "mr", "gap", "gap-x", "gap-y", "space-x", "space-y"];
-const TOKENS = ["background", "foreground", "card", "card-foreground", "popover", "popover-foreground", "primary", "primary-foreground", "secondary", "secondary-foreground", "muted", "muted-foreground", "accent", "accent-foreground", "destructive", "destructive-foreground", "success", "border", "input", "ring", "chart-1", "chart-2", "chart-3", "chart-4", "chart-5", "white", "black", "transparent"];
+const TOKENS = ["background", "foreground", "card", "card-foreground", "popover", "popover-foreground", "primary", "primary-foreground", "secondary", "secondary-foreground", "muted", "muted-foreground", "accent", "accent-foreground", "destructive", "destructive-foreground", "success", "caution", "border", "input", "ring", "chart-1", "chart-2", "chart-3", "chart-4", "chart-5", "white", "black", "transparent"];
 const cp = JSON.parse(readFileSync(join(ROOT, "dstk/contrast-pairs.json"), "utf8"));
 const TINTS = (cp.tints?.allowed ?? []).map((t) => String(t.class));
 const list = [];

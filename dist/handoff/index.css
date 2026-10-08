@@ -1,4 +1,4 @@
-/* 자동 생성 — 손 편집 금지 · commit 16dd685 · 2026-09-29 · 원천: dstk/*.json (git이 source of truth) */
+/* 자동 생성 — 손 편집 금지 · commit 15f4b43 · 2026-10-08 · 원천: dstk/*.json (git이 source of truth) */
 
 /* index — DS 배선. 앱 index.css에서 tailwindcss import 뒤에 이 파일을 @import 하면 끝.
    앱 전용(point 컬러·keyframes·@custom-variant dark)은 앱 파일에 유지. 다크 전환 = 래퍼에 .dark */
@@ -63,6 +63,7 @@ body {
   --color-general-destructive: var(--general-destructive);
   --color-general-destructive-foreground: var(--general-destructive-foreground);
   --color-general-success: var(--general-success);
+  --color-general-caution: var(--general-caution);
   --color-general-border: var(--general-border);
   --color-general-input: var(--general-input);
   --color-general-ring: var(--general-ring);

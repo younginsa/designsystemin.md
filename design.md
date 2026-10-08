@@ -41,7 +41,8 @@
 | `secondary`, `accent` | 보조 액션, hover 표면 |
 | `muted` / `muted-foreground` | 비활성 표면 / 보조 텍스트(2026-09-28 부터 `secondary-foreground` 와 같은 값 — 플레이스홀더·힌트·장식 아이콘용, 타이틀·라벨은 `secondary-foreground` 로) |
 | `destructive` | 삭제·위험 액션 |
-| `success` | 성공 상태 |
+| `success` | 성공 상태 · 진단 NORMAL |
+| `caution` | 주의 상태 · 진단 CAUTION(2026-10-08 — 진단 3단 레벨 WARNING `destructive` · CAUTION `caution` · NORMAL `success`) |
 | `border`, `input`, `ring` | 테두리, 입력 테두리, 포커스 링 |
 | `radius` | 라운드 기준값 (`rounded-lg`) |
 

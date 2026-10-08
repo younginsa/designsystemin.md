@@ -1,4 +1,4 @@
-/* 자동 생성 — 손 편집 금지 · commit 16dd685 · 2026-09-29 · 원천: dstk/*.json (git이 source of truth) */
+/* 자동 생성 — 손 편집 금지 · commit 15f4b43 · 2026-10-08 · 원천: dstk/*.json (git이 source of truth) */
 
 /* semantic-token — 팔레트→시맨틱 매칭. 값은 primitives 참조(var 사슬 — dstk 갱신이 자동 전파), 주석=해석 hex. card·popover는 background와 별도 토큰 */
 
@@ -20,6 +20,7 @@
   --general-destructive: var(--dusk-red-600); /* #FF5B5B */
   --general-destructive-foreground: var(--white-100); /* #FFFFFF */
   --general-success: var(--green-500); /* #24A148 */
+  --general-caution: var(--orange-700); /* #C34600 */
   --chart-1: var(--blue-800); /* #002D9C */
   --chart-2: var(--blue-700); /* #0043CE */
   --chart-3: var(--blue-600); /* #0F62FE */
@@ -49,6 +50,7 @@
   --general-destructive: var(--day-red-500); /* #FA454E */
   --general-destructive-foreground: var(--white-100); /* #FFFFFF */
   --general-success: var(--day-green-500); /* #24A148 */
+  --general-caution: var(--orange-700); /* #FE9A2E */
   --chart-1: var(--day-blue-800); /* #002D9C */
   --chart-2: var(--day-blue-700); /* #0043CE */
   --chart-3: var(--day-blue-600); /* #0F62FE */
@@ -78,6 +80,7 @@
   --general-destructive: var(--dusk-red-100); /* #A50000 */
   --general-destructive-foreground: var(--white-100); /* #FFFFFF */
   --general-success: var(--day-green-500); /* #24A148 */
+  --general-caution: var(--dusk-orange-700); /* #FE9A2E */
   --chart-1: var(--day-blue-800); /* #002D9C */
   --chart-2: var(--day-blue-700); /* #0043CE */
   --chart-3: var(--day-blue-600); /* #0F62FE */

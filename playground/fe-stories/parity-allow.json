@@ -69,6 +69,20 @@
     "note": "같은 측정용 span(2026-10-08)."
   },
   {
+    "tag": "span",
+    "prop": "color",
+    "story": "status-badge/",
+    "fe": "rgb(245, 158, 11)",
+    "note": "caution 토큰 의도된 차이(2026-10-08) — FE --general-caution #F59E0B 는 흰 바탕 2.15:1 로 대비 게이트 미달, 우리는 orange-700(#C34600 · 다크 #FE9A2E). FE 에 같은 값으로 변경 요청. FE 가 바꾸면 이 줄과 아래 줄을 지운다. FE 값이 정확히 #F59E0B 일 때만 예외."
+  },
+  {
+    "tag": "span",
+    "prop": "backgroundColor",
+    "story": "status-badge/",
+    "fe": "rgb(245, 158, 11)",
+    "note": "같은 원인 — StatusBadge 점(dot) 배경색."
+  },
+  {
     "tag": "p",
     "prop": "height",
     "story": "page-header/VerticalAlign",
