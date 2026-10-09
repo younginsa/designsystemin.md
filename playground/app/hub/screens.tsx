@@ -37,6 +37,16 @@ export function useScreens(names: string[]) {
       sessionStorage.setItem("ds365pw", pw);
       const rest = await Promise.all(names.slice(1).map(async (n) => [n, await decryptOne(k, n)] as const));
       setUrls({ [names[0]]: first, ...Object.fromEntries(rest) });
+      // 갤러리 실물 라우트(/gallery/…)는 서버에서 잠겨 있다(루트 middleware.ts).
+      // 같은 비밀번호로 인증 쿠키도 받아 둬야 미리보기 iframe·팝업이 열린다.
+      // 로컬 dev 에는 미들웨어가 없어 실패하므로 결과는 무시한다.
+      try {
+        await fetch("/gallery-unlock", {
+          method: "POST",
+          headers: { accept: "application/json" },
+          body: new URLSearchParams({ password: pw }),
+        });
+      } catch { /* 무시 — 스크린샷 해제는 이미 성공 */ }
       setUnlocked(true);
       return true;
     } catch {
