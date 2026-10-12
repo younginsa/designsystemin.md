@@ -60,18 +60,25 @@ mkdirSync(OUT, { recursive: true });
 
 const names = [...new Set(NAMES)].sort();
 const written = [], missing = [];
+const svgs = {};
 for (const name of names) {
   const node = iconNode(name);
   if (!node) { missing.push(name); continue; }
-  writeFileSync(join(OUT, name + ".svg"), toSvg(name, node));
+  const svg = toSvg(name, node);
+  writeFileSync(join(OUT, name + ".svg"), svg);
+  // .json 쌍둥이(2026-10-12) — 채팅의 텍스트 변환 fetch 는 .svg 를 빈 응답으로 받는다(실측: 생성 대화가 download.svg 를 "빈 응답"으로 보고).
+  // JSON 은 원형으로 오므로 같은 마크업을 {name, svg} 로 감싸 둔다. 스니펫의 .json 쌍둥이와 같은 처리
+  writeFileSync(join(OUT, name + ".json"), JSON.stringify({ name, svg: svg.trim() }) + "\n");
+  svgs[name] = svg.trim();
   written.push(name);
 }
 const index = {
   generated: new Date().toISOString().slice(0, 10),
   lucide: version,
   count: written.length,
-  usage: "스니펫의 예시 아이콘을 의미에 맞게 바꿀 때 /icons/<이름>.svg 의 <svg> 를 통째로 복사해 교체한다. 크기 클래스(size-*)는 원래 것을 유지. 목록에 없는 아이콘은 쓰지 않는다(ds-skill 3(c)③).",
+  usage: "스니펫의 예시 아이콘을 의미에 맞게 바꿀 때 아래 svgs[<이름>] 의 <svg> 를 통째로 복사해 교체한다(이 파일 하나로 전부 읽힌다). 같은 마크업이 /icons/<이름>.svg · /icons/<이름>.json 에도 있다. 크기 클래스(size-*)는 원래 것을 유지. 목록에 없는 아이콘은 쓰지 않는다(ds-skill 3(c)③).",
   names: written,
+  svgs,
 };
 writeFileSync(join(OUT, "index.json"), JSON.stringify(index, null, 1) + "\n");
 console.log("icons: " + written.length + " written to " + OUT + " (lucide-react " + version + ")");

@@ -33,7 +33,7 @@
 | 색 토큰 | `https://designsystemin-md.vercel.app/dstk/semantic-map.json` — 토큰 이름 = Tailwind 클래스 이름 |
 | 타이포 | `https://designsystemin-md.vercel.app/dstk/typography.json` |
 | 허용 클래스 | `https://designsystemin-md.vercel.app/ds-classes.json` — 자가 검사용 전체 클래스 목록 |
-| 아이콘 | `https://designsystemin-md.vercel.app/icons/index.json`(이름 목록) · `https://designsystemin-md.vercel.app/icons/<이름>.svg` — 스니펫의 예시 아이콘을 의미에 맞게 바꿀 때 여기서 `<svg>` 를 통째로 가져온다(lucide, 2026-10-07) |
+| 아이콘 | `https://designsystemin-md.vercel.app/icons/index.json` — 이름 목록(`names`) + **전체 마크업(`svgs[<이름>]`)** 이 한 파일에 있다. 스니펫의 예시 아이콘을 의미에 맞게 바꿀 때 여기서 `<svg>` 를 통째로 가져온다(lucide, 2026-10-07). `.svg` 는 텍스트 변환 fetch 가 빈 응답으로 받으니 읽지 않는다(2026-10-12) — 같은 마크업이 `…/icons/<이름>.json` 에도 있다 |
 | 레이아웃 프레임 | `https://designsystemin-md.vercel.app/docs/layout/README.md` · `https://designsystemin-md.vercel.app/docs/layout/admin-console.md` |
 | 본문 패턴 | `https://designsystemin-md.vercel.app/docs/layout/body-patterns.md` — A 리스트 · B 상세 · C 위저드 · D 대시보드 · E 폼 |
 | 규칙서 **(필독 — 절차 0번)** | `https://designsystemin-md.vercel.app/docs/design.md` — 스니펫에 안 담기는 사용 규칙·금지 목록 |
@@ -77,7 +77,7 @@
        ② **셸 버전 자리** — 워드마크 아래 `<div class="text-caption-xs font-mono text-secondary-foreground">v1.3.0</div>`(custom-brand 는 `v3.0.0`)는
           스토리의 예시 값이다. 프롬프트에 버전이 있으면 그 값으로 바꾸고, 없으면 그 div 를 통째로 뺀다. 스토리의 예시 버전을 남기지 않는다.
        ③ **아이콘** — 스니펫의 아이콘은 스토리의 예시다(alert 의 터미널 아이콘 등). 의미에 맞는 아이콘으로 바꾼다: `https://designsystemin-md.vercel.app/icons/index.json` 에서 이름을
-          고르고 `https://designsystemin-md.vercel.app/icons/<이름>.svg` 를 읽어 `<svg>` 를 통째로 교체한다. 크기 클래스(`size-4` 등)는 원래 것을 유지한다. 목록에 없는 아이콘은
+          고르고 같은 파일의 `svgs[<이름>]` 마크업으로 `<svg>` 를 통째로 교체한다(`.svg` 주소는 채팅 fetch 가 빈 응답으로 받는다 — 2026-10-12 실측). 크기 클래스(`size-4` 등)는 원래 것을 유지한다. 목록에 없는 아이콘은
           쓰지 않는다 — 가장 가까운 것을 고르고 "내가 정한 것"에 적는다.
        ④ **표 셀 분류 태그(선급처럼 한 셀에 여러 값)** — `badge` 의 outline 상태를 쓴다(`states` 의 `default--variant-outline`, 라이브는
           `https://mcp-one-fawn.vercel.app/render/badge/default?args={"variant":"outline"}`). 대표값(주선급) 칩에는 맨 앞에
