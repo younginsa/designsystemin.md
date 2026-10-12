@@ -26,6 +26,9 @@
 @theme inline {
   /* 서체 — Inter(라이브러리 정합), 한글은 시스템 폴백 */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Apple SD Gothic Neo", sans-serif;
+  /* Inter ss02(Disambiguation — I 세리프·l 꼬리·0 사선, 2026-10-12). 피그마 라이브러리 Desktop 스타일과 같은 설정.
+     원본 Inter(public/fonts/InterVariable.woff2)에서만 동작 — Google Fonts 판에는 없다. FE 는 같은 변수(--default-font-feature-settings)로 켠다 */
+  --default-font-feature-settings: "ss02";
   /* 모노 — Roboto Mono(피그마 Desktop/mono_* 정합, 2026-09-10). font-mono 클래스가 이 변수를 쓴다 */
   --font-mono: var(--font-roboto-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   /* 글자 크기 스케일 = 피그마 Desktop 텍스트 스타일(dstk/typography.json). Tailwind 기본(sm 14 · base 16 · lg 18)이 아니라

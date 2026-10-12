@@ -2,5 +2,14 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "pnpm install",
   "buildCommand": "pnpm ds:build && pnpm mcp:artifacts && pnpm --filter playground build && pnpm --filter playground build-storybook -o out/storybook",
-  "outputDirectory": "playground/out"
+  "outputDirectory": "playground/out",
+  "headers": [
+    {
+      "source": "/fonts/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ]
 }

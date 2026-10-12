@@ -50,8 +50,10 @@ writeFileSync(safelist, `<!-- 자동 생성(build-ds-css.mjs) — Tailwind 스�
 // ── 입력 CSS — globals.css + 폰트 + 갤러리 스캔 + 안전 목록 ──
 const globals = readFileSync(join(PG, "app/globals.css"), "utf8")
   .replace('@source "./generated";', '@source "./gallery";\n@source "../scripts/.ds-safelist.html";\n@source "../fe-stories";');
+// Inter = 사이트가 직접 서빙하는 rsms 원본(ss02 동작, 2026-10-12). url 은 ds.css 기준 상대 경로라 배포 사이트의 /fonts/ 로 풀린다.
+// 다른 출처의 단독 HTML 이 ds.css 를 링크해도 받도록 vercel.json 이 /fonts/* 에 CORS 헤더를 붙인다. Roboto Mono 는 Google Fonts 그대로.
 const input = [
-  '@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap");',
+  '@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap");',
   globals,
   // next/font 가 주던 변수의 단독 HTML 판
   ':root { --font-inter: "Inter"; --font-roboto-mono: "Roboto Mono"; }',
@@ -134,7 +136,10 @@ if (existsSync(feCssPath)) {
     feReport = ` · FE 고유 ${missing.length}종(규칙 ${rules.length} · 변수 ${need.size}${still.length ? ` · 못 찾음 ${still.length}: ${still.slice(0, 4).join(" ")}` : ""})`;
   } else feReport = " · FE 고유 0";
 }
-const css = result.css + feExtra;
+// Inter @font-face 는 Tailwind 컴파일을 거치면 사라져서 컴파일 뒤 @import 바로 다음에 붙인다(@import 는 파일 맨 앞이어야 한다)
+const INTER_FACE = '@font-face { font-family: "Inter"; src: url("fonts/InterVariable.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }';
+const css = result.css.replace(/(@import url\("[^"]*"\);)/, `$1\n${INTER_FACE}`) + feExtra; // URL 안에 ";" 가 있다(wght@400;500)
+if (!css.includes("InterVariable.woff2")) throw new Error("[ds.css] Inter @font-face 를 붙이지 못했다 — @import 줄을 확인할 것");
 writeFileSync(out, header + css);
 const classes = new Set([...css.matchAll(/\.((?:\\.|[A-Za-z0-9_-])+)(?=[\s,:{.>[~+])/g)].map((m) => m[1].replace(/\\/g, "")));
 // 자가 검사용 허용 클래스 목록 — claude.ai 스킬이 읽어 대조한다(도구 없이 검사하는 경로)
