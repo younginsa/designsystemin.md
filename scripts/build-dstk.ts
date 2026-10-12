@@ -167,22 +167,26 @@ const css =
     block(".theme-control", tokenVars(semantic, "control", "semantic")),
   ].join("\n\n") + "\n";
 
-mkdirSync(join(ROOT, "dist"), { recursive: true });
-writeFileSync(join(ROOT, "dist/dstk.css"), css);
+// dist 쓰기는 게이트(가독성·스토리)를 모두 통과한 뒤에만 한다(2026-10-12). 종전엔 여기서 먼저 썼다 —
+// 게이트가 실패해도 dist/dstk.css 에 미달 값이 남아 "실패했는데 파일은 바뀐" 상태가 됐다(caution orange-700 사례).
+function writeDist() {
+  mkdirSync(join(ROOT, "dist"), { recursive: true });
+  writeFileSync(join(ROOT, "dist/dstk.css"), css);
 
-// 제품 오버라이드 — dist/products/<name>.css (.theme-<name>)
-mkdirSync(join(ROOT, "dist/products"), { recursive: true });
-for (const f of readdirSync(join(ROOT, "dstk/products")).filter((f) => f.endsWith(".json"))) {
-  const name = basename(f, ".json");
-  const tokens = readJson(`dstk/products/${f}`);
-  const parts: string[] = [`/* ${name} 제품 토큰 — build-dstk.ts 생성 */`];
-  for (const mode of THEME_MODES) {
-    const lines = tokenVars(tokens, mode, `products/${name}`);
-    if (!lines.length) continue;
-    const sel = mode === "light" ? `.theme-${name}` : mode === "dark" ? `.dark .theme-${name}` : `.theme-control .theme-${name}`;
-    parts.push(block(sel, lines));
+  // 제품 오버라이드 — dist/products/<name>.css (.theme-<name>)
+  mkdirSync(join(ROOT, "dist/products"), { recursive: true });
+  for (const f of readdirSync(join(ROOT, "dstk/products")).filter((f) => f.endsWith(".json"))) {
+    const name = basename(f, ".json");
+    const tokens = readJson(`dstk/products/${f}`);
+    const parts: string[] = [`/* ${name} 제품 토큰 — build-dstk.ts 생성 */`];
+    for (const mode of THEME_MODES) {
+      const lines = tokenVars(tokens, mode, `products/${name}`);
+      if (!lines.length) continue;
+      const sel = mode === "light" ? `.theme-${name}` : mode === "dark" ? `.dark .theme-${name}` : `.theme-control .theme-${name}`;
+      parts.push(block(sel, lines));
+    }
+    writeFileSync(join(ROOT, `dist/products/${name}.css`), parts.join("\n\n") + "\n");
   }
-  writeFileSync(join(ROOT, `dist/products/${name}.css`), parts.join("\n\n") + "\n");
 }
 
 // ── 빌드 게이트(가독성·스토리) + Storybook 시맨틱 표 데이터 — 피그마 스냅샷 대조는 2026-09-18 은퇴(저장소가 원천, 피그마는 다운스트림) ──
@@ -289,6 +293,9 @@ for (const f of readdirSync(join(ROOT, "dstk/products")).filter((f) => f.endsWit
     writeFileSync(join(ROOT, "playground", "public", "dstk", "semantic-map.json"), JSON.stringify({ updated, rows, tints }, null, 2));
   }
 }
+
+// 게이트(가독성·스토리)를 모두 통과했다 — 이제야 dist 를 쓴다
+writeDist();
 
 const pgCss = join(ROOT, "playground", "app", "dstk.css");
 if (existsSync(dirname(pgCss))) copyFileSync(join(ROOT, "dist/dstk.css"), pgCss);
