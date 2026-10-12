@@ -227,7 +227,7 @@ type Account = (typeof ACCOUNTS)[number];
 // 경로 → 브레드크럼 (상단바 좌측)
 const CRUMBS: { prefix: string; trail: [string, string][]; page: string }[] = [
   { prefix: `${BASE}/dashboard`, trail: [], page: "대시보드" },
-  { prefix: `${BASE}/diagnostics/detail`, trail: [["자가 진단", `${BASE}/diagnostics`]], page: "SVM_TEST3" },
+  { prefix: `${BASE}/diagnostics/detail`, trail: [["자가 진단", `${BASE}/diagnostics`]], page: "DEV_CONTROL_ENC" },
   { prefix: `${BASE}/diagnostics`, trail: [], page: "자가 진단" },
   { prefix: `${BASE}/updates`, trail: [], page: "업데이트" },
   { prefix: `${BASE}/release-notes`, trail: [], page: "릴리즈 노트" },
@@ -235,6 +235,25 @@ const CRUMBS: { prefix: string; trail: [string, string][]; page: string }[] = [
   { prefix: `${BASE}/dev-qa`, trail: [], page: "Developer / QA" },
   { prefix: `${BASE}/accounts`, trail: [], page: "계정 관리" },
   { prefix: `${BASE}/permissions`, trail: [], page: "기능별 계정권한" },
+  // 상세는 부모 prefix보다 먼저 — 조회가 첫 일치 startsWith 다(2026-09-21 신설)
+  {
+    prefix: `${BASE}/ships/update/history`,
+    trail: [
+      ["납품 호선", `${BASE}/ships/delivery`],
+      ["9811000", `${BASE}/ships/detail`],
+      ["업데이트", `${BASE}/ships/update`],
+    ],
+    page: "히스토리",
+  },
+  {
+    prefix: `${BASE}/ships/update`,
+    trail: [
+      ["납품 호선", `${BASE}/ships/delivery`],
+      ["9811000", `${BASE}/ships/detail`],
+    ],
+    page: "업데이트",
+  },
+  { prefix: `${BASE}/ships/detail`, trail: [["납품 호선", `${BASE}/ships/delivery`]], page: "9811000" },
   { prefix: `${BASE}/ships/delivery`, trail: [], page: "납품 호선" },
   { prefix: `${BASE}/ships/test`, trail: [], page: "테스트 호선" },
 ];

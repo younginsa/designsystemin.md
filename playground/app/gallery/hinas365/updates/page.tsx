@@ -16,7 +16,8 @@
 // 어휘 게이트 메모: skeleton 채택 완료(DES-205 해소, 2026-08-25) — 로딩=스켈레톤 · 프로그레스 바=실제 진행률 전용
 
 import * as React from "react";
-import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
 import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
@@ -26,7 +27,6 @@ import {
   ArrowUp,
   ChevronsUpDown,
   MoreHorizontal,
-  RefreshCw,
 } from "lucide-react";
 
 import { Badge } from "@ds/ui/ui/badge";
@@ -62,6 +62,8 @@ import {
 import { BASE_NOW, passDate, passSelect } from "../../_detail/filter-match";
 // 본문 표 푸터 = 페이저만 가운데(2026-09-18 디자이너 확정) — 릴리즈 노트 개발자용 표와 같은 부품
 import { BodyPager } from "../../_detail/body-pager";
+
+const BASE = "/gallery/hinas365";
 
 /* ---------------------------------------------------- 상태 · 파이프라인 */
 
@@ -353,6 +355,7 @@ function UpdateSection({
   emptyText: string;
   withDateFilter: boolean;
 }) {
+  const router = useRouter(); // 행 클릭 → 업데이트 (A 문법, sales365 선례)
   const [keyword, setKeyword] = React.useState("");
   const [filterValues, setFilterValues] = React.useState<FilterValues>({});
   const [extraShown, setExtraShown] = React.useState<string[]>([]);
@@ -435,7 +438,9 @@ function UpdateSection({
                 <TableHead className="uppercase">Version</TableHead>
                 <TableHead className="uppercase">Status</TableHead>
                 <TableHead className="uppercase">Date Range</TableHead>
-                <TableHead className="uppercase">Actions</TableHead>
+                {/* Actions 제목은 뺐다 — 행마다 있던 [업데이트] 버튼을 없애고 「…」 하나만 남겨서
+                    제목을 붙일 대상이 없다. 업데이트로 들어가는 길은 Update ID 링크가 맡는다(2026-09-29 디자이너 확정) */}
+                <TableHead />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -447,14 +452,23 @@ function UpdateSection({
                 </TableRow>
               ) : (
                 pageRows.map((r) => (
-                  <TableRow key={r.id}>
+                  // 행 클릭 = 그 업데이트로 진입(2026-09-29 디자이너 확정). 문법은 DS 표가 선언한
+                  // `cursor-pointer hover:bg-accent` 이고, sales365 목록의 「행 클릭 → 상세」와 같은 조립이다.
+                  // 행마다 있던 [업데이트] 버튼을 이 클릭이 대신한다
+                  <TableRow
+                    key={r.id}
+                    className="cursor-pointer hover:bg-accent"
+                    onClick={() => router.push(`${BASE}/ships/update`)}
+                  >
                     <TableCell className="align-top font-mono text-sm">{r.id}</TableCell>
-                    <TableCell className="align-top">
-                      {/* 호선 = 이름 링크 + Hull · Name 보조 두 줄(운영 열 재현) */}
+                    {/* 호선 이름만 다른 곳으로 간다 — 전파를 막지 않으면 행 클릭이 같이 발동한다 */}
+                    <TableCell className="align-top" onClick={(e) => e.stopPropagation()}>
+                      {/* 호선 = 이름 링크 + Hull · Name 보조 두 줄(운영 열 재현).
+                          링크 대상은 호선 상세 — 호선 목록의 「행 진입 = 호선 상세」와 같은 뜻으로 맞춘다 */}
                       <div className="space-y-0.5">
-                        <a href="#" className="font-medium text-primary hover:underline">
+                        <Link href={`${BASE}/ships/detail`} className="font-medium text-primary hover:underline">
                           {r.vessel}
-                        </a>
+                        </Link>
                         <p className="text-xs text-secondary-foreground">Hull {r.hull}</p>
                         <p className="text-xs text-secondary-foreground">Name {r.vessel}</p>
                       </div>
@@ -510,12 +524,11 @@ function UpdateSection({
                         ))}
                       </div>
                     </TableCell>
-                    <TableCell className="align-top">
-                      <div className="flex items-center gap-1">
-                        {/* 라벨은 「업데이트」 — 표 안이라 대상(호선)은 행이 이미 말한다(2026-09-18 열 폭 절약) */}
-                        <Button size="sm">
-                          <RefreshCw className="size-4" /> 업데이트
-                        </Button>
+                    {/* [업데이트] 버튼은 없앴다 — 행 자체가 이미 하나의 업데이트고, 이력 표에서는
+                        끝난 기록(COMPLETED · CANCELED)에까지 붙어 있었다(2026-09-29 디자이너 확정) */}
+                    {/* 「…」도 전파를 막는다 — 메뉴를 열려다 업데이트 페이지로 튕기는 것 방지 */}
+                    <TableCell className="align-top text-right" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex items-center justify-end gap-1">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" aria-label="더 보기">

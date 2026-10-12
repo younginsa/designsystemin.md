@@ -51,6 +51,8 @@ import { ErrorState } from "@ds/ui/ui/error-state";
 import { Input } from "@ds/ui/ui/input";
 import { Label } from "@ds/ui/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@ds/ui/ui/popover";
+// 오늘 표시 = 회색 외곽선 + bold(로컬 공용, FE 반영 전 임시 — 2026-10-08)
+import { TODAY_CLASS } from "../../../_detail/calendar-today";
 import { RadioGroup, RadioGroupItem } from "@ds/ui/ui/radio-group";
 import {
   Select,
@@ -257,8 +259,37 @@ function SpecFields() {
   );
 }
 
+// 하단 고정 바 경계선은 「붙어 있을 때만」 — 스크롤이 없으면 바 밑으로 지나갈 내용도 없다(2026-09-23 디자이너 확정).
+// 판정은 바의 바닥 위치 하나다: 뷰포트 바닥에 닿아 있으면 붙어 있는 것이고, 끝까지 내리면 셸 여백만큼 위로 앉는다.
+// 업데이트 위저드(hinas365/ships/update)와 같은 처리 — 두 바가 같은 요소다
+function useStuck() {
+  const ref = React.useRef<HTMLDivElement | null>(null);
+  const [stuck, setStuck] = React.useState(false);
+  React.useEffect(() => {
+    const read = () => {
+      const el = ref.current;
+      if (!el) return;
+      setStuck(el.getBoundingClientRect().bottom >= window.innerHeight - 1);
+    };
+    read();
+    window.addEventListener("scroll", read, { passive: true });
+    window.addEventListener("resize", read);
+    // 스크롤 없이 높이만 바뀔 때(상태 필 기본 → 빈 상태 등)도 다시 잰다 — 갤러리 쪽 보강을 클론 동기화 뒤 복원(2026-10-12).
+    // IntersectionObserver 는 렌더가 멈춘 창에서 발화하지 않아 쓰지 않는다
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(read) : null;
+    ro?.observe(document.body);
+    return () => {
+      window.removeEventListener("scroll", read);
+      window.removeEventListener("resize", read);
+      ro?.disconnect();
+    };
+  }, []);
+  return [ref, stuck] as const;
+}
+
 export default function Sales365ContractCreatePage() {
   const [view, setView] = React.useState<ViewState>("default");
+  const [barRef, stuck] = useStuck();
 
   // ① 기본 계약 정보 — 4필드(고객·유형·계약일·담당자) 전부 채워야 항목 추가 활성.
   // 계약명은 입력이 아니라 자동 생성(2026-09-09 확정) · 계약서 시리얼 넘버는 선택
@@ -293,22 +324,6 @@ export default function Sales365ContractCreatePage() {
       setNextId((n) => n + 1);
     }
   }, [basicComplete, items.length, nextId]);
-
-  // 하단 고정 바 경계선 — 바가 뷰포트 바닥에 붙어 있는 동안에만 border-t(body-patterns E, 2026-09-23).
-  // 판정 = 바 바닥 ≥ 뷰포트 높이. scroll·resize + body ResizeObserver(상태 전환으로 높이만 바뀔 때). IntersectionObserver 는 렌더가 멈춘 창에서 발화하지 않아 쓰지 않는다.
-  const barRef = React.useRef<HTMLDivElement>(null);
-  const [stuck, setStuck] = React.useState(false);
-  React.useEffect(() => {
-    const el = barRef.current;
-    if (!el) return;
-    const read = () => setStuck(el.getBoundingClientRect().bottom >= document.documentElement.clientHeight - 1);
-    read();
-    window.addEventListener("scroll", read, { passive: true });
-    window.addEventListener("resize", read);
-    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(read) : null;
-    ro?.observe(document.body);
-    return () => { window.removeEventListener("scroll", read); window.removeEventListener("resize", read); ro?.disconnect(); };
-  }, []);
 
   const addItem = () => {
     setItems((prev) => [...prev, { id: nextId, pkg: null, slotCount: 0, assigns: [] }]);
@@ -448,6 +463,7 @@ export default function Sales365ContractCreatePage() {
                   <PopoverContent align="start" className="w-auto p-0">
                     <Calendar
                       mode="single"
+                      classNames={TODAY_CLASS}
                       selected={date ? new Date(date) : undefined}
                       onSelect={(d) => d && setDate(fmtDate(d))}
                     />
@@ -749,8 +765,13 @@ export default function Sales365ContractCreatePage() {
             </div>
           )}
 
-          {/* ── 하단 고정 완료 바 — 본문 컬럼 안에서만. 면 = 캔버스(bg-secondary, 띠 금지) · 경계 = 붙어 있을 때만 border-t(stuck, body-patterns E 2026-09-23) ── */}
-          <div ref={barRef} data-sticky-bar className={"sticky bottom-0 flex items-center justify-between bg-secondary py-3" + (stuck ? " border-t" : "")}>
+          {/* ── 하단 고정 완료 바 — 본문 컬럼 안에서만. 면 = 캔버스(bg-secondary, 띠 금지) · 경계 = 바가 뷰포트 바닥에 붙을 때만 border-t 한 줄(2026-09-30 캔버스 회색 확정) ── */}
+          <div
+            ref={barRef}
+            className={
+              "sticky bottom-0 flex items-center justify-between bg-secondary py-3" + (stuck ? " border-t" : "")
+            }
+          >
             <Button asChild variant="outline">
               <Link href={`${BASE}/contracts`}>취소</Link>
             </Button>
@@ -842,6 +863,7 @@ export default function Sales365ContractCreatePage() {
                   <PopoverContent align="start" className="w-auto p-0">
                     <Calendar
                       mode="single"
+                      classNames={TODAY_CLASS}
                       selected={newDue ? new Date(newDue) : undefined}
                       onSelect={(d) => d && setNewDue(fmtDate(d))}
                     />

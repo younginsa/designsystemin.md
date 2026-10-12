@@ -18,6 +18,7 @@
 // - 원본 primary 는 네이비지만 DS 토큰(zinc-900)을 그대로 쓴다 — 토큰 반영 시 자동 추종
 
 import * as React from "react";
+import Link from "next/link";
 import { ListFooter } from "@ds/ui/ui/list-footer";
 import { StatePreview } from "@ds/ui/ui/state-preview";
 import { PageHeader } from "@ds/ui/ui/page-header";
@@ -29,16 +30,19 @@ import {
   ArrowUp,
   Check,
   ChevronDown,
+  ChevronRight,
   ChevronsUpDown,
+  CircleCheck,
   Clock,
   Download,
   Info,
+  Package,
   Plus,
   Search,
+  Ship,
   X,
 } from "lucide-react";
 
-import { Alert, AlertDescription, AlertTitle } from "@ds/ui/ui/alert";
 import { Badge } from "@ds/ui/ui/badge";
 import { StatusBadge } from "@ds/ui/ui/status-badge";
 import { Button } from "@ds/ui/ui/button";
@@ -700,6 +704,7 @@ export default function ShipsView({ kind }: { kind: ListKind }) {
           <>
             <ShipTable
               rows={pageRows}
+              kind={kind}
               sort={sort}
               sortOrder={sortOrder}
               onSort={(f) => {
@@ -789,11 +794,14 @@ export default function ShipsView({ kind }: { kind: ListKind }) {
 
 function ShipTable({
   rows,
+  kind,
   sort,
   sortOrder,
   onSort,
 }: {
   rows: ShipRow[];
+  /** 상세 링크에 넘길 목록 종류(2026-09-21) */
+  kind: ListKind;
   sort: SortField;
   sortOrder: SortOrder;
   onSort: (f: SortField) => void;
@@ -832,9 +840,13 @@ function ShipTable({
           {rows.map((s) => (
             <TableRow key={s.imo}>
               <TableCell>
-                <a href="#" className="block font-medium text-primary hover:underline">
+                {/* 행 진입 = 호선 상세(2026-09-21 신설) — 목록 종류를 kind 로 넘겨 브레드크럼·빈 상태 문구가 따라간다 */}
+                <Link
+                  href={`/gallery/hinas365/ships/detail?kind=${kind}`}
+                  className="block font-medium text-primary hover:underline"
+                >
                   {s.imo}
-                </a>
+                </Link>
                 <p className="text-xs text-secondary-foreground">{s.hull ?? "-"}</p>
               </TableCell>
               <TableCell>
@@ -984,7 +996,12 @@ function CreateShipDialog({
 
   return (
     <Dialog open={open} onOpenChange={(v) => (v ? onOpenChange(true) : close())}>
-      <DialogContent className="sm:max-w-4xl">
+      <DialogContent className={done ? "sm:max-w-lg" : "sm:max-w-4xl"}>
+        {/* 생성 완료 — 같은 모달이 좁아지며 완료 화면으로 바뀐다(피그마 「create4」, 2026-10-08) */}
+        {done ? (
+          <CreateDone ship={ship} />
+        ) : (
+        <>
         <DialogHeader>
           <DialogTitle>신규 호선 생성</DialogTitle>
           <DialogDescription>
@@ -1006,18 +1023,6 @@ function CreateShipDialog({
             </StepperItem>
           ))}
         </Stepper>
-
-        {done && (
-          <Alert>
-            <AlertTitle className="text-success">호선이 생성되었습니다</AlertTitle>
-            <AlertDescription>
-              <p>
-                {ship.shipName || "이름 없음"} · IMO {ship.imo || "-"} 가 테스트 호선 목록에
-                추가되었습니다.
-              </p>
-            </AlertDescription>
-          </Alert>
-        )}
 
         {/* 1단계 — 기본 정보·제원 */}
         {step === 0 && (
@@ -1343,8 +1348,54 @@ function CreateShipDialog({
             )}
           </div>
         </DialogFooter>
+        </>
+        )}
       </DialogContent>
     </Dialog>
+  );
+}
+
+// 생성 완료 — 체크 원 + 제목 + 식별 줄 + 다음 행동 카드 2개(주 행동 = primary 면, 보조 = 테두리)
+function CreateDone({ ship }: { ship: NewShip }) {
+  const detail = "/gallery/hinas365/ships/detail?kind=test";
+  return (
+    <div className="flex flex-col items-center gap-6 py-4 text-center">
+      <div className="flex size-14 items-center justify-center rounded-full bg-success/12">
+        <CircleCheck className="size-7 text-success" />
+      </div>
+      <div className="space-y-1">
+        <DialogTitle className="text-title-m">호선이 성공적으로 생성되었습니다</DialogTitle>
+        <DialogDescription>
+          <span className="text-foreground">{ship.shipName || "이름 없음"}</span> (Hull No. {ship.hull || "—"}) · IMO{" "}
+          {ship.imo || "—"}
+        </DialogDescription>
+      </div>
+      <div className="w-full space-y-2 text-left">
+        <Link
+          href={detail}
+          className="flex items-center gap-3 rounded-lg bg-primary p-4 text-primary-foreground hover:bg-primary/90"
+        >
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary-foreground/10">
+            <Package className="size-4" />
+          </span>
+          <span className="flex-1">
+            <span className="block text-sm font-semibold">바로 제품 추가하기</span>
+            <span className="block text-xs">설치 제품과 서버를 선택하고 버전·옵션까지 한 번에 구성합니다</span>
+          </span>
+          <ChevronRight className="size-4" />
+        </Link>
+        <Link href={detail} className="flex items-center gap-3 rounded-lg border p-4 hover:bg-accent">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-muted">
+            <Ship className="size-4 text-secondary-foreground" />
+          </span>
+          <span className="flex-1">
+            <span className="block text-sm font-semibold">호선 상세로 이동</span>
+            <span className="block text-xs text-secondary-foreground">나중에 제품을 추가하고 호선 정보를 확인합니다</span>
+          </span>
+          <ChevronRight className="size-4 text-secondary-foreground" />
+        </Link>
+      </div>
+    </div>
   );
 }
 

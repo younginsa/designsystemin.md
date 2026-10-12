@@ -8,6 +8,9 @@
 // - 컬럼: Email · Name · Role(정렬) · Delete
 // - Role 셀: 역할 태그 칩(× 제거) + 점선 (+) 버튼 → 팝오버(검색 + 체크박스 목록:
 //   Avikus / Sales / Research / Service Engineer / QA / DEV / Admin) — data-roletag 관례
+// - 일괄 역할 편집(2026-10-08): 맨 앞 체크박스 열(헤더 = 보이는 행 전체) → 표 위 「N명 선택됨 · [역할 편집▾] · 선택 해제」 바.
+//   역할 편집 = 체크 목록 + 보유 수(N/전체) — 누르면 고른 전원에게 추가/제거, 확정은 기존 [저장]
+// - 역할 이니셜 원(2026-10-08): 칩·두 팝오버 목록 앞에 두 글자 원(AV·SA·RE·SE·QA·DV·AD) + 칩 호버 툴팁(역할 설명) — _detail/role-mark.tsx 공용
 // - 원본 역할 칩 색상(빨강·노랑·초록 구분)은 상태 토큰 부족(DES-206)으로 secondary 통일
 //
 // 어휘 게이트 메모: skeleton 채택 완료(DES-205 해소, 2026-08-25) — 로딩=스켈레톤 · 프로그레스 바=실제 진행률 전용
@@ -17,7 +20,7 @@ import { LOADING_STATES, StatePreview } from "@ds/ui/ui/state-preview";
 import { PageHeader } from "@ds/ui/ui/page-header";
 import { Card } from "@ds/ui/ui/card";
 import { TableSkeleton } from "@ds/ui/ui/skeleton";
-import { Check, Info, Plus, Search, Trash2, X } from "lucide-react";
+import { Check, ChevronDown, Info, Plus, Search, Trash2, X } from "lucide-react";
 
 import { Alert, AlertTitle } from "@ds/ui/ui/alert";
 import { Badge } from "@ds/ui/ui/badge";
@@ -37,6 +40,8 @@ import {
   TableHeader,
   TableRow,
 } from "@ds/ui/ui/table";
+
+import { RoleMark, RoleTip } from "../../_detail/role-mark";
 
 const ALL_ROLES = ["Avikus", "Sales", "Research", "Service Engineer", "QA", "DEV", "Admin"];
 
@@ -76,6 +81,29 @@ export default function AccountsPage() {
     setDirty(true);
     setSaved(false);
   };
+
+  // 일괄 역할 편집(2026-10-08) — 체크박스로 사람을 고르고 표 위 바에서 역할을 한 번에 더하거나 뺀다
+  const [picked, setPicked] = React.useState<Set<string>>(new Set());
+  const pickedRows = accounts.filter((a) => picked.has(a.email));
+  const allPicked = rows.length > 0 && rows.every((a) => picked.has(a.email));
+  const togglePick = (email: string) =>
+    setPicked((prev) => {
+      const next = new Set(prev);
+      if (next.has(email)) next.delete(email);
+      else next.add(email);
+      return next;
+    });
+  // 고른 전원에게 역할 추가(add) 또는 전원에게서 제거
+  const bulkRole = (role: string, add: boolean) =>
+    mutate((prev) =>
+      prev.map((a) =>
+        !picked.has(a.email)
+          ? a
+          : add
+            ? a.roles.includes(role) ? a : { ...a, roles: [...a.roles, role] }
+            : { ...a, roles: a.roles.filter((r) => r !== role) },
+      ),
+    );
 
   const toggleRole = (email: string, role: string) =>
     mutate((prev) =>
@@ -173,10 +201,34 @@ export default function AccountsPage() {
       )}
 
       {view === "default" && (
-        <div>
+        <div className="space-y-2">
+          {/* 일괄 작업 바 — 1명 이상 고르면 표 위에 나타난다 */}
+          {picked.size > 0 && (
+            <div className="flex items-center gap-3 rounded-lg border bg-card px-4 py-2">
+              <span className="text-sm font-medium">{picked.size}명 선택됨</span>
+              <BulkRolePopover selected={pickedRows} onApply={bulkRole} />
+              <Button variant="ghost" size="sm" className="ml-auto text-secondary-foreground" onClick={() => setPicked(new Set())}>
+                선택 해제
+              </Button>
+            </div>
+          )}
           <Table className="bg-card">
             <TableHeader>
               <TableRow>
+                <TableHead className="w-10">
+                  <Checkbox
+                    aria-label="보이는 계정 전체 선택"
+                    // 일부 선택(indeterminate)은 표시하지 않는다 — DS Checkbox 에 ▣ 표시가 없어 체크(☑)처럼 보였다(FE 요청 항목)
+                    checked={allPicked}
+                    onCheckedChange={() =>
+                      setPicked((prev) => {
+                        const next = new Set(prev);
+                        rows.forEach((a) => (allPicked ? next.delete(a.email) : next.add(a.email)));
+                        return next;
+                      })
+                    }
+                  />
+                </TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Role</TableHead>
@@ -185,7 +237,14 @@ export default function AccountsPage() {
             </TableHeader>
             <TableBody>
               {rows.map((a) => (
-                <TableRow key={a.email}>
+                <TableRow key={a.email} data-state={picked.has(a.email) ? "selected" : undefined}>
+                  <TableCell>
+                    <Checkbox
+                      aria-label={`${a.name} 선택`}
+                      checked={picked.has(a.email)}
+                      onCheckedChange={() => togglePick(a.email)}
+                    />
+                  </TableCell>
                   <TableCell>
                     <a href="#" className="font-medium text-primary hover:underline">
                       {a.email}
@@ -195,7 +254,9 @@ export default function AccountsPage() {
                   <TableCell>
                     <div className="flex flex-wrap items-center gap-1.5">
                       {a.roles.map((r) => (
-                        <Badge key={r} variant="secondary" className="font-normal">
+                        <RoleTip key={r} role={r}>
+                        <Badge variant="secondary" className="gap-1.5 pl-0.5 font-normal">
+                          <RoleMark role={r} />
                           {r}
                           <button
                             type="button"
@@ -205,6 +266,7 @@ export default function AccountsPage() {
                             <X className="size-3" />
                           </button>
                         </Badge>
+                        </RoleTip>
                       ))}
                       <RoleAddPopover
                         assigned={a.roles}
@@ -219,7 +281,14 @@ export default function AccountsPage() {
                       size="icon"
                       aria-label={`${a.name} 삭제`}
                       className="text-destructive"
-                      onClick={() => mutate((prev) => prev.filter((x) => x.email !== a.email))}
+                      onClick={() => {
+                        mutate((prev) => prev.filter((x) => x.email !== a.email));
+                        setPicked((prev) => {
+                          const next = new Set(prev);
+                          next.delete(a.email);
+                          return next;
+                        });
+                      }}
                     >
                       <Trash2 className="size-4" />
                     </Button>
@@ -231,6 +300,65 @@ export default function AccountsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+// 일괄 역할 편집 — ☑ 고른 전원이 가짐 · ☐ 일부 또는 아무도 없음(오른쪽 숫자 N/전체로 구분).
+// ☐ 를 누르면 전원에게 추가, ☑ 를 누르면 전원에게서 제거. 행 (+) 팝오버와 같은 목록 문법(검색 + 체크 목록)
+function BulkRolePopover({
+  selected,
+  onApply,
+}: {
+  selected: Account[];
+  onApply: (role: string, add: boolean) => void;
+}) {
+  const [query, setQuery] = React.useState("");
+  const shown = ALL_ROLES.filter((r) => r.toLowerCase().includes(query.trim().toLowerCase()));
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline" size="sm">
+          역할 편집 <ChevronDown className="size-4 text-secondary-foreground" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-64 space-y-2 p-2">
+        <InputGroup variant="filled">
+          <InputGroupAddon>
+            <Search />
+          </InputGroupAddon>
+          <InputGroupInput
+            placeholder="검색..."
+            aria-label="역할 검색"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </InputGroup>
+        <div className="space-y-0.5">
+          {shown.length === 0 && (
+            <p className="px-2 py-2 text-sm text-secondary-foreground">검색 결과 없음</p>
+          )}
+          {shown.map((r) => {
+            const has = selected.filter((a) => a.roles.includes(r)).length;
+            const all = has === selected.length;
+            return (
+              <Label
+                key={r}
+                className="flex items-center gap-2.5 rounded-md px-2 py-1.5 font-normal hover:bg-accent"
+              >
+                {/* 일부만 가진 역할은 체크 없이 오른쪽 숫자(2/5)로 읽힌다 — DS Checkbox ▣(indeterminate) 표시 대기 */}
+                <Checkbox checked={all} onCheckedChange={() => onApply(r, !all)} />
+                <RoleMark role={r} />
+                {r}
+                <span className="ml-auto text-xs text-secondary-foreground">
+                  {has}/{selected.length}
+                </span>
+              </Label>
+            );
+          })}
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }
 
@@ -280,6 +408,7 @@ function RoleAddPopover({
               className="flex items-center gap-2.5 rounded-md px-2 py-1.5 font-normal hover:bg-accent"
             >
               <Checkbox checked={assigned.includes(r)} onCheckedChange={() => onToggle(r)} />
+              <RoleMark role={r} />
               {r}
             </Label>
           ))}

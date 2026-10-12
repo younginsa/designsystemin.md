@@ -5,10 +5,10 @@
 //
 // 원본 대조 메모
 // - 우측 상단: "업데이트 15:43:02 (KST)" + [새로고침]
-// - 1행: 운영 현황(전체/데이터 수신/인터넷 미연결) · 진단 결과(Camera 이상/장비 이상/Normal)
+// - 1행: 운영 현황(전체/데이터 수신/인터넷 미연결) · 진단 결과(Warning/Caution/인터넷 미연결)
 //        · 업데이트 현황(대기→다운로드→적용 대기→적용 중 | 완료·실패/롤백·취소)
 // - 2행: SVM(빈)·Control·Navigation 버전 현황 + 선주별 납품 현황, 카드마다 [전체 보기]
-// - 진단 위계(2026-08-24 확정): Camera 이상 = 최심각(숫자·라벨 빨강) · 장비 이상 = 기본색 (CAUTION 폐기)
+// - 진단 위계: Warning(Camera 이상) = 최심각(숫자·라벨 빨강) · Caution(장비 이상) = 기본색 (2026-10-08 CAUTION 부활, 표기 통일)
 //
 // 어휘 게이트 메모: skeleton 채택 완료(DES-205 해소, 2026-08-25) — 로딩=스켈레톤 · 프로그레스 바=실제 진행률 전용
 
@@ -179,11 +179,12 @@ export default function DashboardPage() {
                   <Info className="size-3.5 text-secondary-foreground" />
                 </div>
                 <div className="flex items-stretch px-2 pb-6 pt-4">
-                  {/* CAUTION 폐기(2026-08-24) — 원인 기반 2분: Camera 이상(최심각, 글자까지 빨강)·장비 이상 */}
+                  {/* 레벨 표기(2026-10-08 CAUTION 부활): Warning = Camera 이상(최심각, 글자까지 빨강) · Caution = 장비 이상.
+                      label 이 자가 진단 필터 값(?status=)과 같아야 진입 시 필터가 걸린다 */}
                   {(
                     [
-                      ["1", "Camera 이상", "text-destructive", "text-destructive", "pl-4"],
-                      ["3", "장비 이상", "", "text-secondary-foreground", "pl-2"],
+                      ["1", "Warning", "text-destructive", "text-destructive", "pl-4"],
+                      ["3", "Caution", "", "text-secondary-foreground", "pl-2"],
                     ] as const
                   ).map(([value, label, numTone, labelTone, inset]) => (
                     <Link

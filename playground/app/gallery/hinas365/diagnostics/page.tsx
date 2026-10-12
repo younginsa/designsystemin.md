@@ -127,9 +127,9 @@ const fmtRel = (min: number) => {
   return `${Math.floor(min / 1440)}일 ${Math.floor((min % 1440) / 60)}시간 전`;
 };
 
-// 상태 3종 — WARNING(이상 있음) / UNREAD(미확인) / NORMAL. CAUTION은 폐기(2026-08-24 확정).
-// 위계는 원인이 가른다(제품 확인: Camera 이상 = 최심각): Camera 이상만 라벨 글자까지 빨강,
-// 그 외 장비 이상은 도트만 빨강 + 기본 글자. 원인 부제는 이상 항목에서 자동 산출.
+// 상태 3종 — WARNING(이상 있음) / UNREAD(미확인) / NORMAL. 위계는 원인이 가른다(제품 확인: Camera 이상 = 최심각).
+// 표기(2026-10-08 CAUTION 부활 — 2026-08-24 폐기 결정 번복): Camera 이상 = WARNING(빨강) · 그 외 장비 이상 = CAUTION · NORMAL.
+// 원인 부제는 이상 항목에서 자동 산출.
 // 대시보드 진단 결과 클릭 → ?status= 쿼리로 이 화면 필터와 연동
 type ShipStatus = "WARNING" | "UNREAD" | "NORMAL";
 
@@ -344,11 +344,12 @@ const DIAG_HISTORY: [string, string, string][] = [
 // 검색 제안 후보 — 호선명(샘플 데이터에 IMO·Hull·선사 필드가 없어 이름만). 최근·빠른검색도 같은 목록에서
 const SEARCH_CANDIDATES = SHIPS.map((s) => ({ label: s.name }));
 
-const STATUS_OPTIONS = ["전체", "Camera 이상", "장비 이상", "Normal"];
-// 산출 상태 → 칩 옵션 표기(상태 컬럼과 같은 원천)
+// 필터 표기 = 레벨 이름(2026-10-08 원인 표기 「Camera 이상 / 장비 이상」 → Warning / Caution 통일, 대시보드 링크 같이)
+const STATUS_OPTIONS = ["전체", "Warning", "Caution", "Normal"];
+// 산출 상태 → 칩 옵션 표기(상태 컬럼과 같은 원천). 내부 키는 그대로 — WARNING_CAMERA=Warning · WARNING=Caution
 const STATUS_LABEL: Record<ReturnType<typeof diagStatusOf>, string> = {
-  WARNING_CAMERA: "Camera 이상",
-  WARNING: "장비 이상",
+  WARNING_CAMERA: "Warning",
+  WARNING: "Caution",
   NORMAL: "Normal",
 };
 // header-filter 시스템(FilterBar) 정의 — 자가 진단은 4종 전부 기본 노출(디자이너 확정)
@@ -383,13 +384,13 @@ function DiagnosticsBody() {
   const [page, setPage] = React.useState(1);
   const [keyword, setKeyword] = React.useState("");
   const [selected, setSelected] = React.useState<ShipDiag | null>(null);
-  // 대시보드에서 ?status=Camera 이상 등으로 진입하면 필터가 걸린 채로 열린다 — 값 문법 "is <상태>"
+  // 대시보드에서 ?status=Warning 등으로 진입하면 필터가 걸린 채로 열린다 — 값 문법 "is <상태>"
   const [filterValues, setFilterValues] = React.useState<FilterValues>(() => {
     const q = searchParams.get("status");
     return q && q !== "전체" ? { status: `is ${q}` } : {};
   });
 
-  // ── 시트 상태 드롭다운 (Warning·Camera / Warning·장비 / Normal) ──
+  // ── 시트 상태 드롭다운 (WARNING / CAUTION / NORMAL) ──
   // Normal 전환 시 알람 항목 리스트 확인 모달 → 확정하면 알람 셀이 전부 정상(초록)으로
   type PanelStatus = "WARNING_CAMERA" | "WARNING" | "NORMAL";
   const [panelStatus, setPanelStatus] = React.useState<PanelStatus>("WARNING");
@@ -543,7 +544,7 @@ function DiagnosticsBody() {
         {/* 2026-08-19 피그마(159-2296) 반영 — 제품별 컬럼 테이블로 재편:
             호선 정보 / 해결 상태(Level 칩 — 도트+텍스트 색 쌍, data-status 규칙) /
             Navigation / Control / SVM. 제품 미설치 칸은 "-".
-            상태 위계: Camera 이상만 글자까지 빨강(2026-08-24, CAUTION 폐기). */}
+            상태 위계: WARNING(Camera 이상, 빨강) · CAUTION(장비 이상) · NORMAL(2026-10-08 CAUTION 부활). */}
         {view === "default" && (
           <Table className="bg-card">
             <TableHeader>
@@ -652,15 +653,15 @@ function DiagnosticsBody() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {/* 상태 — DS StatusBadge, 목록 표기와 동일 위계: Camera 이상만 글자까지 빨강(error), 장비는 주의(도트만 빨강) */}
+                {/* 상태 — 목록 상태 칸과 같은 표기(2026-10-08): WARNING(Camera 이상, 빨강) · CAUTION(장비 이상) · NORMAL */}
                 <SelectItem value="WARNING_CAMERA">
-                  <StatusBadge label="Warning · Camera" tone="error" bg={false} />
+                  <StatusBadge label="WARNING" tone="error" bg={false} />
                 </SelectItem>
                 <SelectItem value="WARNING">
-                  <StatusBadge label="Warning · 장비" toneClassName="text-destructive" bg={false} />
+                  <StatusBadge label="CAUTION" tone="neutral" toneClassName="text-caution" bg={false} />
                 </SelectItem>
                 <SelectItem value="NORMAL">
-                  <StatusBadge label="Normal" tone="success" bg={false} />
+                  <StatusBadge label="NORMAL" tone="success" bg={false} />
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -973,8 +974,8 @@ function DiagnosticsBody() {
   );
 }
 
-// 상태 표기 — 도트(상태색) + 텍스트 · text-sm. CAUTION 폐기(2026-08-24):
-// 위계는 색이 가른다 — Camera 이상(최심각)만 라벨 글자까지 빨강, 그 외 Warning은 도트만.
+// 상태 표기 — 도트(상태색) + 텍스트 · text-sm. 위계는 색이 가른다(2026-10-08):
+// WARNING(Camera 이상, 최심각) = 점·글자 빨강 · CAUTION = 주황 점(caution 토큰) + 검정 글자 · NORMAL = 초록 점.
 // 원인 부제(이상 항목 요약)를 라벨 아래 줄에 표기.
 // 히스토리 정렬 헤더 — 테스트호선 SortHeader와 같은 문법
 function HistSortHead({
@@ -1007,21 +1008,23 @@ function StatusPill({
   camera?: boolean;
   cause?: string;
 }) {
-  // DS StatusBadge(2026-09-14): Camera 이상 = error(글자도 빨강) · 장비 이상 = 주의(도트만 빨강, toneClassName 우회 — UX-DS #11)
+  // 레벨 3종(2026-10-08 CAUTION 부활, 디자이너 지시): WARNING = Camera 이상(점·글자 빨강) · CAUTION = 그 외 장비 이상 · NORMAL.
+  // CAUTION = 노랑 점 + 검정 글자 — dstk caution 시맨틱 토큰(2026-10-08 yellow-600 #E8A600, UX-DS 1333e85 · 최초 40a58d2 주황).
+  // design.md 규칙: caution 은 점·틴트에만, 상태 이름 글자는 foreground(StatusBadge 기본) — 점은 bg-current 라 text-caution 이 점 색이 된다
   if (status === "WARNING") {
     return (
       <span className="inline-flex flex-col gap-0.5 text-sm">
         <StatusBadge
-          label="WARNING"
+          label={camera ? "WARNING" : "CAUTION"}
           tone={camera ? "error" : "neutral"}
-          toneClassName={camera ? undefined : "text-destructive"}
+          toneClassName={camera ? undefined : "text-caution"}
           bg={false}
         />
         {cause && <span className="pl-5.5 text-xs text-secondary-foreground">{cause}</span>}
       </span>
     );
   }
-  return <StatusBadge label="Normal" tone="success" bg={false} />;
+  return <StatusBadge label="NORMAL" tone="success" bg={false} />;
 }
 
 // 제품 컬럼 셀 — 항목 칩 먼저, 아래 셋째 줄에 수집 시각 ✓ (작고 연하게). 미설치면 "-"
