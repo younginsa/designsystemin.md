@@ -92,6 +92,29 @@ const PORTAL_MARK = "\n<!-- portal -->\n";
 /** 죽은 클래스·런타임 인라인 style 을 뗀 HTML + 뗀 목록 */
 function strip(html, dead) {
   const removed = new Set();
+  // 스크린리더 전용 사본(Radix VisuallyHidden — 툴팁의 role="tooltip" 등)은 인라인 style(clip: rect(0…))로 숨는다. 아래 포털 정리가 그 style 을
+  // 걷어내면 글자가 두 번 보인다(2026-10-12 툴팁 hover 캡처 실측) — 먼저 같은 뜻의 sr-only 클래스로 바꿔 둔다
+  html = html.replace(/<([a-z][\w-]*)([^>]*?) style="([^"]*clip: rect\(0[^"]*)"([^>]*)>/g, (m, tag, pre, st, post) => {
+    const attrs = pre + post;
+    return /\bclass="/.test(attrs) ? `<${tag}${attrs.replace(/\bclass="/, 'class="sr-only ')}>` : `<${tag}${pre} class="sr-only"${post}>`;
+  });
+  // Radix 화살표(Tooltip·Popover Arrow)의 감싸개 <span> 은 인라인 style(position: absolute …)로 콘텐츠 가장자리에 붙는다. 아래 포털 정리가 그 style 을
+  // 걷어내면 화살표가 글자 밑에 줄로 흘러 빈 띠가 생겼다(2026-10-12 툴팁 hover 캡처 실측). 콘텐츠의 data-side 에 맞는 위치 클래스로 바꾸고,
+  // 그 콘텐츠에 relative 를 더해 기준점을 만든다(Radix 원본은 popper 감싸개가 기준이었는데 그 위치도 걷어낸다)
+  const ARROW_CLS = {
+    top: "absolute top-full left-1/2 -translate-x-1/2",
+    bottom: "absolute bottom-full left-1/2 -translate-x-1/2 rotate-180",
+    right: "absolute right-full top-1/2 -translate-y-1/2 rotate-90",
+    left: "absolute left-full top-1/2 -translate-y-1/2 -rotate-90",
+  };
+  let arrowed = false;
+  html = html.replace(/<span style="[^"]*position: absolute[^"]*">(?=<svg)/g, (m, offset) => {
+    const sides = [...html.slice(0, offset).matchAll(/data-side="(top|bottom|left|right)"/g)];
+    const side = sides.length ? sides[sides.length - 1][1] : "top";
+    arrowed = true;
+    return `<span class="${ARROW_CLS[side]}">`;
+  });
+  if (arrowed) html = html.replace(/(<[a-z][\w-]*[^>]*data-side="(?:top|bottom|left|right)"[^>]*class=")/g, "$1relative ");
   const out = html.replace(/class="([^"]*)"/g, (m, v) => {
     const kept = decode(v).split(/\s+/).filter((c) => { if (c && dead.has(c)) { removed.add(c); return false; } return !!c; });
     return `class="${encode(kept.join(" "))}"`;
@@ -113,6 +136,7 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
 
 async function render(id, args) {
   const url = `${FE}/iframe.html?id=${id}&viewMode=story` + (args ? `&args=${args}` : "");
+  await page.mouse.move(0, 0).catch(() => {}); // 직전 hover 캡처의 마우스 위치가 다음 렌더에 툴팁을 띄우지 않게
   await page.goto(url, { waitUntil: "load" });
   // 렌더 완료 판정 — 스토리 루트에 내용이 생겼거나, 포털로 body 에 나간 오버레이가 생겼거나(Dialog 처럼 루트가 비는 경우), 에러 표시.
   await page.waitForFunction(() => {
@@ -170,6 +194,56 @@ async function renderOpen(i) {
   const r = await extract();
   return r.portal && !r.error ? { html: r.html, trigger } : null;
 }
+// 마우스 올림·펼침 상태(2026-10-12 — 생성 대화가 "툴팁이 열린 모습의 예시가 없어 원본 코드에서 모양을 가져왔고 꼬리는 뺐다"고 보고).
+// 위 클릭 캡처는 aria-haspopup·combobox 만 연다 — 마우스를 올려야 뜨는 툴팁(29개)·차트 툴팁, aria-expanded 만 있는 collapsible·accordion 은
+// 한 번도 찍히지 않았다(전수조사: 트리거 종류별 개수). CSS 만으로 바뀌는 hover(hover:opacity-100 등)는 마크업에 규칙이 이미 있어 찍지 않는다.
+// 결과는 opened 목록에 mode 로 구분해 넣는다: hover = states/<스토리>--hover[-N].html · expand = states/<스토리>--expanded[-N].html
+const HOVER_SEL = '#storybook-root [data-slot="tooltip-trigger"]';
+const HOVER_MAX = 3;
+const EXPAND_SEL = '#storybook-root [data-slot="collapsible-trigger"][aria-expanded="false"], #storybook-root [data-slot="accordion-trigger"][aria-expanded="false"]';
+const EXPAND_MAX = 4;
+const labelOf = (e) => (e.getAttribute("aria-label") || e.textContent || "").replace(/\s+/g, " ").trim().slice(0, 40);
+async function renderHover(i) {
+  const el = (await page.$$(HOVER_SEL))[i];
+  if (!el) return null;
+  const trigger = await el.evaluate(labelOf);
+  try { await el.hover({ timeout: 3000 }); } catch { return null; } // 보이지 않는 트리거(펼친 사이드바의 툴팁 등)는 건너뛴다
+  // 보이는 툴팁만 — shadcn 사이드바는 펼친 상태에서 툴팁 내용을 hidden 으로 두고 만들어 둔다(접혔을 때만 보임)
+  try {
+    await page.waitForFunction(() => [...document.querySelectorAll('[role="tooltip"], [data-slot="tooltip-content"]')].some((el) => {
+      const s = getComputedStyle(el); const b = el.getBoundingClientRect();
+      return !el.closest("[hidden]") && s.display !== "none" && s.visibility !== "hidden" && b.width > 0 && b.height > 0;
+    }), null, { timeout: 2500 });
+  } catch { return null; }
+  await page.waitForTimeout(350); // 등장 애니메이션
+  const r = await extract();
+  return r.portal && !r.error ? { html: r.html, trigger } : null;
+}
+async function renderChartHover() {
+  const pt = await page.$eval("#storybook-root .recharts-surface", (e) => { const b = e.getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2 }; }).catch(() => null);
+  if (!pt) return null;
+  await page.mouse.move(pt.x, pt.y);
+  await page.mouse.move(pt.x + 2, pt.y); // recharts 는 mousemove 로 활성 지점을 잡는다
+  try {
+    await page.waitForFunction(() => {
+      const w = document.querySelector("#storybook-root .recharts-tooltip-wrapper");
+      return !!w && getComputedStyle(w).visibility === "visible" && (w.textContent || "").trim().length > 0;
+    }, null, { timeout: 3000 });
+  } catch { return null; }
+  await page.waitForTimeout(300);
+  const r = await extract();
+  return r.error ? null : { html: r.html, trigger: "그래프 가운데" };
+}
+async function renderExpand(i) {
+  const el = (await page.$$(EXPAND_SEL))[i];
+  if (!el) return null;
+  const trigger = await el.evaluate(labelOf);
+  try { await el.click({ timeout: 3000 }); } catch { return null; }
+  try { await page.waitForFunction((t) => [...document.querySelectorAll('#storybook-root [data-slot$="-trigger"][aria-expanded="true"]')].some((x) => (x.getAttribute("aria-label") || x.textContent || "").replace(/\s+/g, " ").trim().slice(0, 40) === t), trigger, { timeout: 2500 }); } catch { return null; }
+  await page.waitForTimeout(350); // 펼침 애니메이션
+  const r = await extract();
+  return r.error ? null : { html: r.html, trigger };
+}
 const collect = (html, set) => { for (const m of html.matchAll(/class="([^"]*)"/g)) for (const c of decode(m[1]).split(/\s+/)) if (c) set.add(c); };
 
 // 스니펫이 참조하는 자산(로고 svg 등) — FE 서버의 상대 경로라 우리 쪽에선 깨진다. 내려받아 fe-stories/assets/ 에 두고
@@ -226,6 +300,27 @@ for (const key of keys) {
         if (o) raw.push({ kind: "open", story: name, index: i, trigger: o.trigger, file: `${key}/states/${kebab(name)}--open${i ? "-" + i : ""}.html`, html: o.html, portal: true });
       }
     }
+    if (!r.error) {
+      // 마우스 올림 — 툴팁(트리거마다, 상한 HOVER_MAX) · 차트 툴팁(그래프 가운데 한 장)
+      let hn = 0;
+      let nh = 0; try { await render(e.id); nh = Math.min(await page.$$eval(HOVER_SEL, (els) => els.length), HOVER_MAX * 4); } catch {}
+      for (let i = 0; i < nh && hn < HOVER_MAX; i++) {
+        try { await render(e.id); } catch { break; }
+        let o = null; try { o = await renderHover(i); } catch {}
+        if (o) { raw.push({ kind: "open", mode: "hover", story: name, index: hn, trigger: o.trigger, file: `${key}/states/${kebab(name)}--hover${hn ? "-" + hn : ""}.html`, html: o.html, portal: true }); hn++; }
+      }
+      try { await render(e.id); } catch {}
+      let c = null; try { c = await renderChartHover(); } catch {}
+      if (c) { raw.push({ kind: "open", mode: "hover", story: name, index: hn, trigger: c.trigger, file: `${key}/states/${kebab(name)}--hover${hn ? "-" + hn : ""}.html`, html: c.html, portal: false }); hn++; }
+      // 펼침 — collapsible·accordion(트리거마다, 상한 EXPAND_MAX)
+      let xn = 0;
+      let nx = 0; try { await render(e.id); nx = Math.min(await page.$$eval(EXPAND_SEL, (els) => els.length), EXPAND_MAX * 3); } catch {}
+      for (let i = 0; i < nx && xn < EXPAND_MAX; i++) {
+        try { await render(e.id); } catch { break; }
+        let o = null; try { o = await renderExpand(i); } catch {}
+        if (o) { raw.push({ kind: "open", mode: "expand", story: name, index: xn, trigger: o.trigger, file: `${key}/states/${kebab(name)}--expanded${xn ? "-" + xn : ""}.html`, html: o.html, portal: false }); xn++; }
+      }
+    }
     if (!first && !r.error) { first = { id: e.id, name }; argTypes = r.argTypes; }
   }
   // 상태별 렌더 — 첫 스토리에 select 옵션·boolean 컨트롤을 하나씩 적용(Storybook 공식 &args=). 사진에 없는 상태를 미리 찍어 둔다.
@@ -255,7 +350,7 @@ for (const key of keys) {
     writeFileSync(join(OUT, r.file), html + "\n");
     collect(html, classes);
     if (r.kind === "story") stories.push({ name: r.name, id: r.id, file: r.file, portal: r.portal, initialArgs: r.initialArgs, ...(r.error ? { error: r.error } : {}) });
-    else if (r.kind === "open") opened.push({ story: r.story, index: r.index, trigger: r.trigger, file: r.file });
+    else if (r.kind === "open") opened.push({ story: r.story, index: r.index, trigger: r.trigger, file: r.file, ...(r.mode ? { mode: r.mode } : {}) });
     else states.push({ story: r.story, args: r.args, file: r.file, portal: r.portal });
   }
   writeFileSync(join(OUT, `${key}.json`), JSON.stringify({

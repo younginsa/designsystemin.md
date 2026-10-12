@@ -7,7 +7,7 @@
   "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
  },
  "feBuild": "ChyVgiXc",
- "synced": "2026-10-08",
+ "synced": "2026-10-12",
  "stories": [
   {
    "name": "Default",
@@ -49,7 +49,7 @@
   {
    "story": "Default",
    "index": 2,
-   "trigger": "UTC +0 · 2026-10-08 02:49",
+   "trigger": "UTC +0 · 2026-10-12 09:37",
    "file": "sidebar/states/default--open-2.html"
   },
   {
@@ -57,6 +57,27 @@
    "index": 3,
    "trigger": "Notifications",
    "file": "sidebar/states/default--open-3.html"
+  },
+  {
+   "story": "Default",
+   "index": 0,
+   "trigger": "업데이트",
+   "file": "sidebar/states/default--expanded.html",
+   "mode": "expand"
+  },
+  {
+   "story": "Default",
+   "index": 1,
+   "trigger": "릴리즈 노트",
+   "file": "sidebar/states/default--expanded-1.html",
+   "mode": "expand"
+  },
+  {
+   "story": "Default",
+   "index": 2,
+   "trigger": "Developer / QA",
+   "file": "sidebar/states/default--expanded-2.html",
+   "mode": "expand"
   },
   {
    "story": "CollapsedSidebar",
@@ -85,7 +106,7 @@
   {
    "story": "CollapsedSidebar",
    "index": 5,
-   "trigger": "UTC +0 · 2026-10-08 02:50",
+   "trigger": "UTC +0 · 2026-10-12 09:38",
    "file": "sidebar/states/collapsed-sidebar--open-5.html"
   },
   {
@@ -93,6 +114,27 @@
    "index": 6,
    "trigger": "Notifications",
    "file": "sidebar/states/collapsed-sidebar--open-6.html"
+  },
+  {
+   "story": "CollapsedSidebar",
+   "index": 0,
+   "trigger": "대시보드",
+   "file": "sidebar/states/collapsed-sidebar--hover.html",
+   "mode": "hover"
+  },
+  {
+   "story": "CollapsedSidebar",
+   "index": 1,
+   "trigger": "자가 진단",
+   "file": "sidebar/states/collapsed-sidebar--hover-1.html",
+   "mode": "hover"
+  },
+  {
+   "story": "CollapsedSidebar",
+   "index": 2,
+   "trigger": "납품 호선",
+   "file": "sidebar/states/collapsed-sidebar--hover-2.html",
+   "mode": "hover"
   },
   {
    "story": "CustomBrand",
@@ -109,7 +151,7 @@
   {
    "story": "CustomBrand",
    "index": 2,
-   "trigger": "UTC +0 · 2026-10-08 02:50",
+   "trigger": "UTC +0 · 2026-10-12 09:39",
    "file": "sidebar/states/custom-brand--open-2.html"
   },
   {
@@ -117,15 +159,39 @@
    "index": 3,
    "trigger": "Notifications",
    "file": "sidebar/states/custom-brand--open-3.html"
+  },
+  {
+   "story": "CustomBrand",
+   "index": 0,
+   "trigger": "업데이트",
+   "file": "sidebar/states/custom-brand--expanded.html",
+   "mode": "expand"
+  },
+  {
+   "story": "CustomBrand",
+   "index": 1,
+   "trigger": "릴리즈 노트",
+   "file": "sidebar/states/custom-brand--expanded-1.html",
+   "mode": "expand"
+  },
+  {
+   "story": "CustomBrand",
+   "index": 2,
+   "trigger": "Developer / QA",
+   "file": "sidebar/states/custom-brand--expanded-2.html",
+   "mode": "expand"
   }
  ],
  "classes": [
   "-mx-1",
+  "-translate-x-px",
+  "-translate-y-1/2",
   "[&>span:last-child]:truncate",
   "[&>svg]:pointer-events-none",
   "[&>svg]:shrink-0",
   "[&>svg]:size-3",
   "[&>svg]:size-4",
+  "[&>svg]:text-sidebar-accent-foreground",
   "[&_svg:not([class*='size-'])]:size-4",
   "[&_svg:not([class*='text-'])]:text-muted-foreground",
   "[&_svg]:pointer-events-none",
@@ -136,6 +202,7 @@
   "absolute",
   "active:bg-sidebar-accent",
   "active:text-sidebar-accent-foreground",
+  "animate-in",
   "aria-disabled:opacity-50",
   "aria-disabled:pointer-events-none",
   "aria-invalid:border-destructive",
@@ -161,7 +228,9 @@
   "border-b",
   "border-background",
   "border-border",
+  "border-l",
   "border-none",
+  "border-sidebar-border",
   "border-sky-200/70",
   "border-t",
   "border-zinc-200",
@@ -198,8 +267,11 @@
   "data-[variant=destructive]:text-destructive",
   "disabled:opacity-50",
   "disabled:pointer-events-none",
+  "drop-shadow-[0_6px_10px_rgba(15,23,42,0.08)]",
   "duration-200",
   "ease-linear",
+  "fade-in-0",
+  "fill-background",
   "fixed",
   "flex",
   "flex-1",
@@ -262,6 +334,7 @@
   "h-4",
   "h-6",
   "h-64",
+  "h-7",
   "h-8",
   "h-9",
   "h-[1px]",
@@ -333,9 +406,11 @@
   "min-w-[8rem]",
   "ml-auto",
   "mt-1.5",
+  "mx-3.5",
   "mx-auto",
   "my-1",
   "origin-(--radix-dropdown-menu-content-transform-origin)",
+  "origin-(--radix-tooltip-content-transform-origin)",
   "outline-hidden",
   "outline-none",
   "overflow-auto",
@@ -353,6 +428,7 @@
   "px-0",
   "px-1.5",
   "px-2",
+  "px-2.5",
   "px-3",
   "px-3.5",
   "px-4",
@@ -366,9 +442,11 @@
   "py-3.5",
   "relative",
   "right-2",
+  "right-full",
   "ring-1",
   "ring-border",
   "ring-sidebar-ring",
+  "rotate-90",
   "rounded-2xl",
   "rounded-full",
   "rounded-lg",
@@ -378,10 +456,12 @@
   "rounded-xl",
   "select-none",
   "shadow",
+  "shadow-[0_10px_30px_rgba(15,23,42,0.14)]",
   "shadow-md",
   "shadow-sm",
   "shadow-xl",
   "shrink-0",
+  "size-3",
   "size-3.5",
   "size-4",
   "size-5",
@@ -389,12 +469,14 @@
   "size-9",
   "space-y-1",
   "space-y-2",
+  "sr-only",
   "sticky",
   "tabular-nums",
   "text-2xs",
   "text-[10px]",
   "text-[11px]",
   "text-[13px]",
+  "text-balance",
   "text-body",
   "text-caption-m",
   "text-caption-xs",
@@ -419,6 +501,7 @@
   "text-zinc-800",
   "text-zinc-900",
   "top-0",
+  "top-1/2",
   "top-2",
   "tracking-[-0.02em]",
   "tracking-tight",
@@ -431,6 +514,8 @@
   "transition-[width]",
   "transition-colors",
   "transition-transform",
+  "translate-x-px",
+  "translate-y-[calc(-50%_-_1px)]",
   "truncate",
   "uppercase",
   "w-(--sidebar-width)",
@@ -445,7 +530,8 @@
   "whitespace-nowrap",
   "z-20",
   "z-30",
-  "z-50"
+  "z-50",
+  "zoom-in-95"
  ],
  "strippedClasses": [
   "text-medium"

@@ -7,7 +7,7 @@
   "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
  },
  "feBuild": "ChyVgiXc",
- "synced": "2026-10-08",
+ "synced": "2026-10-12",
  "stories": [
   {
    "name": "Default",
@@ -33,7 +33,50 @@
  ],
  "argTypes": {},
  "states": [],
- "opened": [],
+ "opened": [
+  {
+   "story": "Default",
+   "index": 0,
+   "trigger": "섹션 1",
+   "file": "accordion/states/default--expanded.html",
+   "mode": "expand"
+  },
+  {
+   "story": "Default",
+   "index": 1,
+   "trigger": "섹션 2",
+   "file": "accordion/states/default--expanded-1.html",
+   "mode": "expand"
+  },
+  {
+   "story": "Default",
+   "index": 2,
+   "trigger": "섹션 3",
+   "file": "accordion/states/default--expanded-2.html",
+   "mode": "expand"
+  },
+  {
+   "story": "Multiple",
+   "index": 0,
+   "trigger": "여러 항목 동시 열기 가능",
+   "file": "accordion/states/multiple--expanded.html",
+   "mode": "expand"
+  },
+  {
+   "story": "Multiple",
+   "index": 1,
+   "trigger": "섹션 2",
+   "file": "accordion/states/multiple--expanded-1.html",
+   "mode": "expand"
+  },
+  {
+   "story": "IconLeft",
+   "index": 0,
+   "trigger": "아이콘 왼쪽",
+   "file": "accordion/states/icon-left--expanded.html",
+   "mode": "expand"
+  }
+ ],
  "classes": [
   "[&[data-state=closed]>svg]:rotate-270",
   "[&[data-state=open]>svg]:rotate-180",
@@ -60,7 +103,9 @@
   "lucide-chevron-down",
   "outline-none",
   "overflow-hidden",
+  "pb-4",
   "pointer-events-none",
+  "pt-0",
   "py-4",
   "rounded-md",
   "shrink-0",

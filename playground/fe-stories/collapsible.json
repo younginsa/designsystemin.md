@@ -7,7 +7,7 @@
   "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
  },
  "feBuild": "ChyVgiXc",
- "synced": "2026-10-08",
+ "synced": "2026-10-12",
  "stories": [
   {
    "name": "Default",
@@ -19,7 +19,15 @@
  ],
  "argTypes": {},
  "states": [],
- "opened": [],
+ "opened": [
+  {
+   "story": "Default",
+   "index": 0,
+   "trigger": "",
+   "file": "collapsible/states/default--expanded.html",
+   "mode": "expand"
+  }
+ ],
  "classes": [
   "[&_svg:not([class*='size-'])]:size-4",
   "[&_svg]:pointer-events-none",
