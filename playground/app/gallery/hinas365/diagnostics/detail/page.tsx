@@ -25,7 +25,7 @@
 // - 제목 행 = 호선명 링크 + IMO · Hull(같은 줄). 버전 3종(Common·Product·Server Type)은 우 레일 「버전 정보」(Recorded At 아래, 2026-10-08)
 // - [원본 데이터] = 다운로드 모달(시작·종료 시각 · 파일 형식, 최대 14일) — 피그마 「d 1」(2026-10-08)
 // - 차트 색은 DS chart 토큰(파랑 5단계)만 — 실물의 보라·주황·초록은 토큰이 없다(네트워크 모달과 같은 처리, 2026-09-29)
-// - 히트맵 톤: NORMAL=success · ABNORMAL=destructive · UNDETERMINABLE=primary(DES-206 노랑 대체) · NO DATA=none
+// - 히트맵 톤: NORMAL=success · ABNORMAL=destructive · UNDETERMINABLE·Pending=caution(노랑, 2026-10-12 HeatmapGrid caution 톤 d4622a6 — 종전 DES-206 primary 대체 해제) · NO DATA=none
 //
 // 상태: 진단 실행에 실제 진행률이 있는 화면이라 PROGRESS_STATES 5종(기본·빈·로딩·프로그레스·에러)
 
@@ -251,7 +251,7 @@ type Cell = "ok" | "bad" | "mid" | "none";
 const CELL_TONE: Record<Cell, HeatmapTone> = {
   ok: "success",
   bad: "destructive",
-  mid: "primary",
+  mid: "caution",
   none: "none",
 };
 // 히트맵 행 — 기간에서 만들어 낸다(2026-10-08, 종전 고정 8일치). 6시간 덩어리마다 결정적 난수로 상태를 정하고(새로고침해도 같다),
@@ -525,7 +525,7 @@ export default function DiagnosticDetailPage() {
               legend={[
                 { label: "NORMAL", tone: "success" },
                 { label: "NO DATA", tone: "none" },
-                { label: "UNDETERMINABLE", tone: "primary" },
+                { label: "UNDETERMINABLE", tone: "caution" },
                 { label: "ABNORMAL", tone: "destructive" },
               ]}
               rows={SENSOR_ROWS}
@@ -539,7 +539,7 @@ export default function DiagnosticDetailPage() {
               legend={[
                 { label: "NORMAL", tone: "success" },
                 { label: "NO DATA", tone: "none" },
-                { label: "UNDETERMINABLE", tone: "primary" },
+                { label: "UNDETERMINABLE", tone: "caution" },
                 { label: "ABNORMAL", tone: "destructive" },
               ]}
               rows={CAMERA_ROWS}
@@ -552,7 +552,7 @@ export default function DiagnosticDetailPage() {
               desc="각 파드의 시간대별 실행 상태"
               legend={[
                 { label: "Running", tone: "success" },
-                { label: "Pending / NotReady", tone: "primary" },
+                { label: "Pending / NotReady", tone: "caution" },
                 { label: "Error", tone: "destructive" },
                 { label: "NoData", tone: "none" },
               ]}
@@ -1646,7 +1646,7 @@ function HeatmapCard({
 // 칸 자동 축소 히트맵 — 칸 수와 상관없이 표 폭에 맞춰 나눈다(6개월 180칸 ≈ 칸 4px, GitHub 잔디처럼). 가로 스크롤 없음.
 // DS HeatmapGrid 는 칸이 고정(h-5 · min-w-8 = 32px)이라 180칸이면 가로로 넘친다 — 클론에서 못 고쳐 화면 안 임시 조합.
 // 관리자에게 HeatmapGrid dense 모드 요청(2026-10-08). 색은 HeatmapGrid 와 같은 톤 클래스. 화면 표시 없이 data-ds="fallback" 만
-const CELL_BG: Record<Cell, string> = { ok: "bg-success", bad: "bg-destructive", mid: "bg-primary", none: "bg-muted" };
+const CELL_BG: Record<Cell, string> = { ok: "bg-success", bad: "bg-destructive", mid: "bg-caution", none: "bg-muted" };
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function DenseHeatmap({

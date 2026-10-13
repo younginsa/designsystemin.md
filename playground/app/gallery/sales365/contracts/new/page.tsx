@@ -274,7 +274,7 @@ function useStuck() {
     read();
     window.addEventListener("scroll", read, { passive: true });
     window.addEventListener("resize", read);
-    // 스크롤 없이 높이만 바뀔 때(상태 필 기본 → 빈 상태 등)도 다시 잰다 — 갤러리 쪽 보강을 클론 동기화 뒤 복원(2026-10-12).
+    // 스크롤 없이 높이만 바뀔 때(상태 필 기본 → 빈 상태 등)도 다시 잰다 — 관리자 갤러리 보강과 같은 줄(2026-10-12).
     // IntersectionObserver 는 렌더가 멈춘 창에서 발화하지 않아 쓰지 않는다
     const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(read) : null;
     ro?.observe(document.body);

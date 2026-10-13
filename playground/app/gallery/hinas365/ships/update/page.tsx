@@ -786,9 +786,13 @@ function useStuck(reset: unknown) {
     read();
     window.addEventListener("scroll", read, { passive: true });
     window.addEventListener("resize", read);
+    // 스크롤 없이 높이만 바뀔 때도 다시 잰다 — 계약 신규 하단 바와 같은 요소라 같은 보강(2026-10-12, 요소 단위 통일)
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(read) : null;
+    ro?.observe(document.body);
     return () => {
       window.removeEventListener("scroll", read);
       window.removeEventListener("resize", read);
+      ro?.disconnect();
     };
   }, [reset]);
   return [ref, stuck] as const;
