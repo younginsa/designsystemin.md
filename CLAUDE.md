@@ -220,6 +220,11 @@ AI 친화 디자인 시스템 저장소다.
   (스냅샷 `figma-theme-snapshot.json`·THEME-MAP·1시간 리마인더·ds:build 스냅샷 대조·`registry --audit`·인벤토리).
 - **주간 동기화** — 관리자 세션이 Figma MCP 를 연결해 수행한다(훅이 7일 경과 시 리마인더 출력, 스탬프
   `.git/FIGMA_SYNC_STAMP` — 동기화 후 touch):
+  ⓪ **Theme·글꼴 대조(H3, 2026-10-14)** — `use_figma`로 라이브러리에서 `scripts/figma-theme-read.js`를 실행(읽기 전용)해 결과를
+  `fe-requests/figma-values.json`에 저장 → `pnpm figma:classify`가 FE 실제 값(`fe-values.json`, 3모드)·대기 장부와 대조해
+  `fe-requests/figma-report.md`·`figma-plan.json`을 쓴다. 판정: 피그마 뒤처짐(FE 값으로) · 장부 값 아님(디자이너 값으로) ·
+  피그마에 없는 장부 항목(질문). **보고서를 사용자에게 보이고 승인받은 뒤에만** `scripts/figma-theme-apply.js`(PLAN 에 ops)로 적용 —
+  팔레트 별칭으로 묶고, 실행 직전 값이 계획과 다르면 건너뛴다. 세션 상태 줄 `[피그마]`에 마지막 대조 요약이 나온다.
   ① `pnpm registry --figma-gap` — 채택인데 피그마 세트가 없는 항목(missing)과 세트 제작일(`figma[].built`)보다
   스토리가 나중에 바뀐 항목(stale)을 나열한다.
   ② 나열된 항목의 세트를 `use_figma`로 Component 페이지(fileKey 9bDM5hVObGhrFM6vLyeL3K)에 만들거나 갱신하고,

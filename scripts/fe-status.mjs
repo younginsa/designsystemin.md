@@ -60,10 +60,18 @@ say(parts.join(" · "));
 const rep = read("fe-requests/sync-report.json");
 if (rep) {
   const todo = (rep.items || []).filter((i) => i.todo);
-  const wait = (rep.items || []).filter((i) => i.verdict === "local-ahead").map((i) => i.ledger || i.name);
+  const wait = [...new Set((rep.items || []).filter((i) => i.verdict === "local-ahead").map((i) => i.ledger || i.name))];
   say(todo.length
-    ? `⚠ 대조 할 일 ${todo.length} (빌드 ${rep.feBuild}): ${todo.map((i) => `${i.name} ${i.verdict}`).join(", ")} — fe-requests/sync-report.md`
+    ? `⚠ 대조 할 일 ${todo.length} (빌드 ${rep.feBuild}): ${todo.map((i) => `${i.name}${i.mode && i.mode !== "all" ? "[" + i.mode + "]" : ""} ${i.verdict}`).join(", ")} — fe-requests/sync-report.md`
     : `대조 ✓ 할 일 없음 (빌드 ${rep.feBuild})${wait.length ? ` · FE 반영 대기 ${wait.length}: ${wait.join(", ")}` : ""}`);
+}
+
+// ⑤ 피그마 주간 대조 요약(fe-requests/figma-plan.json — figma:classify 가 씀, H3 2026-10-14). 관리자 세션에서만 — 클론은 피그마를 다루지 않는다
+const fplan = ADMIN ? read("fe-requests/figma-plan.json") : null;
+if (fplan) {
+  const age = Math.floor((Date.now() - new Date(fplan.read).getTime()) / 864e5);
+  const fsay = (t) => console.log(`[피그마] ${t}`);
+  fsay(`${fplan.todo ? `⚠ 할 일 ${fplan.todo}` : "할 일 없음 ✓"} · 마지막 대조 ${fplan.read}(${age}일 전, FE 빌드 ${fplan.feBuild}${snap.feBuild && fplan.feBuild !== snap.feBuild ? ` — 지금 FE 는 ${snap.feBuild}, 다시 대조 필요` : ""})${fplan.todo ? " — fe-requests/figma-report.md" : ""}`);
 }
 
 // 해야 할 일 한 줄 — 관리자/클론을 나눈다(클론은 pull 전용 — CLAUDE.md 6·7)

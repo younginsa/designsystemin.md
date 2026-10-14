@@ -3,12 +3,35 @@
  "feBuild": "ChyVgiXc",
  "synced": "2026-10-14",
  "todo": 0,
- "summary": "로컬이 앞섬(대기) 2 · FE 에만 있음 1 · 우리에게만 있음 5",
+ "summary": "로컬이 앞섬(대기) 4 · FE 에만 있음 3 · 우리에게만 있음 15",
  "items": [
   {
    "kind": "color",
+   "mode": "light",
    "name": "caution",
    "ours": "#E8A600",
+   "fe": "#F59E0B",
+   "prevFe": "#F59E0B",
+   "verdict": "local-ahead",
+   "todo": false,
+   "ledger": "caution-color"
+  },
+  {
+   "kind": "color",
+   "mode": "dark",
+   "name": "caution",
+   "ours": "#F0C000",
+   "fe": "#F59E0B",
+   "prevFe": null,
+   "verdict": "local-ahead",
+   "todo": false,
+   "ledger": "caution-color"
+  },
+  {
+   "kind": "color",
+   "mode": "control",
+   "name": "caution",
+   "ours": "#F0C000",
    "fe": "#F59E0B",
    "prevFe": null,
    "verdict": "local-ahead",
@@ -17,16 +40,28 @@
   },
   {
    "kind": "fontFeature",
+   "mode": "all",
    "name": "font-feature-settings",
    "ours": "\"ss02\"",
    "fe": "normal",
-   "prevFe": null,
+   "prevFe": "normal",
    "verdict": "local-ahead",
    "todo": false,
    "ledger": "inter-ss02"
   },
   {
    "kind": "color",
+   "mode": "light",
+   "name": "on-color",
+   "ours": null,
+   "fe": "#FFFFFF",
+   "prevFe": "#FFFFFF",
+   "verdict": "fe-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "mode": "dark",
    "name": "on-color",
    "ours": null,
    "fe": "#FFFFFF",
@@ -36,6 +71,17 @@
   },
   {
    "kind": "color",
+   "mode": "control",
+   "name": "on-color",
+   "ours": null,
+   "fe": "#FFFFFF",
+   "prevFe": null,
+   "verdict": "fe-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "mode": "light",
    "name": "chart-1",
    "ours": "#002D9C",
    "fe": null,
@@ -45,6 +91,27 @@
   },
   {
    "kind": "color",
+   "mode": "dark",
+   "name": "chart-1",
+   "ours": "#002D9C",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "mode": "control",
+   "name": "chart-1",
+   "ours": "#002D9C",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "mode": "light",
    "name": "chart-2",
    "ours": "#0043CE",
    "fe": null,
@@ -54,6 +121,27 @@
   },
   {
    "kind": "color",
+   "mode": "dark",
+   "name": "chart-2",
+   "ours": "#0043CE",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "mode": "control",
+   "name": "chart-2",
+   "ours": "#0043CE",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "mode": "light",
    "name": "chart-3",
    "ours": "#0F62FE",
    "fe": null,
@@ -63,6 +151,27 @@
   },
   {
    "kind": "color",
+   "mode": "dark",
+   "name": "chart-3",
+   "ours": "#0F62FE",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "mode": "control",
+   "name": "chart-3",
+   "ours": "#0F62FE",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "mode": "light",
    "name": "chart-4",
    "ours": "#78A9FF",
    "fe": null,
@@ -72,6 +181,47 @@
   },
   {
    "kind": "color",
+   "mode": "dark",
+   "name": "chart-4",
+   "ours": "#78A9FF",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "mode": "control",
+   "name": "chart-4",
+   "ours": "#78A9FF",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "mode": "light",
+   "name": "chart-5",
+   "ours": "#D0E2FF",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "mode": "dark",
+   "name": "chart-5",
+   "ours": "#D0E2FF",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "mode": "control",
    "name": "chart-5",
    "ours": "#D0E2FF",
    "fe": null,

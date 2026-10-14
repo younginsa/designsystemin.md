@@ -33,7 +33,11 @@
       "check": {
         "kind": "color",
         "name": "caution",
-        "ours": "#E8A600",
+        "ours": {
+          "light": "#E8A600",
+          "dark": "#F0C000",
+          "control": "#F0C000"
+        },
         "feBefore": "#F59E0B"
       }
     },

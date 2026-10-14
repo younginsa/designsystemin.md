@@ -1,0 +1,58 @@
+{
+ "$note": "figma:classify 적용 계획(편집 금지) — scripts/figma-theme-apply.js 의 PLAN 에 넣어 use_figma 로 실행",
+ "file": "i5IhnacRAjg6NJdmtctfn2",
+ "feBuild": "ChyVgiXc",
+ "read": "2026-10-14",
+ "todo": 10,
+ "summary": "피그마에 없음(장부 — 질문) 3 · 장부 값 아님(디자이너 값으로) 1 · 피그마 뒤처짐(FE 값으로) 6 · 피그마에 없음(참고) 21 · FE 에 없음(그대로) 15 · 맞음 36",
+ "ops": [
+  {
+   "variable": "General/input",
+   "id": "VariableID:161:1579",
+   "mode": "light",
+   "from": "#858998",
+   "to": "#ECEDF0",
+   "alias": "Day mode/Gray/100"
+  },
+  {
+   "variable": "General/input",
+   "id": "VariableID:161:1579",
+   "mode": "dark",
+   "from": "#858998",
+   "to": "#FFFFFF/0.08",
+   "alias": "Basic Foreground/White/8"
+  },
+  {
+   "variable": "General/input",
+   "id": "VariableID:161:1579",
+   "mode": "control",
+   "from": "#858998",
+   "to": "#FFFFFF/0.08",
+   "alias": "Basic Foreground/White/8"
+  },
+  {
+   "variable": "General/muted-foreground",
+   "id": "VariableID:107:1263",
+   "mode": "light",
+   "from": "#000000/0.2",
+   "to": "#5D6275",
+   "alias": "Day mode/Gray/600"
+  },
+  {
+   "variable": "General/muted-foreground",
+   "id": "VariableID:107:1263",
+   "mode": "dark",
+   "from": "#FFFFFF/0.2",
+   "to": "#D0D2D9",
+   "alias": "Day mode/Gray/800"
+  },
+  {
+   "variable": "General/muted-foreground",
+   "id": "VariableID:107:1263",
+   "mode": "control",
+   "from": "#FFFFFF/0.2",
+   "to": "#D0D2D9",
+   "alias": "Dusk mode/Gray/800"
+  }
+ ]
+}

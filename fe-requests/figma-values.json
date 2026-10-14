@@ -1,0 +1,280 @@
+{
+ "$note": "피그마 라이브러리 Theme 해석값(scripts/figma-theme-read.js 출력, 편집 금지) — figma:classify 가 FE 값·대기 장부와 대조한다",
+ "read": "2026-10-14",
+ "file": "i5IhnacRAjg6NJdmtctfn2",
+ "collection": "Theme",
+ "modes": [
+  "light",
+  "dark",
+  "control"
+ ],
+ "vars": {
+  "General/background": {
+   "id": "VariableID:107:1279",
+   "light": "#FFFFFF",
+   "lightAlias": "Basic Foreground/White/100",
+   "dark": "#1B1C21",
+   "darkAlias": "Dusk mode/Gray/200",
+   "control": "#15161A",
+   "controlAlias": "Dusk mode/Gray/100"
+  },
+  "General/foreground": {
+   "id": "VariableID:107:1541",
+   "light": "#3C3E47",
+   "lightAlias": "Day mode/Gray/700",
+   "dark": "#F2F4F8",
+   "darkAlias": "Day mode/Gray/50",
+   "control": "#F2F4F8",
+   "controlAlias": "Day mode/Gray/50"
+  },
+  "General/primary": {
+   "id": "VariableID:1491:706",
+   "light": "#4477F9",
+   "lightAlias": "Product/HiNAS Brand",
+   "dark": "#348FF4",
+   "darkAlias": "Product/HiNAS Brand",
+   "control": "#348FF4",
+   "controlAlias": "Product/HiNAS Brand"
+  },
+  "General/secondary": {
+   "id": "VariableID:120:1582",
+   "light": "#F9FAFB",
+   "lightAlias": "Day mode/Gray/20",
+   "dark": "#23252B",
+   "darkAlias": "Dusk mode/Gray/300",
+   "control": "#3C3E47",
+   "controlAlias": "Dusk mode/Gray/400"
+  },
+  "General/secondary-foreground": {
+   "id": "VariableID:107:1257",
+   "light": "#5D6275",
+   "lightAlias": "Day mode/Gray/600",
+   "dark": "#D0D2D9",
+   "darkAlias": "Dusk mode/Gray/800",
+   "control": "#D0D2D9",
+   "controlAlias": "Dusk mode/Gray/800"
+  },
+  "General/muted": {
+   "id": "VariableID:180:2358",
+   "light": "#F2F4F8",
+   "lightAlias": "Day mode/Gray/50",
+   "dark": "#2F323B",
+   "darkAlias": "Dusk mode/Gray/350",
+   "control": "#2F323B",
+   "controlAlias": "Dusk mode/Gray/350"
+  },
+  "General/muted-foreground": {
+   "id": "VariableID:107:1263",
+   "light": "#000000/0.2",
+   "lightAlias": "Basic Foreground/Black/20",
+   "dark": "#FFFFFF/0.2",
+   "darkAlias": "Basic Foreground/White/20",
+   "control": "#FFFFFF/0.2",
+   "controlAlias": "Basic Foreground/White/20"
+  },
+  "General/accent": {
+   "id": "VariableID:1491:77905",
+   "light": "#000000/0.06",
+   "lightAlias": "Basic Foreground/Black/6",
+   "dark": "#FFFFFF/0.12",
+   "darkAlias": "Basic Foreground/White/12",
+   "control": "#FFFFFF/0.12",
+   "controlAlias": "Basic Foreground/White/12"
+  },
+  "General/destructive": {
+   "id": "VariableID:172:1893",
+   "light": "#FF5B5B",
+   "lightAlias": "Dusk mode/SemanticRed/600",
+   "dark": "#FA454E",
+   "darkAlias": "Day mode/SemanticRed/500",
+   "control": "#A50000",
+   "controlAlias": "Dusk mode/SemanticRed/100"
+  },
+  "General/border": {
+   "id": "VariableID:149:1285",
+   "light": "#ECEDF0",
+   "lightAlias": "Day mode/Gray/100",
+   "dark": "#FFFFFF/0.08",
+   "darkAlias": "Basic Foreground/White/8",
+   "control": "#FFFFFF/0.08",
+   "controlAlias": "Basic Foreground/White/8"
+  },
+  "General/input": {
+   "id": "VariableID:161:1579",
+   "light": "#858998",
+   "lightAlias": "Day mode/Gray/500",
+   "dark": "#858998",
+   "darkAlias": "Dusk mode/Gray/600",
+   "control": "#858998",
+   "controlAlias": "Dusk mode/Gray/600"
+  },
+  "General/ring": {
+   "id": "VariableID:117:1444",
+   "light": "#DBDEE8",
+   "lightAlias": "Day mode/Gray/200",
+   "dark": "#3C3E47",
+   "darkAlias": "Dusk mode/Gray/400",
+   "control": "#3C3E47",
+   "controlAlias": "Dusk mode/Gray/400"
+  },
+  "Product/HiNAS Brand": {
+   "id": "VariableID:1421:30182",
+   "light": "#4477F9",
+   "lightAlias": "Day mode/SemanticBlue/500",
+   "dark": "#348FF4",
+   "darkAlias": "Dusk mode/SemanticBlue/500",
+   "control": "#348FF4",
+   "controlAlias": "Dusk mode/SemanticBlue/500"
+  },
+  "Product/Cyber security": {
+   "id": "VariableID:1430:58",
+   "light": "#0367E0",
+   "lightAlias": "Dusk mode/SemanticBlue/300",
+   "dark": "#0367E0",
+   "darkAlias": "Dusk mode/SemanticBlue/300",
+   "control": "#0367E0",
+   "controlAlias": "Dusk mode/SemanticBlue/300"
+  },
+  "General/on-color": {
+   "id": "VariableID:2832:24",
+   "light": "#FFFFFF",
+   "lightAlias": "Basic Foreground/White/100",
+   "dark": "#FFFFFF",
+   "darkAlias": "Basic Foreground/White/100",
+   "control": "#FFFFFF",
+   "controlAlias": "Basic Foreground/White/100"
+  },
+  "General/success": {
+   "id": "VariableID:2834:24",
+   "light": "#24A148",
+   "lightAlias": "Day mode/SemanticGreen/500",
+   "dark": "#24A148",
+   "darkAlias": "Day mode/SemanticGreen/500",
+   "control": "#24A148",
+   "controlAlias": "Day mode/SemanticGreen/500"
+  },
+  "Chart/chart-1": {
+   "id": "VariableID:2834:25",
+   "light": "#002D9C",
+   "lightAlias": "Day mode/SemanticBlue/800",
+   "dark": "#002D9C",
+   "darkAlias": "Day mode/SemanticBlue/800",
+   "control": "#002D9C",
+   "controlAlias": "Day mode/SemanticBlue/800"
+  },
+  "Chart/chart-2": {
+   "id": "VariableID:2834:26",
+   "light": "#0043CE",
+   "lightAlias": "Day mode/SemanticBlue/700",
+   "dark": "#0043CE",
+   "darkAlias": "Day mode/SemanticBlue/700",
+   "control": "#0043CE",
+   "controlAlias": "Day mode/SemanticBlue/700"
+  },
+  "Chart/chart-3": {
+   "id": "VariableID:2834:27",
+   "light": "#0F62FE",
+   "lightAlias": "Day mode/SemanticBlue/600",
+   "dark": "#0F62FE",
+   "darkAlias": "Day mode/SemanticBlue/600",
+   "control": "#0F62FE",
+   "controlAlias": "Day mode/SemanticBlue/600"
+  },
+  "Chart/chart-4": {
+   "id": "VariableID:2834:28",
+   "light": "#78A9FF",
+   "lightAlias": "Day mode/SemanticBlue/400",
+   "dark": "#78A9FF",
+   "darkAlias": "Day mode/SemanticBlue/400",
+   "control": "#78A9FF",
+   "controlAlias": "Day mode/SemanticBlue/400"
+  },
+  "Chart/chart-5": {
+   "id": "VariableID:2834:29",
+   "light": "#D0E2FF",
+   "lightAlias": "Day mode/SemanticBlue/200",
+   "dark": "#D0E2FF",
+   "darkAlias": "Day mode/SemanticBlue/200",
+   "control": "#D0E2FF",
+   "controlAlias": "Day mode/SemanticBlue/200"
+  },
+  "Tint/primary/5": {
+   "id": "VariableID:2962:24",
+   "light": "#4477F9/0.05",
+   "dark": "#348FF4/0.05",
+   "control": "#348FF4/0.05"
+  },
+  "Tint/primary/10": {
+   "id": "VariableID:2962:25",
+   "light": "#4477F9/0.1",
+   "dark": "#348FF4/0.1",
+   "control": "#348FF4/0.1"
+  },
+  "Tint/primary-foreground/10": {
+   "id": "VariableID:2962:26",
+   "light": "#FFFFFF/0.1",
+   "dark": "#FFFFFF/0.1",
+   "control": "#15161A/0.1"
+  },
+  "Tint/destructive/5": {
+   "id": "VariableID:2962:27",
+   "light": "#FF5B5B/0.05",
+   "dark": "#FA454E/0.05",
+   "control": "#A50000/0.05"
+  },
+  "Tint/destructive/10": {
+   "id": "VariableID:2962:28",
+   "light": "#FF5B5B/0.1",
+   "dark": "#FA454E/0.1",
+   "control": "#A50000/0.1"
+  },
+  "Tint/destructive/12": {
+   "id": "VariableID:2962:29",
+   "light": "#FF5B5B/0.12",
+   "dark": "#FA454E/0.12",
+   "control": "#A50000/0.12"
+  },
+  "Tint/success/12": {
+   "id": "VariableID:2962:30",
+   "light": "#24A148/0.12",
+   "dark": "#24A148/0.12",
+   "control": "#24A148/0.12"
+  }
+ },
+ "interStyles": {
+  "total": 60,
+  "sampled": 60,
+  "ss02": 31,
+  "noSs02": [
+   "Desktop/caption_xs/Bold(2/5)",
+   "Desktop/caption_s/Bold(2/3)",
+   "Desktop/Title_XS/Bold(2/5)",
+   "Desktop/Title_S/Bold(4/5)",
+   "Desktop/Title_M/Bold(1/5)",
+   "Desktop/Title_L/Bold(2/5)",
+   "Desktop/Title_XL/Medium(2/3)",
+   "Desktop/Title_XL/Bold(1/5)",
+   "Desktop/Display_XS/Bold(2/3)",
+   "2m Distance/body/Regular(0/2)",
+   "2m Distance/body/Medium(0/5)",
+   "2m Distance/body/Semi bold(0/2)",
+   "2m Distance/body/Bold(0/5)",
+   "2m Distance/Title/Regular(0/2)",
+   "2m Distance/Title/Medium(0/2)",
+   "2m Distance/Title/Semi bold(0/2)",
+   "2m Distance/Title/Bold(0/3)",
+   "2m Distance/Display_S/Regular(0/2)",
+   "2m Distance/Display_S/Medium(0/2)",
+   "2m Distance/Display_S/Semi bold(0/2)",
+   "2m Distance/Display_S/Bold(0/2)",
+   "2m Distance/Display_L/Regular(0/2)",
+   "2m Distance/Display_L/Medium(0/2)",
+   "2m Distance/Display_L/Semi bold(0/2)",
+   "2m Distance/Display_L/Bold(0/2)",
+   "3m Distance/Regular(0/2)",
+   "3m Distance/Medium(0/2)",
+   "3m Distance/Semi bold(0/2)",
+   "3m Distance/Bold(0/5)"
+  ]
+ }
+}

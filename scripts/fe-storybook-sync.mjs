@@ -370,16 +370,21 @@ try {
   await page.waitForTimeout(800);
   const names = [...new Set([...feCss.matchAll(/--general-([a-z0-9-]+)\s*:/g)].map((m) => m[1]))].sort();
   const values = await page.evaluate((ns) => {
-    const probe = document.createElement("div"); document.body.appendChild(probe);
+    const probe = document.createElement("div");
     const toHex = (c) => { const m = c.match(/\d+(\.\d+)?/g); if (!m) return c; const [r, g, b, a] = m.map(Number); const h = "#" + [r, g, b].map((x) => Math.round(x).toString(16).padStart(2, "0")).join("").toUpperCase(); return a !== undefined && a < 1 ? h + "/" + a : h; };
-    const colors = {};
-    for (const n of ns) { probe.style.color = ""; probe.style.color = `var(--general-${n})`; const c = getComputedStyle(probe).color; colors[n] = c ? toHex(c) : null; }
-    probe.remove();
+    // 모드 3개 — FE CSS 의 :root(Light) · .dark · .theme-control 을 감싼 상자 안에서 해석한다(H3, 2026-10-14 — 피그마 Theme 도 3모드)
+    const read = (cls) => {
+      const wrap = document.createElement("div"); if (cls) wrap.className = cls; wrap.appendChild(probe); document.body.appendChild(wrap);
+      const out = {};
+      for (const n of ns) { probe.style.color = ""; probe.style.color = `var(--general-${n})`; const c = getComputedStyle(probe).color; out[n] = c ? toHex(c) : null; }
+      wrap.remove(); return out;
+    };
+    const colorsByMode = { light: read(""), dark: read("dark"), control: read("theme-control") };
     const cs = getComputedStyle(document.documentElement);
-    return { colors, fontFamily: cs.fontFamily, fontFeatureSettings: cs.fontFeatureSettings };
+    return { colors: colorsByMode.light, colorsByMode, fontFamily: cs.fontFamily, fontFeatureSettings: cs.fontFeatureSettings };
   }, names);
-  writeFileSync(join(OUT, "fe-values.json"), JSON.stringify({ $note: "FE Storybook 의 실제 값(fe:sync 가 기록, 편집 금지) — 색 = --general-<이름> 을 Light 화면에서 해석한 값. fe:classify 가 우리 값·대기 장부와 대조한다.", feBuild, synced, ...values }, null, 1) + "\n");
-  console.log(`[fe:sync] FE 값 기록 — 색 ${Object.keys(values.colors).length} · font-feature-settings ${values.fontFeatureSettings}`);
+  writeFileSync(join(OUT, "fe-values.json"), JSON.stringify({ $note: "FE Storybook 의 실제 값(fe:sync 가 기록, 편집 금지) — 색 = --general-<이름> 을 해석한 값(colors = Light, colorsByMode = light·dark·control). fe:classify 가 우리 값·대기 장부와 대조한다.", feBuild, synced, ...values }, null, 1) + "\n");
+  console.log(`[fe:sync] FE 값 기록 — 색 ${Object.keys(values.colors).length} × 모드 3 · font-feature-settings ${values.fontFeatureSettings}`);
 } catch (e) { console.log("[fe:sync] ⚠ FE 값 기록 실패 — " + String(e?.message ?? e).slice(0, 120)); }
 await browser.close();
 

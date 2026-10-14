@@ -40,20 +40,28 @@ const up = (v) => {
   if (sl) s = Number(sl[2]) >= 1 ? sl[1] : `${sl[1]}/${Number(sl[2]).toFixed(2)}`;
   return s;
 };
+const MODES = ["light", "dark", "control"];
+const feByMode = fe.colorsByMode || { light: fe.colors || {} };
+const prevByMode = prev ? prev.colorsByMode || { light: prev.colors || {} } : null;
 const subjects = [];
-for (const [name, feVal] of Object.entries(fe.colors || {})) {
-  const row = rows.find((r) => r.name === name);
-  subjects.push({ kind: "color", name, ours: row ? row.light?.hex : null, fe: feVal, prevFe: prev?.colors?.[name] ?? null });
+for (const mode of MODES) {
+  const fm = feByMode[mode]; if (!fm) continue;
+  for (const [name, feVal] of Object.entries(fm)) {
+    const row = rows.find((r) => r.name === name);
+    subjects.push({ kind: "color", mode, name, ours: row ? row[mode]?.hex : null, fe: feVal, prevFe: prevByMode?.[mode]?.[name] ?? null, prevKnown: !!prevByMode?.[mode] });
+  }
+  for (const r of rows) if (!(r.name in fm)) subjects.push({ kind: "color", mode, name: r.name, ours: r[mode]?.hex, fe: null, prevFe: null, prevKnown: true });
 }
-for (const r of rows) if (!(r.name in (fe.colors || {}))) subjects.push({ kind: "color", name: r.name, ours: r.light?.hex, fe: null, prevFe: null });
-subjects.push({ kind: "fontFeature", name: "font-feature-settings", ours: oursFeature, fe: fe.fontFeatureSettings, prevFe: prev?.fontFeatureSettings ?? null });
+subjects.push({ kind: "fontFeature", mode: "all", name: "font-feature-settings", ours: oursFeature, fe: fe.fontFeatureSettings, prevFe: prev?.fontFeatureSettings ?? null, prevKnown: !!prev });
+// 장부 check 의 ours·feBefore 는 문자열(모든 모드 같음) 또는 { light, dark, control }
+const pick = (v, mode) => (v && typeof v === "object" ? v[mode] : v);
 
 const findLedger = (s) => ledger.items.find((i) => i.status === "pending" && i.check && i.check.kind === s.kind && (s.kind === "fontFeature" || i.check.name === s.name));
 const out = [];
 for (const s of subjects) {
   const item = findLedger(s);
   if (item) {
-    const c = item.check;
+    const c = { ours: pick(item.check.ours, s.mode), feBefore: pick(item.check.feBefore, s.mode) };
     let verdict, todo, why;
     if (up(s.fe) === up(c.ours)) { verdict = "shipped"; todo = true; why = "FE 가 우리 결정 값이 됨 — 장부 status=shipped 로 닫기"; }
     else if (up(s.fe) === up(c.feBefore)) {
@@ -67,26 +75,26 @@ for (const s of subjects) {
   if (up(s.ours) === up(s.fe)) continue;
   if (s.fe == null) { out.push({ ...s, verdict: "ours-only", todo: false, why: "FE 에 없는 우리 토큰 — 프로토타입 전용" }); continue; }
   if (s.ours == null) { out.push({ ...s, verdict: "fe-only", todo: false, why: "우리에게 없는 FE 토큰 — 참고" }); continue; }
-  const acc = accepted.find((a) => a.name === s.name);
+  const acc = accepted.find((a) => a.name === s.name && (!a.mode || a.mode === s.mode));
   if (acc && up(acc.fe) === up(s.fe)) { out.push({ ...s, verdict: "accepted", todo: false, why: acc.note }); continue; }
-  const changed = prev && up(s.prevFe) !== up(s.fe);
+  const changed = s.prevKnown && up(s.prevFe) !== up(s.fe);
   if (changed) out.push({ ...s, verdict: "storybook-ahead", todo: true, why: `FE 가 ${s.prevFe ?? "(없음)"} → ${s.fe} 로 바꿈 — 우리 쪽 맞추기` });
-  else out.push({ ...s, verdict: "unknown-drift", todo: true, why: prev ? "장부에 없고 FE 도 그대로 — 원인 확인 필요(자동 수정 금지)" : "직전 기록 없음(첫 실행) — 원인 확인 필요" });
+  else out.push({ ...s, verdict: "unknown-drift", todo: true, why: s.prevKnown ? "장부에 없고 FE 도 그대로 — 원인 확인 필요(자동 수정 금지)" : "직전 기록 없음(첫 실행) — 원인 확인 필요" });
 }
 
 const ORDER = ["conflict", "storybook-ahead", "unknown-drift", "shipped", "local-ahead", "accepted", "fe-only", "ours-only"];
 const LABEL = { conflict: "충돌(질문)", "storybook-ahead": "Storybook 이 앞섬(맞추기)", "unknown-drift": "원인 모를 차이(질문)", shipped: "FE 반영됨(장부 닫기)", "local-ahead": "로컬이 앞섬(대기)", accepted: "알고 둔 차이", "fe-only": "FE 에만 있음", "ours-only": "우리에게만 있음" };
-out.sort((a, b) => ORDER.indexOf(a.verdict) - ORDER.indexOf(b.verdict) || a.name.localeCompare(b.name));
+out.sort((a, b) => ORDER.indexOf(a.verdict) - ORDER.indexOf(b.verdict) || a.name.localeCompare(b.name) || MODES.indexOf(a.mode) - MODES.indexOf(b.mode));
 const count = Object.fromEntries(ORDER.map((v) => [v, out.filter((o) => o.verdict === v).length]));
 const todo = out.filter((o) => o.todo);
 const summary = ORDER.filter((v) => count[v]).map((v) => `${LABEL[v]} ${count[v]}`).join(" · ") || "차이 없음";
 
-const lines = [`# FE 대조 보고서`, ``, `FE 빌드 ${fe.feBuild} · ${fe.synced} 동기화 · 직전 기록 ${prev ? prev.feBuild : "없음"}`, ``, `할 일 ${todo.length}건 — ${summary}`, ``, `| 판정 | 대상 | 우리 | FE | 직전 FE | 할 일 | 메모 |`, `|---|---|---|---|---|---|---|`];
-for (const o of out) lines.push(`| ${LABEL[o.verdict]} | ${o.name}${o.ledger ? ` (장부 ${o.ledger})` : ""} | ${o.ours ?? "—"} | ${o.fe ?? "—"} | ${o.prevFe ?? "—"} | ${o.todo ? "예" : ""} | ${o.why} |`);
+const lines = [`# FE 대조 보고서`, ``, `FE 빌드 ${fe.feBuild} · ${fe.synced} 동기화 · 직전 기록 ${prev ? prev.feBuild : "없음"}`, ``, `할 일 ${todo.length}건 — ${summary}`, ``, `| 판정 | 대상 | 모드 | 우리 | FE | 직전 FE | 할 일 | 메모 |`, `|---|---|---|---|---|---|---|---|`];
+for (const o of out) lines.push(`| ${LABEL[o.verdict]} | ${o.name}${o.ledger ? ` (장부 ${o.ledger})` : ""} | ${o.mode} | ${o.ours ?? "—"} | ${o.fe ?? "—"} | ${o.prevFe ?? "—"} | ${o.todo ? "예" : ""} | ${o.why} |`);
 writeFileSync(join(ROOT, "fe-requests/sync-report.md"), lines.join("\n") + "\n");
-writeFileSync(join(ROOT, "fe-requests/sync-report.json"), JSON.stringify({ $note: "fe:classify 요약(편집 금지) — fe-status.mjs 가 읽는다", feBuild: fe.feBuild, synced: fe.synced, todo: todo.length, summary, items: out.map(({ kind, name, ours, fe, prevFe, verdict, todo, ledger }) => ({ kind, name, ours, fe, prevFe, verdict, todo, ledger })) }, null, 1) + "\n");
+writeFileSync(join(ROOT, "fe-requests/sync-report.json"), JSON.stringify({ $note: "fe:classify 요약(편집 금지) — fe-status.mjs 가 읽는다", feBuild: fe.feBuild, synced: fe.synced, todo: todo.length, summary, items: out.map(({ kind, mode, name, ours, fe, prevFe, verdict, todo, ledger }) => ({ kind, mode, name, ours, fe, prevFe, verdict, todo, ledger })) }, null, 1) + "\n");
 
 console.log(`[fe:classify] 빌드 ${fe.feBuild} · 할 일 ${todo.length} · ${summary}`);
-for (const o of todo) console.log(`  - ${LABEL[o.verdict]} ${o.name}: 우리 ${o.ours ?? "—"} · FE ${o.fe ?? "—"} — ${o.why}`);
+for (const o of todo) console.log(`  - ${LABEL[o.verdict]} ${o.name}[${o.mode}]: 우리 ${o.ours ?? "—"} · FE ${o.fe ?? "—"} — ${o.why}`);
 if (E.GITHUB_STEP_SUMMARY) writeFileSync(E.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n", { flag: "a" });
 process.exit(todo.length ? 1 : 0);

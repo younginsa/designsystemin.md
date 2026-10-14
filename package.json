@@ -21,7 +21,8 @@
     "check:html": "pnpm --filter @ds/mcp check-html --",
     "pilot:shot": "node scripts/pilot-shot.mjs",
     "icons:build": "node scripts/build-icons.mjs",
-    "fe:classify": "node scripts/fe-classify.mjs"
+    "fe:classify": "node scripts/fe-classify.mjs",
+    "figma:classify": "node scripts/figma-classify.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.2",
