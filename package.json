@@ -22,7 +22,8 @@
     "pilot:shot": "node scripts/pilot-shot.mjs",
     "icons:build": "node scripts/build-icons.mjs",
     "fe:classify": "node scripts/fe-classify.mjs",
-    "figma:classify": "node scripts/figma-classify.mjs"
+    "figma:classify": "node scripts/figma-classify.mjs",
+    "proto:check": "node scripts/proto-check.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.2",

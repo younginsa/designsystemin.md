@@ -74,6 +74,14 @@ if (fplan) {
   fsay(`${fplan.todo ? `⚠ 할 일 ${fplan.todo}` : "할 일 없음 ✓"} · 마지막 대조 ${fplan.read}(${age}일 전, FE 빌드 ${fplan.feBuild}${snap.feBuild && fplan.feBuild !== snap.feBuild ? ` — 지금 FE 는 ${snap.feBuild}, 다시 대조 필요` : ""})${fplan.todo ? " — fe-requests/figma-report.md" : ""}`);
 }
 
+// ⑥ 로컬 프로토타입(H4, 2026-10-14) — localhost:3000 이 켜져 있을 때만 scripts/proto-check.mjs 를 돌려 그 출력을 그대로 싣는다(꺼져 있으면 조용히 생략)
+try {
+  await fetch("http://localhost:3000", { signal: AbortSignal.timeout(1500) });
+  const pc = spawnSync(process.execPath, [join(ROOT, "scripts/proto-check.mjs")], { cwd: ROOT, encoding: "utf8", timeout: 20000 });
+  const outp = (pc.stdout || "").trim();
+  if (outp) console.log(outp); else if (pc.error) console.log("[프로토타입] 대조 시간 초과(20초) — pnpm proto:check 로 직접 확인");
+} catch {}
+
 // 해야 할 일 한 줄 — 관리자/클론을 나눈다(클론은 pull 전용 — CLAUDE.md 6·7)
 const behind = fe && fe !== mine;
 if (behind || missing.length || failed) {
