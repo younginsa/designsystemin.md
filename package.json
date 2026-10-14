@@ -20,7 +20,8 @@
     "pilot:gen": "node scripts/pilot-gen.mjs",
     "check:html": "pnpm --filter @ds/mcp check-html --",
     "pilot:shot": "node scripts/pilot-shot.mjs",
-    "icons:build": "node scripts/build-icons.mjs"
+    "icons:build": "node scripts/build-icons.mjs",
+    "fe:classify": "node scripts/fe-classify.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.2",

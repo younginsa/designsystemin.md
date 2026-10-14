@@ -362,6 +362,25 @@ for (const key of keys) {
   summary.push({ key, stories: stories.length, states: states.length, opened: opened.length, classes: classes.size, stripped: [...stripped], errors });
   console.log(`  ${key}: 스토리 ${stories.length} · 상태 ${states.length}${opened.length ? ` · 열림 ${opened.length}(${opened.map((o) => o.trigger).join(",")})` : ""} · 클래스 ${classes.size}${stories.some((s) => s.portal) ? " · 포털" : ""}${stripped.size ? ` · 죽은 클래스 뗌 ${[...stripped].join(",")}` : ""}${errors ? ` · 렌더 오류 ${errors}` : ""}`);
 }
+// ── FE 실제 값(H2, 2026-10-14) — 제품의 원천은 FE Storybook 이다. 색은 --general-* 를 화면에서 해석한 최종 값으로,
+// 글꼴은 html 의 font-family·font-feature-settings 로 기록한다(fe-values.json). fe:classify 가 우리 값·대기 장부와 대조한다.
+try {
+  await page.mouse.move(0, 0).catch(() => {});
+  await page.goto(`${FE}/iframe.html?viewMode=story&id=${(Object.values(entries).find((x) => x.type === "story") || {}).id}`, { waitUntil: "load" });
+  await page.waitForTimeout(800);
+  const names = [...new Set([...feCss.matchAll(/--general-([a-z0-9-]+)\s*:/g)].map((m) => m[1]))].sort();
+  const values = await page.evaluate((ns) => {
+    const probe = document.createElement("div"); document.body.appendChild(probe);
+    const toHex = (c) => { const m = c.match(/\d+(\.\d+)?/g); if (!m) return c; const [r, g, b, a] = m.map(Number); const h = "#" + [r, g, b].map((x) => Math.round(x).toString(16).padStart(2, "0")).join("").toUpperCase(); return a !== undefined && a < 1 ? h + "/" + a : h; };
+    const colors = {};
+    for (const n of ns) { probe.style.color = ""; probe.style.color = `var(--general-${n})`; const c = getComputedStyle(probe).color; colors[n] = c ? toHex(c) : null; }
+    probe.remove();
+    const cs = getComputedStyle(document.documentElement);
+    return { colors, fontFamily: cs.fontFamily, fontFeatureSettings: cs.fontFeatureSettings };
+  }, names);
+  writeFileSync(join(OUT, "fe-values.json"), JSON.stringify({ $note: "FE Storybook 의 실제 값(fe:sync 가 기록, 편집 금지) — 색 = --general-<이름> 을 Light 화면에서 해석한 값. fe:classify 가 우리 값·대기 장부와 대조한다.", feBuild, synced, ...values }, null, 1) + "\n");
+  console.log(`[fe:sync] FE 값 기록 — 색 ${Object.keys(values.colors).length} · font-feature-settings ${values.fontFeatureSettings}`);
+} catch (e) { console.log("[fe:sync] ⚠ FE 값 기록 실패 — " + String(e?.message ?? e).slice(0, 120)); }
 await browser.close();
 
 // ── FE 빌드 CSS 보관 ──

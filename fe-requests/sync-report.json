@@ -1,0 +1,83 @@
+{
+ "$note": "fe:classify 요약(편집 금지) — fe-status.mjs 가 읽는다",
+ "feBuild": "ChyVgiXc",
+ "synced": "2026-10-14",
+ "todo": 0,
+ "summary": "로컬이 앞섬(대기) 2 · FE 에만 있음 1 · 우리에게만 있음 5",
+ "items": [
+  {
+   "kind": "color",
+   "name": "caution",
+   "ours": "#E8A600",
+   "fe": "#F59E0B",
+   "prevFe": null,
+   "verdict": "local-ahead",
+   "todo": false,
+   "ledger": "caution-color"
+  },
+  {
+   "kind": "fontFeature",
+   "name": "font-feature-settings",
+   "ours": "\"ss02\"",
+   "fe": "normal",
+   "prevFe": null,
+   "verdict": "local-ahead",
+   "todo": false,
+   "ledger": "inter-ss02"
+  },
+  {
+   "kind": "color",
+   "name": "on-color",
+   "ours": null,
+   "fe": "#FFFFFF",
+   "prevFe": null,
+   "verdict": "fe-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "name": "chart-1",
+   "ours": "#002D9C",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "name": "chart-2",
+   "ours": "#0043CE",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "name": "chart-3",
+   "ours": "#0F62FE",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "name": "chart-4",
+   "ours": "#78A9FF",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  },
+  {
+   "kind": "color",
+   "name": "chart-5",
+   "ours": "#D0E2FF",
+   "fe": null,
+   "prevFe": null,
+   "verdict": "ours-only",
+   "todo": false
+  }
+ ]
+}

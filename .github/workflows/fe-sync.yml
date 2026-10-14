@@ -4,6 +4,9 @@
 # 실패(빨간 X)는 두 가지뿐: FE 스토리북이 안 열림(다음 시간에 자연 회복) / 새 FE 빌드가 우리 ds.css 위에서 다르게 그려짐(사람이 고칠 것 — 커밋하지 않는다).
 # FE 가 스토리를 개명해 레지스트리 fe.id 가 목차에 없는 키는 실패가 아니다(2026-10-08) — 그 키만 이전 스냅샷을 두고 나머지를 커밋하며,
 # fe-stories/index.json 의 missing 목록에 남는다. 관리자가 ds-registry.json 의 fe.id 를 고치면 다음 시간에 채워진다.
+# 대조 분류(H2, 2026-10-14) — 정합 통과 뒤 pnpm fe:classify 가 FE 실제 값(fe-values.json)을 우리 값·대기 장부와 대조한다.
+# 할 일(충돌 · Storybook 이 앞섬 · 원인 모를 차이 · 장부 닫기 · 댓글 미게시)이 있으면 커밋은 그대로 하고 마지막 단계에서 빨간 X 로 끝낸다
+# → GitHub 가 메일을 보낸다. 보고서는 fe-requests/sync-report.md(실행 요약 화면에도 표시). FE 빌드가 바뀐 시간에만 돈다 = 빌드당 메일 1통.
 # 수동 실행: Actions 탭 → FE Storybook sync → Run workflow.
 name: FE Storybook sync
 
@@ -72,13 +75,27 @@ jobs:
           sleep 2
           DS_BASE=http://127.0.0.1:3000 pnpm fe:parity
 
-      # 4. 통과했으면 봇이 커밋·푸시 — Vercel 이 배포한다
+      # 4. 대조 분류 — 봇 커밋 전에 돌려야 git HEAD 의 fe-values.json 이 직전 빌드 값이다. 실패해도 커밋은 하고 6에서 빨갛게 끝낸다
+      - if: steps.check.outputs.changed == 'true'
+        name: 대조 분류
+        id: classify
+        continue-on-error: true
+        run: pnpm fe:classify
+
+      # 5. 통과했으면 봇이 커밋·푸시 — Vercel 이 배포한다
       - if: steps.check.outputs.changed == 'true'
         name: 커밋
         run: |
           git config user.name "fe-sync[bot]"
           git config user.email "fe-sync@users.noreply.github.com"
-          git add playground/fe-stories
+          git add playground/fe-stories fe-requests/sync-report.md fe-requests/sync-report.json
           if git diff --cached --quiet; then echo "변경 없음"; exit 0; fi
           git commit -m "chore(fe): FE 스토리북 스냅샷 동기화 — 빌드 ${{ steps.check.outputs.build }}" -m "자동 실행(.github/workflows/fe-sync.yml). pnpm fe:sync → fe:parity 통과."
           git push
+
+      # 6. 할 일이 있으면 빨간 X — GitHub 가 메일을 보낸다(보고서: 실행 요약 · fe-requests/sync-report.md)
+      - if: steps.check.outputs.changed == 'true' && steps.classify.outcome == 'failure'
+        name: 할 일 있음 — 확인 필요
+        run: |
+          echo "FE 대조 결과 할 일이 있다 — fe-requests/sync-report.md 확인"
+          exit 1

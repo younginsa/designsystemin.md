@@ -1,0 +1,31 @@
+{
+ "$note": "FE Storybook 의 실제 값(fe:sync 가 기록, 편집 금지) — 색 = --general-<이름> 을 Light 화면에서 해석한 값. fe:classify 가 우리 값·대기 장부와 대조한다.",
+ "feBuild": "ChyVgiXc",
+ "synced": "2026-10-14",
+ "colors": {
+  "accent": "#000000/0.06",
+  "accent-foreground": "#3C3E47",
+  "background": "#FFFFFF",
+  "border": "#ECEDF0",
+  "card": "#FFFFFF",
+  "card-foreground": "#3C3E47",
+  "caution": "#F59E0B",
+  "destructive": "#FF5B5B",
+  "destructive-foreground": "#FFFFFF",
+  "foreground": "#3C3E47",
+  "input": "#ECEDF0",
+  "muted": "#F2F4F8",
+  "muted-foreground": "#5D6275",
+  "on-color": "#FFFFFF",
+  "popover": "#FFFFFF",
+  "popover-foreground": "#3C3E47",
+  "primary": "#4477F9",
+  "primary-foreground": "#FFFFFF",
+  "ring": "#DBDEE8",
+  "secondary": "#F9FAFB",
+  "secondary-foreground": "#5D6275",
+  "success": "#24A148"
+ },
+ "fontFamily": "Inter, system-ui, sans-serif",
+ "fontFeatureSettings": "normal"
+}

@@ -56,6 +56,16 @@ if (missing.length) parts.push(`⚠ 스토리 없음 ${missing.length}: ${missin
 if (runText && (failed || (fe && fe !== mine))) parts.push(runText);
 say(parts.join(" · "));
 
+// ④ 대조 분류 요약(fe-requests/sync-report.json — fe:classify 가 FE 빌드마다 씀, H2 2026-10-14)
+const rep = read("fe-requests/sync-report.json");
+if (rep) {
+  const todo = (rep.items || []).filter((i) => i.todo);
+  const wait = (rep.items || []).filter((i) => i.verdict === "local-ahead").map((i) => i.ledger || i.name);
+  say(todo.length
+    ? `⚠ 대조 할 일 ${todo.length} (빌드 ${rep.feBuild}): ${todo.map((i) => `${i.name} ${i.verdict}`).join(", ")} — fe-requests/sync-report.md`
+    : `대조 ✓ 할 일 없음 (빌드 ${rep.feBuild})${wait.length ? ` · FE 반영 대기 ${wait.length}: ${wait.join(", ")}` : ""}`);
+}
+
 // 해야 할 일 한 줄 — 관리자/클론을 나눈다(클론은 pull 전용 — CLAUDE.md 6·7)
 const behind = fe && fe !== mine;
 if (behind || missing.length || failed) {
