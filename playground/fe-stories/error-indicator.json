@@ -1,0 +1,120 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "error-indicator",
+ "fe": {
+  "id": "shared-errorindicator",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/shared-errorindicator--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "ChyVgiXc",
+ "synced": "2026-10-14",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "shared-errorindicator--default",
+   "file": "error-indicator/default.html",
+   "portal": false,
+   "initialArgs": {
+    "errorType": "업데이트"
+   }
+  },
+  {
+   "name": "WithRetry",
+   "id": "shared-errorindicator--with-retry",
+   "file": "error-indicator/with-retry.html",
+   "portal": false,
+   "initialArgs": {
+    "errorType": "업데이트",
+    "description": "네트워크 연결을 확인하고 다시 시도해 주세요."
+   }
+  }
+ ],
+ "argTypes": {
+  "errorType": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  },
+  "title": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  },
+  "description": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  },
+  "onRetry": {
+   "type": "function",
+   "required": false,
+   "control": null
+  }
+ },
+ "states": [],
+ "opened": [],
+ "classes": [
+  "[&>svg+div]:translate-y-[-3px]",
+  "[&>svg]:absolute",
+  "[&>svg]:left-4",
+  "[&>svg]:text-destructive",
+  "[&>svg]:top-4",
+  "[&>svg~*]:pl-7",
+  "[&_p]:leading-relaxed",
+  "[&_svg]:pointer-events-none",
+  "[&_svg]:shrink-0",
+  "[&_svg]:size-4",
+  "bg-destructive/10",
+  "bg-destructive/5",
+  "border",
+  "border-destructive/50",
+  "border-none",
+  "dark:border-destructive",
+  "dark:focus-visible:ring-destructive/40",
+  "disabled:opacity-50",
+  "disabled:pointer-events-none",
+  "flex",
+  "flex-1",
+  "flex-col",
+  "focus-visible:outline-none",
+  "focus-visible:ring-1",
+  "focus-visible:ring-destructive/20",
+  "font-medium",
+  "font-semibold",
+  "gap-1.5",
+  "gap-4",
+  "h-4",
+  "has-[>svg]:px-2.5",
+  "hover:bg-destructive/10",
+  "hover:text-destructive",
+  "inline-flex",
+  "items-center",
+  "items-start",
+  "justify-between",
+  "justify-center",
+  "lucide",
+  "lucide-circle-alert",
+  "lucide-refresh-cw",
+  "mb-1",
+  "mr-2",
+  "px-3",
+  "px-5",
+  "py-1.5",
+  "py-4",
+  "relative",
+  "rounded-lg",
+  "rounded-md",
+  "text-destructive",
+  "text-foreground",
+  "text-secondary-foreground",
+  "text-sm",
+  "text-title-xs",
+  "tracking-tight",
+  "transition-colors",
+  "w-4",
+  "w-full",
+  "whitespace-nowrap",
+  "whitespace-pre-wrap"
+ ],
+ "strippedClasses": []
+}

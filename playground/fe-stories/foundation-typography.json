@@ -1,0 +1,80 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "foundation-typography",
+ "fe": {
+  "id": "design-tokens-typography",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/design-tokens-typography--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "ChyVgiXc",
+ "synced": "2026-10-14",
+ "stories": [
+  {
+   "name": "Scale",
+   "id": "design-tokens-typography--scale",
+   "file": "foundation-typography/scale.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "Weights",
+   "id": "design-tokens-typography--weights",
+   "file": "foundation-typography/weights.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "AllCombinations",
+   "id": "design-tokens-typography--all-combinations",
+   "file": "foundation-typography/all-combinations.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {},
+ "states": [],
+ "opened": [],
+ "classes": [
+  "bg-background",
+  "border-b",
+  "border-border",
+  "flex",
+  "flex-col",
+  "font-bold",
+  "font-medium",
+  "font-mono",
+  "font-normal",
+  "font-semibold",
+  "gap-0",
+  "gap-1",
+  "gap-2",
+  "gap-3",
+  "gap-4",
+  "gap-6",
+  "gap-8",
+  "gap-x-4",
+  "grid",
+  "grid-cols-[160px_80px_80px_1fr]",
+  "items-baseline",
+  "last:border-0",
+  "p-4",
+  "pb-2",
+  "py-3",
+  "text-body",
+  "text-caption-m",
+  "text-caption-s",
+  "text-caption-xs",
+  "text-display-xs",
+  "text-foreground",
+  "text-muted-foreground",
+  "text-primary",
+  "text-title-l",
+  "text-title-m",
+  "text-title-s",
+  "text-title-xl",
+  "text-title-xs",
+  "w-16",
+  "w-20"
+ ],
+ "strippedClasses": []
+}

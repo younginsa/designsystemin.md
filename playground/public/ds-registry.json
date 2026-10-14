@@ -38,6 +38,21 @@
     "docs": "/?path=/docs/primitives-accordion--docs"
    }
   },
+  "add-filter-button": {
+   "name": {
+    "ko": "필터 추가 버튼",
+    "en": "AddFilterButton"
+   },
+   "section": "Form",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "components-filter-addfilterbutton",
+    "docs": "/?path=/docs/components-filter-addfilterbutton--docs"
+   }
+  },
   "alert": {
    "name": {
     "ko": "배너 · 안내 노트 (결과 피드백 · 상시 안내)",
@@ -91,7 +106,11 @@
    "stories": null,
    "file": "components/src/ui/avatar.tsx",
    "figma": [],
-   "note": null
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "primitives-avatar",
+    "docs": "/?path=/docs/primitives-avatar--docs"
+   }
   },
   "badge": {
    "name": {
@@ -113,6 +132,21 @@
    "fe": {
     "id": "primitives-badge",
     "docs": "/?path=/docs/primitives-badge--docs"
+   }
+  },
+  "badge-ext": {
+   "name": {
+    "ko": "뱃지(확장 — 오른쪽 아이콘·모노)",
+    "en": "Badge (components)"
+   },
+   "section": "Data",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "components-badge",
+    "docs": "/?path=/docs/components-badge--docs"
    }
   },
   "breadcrumb": {
@@ -337,6 +371,21 @@
     "docs": "/?path=/docs/primitives-command--docs"
    }
   },
+  "copy-icon-button": {
+   "name": {
+    "ko": "복사 아이콘 버튼",
+    "en": "CopyIconButton"
+   },
+   "section": "Actions",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "components-copyiconbutton",
+    "docs": "/?path=/docs/components-copyiconbutton--docs"
+   }
+  },
   "detail-panel": {
    "name": {
     "ko": "상세 패널",
@@ -453,6 +502,21 @@
    "note": "스토리 전용 패턴(error-console.stories.tsx 안의 로컬 ErrorConsole) — 전용 컴포넌트 파일 없음. 어휘 files 는 빈 배열(손 조합 패턴).",
    "composition": "FE 판정 2026-09-30: 공통 컴포넌트 아님 — 0면 — 우리 조합 유지. FE Storybook 요청 대상에서 제외(fe:request)."
   },
+  "error-indicator": {
+   "name": {
+    "ko": "에러 표시(재시도)",
+    "en": "ErrorIndicator"
+   },
+   "section": "Feedback",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "shared-errorindicator",
+    "docs": "/?path=/docs/shared-errorindicator--docs"
+   }
+  },
   "error-state": {
    "name": {
     "ko": "에러 상태 배너",
@@ -551,6 +615,66 @@
     "docs": "/?path=/docs/components-filter-filterbar--docs"
    }
   },
+  "filter-options": {
+   "name": {
+    "ko": "필터 옵션 목록",
+    "en": "FilterOptions"
+   },
+   "section": "Form",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "components-filter-filteroptions",
+    "docs": "/?path=/docs/components-filter-filteroptions--docs"
+   }
+  },
+  "filter-select": {
+   "name": {
+    "ko": "필터 선택",
+    "en": "FilterSelect"
+   },
+   "section": "Form",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "components-filter-filterselect",
+    "docs": "/?path=/docs/components-filter-filterselect--docs"
+   }
+  },
+  "foundation-color": {
+   "name": {
+    "ko": "디자인 토큰 · 색",
+    "en": "Design Tokens / Color"
+   },
+   "section": "Foundations",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 「Design Tokens」 페이지. 컴포넌트가 아니라 토큰 값의 원천(제품 원천은 FE Storybook — CLAUDE.md § 원천). 우리 dstk 는 이 값의 거울 + 대기 결정(fe-requests/pending-decisions.json).",
+   "fe": {
+    "id": "design-tokens-color",
+    "docs": "/?path=/docs/design-tokens-color--docs"
+   }
+  },
+  "foundation-typography": {
+   "name": {
+    "ko": "디자인 토큰 · 타이포",
+    "en": "Design Tokens / Typography"
+   },
+   "section": "Foundations",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 「Design Tokens」 페이지. 컴포넌트가 아니라 토큰 값의 원천(제품 원천은 FE Storybook — CLAUDE.md § 원천). 우리 dstk 는 이 값의 거울 + 대기 결정(fe-requests/pending-decisions.json).",
+   "fe": {
+    "id": "design-tokens-typography",
+    "docs": "/?path=/docs/design-tokens-typography--docs"
+   }
+  },
   "heatmap-grid": {
    "name": {
     "ko": "히트맵 그리드",
@@ -588,6 +712,21 @@
    ],
    "note": "조합 제작 — @ds/ui/ui/icon-select. shadcn DropdownMenu 프리셋. 타입 3종: 아이콘형(icon 지정)·텍스트형(icon 생략)·다중형(multiple — 왼쪽 Checkbox 상시, 토글해도 안 닫힘, 값은 items 순서 \", \" 병합). 단일 ✓는 오른쪽 ml-auto(2026-08-26 select-grammar 개정). h-9(36px)·아이콘 간격 8px·그림자 없음(플랫) — 손 구현 금지",
    "composition": "FE 판정 2026-09-30: 공통 컴포넌트 아님 — 셸 타임존 선택(DropdownMenu 조합) — 우리 조합 유지. FE Storybook 요청 대상에서 제외(fe:request)."
+  },
+  "info-tooltip": {
+   "name": {
+    "ko": "정보 툴팁",
+    "en": "InfoTooltip"
+   },
+   "section": "Feedback",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "components-infotooltip",
+    "docs": "/?path=/docs/components-infotooltip--docs"
+   }
   },
   "input": {
    "name": {
@@ -789,6 +928,21 @@
     "docs": "/?path=/docs/primitives-pagination--docs"
    }
   },
+  "person-cell": {
+   "name": {
+    "ko": "사람 셀(이름·이메일)",
+    "en": "PersonCell"
+   },
+   "section": "Data",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "components-personcell",
+    "docs": "/?path=/docs/components-personcell--docs"
+   }
+  },
   "popover": {
    "name": {
     "ko": "팝오버",
@@ -809,6 +963,36 @@
    "fe": {
     "id": "primitives-popover",
     "docs": "/?path=/docs/primitives-popover--docs"
+   }
+  },
+  "product-badge": {
+   "name": {
+    "ko": "제품 뱃지(Navigation·Control·SVM)",
+    "en": "ProductBadge"
+   },
+   "section": "Data",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "components-productbadge",
+    "docs": "/?path=/docs/components-productbadge--docs"
+   }
+  },
+  "product-filter-header": {
+   "name": {
+    "ko": "제품 필터 헤더",
+    "en": "ProductFilterHeader"
+   },
+   "section": "Data",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "components-productfilterheader",
+    "docs": "/?path=/docs/components-productfilterheader--docs"
    }
   },
   "progress": {
@@ -888,6 +1072,21 @@
    "figma": [],
    "note": null
   },
+  "scroll-table": {
+   "name": {
+    "ko": "스크롤 표",
+    "en": "ScrollTable"
+   },
+   "section": "Data",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "components-scrolltable",
+    "docs": "/?path=/docs/components-scrolltable--docs"
+   }
+  },
   "search-box": {
    "name": {
     "ko": "검색 제안",
@@ -950,6 +1149,21 @@
     "docs": "/?path=/docs/primitives-select--docs"
    }
   },
+  "select-field": {
+   "name": {
+    "ko": "선택 필드(폼)",
+    "en": "SelectField"
+   },
+   "section": "Form",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "components-form-selectfield",
+    "docs": "/?path=/docs/components-form-selectfield--docs"
+   }
+  },
   "separator": {
    "name": {
     "ko": "Separator",
@@ -959,7 +1173,11 @@
    "stories": null,
    "file": "components/src/ui/separator.tsx",
    "figma": [],
-   "note": null
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "primitives-separator",
+    "docs": "/?path=/docs/primitives-separator--docs"
+   }
   },
   "sheet": {
    "name": {
@@ -1218,6 +1436,21 @@
     "docs": "/?path=/docs/components-datatable--docs"
    }
   },
+  "table-fetching-overlay": {
+   "name": {
+    "ko": "표 불러오는 중 오버레이",
+    "en": "TableFetchingOverlay"
+   },
+   "section": "Feedback",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "components-tablefetchingoverlay",
+    "docs": "/?path=/docs/components-tablefetchingoverlay--docs"
+   }
+  },
   "tabs": {
    "name": {
     "ko": "탭 3종",
@@ -1335,6 +1568,21 @@
    "fe": {
     "id": "primitives-tooltip",
     "docs": "/?path=/docs/primitives-tooltip--docs"
+   }
+  },
+  "underline-tabs": {
+   "name": {
+    "ko": "밑줄 탭",
+    "en": "UnderlineTabs"
+   },
+   "section": "Navigation",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "FE 원천(2026-10-14 미러 G) — FE Storybook 에만 있던 컴포넌트. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "components-underlinetabs",
+    "docs": "/?path=/docs/components-underlinetabs--docs"
    }
   },
   "version-filter-chip": {

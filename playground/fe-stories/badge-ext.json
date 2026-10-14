@@ -1,0 +1,189 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "badge-ext",
+ "fe": {
+  "id": "components-badge",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-badge--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "ChyVgiXc",
+ "synced": "2026-10-14",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-badge--default",
+   "file": "badge-ext/default.html",
+   "portal": false,
+   "initialArgs": {
+    "children": "Badge",
+    "variant": "default"
+   }
+  },
+  {
+   "name": "AllVariants",
+   "id": "components-badge--all-variants",
+   "file": "badge-ext/all-variants.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "WithRightIcon",
+   "id": "components-badge--with-right-icon",
+   "file": "badge-ext/with-right-icon.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "Mono",
+   "id": "components-badge--mono",
+   "file": "badge-ext/mono.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "children": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  },
+  "variant": {
+   "type": "other",
+   "required": false,
+   "control": "select",
+   "options": [
+    "default",
+    "secondary",
+    "destructive",
+    "outline",
+    "ghost",
+    "link"
+   ],
+   "default": "\"default\""
+  },
+  "mono": {
+   "type": "boolean",
+   "required": false,
+   "control": "boolean"
+  },
+  "rightIcon": {
+   "type": "other",
+   "required": false,
+   "control": "object"
+  }
+ },
+ "states": [
+  {
+   "story": "Default",
+   "args": {
+    "variant": "default"
+   },
+   "file": "badge-ext/states/default--variant-default.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "secondary"
+   },
+   "file": "badge-ext/states/default--variant-secondary.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "destructive"
+   },
+   "file": "badge-ext/states/default--variant-destructive.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "outline"
+   },
+   "file": "badge-ext/states/default--variant-outline.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "ghost"
+   },
+   "file": "badge-ext/states/default--variant-ghost.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "variant": "link"
+   },
+   "file": "badge-ext/states/default--variant-link.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "mono": true
+   },
+   "file": "badge-ext/states/default--mono-true.html",
+   "portal": false
+  }
+ ],
+ "opened": [],
+ "classes": [
+  "[&>svg]:pointer-events-none",
+  "[&>svg]:size-3",
+  "[a&]:hover:bg-accent",
+  "[a&]:hover:bg-destructive/90",
+  "[a&]:hover:bg-primary/90",
+  "[a&]:hover:bg-secondary/90",
+  "[a&]:hover:text-accent-foreground",
+  "aria-invalid:border-destructive",
+  "aria-invalid:ring-destructive/20",
+  "bg-destructive",
+  "bg-primary",
+  "bg-secondary",
+  "bg-transparent",
+  "border",
+  "border-transparent",
+  "dark:aria-invalid:ring-destructive/40",
+  "dark:bg-destructive/60",
+  "dark:focus-visible:ring-destructive/40",
+  "flex",
+  "flex-wrap",
+  "focus-visible:border-ring",
+  "focus-visible:ring-[3px]",
+  "focus-visible:ring-destructive/20",
+  "focus-visible:ring-ring/50",
+  "font-medium",
+  "font-mono",
+  "gap-1",
+  "gap-2",
+  "hover:bg-accent",
+  "hover:text-accent-foreground",
+  "hover:underline",
+  "inline-flex",
+  "items-center",
+  "justify-center",
+  "lucide",
+  "lucide-x",
+  "overflow-hidden",
+  "px-2",
+  "py-0.5",
+  "rounded-md",
+  "shrink-0",
+  "size-3",
+  "text-caption-m",
+  "text-foreground",
+  "text-primary",
+  "text-primary-foreground",
+  "text-secondary-foreground",
+  "text-white",
+  "transition-[color,box-shadow]",
+  "underline-offset-4",
+  "w-fit",
+  "whitespace-nowrap"
+ ],
+ "strippedClasses": []
+}

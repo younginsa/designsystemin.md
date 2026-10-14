@@ -1,0 +1,145 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "scroll-table",
+ "fe": {
+  "id": "components-scrolltable",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-scrolltable--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "ChyVgiXc",
+ "synced": "2026-10-14",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-scrolltable--default",
+   "file": "scroll-table/default.html",
+   "portal": false,
+   "initialArgs": {
+    "columns": [
+     {
+      "accessorKey": "id",
+      "header": "ID"
+     },
+     {
+      "accessorKey": "name",
+      "header": "Name"
+     },
+     {
+      "accessorKey": "value",
+      "header": "Value"
+     }
+    ],
+    "data": [
+     {
+      "id": 1,
+      "name": "Alpha",
+      "value": "foo"
+     },
+     {
+      "id": 2,
+      "name": "Beta",
+      "value": "bar"
+     }
+    ]
+   }
+  },
+  {
+   "name": "Empty",
+   "id": "components-scrolltable--empty",
+   "file": "scroll-table/empty.html",
+   "portal": false,
+   "initialArgs": {
+    "columns": [
+     {
+      "accessorKey": "id",
+      "header": "ID"
+     },
+     {
+      "accessorKey": "name",
+      "header": "Name"
+     },
+     {
+      "accessorKey": "value",
+      "header": "Value"
+     }
+    ],
+    "data": []
+   }
+  }
+ ],
+ "argTypes": {
+  "columns": {
+   "type": "array",
+   "required": false,
+   "control": "object"
+  },
+  "data": {
+   "type": "array",
+   "required": false,
+   "control": "object"
+  }
+ },
+ "states": [],
+ "opened": [],
+ "classes": [
+  "[&:has([role=checkbox])]:pr-0",
+  "[&>[role=checkbox]]:translate-y-[2px]",
+  "[&_svg]:pointer-events-none",
+  "[&_svg]:shrink-0",
+  "[&_tr:last-child]:border-0",
+  "[&_tr]:border-b",
+  "align-middle",
+  "align-top",
+  "bg-gray-50",
+  "bg-transparent",
+  "border",
+  "border-b",
+  "border-dashed",
+  "caption-bottom",
+  "data-[state=selected]:bg-muted",
+  "flex",
+  "flex-1",
+  "flex-col",
+  "font-medium",
+  "gap-2",
+  "gap-6",
+  "h-10",
+  "h-24",
+  "hover:bg-gray-50",
+  "hover:bg-muted/50",
+  "items-center",
+  "justify-center",
+  "lucide",
+  "lucide-info",
+  "max-w-sm",
+  "mb-2",
+  "md:p-12",
+  "min-w-0",
+  "overflow-auto",
+  "p-2",
+  "p-6",
+  "px-7",
+  "py-3",
+  "py-4",
+  "relative",
+  "rounded-lg",
+  "rounded-md",
+  "rounded-t-md",
+  "shrink-0",
+  "size-5",
+  "sticky",
+  "text-balance",
+  "text-center",
+  "text-gray-600",
+  "text-left",
+  "text-sm",
+  "top-0",
+  "tracking-tight",
+  "transition-colors",
+  "w-full",
+  "whitespace-nowrap",
+  "whitespace-pre",
+  "z-10"
+ ],
+ "strippedClasses": []
+}

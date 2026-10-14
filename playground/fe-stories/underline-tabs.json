@@ -1,0 +1,144 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "underline-tabs",
+ "fe": {
+  "id": "components-underlinetabs",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-underlinetabs--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "ChyVgiXc",
+ "synced": "2026-10-14",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-underlinetabs--default",
+   "file": "underline-tabs/default.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "WithoutBorder",
+   "id": "components-underlinetabs--without-border",
+   "file": "underline-tabs/without-border.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "FixedWidth",
+   "id": "components-underlinetabs--fixed-width",
+   "file": "underline-tabs/fixed-width.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "Locked",
+   "id": "components-underlinetabs--locked",
+   "file": "underline-tabs/locked.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "items": {
+   "type": "array",
+   "required": true,
+   "control": null
+  },
+  "value": {
+   "type": "string",
+   "required": true,
+   "control": null
+  },
+  "onValueChange": {
+   "type": "function",
+   "required": true,
+   "control": null
+  },
+  "className": {
+   "type": "string",
+   "required": false,
+   "control": null
+  },
+  "tabClassName": {
+   "type": "string",
+   "required": false,
+   "control": null
+  }
+ },
+ "states": [],
+ "opened": [
+  {
+   "story": "Locked",
+   "index": 0,
+   "trigger": "",
+   "file": "underline-tabs/states/locked--hover.html",
+   "mode": "hover"
+  }
+ ],
+ "classes": [
+  "-translate-x-1/2",
+  "absolute",
+  "animate-in",
+  "bg-background",
+  "bg-foreground",
+  "border-b",
+  "border-none",
+  "border-y",
+  "bottom-0",
+  "bottom-full",
+  "cursor-not-allowed",
+  "cursor-pointer",
+  "data-[side=bottom]:slide-in-from-top-2",
+  "data-[side=left]:slide-in-from-right-2",
+  "data-[side=right]:slide-in-from-left-2",
+  "data-[side=top]:slide-in-from-bottom-2",
+  "data-[state=closed]:animate-out",
+  "data-[state=closed]:fade-out-0",
+  "data-[state=closed]:zoom-out-95",
+  "drop-shadow-[0_6px_10px_rgba(15,23,42,0.08)]",
+  "fade-in-0",
+  "fill-background",
+  "flex",
+  "font-semibold",
+  "gap-1",
+  "h-[2px]",
+  "items-center",
+  "justify-center",
+  "left-0",
+  "left-1/2",
+  "mb-0",
+  "mb-3",
+  "opacity-40",
+  "origin-(--radix-tooltip-content-transform-origin)",
+  "pb-2",
+  "pt-2",
+  "px-3",
+  "px-5",
+  "py-2",
+  "relative",
+  "rotate-180",
+  "rounded-xl",
+  "shadow-[0_10px_30px_rgba(15,23,42,0.14)]",
+  "shrink-0",
+  "size-3",
+  "size-3.5",
+  "sr-only",
+  "text-balance",
+  "text-base",
+  "text-foreground",
+  "text-muted-foreground",
+  "text-secondary-foreground",
+  "text-sm",
+  "text-xs",
+  "transition-colors",
+  "translate-y-[calc(-50%_-_1px)]",
+  "uppercase",
+  "w-[150px]",
+  "w-fit",
+  "w-full",
+  "z-10",
+  "z-50",
+  "zoom-in-95"
+ ],
+ "strippedClasses": []
+}

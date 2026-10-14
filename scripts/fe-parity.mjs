@@ -19,7 +19,8 @@ const registry = JSON.parse(readFileSync(join(ROOT, "playground/public/ds-regist
 const argv = process.argv.slice(2);
 const DEBUG = argv.includes("--debug");
 const only = argv.filter((a) => !a.startsWith("--"));
-const keys = Object.keys(registry.components).filter((k) => registry.components[k].fe && existsSync(join(FE_DIR, k + ".json")) && (!only.length || only.includes(k))).sort();
+// Foundations(FE Design Tokens 페이지)는 렌더 대조 대상이 아니다 — 견본이 FE 전용 변수(--general-*)로 칠해져 우리 ds.css 위에선 비고, 값 비교는 별도(2026-10-14)
+const keys = Object.keys(registry.components).filter((k) => registry.components[k].fe && registry.components[k].section !== "Foundations" && existsSync(join(FE_DIR, k + ".json")) && (!only.length || only.includes(k))).sort();
 const PROPS = ["backgroundColor", "color", "borderColor", "borderWidth", "borderRadius", "height", "paddingLeft", "paddingTop", "fontSize", "lineHeight", "fontWeight", "boxShadow", "opacity", "gap"];
 
 function chromePath() {
@@ -82,7 +83,7 @@ for (const key of keys) {
         if (b.contains("sb-show-errordisplay")) return true;
         if (!b.contains("sb-show-main")) return false;
         const r = document.getElementById("storybook-root");
-        if (r && r.childElementCount > 0) return true;
+        if (r && (r.childElementCount > 0 || (r.textContent || "").trim())) return true; // 글자만 렌더하는 스토리(ProductFilterHeader Default)
         return [...document.body.children].some((el) => !/^storybook-/.test(el.id) && !/(^|\s)sb-/.test(el.className || "") && !/^(SCRIPT|STYLE|LINK|NOSCRIPT|SPAN)$/.test(el.tagName));
       }, null, { timeout: 20000 });
       await fe.waitForTimeout(250);

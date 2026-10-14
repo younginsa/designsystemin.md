@@ -1,0 +1,238 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "info-tooltip",
+ "fe": {
+  "id": "components-infotooltip",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-infotooltip--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "ChyVgiXc",
+ "synced": "2026-10-14",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-infotooltip--default",
+   "file": "info-tooltip/default.html",
+   "portal": false,
+   "initialArgs": {
+    "content": "툴팁 내용입니다."
+   }
+  },
+  {
+   "name": "WithTitle",
+   "id": "components-infotooltip--with-title",
+   "file": "info-tooltip/with-title.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "LongContent",
+   "id": "components-infotooltip--long-content",
+   "file": "info-tooltip/long-content.html",
+   "portal": false,
+   "initialArgs": {
+    "content": "납품 제품은 호선 배정 시 자동 생성되며, 이 화면에서는 납품·커미셔닝 예정일과 도면을 관리합니다. 직접 만들거나 지울 수 없습니다."
+   }
+  },
+  {
+   "name": "Sides",
+   "id": "components-infotooltip--sides",
+   "file": "info-tooltip/sides.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "content": {
+   "type": "other",
+   "required": true,
+   "control": "object"
+  },
+  "side": {
+   "type": "enum",
+   "required": false,
+   "control": "radio",
+   "options": [
+    "top",
+    "bottom",
+    "left",
+    "right"
+   ]
+  },
+  "align": {
+   "type": "enum",
+   "required": false,
+   "control": "radio",
+   "options": [
+    "start",
+    "center",
+    "end"
+   ]
+  },
+  "className": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  },
+  "iconClassName": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  }
+ },
+ "states": [
+  {
+   "story": "Default",
+   "args": {
+    "side": "top"
+   },
+   "file": "info-tooltip/states/default--side-top.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "side": "bottom"
+   },
+   "file": "info-tooltip/states/default--side-bottom.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "side": "left"
+   },
+   "file": "info-tooltip/states/default--side-left.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "side": "right"
+   },
+   "file": "info-tooltip/states/default--side-right.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "align": "start"
+   },
+   "file": "info-tooltip/states/default--align-start.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "align": "center"
+   },
+   "file": "info-tooltip/states/default--align-center.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "align": "end"
+   },
+   "file": "info-tooltip/states/default--align-end.html",
+   "portal": false
+  }
+ ],
+ "opened": [
+  {
+   "story": "Default",
+   "index": 0,
+   "trigger": "",
+   "file": "info-tooltip/states/default--hover.html",
+   "mode": "hover"
+  },
+  {
+   "story": "WithTitle",
+   "index": 0,
+   "trigger": "",
+   "file": "info-tooltip/states/with-title--hover.html",
+   "mode": "hover"
+  },
+  {
+   "story": "LongContent",
+   "index": 0,
+   "trigger": "",
+   "file": "info-tooltip/states/long-content--hover.html",
+   "mode": "hover"
+  },
+  {
+   "story": "Sides",
+   "index": 0,
+   "trigger": "",
+   "file": "info-tooltip/states/sides--hover.html",
+   "mode": "hover"
+  },
+  {
+   "story": "Sides",
+   "index": 1,
+   "trigger": "",
+   "file": "info-tooltip/states/sides--hover-1.html",
+   "mode": "hover"
+  },
+  {
+   "story": "Sides",
+   "index": 2,
+   "trigger": "",
+   "file": "info-tooltip/states/sides--hover-2.html",
+   "mode": "hover"
+  }
+ ],
+ "classes": [
+  "-rotate-90",
+  "-translate-x-1/2",
+  "-translate-y-1/2",
+  "absolute",
+  "animate-in",
+  "bg-background",
+  "bottom-full",
+  "cursor-default",
+  "data-[side=bottom]:slide-in-from-top-2",
+  "data-[side=left]:slide-in-from-right-2",
+  "data-[side=right]:slide-in-from-left-2",
+  "data-[side=top]:slide-in-from-bottom-2",
+  "data-[state=closed]:animate-out",
+  "data-[state=closed]:fade-out-0",
+  "data-[state=closed]:zoom-out-95",
+  "drop-shadow-[0_6px_10px_rgba(15,23,42,0.08)]",
+  "fade-in-0",
+  "fill-background",
+  "flex",
+  "font-medium",
+  "gap-1.5",
+  "gap-6",
+  "items-center",
+  "left-1/2",
+  "left-full",
+  "lucide",
+  "lucide-info",
+  "max-w-72",
+  "origin-(--radix-tooltip-content-transform-origin)",
+  "p-10",
+  "px-3",
+  "py-2",
+  "relative",
+  "rotate-180",
+  "rounded-xl",
+  "shadow-[0_10px_30px_rgba(15,23,42,0.14)]",
+  "shrink-0",
+  "size-3",
+  "size-3.5",
+  "sr-only",
+  "text-balance",
+  "text-caption-m",
+  "text-foreground",
+  "text-secondary-foreground",
+  "top-1/2",
+  "top-full",
+  "translate-y-[calc(-50%_-_1px)]",
+  "w-fit",
+  "z-50",
+  "zoom-in-95"
+ ],
+ "strippedClasses": []
+}

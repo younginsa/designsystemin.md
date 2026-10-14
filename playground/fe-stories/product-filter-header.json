@@ -1,0 +1,170 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "product-filter-header",
+ "fe": {
+  "id": "components-productfilterheader",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-productfilterheader--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "ChyVgiXc",
+ "synced": "2026-10-14",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-productfilterheader--default",
+   "file": "product-filter-header/default.html",
+   "portal": false,
+   "initialArgs": {
+    "value": null
+   }
+  },
+  {
+   "name": "WithFilter",
+   "id": "components-productfilterheader--with-filter",
+   "file": "product-filter-header/with-filter.html",
+   "portal": false,
+   "initialArgs": {
+    "value": "navigation"
+   }
+  },
+  {
+   "name": "Interactive",
+   "id": "components-productfilterheader--interactive",
+   "file": "product-filter-header/interactive.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "value": {
+   "type": "union",
+   "required": false,
+   "control": "object"
+  },
+  "onChange": {
+   "type": "function",
+   "required": false,
+   "control": null
+  }
+ },
+ "states": [],
+ "opened": [
+  {
+   "story": "WithFilter",
+   "index": 0,
+   "trigger": "Product1",
+   "file": "product-filter-header/states/with-filter--open.html"
+  },
+  {
+   "story": "Interactive",
+   "index": 0,
+   "trigger": "Product",
+   "file": "product-filter-header/states/interactive--open.html"
+  }
+ ],
+ "classes": [
+  "-mx-1",
+  "-translate-x-1/2",
+  "-translate-y-1/2",
+  "[&>svg]:pointer-events-none",
+  "[&>svg]:size-3",
+  "[&_svg]:pointer-events-none",
+  "[&_svg]:shrink-0",
+  "[&_svg]:size-4",
+  "[a&]:hover:bg-accent",
+  "[a&]:hover:text-accent-foreground",
+  "absolute",
+  "aria-invalid:border-destructive",
+  "aria-invalid:ring-destructive/20",
+  "aspect-square",
+  "bg-border",
+  "bg-popover",
+  "bg-primary",
+  "border",
+  "border-foreground/50",
+  "cursor-pointer",
+  "dark:aria-invalid:ring-destructive/40",
+  "dark:bg-input/30",
+  "dark:hover:bg-accent/50",
+  "data-[inset]:pl-8",
+  "data-[side=bottom]:slide-in-from-top-2",
+  "data-[side=left]:slide-in-from-right-2",
+  "data-[side=right]:slide-in-from-left-2",
+  "data-[side=top]:slide-in-from-bottom-2",
+  "data-[state=closed]:animate-out",
+  "data-[state=closed]:fade-out-0",
+  "data-[state=closed]:zoom-out-95",
+  "data-[state=open]:animate-in",
+  "data-[state=open]:fade-in-0",
+  "data-[state=open]:zoom-in-95",
+  "disabled:cursor-not-allowed",
+  "disabled:opacity-50",
+  "disabled:pointer-events-none",
+  "fill-primary",
+  "flex",
+  "focus-visible:border-ring",
+  "focus-visible:outline-none",
+  "focus-visible:ring-1",
+  "focus-visible:ring-[3px]",
+  "focus-visible:ring-ring",
+  "focus-visible:ring-ring/50",
+  "font-medium",
+  "gap-1",
+  "gap-1.5",
+  "gap-2.5",
+  "grid",
+  "h-4",
+  "h-px",
+  "has-[>svg]:px-2.5",
+  "hover:bg-accent",
+  "hover:text-accent-foreground",
+  "inline-flex",
+  "items-center",
+  "justify-center",
+  "left-1/2",
+  "lucide",
+  "lucide-circle",
+  "max-h-(--radix-dropdown-menu-content-available-height)",
+  "min-w-[8rem]",
+  "my-1",
+  "origin-(--radix-dropdown-menu-content-transform-origin)",
+  "outline-none",
+  "overflow-hidden",
+  "overflow-x-hidden",
+  "overflow-y-auto",
+  "p-1",
+  "px-0",
+  "px-2",
+  "py-0.5",
+  "py-1.5",
+  "relative",
+  "rounded-full",
+  "rounded-md",
+  "shadow-md",
+  "shadow-xs",
+  "shrink-0",
+  "size-2",
+  "size-4",
+  "text-[10px]",
+  "text-caption-m",
+  "text-foreground",
+  "text-muted-foreground",
+  "text-popover-foreground",
+  "text-primary",
+  "text-title-xs",
+  "text-white",
+  "text-xs",
+  "top-1/2",
+  "transition-[color,box-shadow]",
+  "transition-colors",
+  "uppercase",
+  "w-4",
+  "w-44",
+  "w-fit",
+  "whitespace-nowrap",
+  "z-50"
+ ],
+ "strippedClasses": [
+  "text-medium"
+ ]
+}

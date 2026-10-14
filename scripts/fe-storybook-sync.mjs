@@ -144,7 +144,8 @@ async function render(id, args) {
     if (b.contains("sb-show-errordisplay")) return true;
     if (!b.contains("sb-show-main")) return false;
     const r = document.getElementById("storybook-root");
-    if (r && r.childElementCount > 0) return true;
+    // 글자만 렌더하는 스토리도 있다(ProductFilterHeader Default = "Product" 텍스트 노드 하나, 2026-10-14 — 요소만 보면 20초 초과)
+    if (r && (r.childElementCount > 0 || (r.textContent || "").trim())) return true;
     return [...document.body.children].some((el) => !/^storybook-/.test(el.id) && !/(^|\s)sb-/.test(el.className || "") && !/^(SCRIPT|STYLE|LINK|NOSCRIPT|SPAN)$/.test(el.tagName));
   }, null, { timeout: 20000 });
   await page.waitForTimeout(250); // play 함수·포털 마운트 여유

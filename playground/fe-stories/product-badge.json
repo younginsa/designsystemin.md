@@ -1,0 +1,289 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "product-badge",
+ "fe": {
+  "id": "components-productbadge",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-productbadge--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "ChyVgiXc",
+ "synced": "2026-10-14",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-productbadge--default",
+   "file": "product-badge/default.html",
+   "portal": false,
+   "initialArgs": {
+    "product": "navigation",
+    "showTooltip": true,
+    "commonVersion": "v1.0.0",
+    "prodVersion": "v1.2.3"
+   }
+  },
+  {
+   "name": "Navigation",
+   "id": "components-productbadge--navigation",
+   "file": "product-badge/navigation.html",
+   "portal": false,
+   "initialArgs": {
+    "product": "navigation",
+    "commonVersion": "v1.0.0",
+    "prodVersion": "v2.0.1"
+   }
+  },
+  {
+   "name": "Control",
+   "id": "components-productbadge--control",
+   "file": "product-badge/control.html",
+   "portal": false,
+   "initialArgs": {
+    "product": "control",
+    "commonVersion": "v1.0.0",
+    "prodVersion": "v3.4.2"
+   }
+  },
+  {
+   "name": "Svm",
+   "id": "components-productbadge--svm",
+   "file": "product-badge/svm.html",
+   "portal": false,
+   "initialArgs": {
+    "product": "svm",
+    "commonVersion": "v1.0.0",
+    "prodVersion": "v5.1.0"
+   }
+  },
+  {
+   "name": "WithoutTooltip",
+   "id": "components-productbadge--without-tooltip",
+   "file": "product-badge/without-tooltip.html",
+   "portal": false,
+   "initialArgs": {
+    "product": "navigation",
+    "showTooltip": false
+   }
+  },
+  {
+   "name": "AllProducts",
+   "id": "components-productbadge--all-products",
+   "file": "product-badge/all-products.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "WithLongVersions",
+   "id": "components-productbadge--with-long-versions",
+   "file": "product-badge/with-long-versions.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "product": {
+   "type": "string",
+   "required": true,
+   "control": "select",
+   "options": [
+    "navigation",
+    "control",
+    "svm"
+   ]
+  },
+  "showTooltip": {
+   "type": "boolean",
+   "required": false,
+   "control": "boolean",
+   "default": "true"
+  },
+  "commonVersion": {
+   "type": "union",
+   "required": false,
+   "control": "text"
+  },
+  "prodVersion": {
+   "type": "union",
+   "required": false,
+   "control": "text"
+  },
+  "className": {
+   "type": "string",
+   "required": false,
+   "control": "text"
+  }
+ },
+ "states": [
+  {
+   "story": "Default",
+   "args": {
+    "product": "navigation"
+   },
+   "file": "product-badge/states/default--product-navigation.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "product": "control"
+   },
+   "file": "product-badge/states/default--product-control.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "product": "svm"
+   },
+   "file": "product-badge/states/default--product-svm.html",
+   "portal": false
+  },
+  {
+   "story": "Default",
+   "args": {
+    "showTooltip": true
+   },
+   "file": "product-badge/states/default--showTooltip-true.html",
+   "portal": false
+  }
+ ],
+ "opened": [
+  {
+   "story": "Default",
+   "index": 0,
+   "trigger": "",
+   "file": "product-badge/states/default--hover.html",
+   "mode": "hover"
+  },
+  {
+   "story": "Navigation",
+   "index": 0,
+   "trigger": "",
+   "file": "product-badge/states/navigation--hover.html",
+   "mode": "hover"
+  },
+  {
+   "story": "Control",
+   "index": 0,
+   "trigger": "",
+   "file": "product-badge/states/control--hover.html",
+   "mode": "hover"
+  },
+  {
+   "story": "Svm",
+   "index": 0,
+   "trigger": "",
+   "file": "product-badge/states/svm--hover.html",
+   "mode": "hover"
+  },
+  {
+   "story": "AllProducts",
+   "index": 0,
+   "trigger": "",
+   "file": "product-badge/states/all-products--hover.html",
+   "mode": "hover"
+  },
+  {
+   "story": "AllProducts",
+   "index": 1,
+   "trigger": "",
+   "file": "product-badge/states/all-products--hover-1.html",
+   "mode": "hover"
+  },
+  {
+   "story": "AllProducts",
+   "index": 2,
+   "trigger": "",
+   "file": "product-badge/states/all-products--hover-2.html",
+   "mode": "hover"
+  },
+  {
+   "story": "WithLongVersions",
+   "index": 0,
+   "trigger": "",
+   "file": "product-badge/states/with-long-versions--hover.html",
+   "mode": "hover"
+  },
+  {
+   "story": "WithLongVersions",
+   "index": 1,
+   "trigger": "",
+   "file": "product-badge/states/with-long-versions--hover-1.html",
+   "mode": "hover"
+  },
+  {
+   "story": "WithLongVersions",
+   "index": 2,
+   "trigger": "",
+   "file": "product-badge/states/with-long-versions--hover-2.html",
+   "mode": "hover"
+  }
+ ],
+ "classes": [
+  "-translate-x-1/2",
+  "[&>svg]:pointer-events-none",
+  "[&>svg]:size-3",
+  "[a&]:hover:bg-accent",
+  "[a&]:hover:text-accent-foreground",
+  "absolute",
+  "animate-in",
+  "aria-invalid:border-destructive",
+  "aria-invalid:ring-destructive/20",
+  "bg-background",
+  "border",
+  "bottom-full",
+  "cursor-pointer",
+  "dark:aria-invalid:ring-destructive/40",
+  "data-[side=bottom]:slide-in-from-top-2",
+  "data-[side=left]:slide-in-from-right-2",
+  "data-[side=right]:slide-in-from-left-2",
+  "data-[side=top]:slide-in-from-bottom-2",
+  "data-[state=closed]:animate-out",
+  "data-[state=closed]:fade-out-0",
+  "data-[state=closed]:zoom-out-95",
+  "drop-shadow-[0_6px_10px_rgba(15,23,42,0.08)]",
+  "fade-in-0",
+  "fill-background",
+  "flex",
+  "flex-col",
+  "focus-visible:border-ring",
+  "focus-visible:ring-[3px]",
+  "focus-visible:ring-ring/50",
+  "font-medium",
+  "gap-1",
+  "gap-2",
+  "h-3",
+  "inline-flex",
+  "items-center",
+  "justify-center",
+  "left-1/2",
+  "lucide",
+  "lucide-info",
+  "origin-(--radix-tooltip-content-transform-origin)",
+  "overflow-hidden",
+  "px-2",
+  "px-3",
+  "py-0.5",
+  "py-2",
+  "relative",
+  "rotate-180",
+  "rounded-md",
+  "rounded-xl",
+  "shadow-[0_10px_30px_rgba(15,23,42,0.14)]",
+  "shrink-0",
+  "size-3",
+  "sr-only",
+  "text-balance",
+  "text-caption-m",
+  "text-caption-s",
+  "text-foreground",
+  "text-xs",
+  "transition-[color,box-shadow]",
+  "translate-y-[calc(-50%_-_1px)]",
+  "w-3",
+  "w-fit",
+  "whitespace-nowrap",
+  "z-50",
+  "zoom-in-95"
+ ],
+ "strippedClasses": []
+}

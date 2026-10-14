@@ -1,0 +1,58 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "person-cell",
+ "fe": {
+  "id": "components-personcell",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-personcell--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "ChyVgiXc",
+ "synced": "2026-10-14",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-personcell--default",
+   "file": "person-cell/default.html",
+   "portal": false,
+   "initialArgs": {
+    "name": "홍길동"
+   }
+  },
+  {
+   "name": "ShortName",
+   "id": "components-personcell--short-name",
+   "file": "person-cell/short-name.html",
+   "portal": false,
+   "initialArgs": {
+    "name": "김철수"
+   }
+  }
+ ],
+ "argTypes": {
+  "name": {
+   "type": "string",
+   "required": true,
+   "control": "text"
+  }
+ },
+ "states": [],
+ "opened": [],
+ "classes": [
+  "bg-muted",
+  "flex",
+  "font-medium",
+  "gap-2",
+  "h-full",
+  "items-center",
+  "justify-center",
+  "overflow-hidden",
+  "relative",
+  "rounded-full",
+  "shrink-0",
+  "size-6",
+  "text-caption-m",
+  "text-title-xs",
+  "w-full"
+ ],
+ "strippedClasses": []
+}

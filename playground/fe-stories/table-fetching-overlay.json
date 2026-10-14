@@ -1,0 +1,73 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "table-fetching-overlay",
+ "fe": {
+  "id": "components-tablefetchingoverlay",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-tablefetchingoverlay--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "ChyVgiXc",
+ "synced": "2026-10-14",
+ "stories": [
+  {
+   "name": "Default",
+   "id": "components-tablefetchingoverlay--default",
+   "file": "table-fetching-overlay/default.html",
+   "portal": false,
+   "initialArgs": {
+    "show": true
+   }
+  },
+  {
+   "name": "Hidden",
+   "id": "components-tablefetchingoverlay--hidden",
+   "file": "table-fetching-overlay/hidden.html",
+   "portal": false,
+   "initialArgs": {
+    "show": false
+   }
+  }
+ ],
+ "argTypes": {
+  "show": {
+   "type": "boolean",
+   "required": true,
+   "control": "boolean"
+  }
+ },
+ "states": [
+  {
+   "story": "Default",
+   "args": {
+    "show": true
+   },
+   "file": "table-fetching-overlay/states/default--show-true.html",
+   "portal": false
+  }
+ ],
+ "opened": [],
+ "classes": [
+  "absolute",
+  "animate-spin",
+  "bg-background/50",
+  "bg-muted/20",
+  "border",
+  "flex",
+  "h-48",
+  "h-8",
+  "inset-0",
+  "items-center",
+  "justify-center",
+  "lucide",
+  "lucide-loader-circle",
+  "p-4",
+  "relative",
+  "rounded",
+  "text-muted-foreground",
+  "text-sm",
+  "w-8",
+  "w-full",
+  "z-10"
+ ],
+ "strippedClasses": []
+}

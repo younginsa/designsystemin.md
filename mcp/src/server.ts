@@ -153,7 +153,8 @@ export function createServer() {
       if (!used.has(k)) used.set(k, []);
       used.get(k)!.push(s);
     }
-    for (const k of used.keys()) if (!reg.components[k].stories) v.push({ rule: "no-story-component", detail: `${k} — 스토리 없는 부품을 화면에 직접 썼다(DS 아님). DS 컴포넌트로 바꾸거나 data-ds="fallback" 마커로 감싼다` });
+    // FE 원천 항목(fe)은 우리 스토리 파일이 없어도 DS 다 — FE Storybook 이 원천(2026-10-14 미러 G)
+    for (const k of used.keys()) if (!reg.components[k].stories && !reg.components[k].fe) v.push({ rule: "no-story-component", detail: `${k} — 스토리 없는 부품을 화면에 직접 썼다(DS 아님). DS 컴포넌트로 바꾸거나 data-ds="fallback" 마커로 감싼다` });
     const filledInputs = [...html.matchAll(/<input\b[^>]*\bvalue="([^"]+)"/g)].length;
     const conditional = [...used.keys()].map((k) => {
       const cond: any[] = idx?.components?.[k]?.conditional ?? [];

@@ -2,7 +2,7 @@
  "$note": "FE 스토리북 동기화 요약(pnpm fe:sync). feBuild = 마지막으로 가져온 FE 빌드 도장 — --if-changed 가 이것과 대조한다. missing = FE 목차에 스토리가 없어 이전 스냅샷을 그대로 둔 키 — ds-registry.json 의 fe.id 를 FE index.json 과 대조해 고칠 것(스토리 개명)",
  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com",
  "feBuild": "ChyVgiXc",
- "synced": "2026-10-12",
+ "synced": "2026-10-14",
  "missing": [],
  "components": [
   {
@@ -12,6 +12,17 @@
    "opened": 6,
    "classes": 39,
    "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "add-filter-button",
+   "stories": 1,
+   "states": 0,
+   "opened": 1,
+   "classes": 90,
+   "stripped": [
+    "text-medium"
+   ],
    "errors": 0
   },
   {
@@ -35,11 +46,29 @@
    "errors": 0
   },
   {
+   "key": "avatar",
+   "stories": 3,
+   "states": 0,
+   "opened": 0,
+   "classes": 23,
+   "stripped": [],
+   "errors": 0
+  },
+  {
    "key": "badge",
    "stories": 2,
    "states": 4,
    "opened": 0,
    "classes": 42,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "badge-ext",
+   "stories": 4,
+   "states": 7,
+   "opened": 0,
+   "classes": 52,
    "stripped": [],
    "errors": 0
   },
@@ -140,6 +169,15 @@
    "errors": 0
   },
   {
+   "key": "copy-icon-button",
+   "stories": 2,
+   "states": 0,
+   "opened": 0,
+   "classes": 20,
+   "stripped": [],
+   "errors": 0
+  },
+  {
    "key": "dialog",
    "stories": 4,
    "states": 5,
@@ -171,6 +209,15 @@
    "errors": 0
   },
   {
+   "key": "error-indicator",
+   "stories": 2,
+   "states": 0,
+   "opened": 0,
+   "classes": 61,
+   "stripped": [],
+   "errors": 0
+  },
+  {
    "key": "field",
    "stories": 2,
    "states": 0,
@@ -190,6 +237,55 @@
     "rtl:**:[.rdp-button\\_next>svg]:rotate-180",
     "rtl:**:[.rdp-button\\_previous>svg]:rotate-180"
    ],
+   "errors": 0
+  },
+  {
+   "key": "filter-options",
+   "stories": 2,
+   "states": 0,
+   "opened": 0,
+   "classes": 45,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "filter-select",
+   "stories": 6,
+   "states": 0,
+   "opened": 6,
+   "classes": 212,
+   "stripped": [
+    "text-medium",
+    "rtl:**:[.rdp-button\\_next>svg]:rotate-180",
+    "rtl:**:[.rdp-button\\_previous>svg]:rotate-180"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "foundation-color",
+   "stories": 2,
+   "states": 0,
+   "opened": 0,
+   "classes": 22,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "foundation-typography",
+   "stories": 3,
+   "states": 0,
+   "opened": 0,
+   "classes": 40,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "info-tooltip",
+   "stories": 4,
+   "states": 7,
+   "opened": 6,
+   "classes": 50,
+   "stripped": [],
    "errors": 0
   },
   {
@@ -256,11 +352,40 @@
    "errors": 0
   },
   {
+   "key": "person-cell",
+   "stories": 2,
+   "states": 0,
+   "opened": 0,
+   "classes": 15,
+   "stripped": [],
+   "errors": 0
+  },
+  {
    "key": "popover",
    "stories": 2,
    "states": 0,
    "opened": 2,
    "classes": 78,
+   "stripped": [
+    "text-medium"
+   ],
+   "errors": 0
+  },
+  {
+   "key": "product-badge",
+   "stories": 7,
+   "states": 4,
+   "opened": 10,
+   "classes": 65,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "product-filter-header",
+   "stories": 3,
+   "states": 0,
+   "opened": 2,
+   "classes": 100,
    "stripped": [
     "text-medium"
    ],
@@ -294,6 +419,15 @@
    "errors": 0
   },
   {
+   "key": "scroll-table",
+   "stories": 2,
+   "states": 0,
+   "opened": 0,
+   "classes": 58,
+   "stripped": [],
+   "errors": 0
+  },
+  {
    "key": "search-box",
    "stories": 6,
    "states": 2,
@@ -310,6 +444,24 @@
    "states": 0,
    "opened": 3,
    "classes": 96,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "select-field",
+   "stories": 8,
+   "states": 4,
+   "opened": 6,
+   "classes": 94,
+   "stripped": [],
+   "errors": 0
+  },
+  {
+   "key": "separator",
+   "stories": 2,
+   "states": 0,
+   "opened": 0,
+   "classes": 14,
    "stripped": [],
    "errors": 0
   },
@@ -403,6 +555,15 @@
    "errors": 0
   },
   {
+   "key": "table-fetching-overlay",
+   "stories": 2,
+   "states": 1,
+   "opened": 0,
+   "classes": 21,
+   "stripped": [],
+   "errors": 0
+  },
+  {
    "key": "tabs",
    "stories": 2,
    "states": 0,
@@ -429,6 +590,15 @@
    "stripped": [
     "text-medium"
    ],
+   "errors": 0
+  },
+  {
+   "key": "underline-tabs",
+   "stories": 4,
+   "states": 0,
+   "opened": 1,
+   "classes": 63,
+   "stripped": [],
    "errors": 0
   }
  ]

@@ -83,6 +83,24 @@
     "note": "같은 원인 — StatusBadge 점(dot) 배경색."
   },
   {
+    "tag": "div",
+    "prop": "paddingLeft",
+    "story": "error-indicator/",
+    "note": "측정 틀 차이(2026-10-14) — FE 스토리가 Storybook padded 레이아웃이라 첫 상자(#storybook-root)에 Storybook 자체 16px 여백이 붙는다. 컴포넌트 스타일 차이 아님."
+  },
+  {
+    "tag": "div",
+    "prop": "paddingTop",
+    "story": "error-indicator/",
+    "note": "같은 이유(padded 레이아웃 여백)."
+  },
+  {
+    "tag": "div",
+    "prop": "height",
+    "story": "error-indicator/",
+    "note": "같은 이유 — 높이 차 32px = 위아래 여백 16px × 2."
+  },
+  {
     "tag": "p",
     "prop": "height",
     "story": "page-header/VerticalAlign",
