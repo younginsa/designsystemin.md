@@ -19,7 +19,8 @@
       "appliedIn": [
         "dstk/semantic.json caution",
         "갤러리·프로토타입(bg-caution)",
-        "HeatmapGrid caution 톤"
+        "HeatmapGrid caution 톤",
+        "피그마 라이브러리 Theme General/caution(2026-10-14, yellow-600 Day/Dusk 별칭 — 게시는 디자이너)"
       ],
       "storybookTarget": "components/StatusBadge (All Tones · With Dot · Without Background) + Design Tokens/Color › Semantic Tokens",
       "chromaticComment": {

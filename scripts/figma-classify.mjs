@@ -83,9 +83,11 @@ for (const [n, v] of Object.entries(fg.vars)) {
 // 글꼴 — 장부 fontFeature 항목(ss02): 피그마 Inter 스타일이 디자이너 값을 가져야 한다
 const ff = ledger.find((i) => i.check.kind === "fontFeature");
 const st = fg.interStyles;
-if (ff && st) {
-  if (st.noSs02.length) rows.push({ name: "Inter 글자 스타일 SS02", mode: "all", verdict: "ledger-off", todo: true, figma: `${st.ss02}/${st.sampled}`, fe: fe.fontFeatureSettings, target: "SS02", why: `장부 항목(${ff.id}) — SS02 없는 스타일 ${st.noSs02.length}: ${st.noSs02.join(", ")} (스타일마다 쓰는 레이어 1개 표본)` });
-  else rows.push({ name: "Inter 글자 스타일 SS02", mode: "all", verdict: "ok-ledger" });
+if (ff && st?.ss02) for (const [g, G] of Object.entries(st.ss02)) {
+  const name = `SS02 · ${g}`;
+  if (!G.missing) { rows.push({ name, mode: "all", verdict: "ok-ledger" }); continue; }
+  rows.push({ name, mode: "all", verdict: "ledger-off", todo: true, manual: true, figma: `${G.layers - G.missing}/${G.layers} 레이어`, fe: fe.fontFeatureSettings, target: "SS02",
+    why: `장부 항목(${ff.id}) — SS02 없는 레이어 ${G.missing}. 플러그인 API 로 못 켬 → 피그마에서 직접. 많은 곳: ${Object.entries(G.where).map(([k, n]) => `${k} ${n}`).join(" · ")}` });
 }
 
 const LABEL = { "ledger-missing": "피그마에 없음(장부 — 질문)", "ledger-off": "장부 값 아님(디자이너 값으로)", "figma-behind": "피그마 뒤처짐(FE 값으로)", "figma-missing": "피그마에 없음(참고)", "fe-missing": "FE 에 없음(그대로)", ok: "맞음", "ok-ledger": "맞음(장부 값 유지)" };

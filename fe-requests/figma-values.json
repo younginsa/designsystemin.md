@@ -65,12 +65,12 @@
   },
   "General/muted-foreground": {
    "id": "VariableID:107:1263",
-   "light": "#000000/0.2",
-   "lightAlias": "Basic Foreground/Black/20",
-   "dark": "#FFFFFF/0.2",
-   "darkAlias": "Basic Foreground/White/20",
-   "control": "#FFFFFF/0.2",
-   "controlAlias": "Basic Foreground/White/20"
+   "light": "#5D6275",
+   "lightAlias": "Day mode/Gray/600",
+   "dark": "#D0D2D9",
+   "darkAlias": "Dusk mode/Gray/800",
+   "control": "#D0D2D9",
+   "controlAlias": "Dusk mode/Gray/800"
   },
   "General/accent": {
    "id": "VariableID:1491:77905",
@@ -101,12 +101,12 @@
   },
   "General/input": {
    "id": "VariableID:161:1579",
-   "light": "#858998",
-   "lightAlias": "Day mode/Gray/500",
-   "dark": "#858998",
-   "darkAlias": "Dusk mode/Gray/600",
-   "control": "#858998",
-   "controlAlias": "Dusk mode/Gray/600"
+   "light": "#ECEDF0",
+   "lightAlias": "Day mode/Gray/100",
+   "dark": "#FFFFFF/0.08",
+   "darkAlias": "Basic Foreground/White/8",
+   "control": "#FFFFFF/0.08",
+   "controlAlias": "Basic Foreground/White/8"
   },
   "General/ring": {
    "id": "VariableID:117:1444",
@@ -239,42 +239,57 @@
    "light": "#24A148/0.12",
    "dark": "#24A148/0.12",
    "control": "#24A148/0.12"
+  },
+  "General/caution": {
+   "id": "VariableID:3171:83814",
+   "light": "#E8A600",
+   "lightAlias": "Day mode/SemanticYellow/600",
+   "dark": "#F0C000",
+   "darkAlias": "Dusk mode/SemanticYellow/600",
+   "control": "#F0C000",
+   "controlAlias": "Dusk mode/SemanticYellow/600"
   }
  },
  "interStyles": {
-  "total": 60,
-  "sampled": 60,
-  "ss02": 31,
-  "noSs02": [
-   "Desktop/caption_xs/Bold(2/5)",
-   "Desktop/caption_s/Bold(2/3)",
-   "Desktop/Title_XS/Bold(2/5)",
-   "Desktop/Title_S/Bold(4/5)",
-   "Desktop/Title_M/Bold(1/5)",
-   "Desktop/Title_L/Bold(2/5)",
-   "Desktop/Title_XL/Medium(2/3)",
-   "Desktop/Title_XL/Bold(1/5)",
-   "Desktop/Display_XS/Bold(2/3)",
-   "2m Distance/body/Regular(0/2)",
-   "2m Distance/body/Medium(0/5)",
-   "2m Distance/body/Semi bold(0/2)",
-   "2m Distance/body/Bold(0/5)",
-   "2m Distance/Title/Regular(0/2)",
-   "2m Distance/Title/Medium(0/2)",
-   "2m Distance/Title/Semi bold(0/2)",
-   "2m Distance/Title/Bold(0/3)",
-   "2m Distance/Display_S/Regular(0/2)",
-   "2m Distance/Display_S/Medium(0/2)",
-   "2m Distance/Display_S/Semi bold(0/2)",
-   "2m Distance/Display_S/Bold(0/2)",
-   "2m Distance/Display_L/Regular(0/2)",
-   "2m Distance/Display_L/Medium(0/2)",
-   "2m Distance/Display_L/Semi bold(0/2)",
-   "2m Distance/Display_L/Bold(0/2)",
-   "3m Distance/Regular(0/2)",
-   "3m Distance/Medium(0/2)",
-   "3m Distance/Semi bold(0/2)",
-   "3m Distance/Bold(0/5)"
-  ]
+  "styles": 60,
+  "ss02": {
+   "Desktop": {
+    "layers": 10079,
+    "missing": 2038,
+    "where": {
+     "Neuboat (mobile) › Setting": 563,
+     "Neuboat (mobile) › Keyscreens": 399,
+     "Neuboat (mobile) › Dashboard": 345,
+     "Neuboat (mobile) › Sign up&in": 282,
+     "Neuboat (mobile) › Main flow": 187,
+     "Neuboat (mobile) › Overlay": 88,
+     "Neuboat (mobile) › CCTV": 54,
+     "Neuboat (mobile) › SSO": 25
+    }
+   },
+   "2m Distance": {
+    "layers": 117,
+    "missing": 117,
+    "where": {
+     "Neuboat (mobile) › Sign up&in": 36,
+     "Typography › Dark": 16,
+     "Typography › Light": 16,
+     "CTA › Button": 10,
+     "CTA › dark": 10,
+     "Neuboat (mobile) › Keyscreens": 10,
+     "Neuboat (mobile) › Main flow": 8,
+     "Neuboat (mobile) › SSO": 5
+    }
+   },
+   "3m Distance": {
+    "layers": 12,
+    "missing": 12,
+    "where": {
+     "Typography › Dark": 4,
+     "Typography › Light": 4,
+     "Typography › Frame 1": 4
+    }
+   }
+  }
  }
 }

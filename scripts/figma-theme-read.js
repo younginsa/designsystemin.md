@@ -15,13 +15,18 @@ for (const id of col.variableIds) {
   for (const m of col.modes) { const raw = v.valuesByMode[m.modeId]; row[MODE(m.name)] = await resolve(raw, m.modeId); if (raw && raw.type === "VARIABLE_ALIAS") row[MODE(m.name) + "Alias"] = (await figma.variables.getVariableByIdAsync(raw.id)).name; }
   vars[v.name] = row;
 }
-// Inter 글자 스타일의 SS02 — 스타일 자체엔 OpenType 정보가 없어 쓰는 레이어 최대 5개를 표본으로 읽는다(전부 SS02 여야 통과, 아니면 "이름(있음/표본)")
+// Inter 글자 스타일의 SS02 — 스타일엔 OpenType 정보가 없어(플러그인 API 는 읽기만 가능) 스타일을 쓰는 레이어를 전수로 센다.
+// 그룹 = 스타일 이름 첫 마디(Desktop · 2m Distance · 3m Distance). 빠진 곳은 페이지 › 최상위 프레임 상위 8개(사람이 피그마에서 직접 켠다)
 const styles = (await figma.getLocalTextStylesAsync()).filter((s) => s.fontName.family === "Inter");
-let sampled = 0, ss02 = 0; const noSs02 = [];
+const ss = {};
 for (const s of styles) {
-  const uses = (await s.getStyleConsumersAsync()).filter((c) => c.node.type === "TEXT" && c.node.characters.length).slice(0, 5);
-  if (!uses.length) continue; sampled++;
-  const has = uses.filter((u) => { const f = u.node.getRangeOpenTypeFeatures(0, 1); return f && f !== figma.mixed && f.SS02; }).length;
-  if (has === uses.length) ss02++; else noSs02.push(`${s.name}(${has}/${uses.length})`);
+  const g = s.name.split("/")[0]; const G = (ss[g] = ss[g] || { layers: 0, missing: 0, where: {} });
+  for (const c of await s.getStyleConsumersAsync()) {
+    const n = c.node; if (n.type !== "TEXT" || !n.characters.length) continue; G.layers++;
+    const f = n.getRangeOpenTypeFeatures(0, 1); if (f && f !== figma.mixed && f.SS02) continue; G.missing++;
+    let top = n; while (top.parent && top.parent.type !== "PAGE") top = top.parent;
+    const k = (top.parent ? top.parent.name.replace(/^[^A-Za-z0-9가-힣_]+/, "") : "?") + " › " + top.name; G.where[k] = (G.where[k] || 0) + 1;
+  }
+  G.where = Object.fromEntries(Object.entries(G.where).sort((x, y) => y[1] - x[1]).slice(0, 8));
 }
-return { $note: "피그마 라이브러리 Theme 해석값(scripts/figma-theme-read.js 출력, 편집 금지) — figma:classify 가 FE 값·대기 장부와 대조한다", read: new Date().toISOString().slice(0, 10), file: figma.fileKey, collection: col.name.trim(), modes: col.modes.map((m) => MODE(m.name)), vars, interStyles: { total: styles.length, sampled, ss02, noSs02 } };
+return { $note: "피그마 라이브러리 Theme 해석값(scripts/figma-theme-read.js 출력, 편집 금지) — figma:classify 가 FE 값·대기 장부와 대조한다", read: new Date().toISOString().slice(0, 10), file: figma.fileKey, collection: col.name.trim(), modes: col.modes.map((m) => MODE(m.name)), vars, interStyles: { styles: styles.length, ss02: ss } };
