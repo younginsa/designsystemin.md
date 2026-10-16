@@ -63,7 +63,14 @@ if (rep) {
   const wait = [...new Set((rep.items || []).filter((i) => i.verdict === "local-ahead").map((i) => i.ledger || i.name))];
   say(todo.length
     ? `⚠ 대조 할 일 ${todo.length} (빌드 ${rep.feBuild}): ${todo.map((i) => `${i.name}${i.mode && i.mode !== "all" ? "[" + i.mode + "]" : ""} ${i.verdict}`).join(", ")} — fe-requests/sync-report.md`
-    : `대조 ✓ 할 일 없음 (빌드 ${rep.feBuild})${wait.length ? ` · FE 반영 대기 ${wait.length}: ${wait.join(", ")}` : ""}`);
+    : `값 대조(색 22×3모드 · 글꼴만) 할 일 없음 (빌드 ${rep.feBuild})${wait.length ? ` · FE 반영 대기 ${wait.length}: ${wait.join(", ")}` : ""}`);
+}
+// ④-1 커버리지(안전장치, 2026-10-16) — Storybook 자체 목차 기준으로 검사마다 몇 개를 실제로 봤는가. ✓ 는 그 검사가 전부 봤을 때만
+const cov = read("playground/fe-stories/coverage.json");
+if (cov) {
+  const c = Object.fromEntries((cov.checks || []).map((k) => [k.id, k]));
+  const n = (id, label) => { const k = c[id]; if (!k) return null; const app = k.pass + k.fail + k["not-checked"]; return `${label} ${k.pass}/${app}${!k.fail && !k["not-checked"] ? " ✓" : ""}`; };
+  say(`범위 — 목차 컴포넌트 ${cov.counts.components} · 스토리 ${cov.counts.stories} | ${[n("snapshot", "스냅샷"), n("renderLight", "렌더(라이트)"), n("renderDark", "렌더(다크)"), n("states", "상태"), n("ours", "우리 사본"), n("figma", "피그마 컴포넌트")].filter(Boolean).join(" · ")} | 토큰 값 ${cov.tokens.checked}/${cov.tokens.total}${cov.gate && !cov.gate.ok ? " | ⚠ 게시 관문 막힘" : ""}`);
 }
 
 // ⑤ 피그마 주간 대조 요약(fe-requests/figma-plan.json — figma:classify 가 씀, H3 2026-10-14). 관리자 세션에서만 — 클론은 피그마를 다루지 않는다
@@ -71,7 +78,7 @@ const fplan = ADMIN ? read("fe-requests/figma-plan.json") : null;
 if (fplan) {
   const age = Math.floor((Date.now() - new Date(fplan.read).getTime()) / 864e5);
   const fsay = (t) => console.log(`[피그마] ${t}`);
-  fsay(`${fplan.todo ? `⚠ 할 일 ${fplan.todo}` : "할 일 없음 ✓"} · 마지막 대조 ${fplan.read}(${age}일 전, FE 빌드 ${fplan.feBuild}${snap.feBuild && fplan.feBuild !== snap.feBuild ? ` — 지금 FE 는 ${snap.feBuild}, 다시 대조 필요` : ""})${fplan.todo ? " — fe-requests/figma-report.md" : ""}`);
+  fsay(`Theme 색·SS02만 봄(글자 스타일·컴포넌트는 안 봄) — ${fplan.todo ? `⚠ 할 일 ${fplan.todo}` : "할 일 없음"} · 마지막 대조 ${fplan.read}(${age}일 전, FE 빌드 ${fplan.feBuild}${snap.feBuild && fplan.feBuild !== snap.feBuild ? ` — 지금 FE 는 ${snap.feBuild}, 다시 대조 필요` : ""})${fplan.todo ? " — fe-requests/figma-report.md" : ""}`);
 }
 
 // ⑥ 로컬 프로토타입(H4, 2026-10-14) — localhost:3000 이 켜져 있을 때만 scripts/proto-check.mjs 를 돌려 그 출력을 그대로 싣는다(꺼져 있으면 조용히 생략)

@@ -1,0 +1,37 @@
+# 자가 검사(안전장치, 2026-10-16) — 매주 월요일. 각 검사에 알고 있는 차이를 심어 실제로 잡는지 확인한다(pnpm fe:selftest).
+# 못 잡는 검사가 있으면 빨간 X → GitHub 메일. 저장소는 바꾸지 않는다(커밋 없음).
+name: FE checks self-test
+
+on:
+  schedule:
+    - cron: "17 0 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Chromium
+        run: pnpm exec playwright-core install --with-deps chromium
+      - name: ds.css + 자가 검사
+        run: |
+          node playground/scripts/mcp-artifacts.mjs
+          node playground/scripts/build-ds-css.mjs
+          (cd playground/public && python3 -m http.server 3000 --bind 127.0.0.1 > /tmp/http.log 2>&1 &)
+          sleep 2
+          DS_BASE=http://127.0.0.1:3000 pnpm fe:selftest | tee /tmp/selftest.txt
+          { echo "### 자가 검사"; cat /tmp/selftest.txt; } >> "$GITHUB_STEP_SUMMARY"
+          ! grep -q "못 잡음" /tmp/selftest.txt

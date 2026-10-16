@@ -35,8 +35,6 @@ if (!FE) fail("FE 스토리북 주소가 없다 — ds-registry.json $storybook.
 const argv = process.argv.slice(2);
 const IF_CHANGED = argv.includes("--if-changed");
 const only = argv.filter((a) => !a.startsWith("--"));
-const keys = Object.keys(registry.components).filter((k) => registry.components[k].fe && (!only.length || only.includes(k))).sort();
-if (!keys.length) fail("fe 가 적힌 컴포넌트가 없다" + (only.length ? ` (${only.join(", ")})` : ""));
 
 const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
 const pascal = (s) => s.replace(/\s+/g, "");
@@ -65,6 +63,40 @@ if (!idxRes.ok) fail(`${FE}/index.json ${idxRes.status} — public 설정 확인
 const feIndex = await idxRes.json();
 const entries = feIndex.entries || feIndex.stories || {};
 if (!Object.keys(entries).length) fail("목차가 비어 있다(로그인 벽?)");
+// ── 목차가 기준(안전장치, 2026-10-16) ──
+// Storybook 자체 목차(index.json)의 모든 컴포넌트를 가져온다. 레지스트리에 사람(이나 AI)이 고른 것만 가져오던 방식이 컴포넌트 9개·스토리 25개를
+// 말없이 빠뜨렸다(Features·Shared·Diagnostic·Widgets). 이제 목차에 있는데 레지스트리에 없는 컴포넌트는 여기서 자동 등록한다.
+// 빼려면 fe-requests/coverage-exclusions.json 에 이유와 함께 적는다(사용자 승인) — 그 밖에는 빠질 수 없다.
+const EXCL_PATH = join(ROOT, "fe-requests/coverage-exclusions.json");
+const excluded = new Set(existsSync(EXCL_PATH) ? (JSON.parse(readFileSync(EXCL_PATH, "utf8")).items || []).map((x) => x.id) : []);
+const tocComps = new Map(); // 스토리 id 앞부분(= 컴포넌트) → { title, n }
+for (const e of Object.values(entries)) {
+  if (e.type !== "story") continue;
+  const pre = e.id.split("--")[0];
+  const c = tocComps.get(pre) || { title: e.title, n: 0 }; c.n++; tocComps.set(pre, c);
+}
+const feIdToKey = new Map(Object.entries(registry.components).filter(([, v]) => v.fe).map(([k, v]) => [v.fe.id, k]));
+const autoAdded = [];
+for (const [pre, c] of tocComps) {
+  if (feIdToKey.has(pre) || excluded.has(pre)) continue;
+  const parts = c.title.split("/");
+  const leaf = parts[parts.length - 1];
+  let k = kebab(leaf).replace(/[^a-z0-9-]/g, "");
+  if (registry.components[k]) k = kebab(parts[0]).replace(/[^a-z0-9-]/g, "") + "-" + k;
+  registry.components[k] = {
+    name: { ko: leaf, en: leaf },
+    section: parts[0], stories: null, file: null, figma: [],
+    note: `자동 등록(${new Date().toISOString().slice(0, 10)}, fe:sync 목차 기준) — Storybook 목차에 있는데 레지스트리에 없었다. 한국어 이름·분류는 사람이 다듬는다. 스냅샷 = playground/fe-stories/<키>/`,
+    fe: { id: pre, docs: `/?path=/docs/${pre}--docs` },
+  };
+  feIdToKey.set(pre, k); autoAdded.push(`${k}(${c.title} · 스토리 ${c.n})`);
+}
+if (autoAdded.length) {
+  writeFileSync(join(ROOT, "playground/public/ds-registry.json"), JSON.stringify(registry, null, 1) + "\n");
+  console.log(`[fe:sync] 목차에 있는데 레지스트리에 없던 컴포넌트 ${autoAdded.length} 자동 등록: ${autoAdded.join(", ")}`);
+}
+const keys = Object.keys(registry.components).filter((k) => registry.components[k].fe && !excluded.has(registry.components[k].fe.id) && (!only.length || only.includes(k))).sort();
+if (!keys.length) fail("가져올 컴포넌트가 없다" + (only.length ? ` (${only.join(", ")})` : ""));
 const iframeHtml = await (await fetch(FE + "/iframe.html")).text();
 const cssRel = (iframeHtml.match(/href="([^"]+\.css)"/) || [])[1] || "";
 const feBuild = cssRel ? cssRel.replace(/.*iframe-/, "").replace(/\.css$/, "") : "unknown";

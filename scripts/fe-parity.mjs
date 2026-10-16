@@ -7,13 +7,15 @@
 // - 스토리 하나가 실패해도 멈추지 않는다(실패로 집계).
 
 import { chromium } from "playwright-core";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const FE_DIR = join(ROOT, "playground/fe-stories");
+// FE_PARITY_DIR — 자가 검사(fe:selftest)가 일부러 망가뜨린 사본으로 돌릴 때만 쓴다. 그때는 결과 파일을 쓰지 않는다
+const FE_DIR = process.env.FE_PARITY_DIR || join(ROOT, "playground/fe-stories");
+const WRITE_RESULTS = !process.env.FE_PARITY_DIR;
 const DS = (process.env.DS_BASE || "http://localhost:3000").replace(/\/$/, "");
 const registry = JSON.parse(readFileSync(join(ROOT, "playground/public/ds-registry.json"), "utf8"));
 const argv = process.argv.slice(2);
@@ -61,6 +63,8 @@ if (DEBUG) for (const p of [ours, fe]) {
   p.on("requestfailed", (r) => console.log("   [request failed]", r.url().slice(0, 120), r.failure()?.errorText));
 }
 let totalDiff = 0, totalEl = 0, stories = 0, failures = 0, totalAllowed = 0;
+// 스토리마다 결과를 남긴다(안전장치 — fe:coverage 가 "렌더 대조" 칸을 채운다): pass · fail · error. 라이트 모드·폭 1280·기본 상태만 잰다
+const results = {};
 const bad = [];
 const propCount = {};
 for (const key of keys) {
@@ -98,16 +102,24 @@ for (const key of keys) {
       }
       totalDiff += diffs.length; totalEl += n; stories++;
       if (diffs.length || mine.length !== theirs.length) bad.push(`${key}/${s.name}`);
+      results[s.id] = diffs.length || mine.length !== theirs.length ? "fail" : "pass";
       console.log(`  ${key}/${s.name}: 요소 ${n}${mine.length !== theirs.length ? `(우리 ${mine.length} · FE ${theirs.length})` : ""} · 차이 ${diffs.length}`);
       for (const d of diffs.slice(0, 8)) console.log("     " + d);
       if (diffs.length > 8) console.log(`     … 외 ${diffs.length - 8}`);
     } catch (e) {
-      failures++; bad.push(`${key}/${s.name}(실패)`);
+      failures++; bad.push(`${key}/${s.name}(실패)`); results[s.id] = "error";
       console.log(`  ${key}/${s.name}: 실패 — ${String(e?.message ?? e).slice(0, 120)}`);
     }
   }
 }
 await browser.close();
+// 부분 실행(키 지정)이면 기존 결과에 합친다
+if (WRITE_RESULTS) {
+  const RP = join(FE_DIR, "parity-results.json");
+  const prev = only.length && existsSync(RP) ? JSON.parse(readFileSync(RP, "utf8")).stories || {} : {};
+  const feBuild = existsSync(join(FE_DIR, "index.json")) ? JSON.parse(readFileSync(join(FE_DIR, "index.json"), "utf8")).feBuild : null;
+  writeFileSync(RP, JSON.stringify({ $note: "fe:parity 스토리별 결과(편집 금지) — fe:coverage 가 읽는다. 라이트 모드 · 폭 1280 · 기본 상태만", feBuild, ran: new Date().toISOString().slice(0, 10), stories: { ...prev, ...results } }, null, 1) + "\n");
+}
 const byProp = Object.entries(propCount).sort((a, b) => b[1] - a[1]).map(([p, n]) => `${p} ${n}`).join(" · ");
 console.log(`[fe:parity] 컴포넌트 ${keys.length} · 스토리 ${stories} · 요소 ${totalEl} · 차이 ${totalDiff} · 실패 ${failures}${totalAllowed ? ` · 예외 ${totalAllowed}(parity-allow.json)` : ""}${byProp ? " · 속성별 " + byProp : ""}${bad.length ? " · 불일치 " + bad.join(", ") : " · 전부 동일"}`);
 process.exit(totalDiff || failures ? 1 : 0);

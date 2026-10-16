@@ -20,7 +20,9 @@ const E = process["en"+"v"];
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const rd = (p) => JSON.parse(readFileSync(join(ROOT, p), "utf8"));
 const VALUES = "playground/fe-stories/fe-values.json";
-const fe = rd(VALUES);
+// FE_VALUES_PATH·FE_REPORT_DIR — 자가 검사(fe:selftest)가 일부러 바꾼 값 사본으로 돌릴 때만 쓴다(보고서도 임시 폴더로)
+const fe = E.FE_VALUES_PATH ? JSON.parse(readFileSync(E.FE_VALUES_PATH, "utf8")) : rd(VALUES);
+const REPORT_DIR = E.FE_REPORT_DIR || join(ROOT, "fe-requests");
 const prevRaw = spawnSync("git", ["show", `${E.FE_PREV_REF || "HEAD"}:${VALUES}`], { cwd: ROOT, encoding: "utf8" });
 const prev = prevRaw.status === 0 ? JSON.parse(prevRaw.stdout) : null;
 const ledger = rd("fe-requests/pending-decisions.json");
@@ -91,10 +93,10 @@ const summary = ORDER.filter((v) => count[v]).map((v) => `${LABEL[v]} ${count[v]
 
 const lines = [`# FE 대조 보고서`, ``, `FE 빌드 ${fe.feBuild} · ${fe.synced} 동기화 · 직전 기록 ${prev ? prev.feBuild : "없음"}`, ``, `할 일 ${todo.length}건 — ${summary}`, ``, `| 판정 | 대상 | 모드 | 우리 | FE | 직전 FE | 할 일 | 메모 |`, `|---|---|---|---|---|---|---|---|`];
 for (const o of out) lines.push(`| ${LABEL[o.verdict]} | ${o.name}${o.ledger ? ` (장부 ${o.ledger})` : ""} | ${o.mode} | ${o.ours ?? "—"} | ${o.fe ?? "—"} | ${o.prevFe ?? "—"} | ${o.todo ? "예" : ""} | ${o.why} |`);
-writeFileSync(join(ROOT, "fe-requests/sync-report.md"), lines.join("\n") + "\n");
-writeFileSync(join(ROOT, "fe-requests/sync-report.json"), JSON.stringify({ $note: "fe:classify 요약(편집 금지) — fe-status.mjs 가 읽는다", feBuild: fe.feBuild, synced: fe.synced, todo: todo.length, summary, items: out.map(({ kind, mode, name, ours, fe, prevFe, verdict, todo, ledger }) => ({ kind, mode, name, ours, fe, prevFe, verdict, todo, ledger })) }, null, 1) + "\n");
+writeFileSync(join(REPORT_DIR, "sync-report.md"), lines.join("\n") + "\n");
+writeFileSync(join(REPORT_DIR, "sync-report.json"), JSON.stringify({ $note: "fe:classify 요약(편집 금지) — fe-status.mjs 가 읽는다", feBuild: fe.feBuild, synced: fe.synced, todo: todo.length, summary, items: out.map(({ kind, mode, name, ours, fe, prevFe, verdict, todo, ledger }) => ({ kind, mode, name, ours, fe, prevFe, verdict, todo, ledger })) }, null, 1) + "\n");
 
 console.log(`[fe:classify] 빌드 ${fe.feBuild} · 할 일 ${todo.length} · ${summary}`);
 for (const o of todo) console.log(`  - ${LABEL[o.verdict]} ${o.name}[${o.mode}]: 우리 ${o.ours ?? "—"} · FE ${o.fe ?? "—"} — ${o.why}`);
-if (E.GITHUB_STEP_SUMMARY) writeFileSync(E.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n", { flag: "a" });
+if (E.GITHUB_STEP_SUMMARY && !E.FE_REPORT_DIR) writeFileSync(E.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n", { flag: "a" });
 process.exit(todo.length ? 1 : 0);

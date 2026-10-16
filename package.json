@@ -23,7 +23,9 @@
     "icons:build": "node scripts/build-icons.mjs",
     "fe:classify": "node scripts/fe-classify.mjs",
     "figma:classify": "node scripts/figma-classify.mjs",
-    "proto:check": "node scripts/proto-check.mjs"
+    "proto:check": "node scripts/proto-check.mjs",
+    "fe:coverage": "node scripts/fe-coverage.mjs",
+    "fe:selftest": "node scripts/fe-selftest.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.2",

@@ -101,7 +101,7 @@ const ffOk = got.ff.replace(/\s/g, "") === String(ffWant).replace(/\s/g, "");
 if (!ffOk) diffs.push(`font-feature-settings 프로토 ${got.ff} · 기대 ${ffWant}${ffItem ? `(장부 ${ffItem.id})` : "(FE)"}`);
 
 const where = repo ? ` · ${repo.replace(homedir(), "~")}${behind == null ? "" : behind ? ` — ${behind}커밋 뒤처짐(git pull 하면 대개 해결)` : " 최신"}` : "";
-if (!diffs.length) say(`일치 ✓ — 색 ${checked}(3모드) · 글꼴 ${got.ff} = FE + 대기 장부${missing.length ? ` · 프로토에 없는 FE 변수 ${missing.length}: ${missing.join(", ")}` : ""}${where}`);
+if (!diffs.length) say(`색·글꼴만 봄(컴포넌트는 안 봄) — 일치 · 색 ${checked}(3모드) · 글꼴 ${got.ff} = FE + 대기 장부${missing.length ? ` · 프로토에 없는 FE 변수 ${missing.length}: ${missing.join(", ")}` : ""}${where}`);
 else {
   say(`⚠ 다름 ${diffs.length} — FE + 대기 장부와 안 맞음${where}`);
   for (const d of diffs) console.log("   - " + d);
