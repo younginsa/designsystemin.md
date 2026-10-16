@@ -39,7 +39,10 @@ function chromePath() {
   return cands.find(existsSync);
 }
 // 페이지 전체를 재되 스토리북 자체 요소(#storybook-docs · #storybook-highlights-root · sb-* 껍데기 · a11y svg)와 Radix 포커스 가드 span 은 뺀다
-const measure = (props) => `(function(){var P=${JSON.stringify(props)};var out=[];document.body.querySelectorAll("*").forEach(function(el){if(el.closest("[id^=storybook-]:not(#storybook-root)"))return;if(el.closest("div[class^=sb-],span[class^=sb-]"))return;if(/^(SCRIPT|STYLE|LINK|NOSCRIPT)$/.test(el.tagName))return;if(el.hasAttribute("data-radix-focus-guard"))return;var s=getComputedStyle(el);var o={tag:el.tagName.toLowerCase()};P.forEach(function(p){o[p]=s[p]});out.push(o)});return out})()`;
+// 화면에 절대 안 보이는 요소는 비교하지 않는다(2026-10-16 사용자 결정) — 조건 둘 다: 페이지가 aria-hidden 으로 숨겼고 + 화면 바깥(위·왼쪽 밖)이거나
+// 스토리 루트 바깥(body 에 따로 붙음)이다. 스냅샷은 포털의 위치 style 을 걷어내서 우리 쪽에선 화면 밖 조건이 안 맞기 때문에 둘째 조건이 필요하다.
+// 예: 차트 라이브러리가 글자 폭을 재려고 화면 밖에 붙이는 측정용 span. 닫힌 드롭다운·툴팁은 제자리에 있거나 아예 없어서 해당하지 않는다
+const measure = (props) => `(function(){var P=${JSON.stringify(props)};var out=[];document.body.querySelectorAll("*").forEach(function(el){if(el.closest("[id^=storybook-]:not(#storybook-root)"))return;var ah=el.closest("[aria-hidden=true]");if(ah){var rc=el.getBoundingClientRect();if(rc.bottom<0||rc.right<0||!ah.closest("#storybook-root"))return;}if(el.closest("div[class^=sb-],span[class^=sb-]"))return;if(/^(SCRIPT|STYLE|LINK|NOSCRIPT)$/.test(el.tagName))return;if(el.hasAttribute("data-radix-focus-guard"))return;var s=getComputedStyle(el);var o={tag:el.tagName.toLowerCase()};P.forEach(function(p){o[p]=s[p]});out.push(o)});return out})()`;
 // 표기 차이는 차이가 아니다 — rgba(255,255,255,1) = rgb(255,255,255), 9.99998px = 10px(calc·rem 반올림), 167.969px = 168px(서브픽셀). 0.5px 단위로 비교
 const norm = (v) => String(v ?? "")
   .replace(/rgba?\(([^)]+)\)/g, (m, inner) => { const a = inner.split(/[\s,\/]+/).filter(Boolean).map(Number); if (a.length === 4 && a[3] === 1) a.pop(); return "rgb(" + a.join(",") + ")"; })
@@ -79,11 +82,6 @@ for (const key of keys) {
       // 스니펫의 자산 주소는 배포 사이트 절대 주소 — 검사 중엔 DS_BASE(로컬 dev 서버)의 사본을 쓴다
       const local = raw.split("https://designsystemin-md.vercel.app/fe-assets/").join(`${DS}/fe-assets/`);
       const [rootHtml, portalHtml = ""] = local.split("\n<!-- portal -->\n");
-      await ours.setContent(`<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="${DS}/ds.css"></head><body class="bg-background text-foreground antialiased"><div id="storybook-root">${rootHtml}</div>${portalHtml}</body></html>`, { waitUntil: "load" });
-      await ours.waitForFunction(() => document.fonts.status === "loaded", null, { timeout: 10000 }).catch(() => {});
-      await ours.evaluate(FREEZE); await ours.waitForTimeout(60);
-      if (DEBUG) console.log("   우리:", await ours.evaluate(sheetInfo));
-      const mine = await ours.evaluate(measure(PROPS));
       await fe.goto(`${meta.fe.base}/iframe.html?id=${s.id}&viewMode=story`, { waitUntil: "load" });
       await fe.waitForFunction(() => {
         const b = document.body.classList;
@@ -97,6 +95,14 @@ for (const key of keys) {
       await fe.evaluate(FREEZE); await fe.waitForTimeout(60);
       if (DEBUG) console.log("   FE:", await fe.evaluate(sheetInfo));
       const theirs = await fe.evaluate(measure(PROPS));
+      // 스토리북 레이아웃 여백을 우리 쪽에도 똑같이(2026-10-16) — FE 스토리가 padded 레이아웃이면 body·루트에 Storybook 자체 여백(16px)이 붙어
+      // 폭이 줄고 글이 줄바꿈된다(PodResourceGroupRow ReplicaGroup: FE 카드 618px · 우리 634px → 높이 20px 차이). FE 쪽 계산값을 그대로 옮긴다
+      const frame = await fe.evaluate(() => { const r = document.getElementById("storybook-root"); const p = (el) => { const c = getComputedStyle(el); return `padding:${c.paddingTop} ${c.paddingRight} ${c.paddingBottom} ${c.paddingLeft};`; }; return { body: p(document.body), root: r ? p(r) : "" }; });
+      await ours.setContent(`<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="${DS}/ds.css"></head><body class="bg-background text-foreground antialiased" style="margin:0;${frame.body}"><div id="storybook-root" style="${frame.root}">${rootHtml}</div>${portalHtml}</body></html>`, { waitUntil: "load" });
+      await ours.waitForFunction(() => document.fonts.status === "loaded", null, { timeout: 10000 }).catch(() => {});
+      await ours.evaluate(FREEZE); await ours.waitForTimeout(60);
+      if (DEBUG) console.log("   우리:", await ours.evaluate(sheetInfo));
+      const mine = await ours.evaluate(measure(PROPS));
       const n = Math.min(mine.length, theirs.length);
       const diffs = [];
       for (let i = 0; i < n; i++) for (const p of PROPS) if (norm(mine[i][p]) !== norm(theirs[i][p])) {
