@@ -6,8 +6,8 @@
   "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/components-datatable--docs",
   "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
  },
- "feBuild": "ChyVgiXc",
- "synced": "2026-10-08",
+ "feBuild": "BIbnlWFW",
+ "synced": "2026-10-16",
  "stories": [
   {
    "name": "Default",
@@ -416,14 +416,15 @@
   "sm:pr-2.5",
   "sr-only",
   "text-balance",
+  "text-body",
   "text-caption-m",
+  "text-caption-s",
   "text-center",
   "text-left",
   "text-right",
   "text-secondary-foreground",
   "text-sm",
   "text-title-xs",
-  "text-xs",
   "tracking-tight",
   "transition-colors",
   "uppercase",

@@ -1,0 +1,266 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "option-schema-renderer",
+ "fe": {
+  "id": "shared-optionschemarenderer",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/shared-optionschemarenderer--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "BIbnlWFW",
+ "synced": "2026-10-16",
+ "stories": [
+  {
+   "name": "IpCameraDisabled",
+   "id": "shared-optionschemarenderer--ip-camera-disabled",
+   "file": "option-schema-renderer/ip-camera-disabled.html",
+   "portal": false,
+   "initialArgs": {}
+  },
+  {
+   "name": "IpCameraEnabled",
+   "id": "shared-optionschemarenderer--ip-camera-enabled",
+   "file": "option-schema-renderer/ip-camera-enabled.html",
+   "portal": false,
+   "initialArgs": {}
+  }
+ ],
+ "argTypes": {
+  "control": {
+   "type": "other",
+   "required": true,
+   "control": null
+  },
+  "namePrefix": {
+   "type": "string",
+   "required": true,
+   "control": null
+  },
+  "schema": {
+   "type": "other",
+   "required": false,
+   "control": null
+  },
+  "isLoading": {
+   "type": "boolean",
+   "required": true,
+   "control": null
+  },
+  "hasVersionSelected": {
+   "type": "boolean",
+   "required": false,
+   "control": null,
+   "default": "true"
+  },
+  "highlightedPaths": {
+   "type": "other",
+   "required": false,
+   "control": null
+  }
+ },
+ "states": [
+  {
+   "story": "IpCameraDisabled",
+   "args": {
+    "isLoading": true
+   },
+   "file": "option-schema-renderer/states/ip-camera-disabled--isLoading-true.html",
+   "portal": false
+  },
+  {
+   "story": "IpCameraDisabled",
+   "args": {
+    "hasVersionSelected": true
+   },
+   "file": "option-schema-renderer/states/ip-camera-disabled--hasVersionSelected-true.html",
+   "portal": false
+  }
+ ],
+ "opened": [
+  {
+   "story": "IpCameraDisabled",
+   "index": 0,
+   "trigger": "Select EO FOV",
+   "file": "option-schema-renderer/states/ip-camera-disabled--open.html"
+  },
+  {
+   "story": "IpCameraDisabled",
+   "index": 0,
+   "trigger": "",
+   "file": "option-schema-renderer/states/ip-camera-disabled--hover.html",
+   "mode": "hover"
+  },
+  {
+   "story": "IpCameraDisabled",
+   "index": 1,
+   "trigger": "",
+   "file": "option-schema-renderer/states/ip-camera-disabled--hover-1.html",
+   "mode": "hover"
+  },
+  {
+   "story": "IpCameraDisabled",
+   "index": 2,
+   "trigger": "",
+   "file": "option-schema-renderer/states/ip-camera-disabled--hover-2.html",
+   "mode": "hover"
+  },
+  {
+   "story": "IpCameraEnabled",
+   "index": 0,
+   "trigger": "Select EO FOV",
+   "file": "option-schema-renderer/states/ip-camera-enabled--open.html"
+  },
+  {
+   "story": "IpCameraEnabled",
+   "index": 0,
+   "trigger": "",
+   "file": "option-schema-renderer/states/ip-camera-enabled--hover.html",
+   "mode": "hover"
+  },
+  {
+   "story": "IpCameraEnabled",
+   "index": 1,
+   "trigger": "",
+   "file": "option-schema-renderer/states/ip-camera-enabled--hover-1.html",
+   "mode": "hover"
+  },
+  {
+   "story": "IpCameraEnabled",
+   "index": 2,
+   "trigger": "",
+   "file": "option-schema-renderer/states/ip-camera-enabled--hover-2.html",
+   "mode": "hover"
+  }
+ ],
+ "classes": [
+  "-translate-x-1/2",
+  "absolute",
+  "animate-in",
+  "aria-invalid:border-destructive",
+  "aria-invalid:ring-destructive/20",
+  "aspect-square",
+  "bg-background",
+  "bg-popover",
+  "border",
+  "border-border",
+  "border-foreground",
+  "border-foreground/50",
+  "cursor-pointer",
+  "dark:aria-invalid:ring-destructive/40",
+  "dark:bg-input/30",
+  "dark:data-[state=checked]:bg-primary",
+  "data-[error=true]:text-destructive",
+  "data-[side=bottom]:slide-in-from-top-2",
+  "data-[side=left]:slide-in-from-right-2",
+  "data-[side=right]:slide-in-from-left-2",
+  "data-[side=top]:slide-in-from-bottom-2",
+  "data-[state=checked]:bg-primary",
+  "data-[state=checked]:border-primary",
+  "data-[state=checked]:text-primary-foreground",
+  "data-[state=closed]:animate-out",
+  "data-[state=closed]:fade-out-0",
+  "data-[state=closed]:zoom-out-95",
+  "data-[state=open]:animate-in",
+  "data-[state=open]:fade-in-0",
+  "data-[state=open]:zoom-in-95",
+  "disabled:cursor-not-allowed",
+  "disabled:opacity-50",
+  "drop-shadow-[0_6px_10px_rgba(15,23,42,0.08)]",
+  "duration-150",
+  "fade-in-0",
+  "fill-background",
+  "flex",
+  "flex-1",
+  "flex-row",
+  "focus-visible:border-ring",
+  "focus-visible:ring-[3px]",
+  "focus-visible:ring-ring/50",
+  "font-medium",
+  "font-normal",
+  "font-semibold",
+  "gap-0.5",
+  "gap-1",
+  "gap-2",
+  "gap-2.5",
+  "gap-4",
+  "gap-6",
+  "grid",
+  "grid-cols-1",
+  "h-4",
+  "hover:bg-accent",
+  "hover:text-accent-foreground",
+  "inline-flex",
+  "items-center",
+  "justify-between",
+  "justify-center",
+  "leading-none",
+  "left-1/2",
+  "lg:grid-cols-2",
+  "lucide",
+  "lucide-check",
+  "lucide-chevron-down",
+  "lucide-info",
+  "max-h-60",
+  "mb-4",
+  "motion-reduce:transition-none",
+  "mt-2",
+  "origin-(--radix-popover-content-transform-origin)",
+  "origin-(--radix-tooltip-content-transform-origin)",
+  "outline-hidden",
+  "outline-none",
+  "overflow-y-auto",
+  "p-1",
+  "p-4",
+  "pb-2",
+  "peer",
+  "peer-disabled:cursor-not-allowed",
+  "peer-disabled:opacity-70",
+  "pointer-events-auto",
+  "pt-2",
+  "px-2",
+  "px-3",
+  "py-1.5",
+  "py-2",
+  "relative",
+  "rotate-180",
+  "rounded-[4px]",
+  "rounded-full",
+  "rounded-md",
+  "rounded-sm",
+  "rounded-xl",
+  "shadow-[0_10px_30px_rgba(15,23,42,0.14)]",
+  "shadow-md",
+  "shadow-xs",
+  "shrink-0",
+  "size-3",
+  "size-3.5",
+  "size-4",
+  "space-x-2",
+  "sr-only",
+  "text-balance",
+  "text-caption-m",
+  "text-current",
+  "text-foreground",
+  "text-gray-400",
+  "text-popover-foreground",
+  "text-primary",
+  "text-secondary-foreground",
+  "text-sm",
+  "text-title-xs",
+  "text-xs",
+  "top-full",
+  "transition-[color,box-shadow]",
+  "transition-colors",
+  "transition-none",
+  "transition-opacity",
+  "transition-shadow",
+  "transition-transform",
+  "translate-y-[calc(-50%_-_1px)]",
+  "w-4",
+  "w-[var(--radix-popover-trigger-width)]",
+  "w-fit",
+  "w-full",
+  "z-50",
+  "zoom-in-95"
+ ],
+ "strippedClasses": []
+}

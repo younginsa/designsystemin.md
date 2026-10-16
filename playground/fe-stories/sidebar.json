@@ -6,8 +6,8 @@
   "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/story/layout-appshell--default",
   "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
  },
- "feBuild": "ChyVgiXc",
- "synced": "2026-10-12",
+ "feBuild": "BIbnlWFW",
+ "synced": "2026-10-16",
  "stories": [
   {
    "name": "Default",
@@ -49,7 +49,7 @@
   {
    "story": "Default",
    "index": 2,
-   "trigger": "UTC +0 · 2026-10-12 09:37",
+   "trigger": "UTC +0 · 2026-10-16 08:28",
    "file": "sidebar/states/default--open-2.html"
   },
   {
@@ -68,15 +68,22 @@
   {
    "story": "Default",
    "index": 1,
-   "trigger": "릴리즈 노트",
+   "trigger": "버전 호환성",
    "file": "sidebar/states/default--expanded-1.html",
    "mode": "expand"
   },
   {
    "story": "Default",
    "index": 2,
-   "trigger": "Developer / QA",
+   "trigger": "릴리즈 노트",
    "file": "sidebar/states/default--expanded-2.html",
+   "mode": "expand"
+  },
+  {
+   "story": "Default",
+   "index": 3,
+   "trigger": "Developer / QA",
+   "file": "sidebar/states/default--expanded-3.html",
    "mode": "expand"
   },
   {
@@ -88,32 +95,38 @@
   {
    "story": "CollapsedSidebar",
    "index": 2,
-   "trigger": "릴리즈 노트",
+   "trigger": "버전 호환성",
    "file": "sidebar/states/collapsed-sidebar--open-2.html"
   },
   {
    "story": "CollapsedSidebar",
    "index": 3,
-   "trigger": "Developer / QA",
+   "trigger": "릴리즈 노트",
    "file": "sidebar/states/collapsed-sidebar--open-3.html"
   },
   {
    "story": "CollapsedSidebar",
    "index": 4,
-   "trigger": "지윤 menu",
+   "trigger": "Developer / QA",
    "file": "sidebar/states/collapsed-sidebar--open-4.html"
   },
   {
    "story": "CollapsedSidebar",
    "index": 5,
-   "trigger": "UTC +0 · 2026-10-12 09:38",
+   "trigger": "지윤 menu",
    "file": "sidebar/states/collapsed-sidebar--open-5.html"
   },
   {
    "story": "CollapsedSidebar",
    "index": 6,
-   "trigger": "Notifications",
+   "trigger": "UTC +0 · 2026-10-16 08:29",
    "file": "sidebar/states/collapsed-sidebar--open-6.html"
+  },
+  {
+   "story": "CollapsedSidebar",
+   "index": 7,
+   "trigger": "Notifications",
+   "file": "sidebar/states/collapsed-sidebar--open-7.html"
   },
   {
    "story": "CollapsedSidebar",
@@ -151,7 +164,7 @@
   {
    "story": "CustomBrand",
    "index": 2,
-   "trigger": "UTC +0 · 2026-10-12 09:39",
+   "trigger": "UTC +0 · 2026-10-16 08:29",
    "file": "sidebar/states/custom-brand--open-2.html"
   },
   {
@@ -170,15 +183,22 @@
   {
    "story": "CustomBrand",
    "index": 1,
-   "trigger": "릴리즈 노트",
+   "trigger": "버전 호환성",
    "file": "sidebar/states/custom-brand--expanded-1.html",
    "mode": "expand"
   },
   {
    "story": "CustomBrand",
    "index": 2,
-   "trigger": "Developer / QA",
+   "trigger": "릴리즈 노트",
    "file": "sidebar/states/custom-brand--expanded-2.html",
+   "mode": "expand"
+  },
+  {
+   "story": "CustomBrand",
+   "index": 3,
+   "trigger": "Developer / QA",
+   "file": "sidebar/states/custom-brand--expanded-3.html",
    "mode": "expand"
   }
  ],
@@ -198,6 +218,7 @@
   "[&_svg]:shrink-0",
   "[&_svg]:size-4",
   "[a&]:hover:bg-accent",
+  "[a&]:hover:bg-secondary/90",
   "[a&]:hover:text-accent-foreground",
   "absolute",
   "active:bg-sidebar-accent",
@@ -215,7 +236,7 @@
   "bg-muted",
   "bg-popover",
   "bg-primary",
-  "bg-primary/10",
+  "bg-secondary",
   "bg-sidebar",
   "bg-sky-50/35",
   "bg-transparent",
@@ -233,6 +254,7 @@
   "border-sidebar-border",
   "border-sky-200/70",
   "border-t",
+  "border-transparent",
   "border-zinc-200",
   "border-zinc-200/80",
   "cursor-default",
@@ -314,6 +336,7 @@
   "group-data-[collapsible=icon]:p-0",
   "group-data-[collapsible=icon]:pt-3",
   "group-data-[collapsible=icon]:rotate-180",
+  "group-data-[collapsible=icon]:size-8",
   "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
   "group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]",
   "group-data-[collapsible=offcanvas]:w-0",
@@ -329,6 +352,7 @@
   "group/collapsible",
   "group/menu-item",
   "group/sidebar-wrapper",
+  "h-10",
   "h-14",
   "h-2",
   "h-4",
@@ -451,7 +475,6 @@
   "rounded-full",
   "rounded-lg",
   "rounded-md",
-  "rounded-none",
   "rounded-sm",
   "rounded-xl",
   "select-none",
@@ -505,7 +528,6 @@
   "top-2",
   "tracking-[-0.02em]",
   "tracking-tight",
-  "tracking-wide",
   "tracking-widest",
   "transition-[color,box-shadow]",
   "transition-[left,right,width]",
@@ -519,6 +541,7 @@
   "truncate",
   "uppercase",
   "w-(--sidebar-width)",
+  "w-10",
   "w-2",
   "w-4",
   "w-6",

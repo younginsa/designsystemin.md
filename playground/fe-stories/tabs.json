@@ -6,8 +6,8 @@
   "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/primitives-tabs--docs",
   "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
  },
- "feBuild": "ChyVgiXc",
- "synced": "2026-10-08",
+ "feBuild": "BIbnlWFW",
+ "synced": "2026-10-16",
  "stories": [
   {
    "name": "Default",
@@ -39,7 +39,7 @@
   "focus-visible:ring-offset-2",
   "focus-visible:ring-ring",
   "font-medium",
-  "h-11",
+  "h-9",
   "inline-flex",
   "items-center",
   "justify-center",

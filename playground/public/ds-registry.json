@@ -1603,6 +1603,96 @@
    ],
    "note": "조합 제작 — @ds/ui/ui/version-filter-chip. 계층 캐스케이드 필터 칩(구 필터 모달 폐기 → 칩 아래 패널): 제품 선택 → 공통버전 등장 → 제품버전 등장 순차 노출. 다중 조건 [+ 추가] — 제품 간 AND · 같은 제품 OR(구 모달 규칙 승계). 칩 = FilterChip 기본형 문법(h-9 · muted 면 · 꺾쇠 · 활성 = 파란 테두리+글자). 라벨 기본 '제품'(한국어 헤더 규칙) · 적용 요약 = 버전 포함 '제품 · navigation · 1.2.0 · 1.5.2', 2건 이상은 '첫 조건 외 N건'(2026-08-26 개정). 패널 = 드래프트 편집 → [적용] 확정 · [취소] 폐기 · [초기화] 좌하단 · 풀블리드 구분선. 내부는 채택분 조합(ov-popover·form-select·btn-basic) — 손 구현 금지",
    "composition": "FE 판정 2026-09-30: 공통 컴포넌트 아님 — Select 조합, 1면 — 우리 조합 유지. FE Storybook 요청 대상에서 제외(fe:request)."
+  },
+  "icons": {
+   "name": {
+    "ko": "Icons",
+    "en": "Icons"
+   },
+   "section": "Design Tokens",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "자동 등록(2026-10-16, fe:sync 목차 기준) — Storybook 목차에 있는데 레지스트리에 없었다. 한국어 이름·분류는 사람이 다듬는다. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "design-tokens-icons",
+    "docs": "/?path=/docs/design-tokens-icons--docs"
+   }
+  },
+  "option-schema-renderer": {
+   "name": {
+    "ko": "OptionSchemaRenderer",
+    "en": "OptionSchemaRenderer"
+   },
+   "section": "Shared",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "자동 등록(2026-10-16, fe:sync 목차 기준) — Storybook 목차에 있는데 레지스트리에 없었다. 한국어 이름·분류는 사람이 다듬는다. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "shared-optionschemarenderer",
+    "docs": "/?path=/docs/shared-optionschemarenderer--docs"
+   }
+  },
+  "diagnostic-tools-panel": {
+   "name": {
+    "ko": "DiagnosticToolsPanel",
+    "en": "DiagnosticToolsPanel"
+   },
+   "section": "Diagnostic",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "자동 등록(2026-10-16, fe:sync 목차 기준) — Storybook 목차에 있는데 레지스트리에 없었다. 한국어 이름·분류는 사람이 다듬는다. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "diagnostic-diagnostictoolspanel",
+    "docs": "/?path=/docs/diagnostic-diagnostictoolspanel--docs"
+   }
+  },
+  "pod-resource-group-row": {
+   "name": {
+    "ko": "PodResourceGroupRow",
+    "en": "PodResourceGroupRow"
+   },
+   "section": "Diagnostic",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "자동 등록(2026-10-16, fe:sync 목차 기준) — Storybook 목차에 있는데 레지스트리에 없었다. 한국어 이름·분류는 사람이 다듬는다. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "diagnostic-podresourcegrouprow",
+    "docs": "/?path=/docs/diagnostic-podresourcegrouprow--docs"
+   }
+  },
+  "ship-spec-history-modal": {
+   "name": {
+    "ko": "ShipSpecHistoryModal",
+    "en": "ShipSpecHistoryModal"
+   },
+   "section": "Widgets",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "자동 등록(2026-10-16, fe:sync 목차 기준) — Storybook 목차에 있는데 레지스트리에 없었다. 한국어 이름·분류는 사람이 다듬는다. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "widgets-shipactionbuttons-shipspechistorymodal",
+    "docs": "/?path=/docs/widgets-shipactionbuttons-shipspechistorymodal--docs"
+   }
+  },
+  "ship-option-section": {
+   "name": {
+    "ko": "ShipOptionSection",
+    "en": "ShipOptionSection"
+   },
+   "section": "Widgets",
+   "stories": null,
+   "file": null,
+   "figma": [],
+   "note": "자동 등록(2026-10-16, fe:sync 목차 기준) — Storybook 목차에 있는데 레지스트리에 없었다. 한국어 이름·분류는 사람이 다듬는다. 스냅샷 = playground/fe-stories/<키>/",
+   "fe": {
+    "id": "widgets-shipinformationoverview-shipoptionsection",
+    "docs": "/?path=/docs/widgets-shipinformationoverview-shipoptionsection--docs"
+   }
   }
  }
 }

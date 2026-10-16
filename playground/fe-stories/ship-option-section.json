@@ -1,0 +1,127 @@
+{
+ "$note": "FE 스토리북 스냅샷(scripts/fe-storybook-sync.mjs). 편집하지 않는다 — pnpm fe:sync 로 다시 만든다. states = 첫 스토리에 args 를 하나씩 바꿔 렌더한 것(/render?args= 의 대체). opened = 스토리의 첫 닫힌 트리거(trigger)를 클릭해 연 상태 — 드롭다운·팝오버·셀렉트 내용이 <!-- portal --> 뒤에 있고 ds.js 가 열고 닫는다. portal=true 는 오버레이가 <!-- portal --> 뒤에 붙어 있다. strippedClasses = FE CSS 에 규칙이 없어 뗀 이름(FE 화면에서도 효과 0).",
+ "key": "ship-option-section",
+ "fe": {
+  "id": "widgets-shipinformationoverview-shipoptionsection",
+  "docs": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com/?path=/docs/widgets-shipinformationoverview-shipoptionsection--docs",
+  "base": "https://chore-upate-list--6a9f9291eafe7a08127c154c.chromatic.com"
+ },
+ "feBuild": "BIbnlWFW",
+ "synced": "2026-10-16",
+ "stories": [
+  {
+   "name": "AllEnabled",
+   "id": "widgets-shipinformationoverview-shipoptionsection--all-enabled",
+   "file": "ship-option-section/all-enabled.html",
+   "portal": false,
+   "initialArgs": {
+    "spec": {
+     "enable_cv_collector": true
+    },
+    "detail": {
+     "cybersecurity": true,
+     "cloud_deploy": true,
+     "cloud_installed_ip": "10.0.100.10",
+     "cloud_status": "COMPLETED"
+    }
+   }
+  },
+  {
+   "name": "AllDisabled",
+   "id": "widgets-shipinformationoverview-shipoptionsection--all-disabled",
+   "file": "ship-option-section/all-disabled.html",
+   "portal": false,
+   "initialArgs": {
+    "spec": {
+     "enable_cv_collector": false
+    },
+    "detail": {
+     "cybersecurity": false,
+     "cloud_deploy": false,
+     "cloud_installed_ip": "10.0.100.10",
+     "cloud_status": "COMPLETED"
+    }
+   }
+  },
+  {
+   "name": "Empty",
+   "id": "widgets-shipinformationoverview-shipoptionsection--empty",
+   "file": "ship-option-section/empty.html",
+   "portal": false,
+   "initialArgs": {
+    "spec": null
+   }
+  }
+ ],
+ "argTypes": {
+  "spec": {
+   "type": "union",
+   "required": false,
+   "control": "object"
+  },
+  "detail": {
+   "type": "other",
+   "required": false,
+   "control": "object"
+  }
+ },
+ "states": [],
+ "opened": [],
+ "classes": [
+  "[&>svg]:pointer-events-none",
+  "[&>svg]:size-3",
+  "[a&]:hover:bg-accent",
+  "[a&]:hover:text-accent-foreground",
+  "aria-invalid:border-destructive",
+  "aria-invalid:ring-destructive/20",
+  "bg-card",
+  "bg-current",
+  "bg-transparent",
+  "border",
+  "border-none",
+  "dark:aria-invalid:ring-destructive/40",
+  "divide-y",
+  "flex",
+  "flex-col",
+  "focus-visible:border-ring",
+  "focus-visible:ring-[3px]",
+  "focus-visible:ring-ring/50",
+  "font-medium",
+  "font-semibold",
+  "gap-0.5",
+  "gap-1.5",
+  "h-2",
+  "h-full",
+  "inline-flex",
+  "items-center",
+  "justify-center",
+  "overflow-hidden",
+  "p-6",
+  "pb-1",
+  "pt-0",
+  "pt-1",
+  "px-2",
+  "py-0.5",
+  "py-1.5",
+  "rounded-full",
+  "rounded-md",
+  "shrink-0",
+  "space-y-1.5",
+  "text-card-foreground",
+  "text-foreground",
+  "text-muted-foreground",
+  "text-sm",
+  "text-success",
+  "text-title-xs",
+  "text-xs",
+  "tracking-tight",
+  "transition-[color,box-shadow]",
+  "w-2",
+  "w-fit",
+  "w-full",
+  "whitespace-nowrap"
+ ],
+ "strippedClasses": [
+  "font-secondary-foreground"
+ ]
+}

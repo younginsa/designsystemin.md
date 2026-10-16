@@ -1,0 +1,3526 @@
+{
+ "$note": "커버리지 장부(fe:coverage, 편집 금지) — Storybook 자체 목차의 모든 스토리 × 모든 검사. not-checked 는 '그 검사가 아직 없다'는 기록이지 통과가 아니다. 제외는 fe-requests/coverage-exclusions.json(사용자 승인)",
+ "tocBuild": "BIbnlWFW",
+ "snapshotBuild": "BIbnlWFW",
+ "checked": "2026-10-16T08:36:33.281Z",
+ "line": "목차 컴포넌트 70 · 스토리 226 | 스냅샷 213/213 ✓ | 렌더 대조(라이트) 208/208 ✓ | 렌더 대조(다크) 0/208 | 렌더 대조(컨트롤) 0/208 | 열림·호버·args 상태 대조 0/69 | 우리 사본(@ds/ui) 대조 0/141 | 피그마 컴포넌트 대조 0/208 | 토큰 값 22/514 (할 일 3) | 제외 4",
+ "counts": {
+  "components": 70,
+  "stories": 226
+ },
+ "checks": [
+  {
+   "id": "snapshot",
+   "label": "스냅샷",
+   "pass": 213,
+   "fail": 0,
+   "not-checked": 0,
+   "excluded": 13,
+   "n/a": 0,
+   "why": null
+  },
+  {
+   "id": "renderLight",
+   "label": "렌더 대조(라이트)",
+   "pass": 208,
+   "fail": 0,
+   "not-checked": 0,
+   "excluded": 13,
+   "n/a": 5,
+   "why": null
+  },
+  {
+   "id": "renderDark",
+   "label": "렌더 대조(다크)",
+   "pass": 0,
+   "fail": 0,
+   "not-checked": 208,
+   "excluded": 13,
+   "n/a": 5,
+   "why": "다크 모드 렌더 대조가 없다(fe:parity 는 라이트만)"
+  },
+  {
+   "id": "renderControl",
+   "label": "렌더 대조(컨트롤)",
+   "pass": 0,
+   "fail": 0,
+   "not-checked": 208,
+   "excluded": 13,
+   "n/a": 5,
+   "why": "컨트롤 모드 렌더 대조가 없다(fe:parity 는 라이트만)"
+  },
+  {
+   "id": "states",
+   "label": "열림·호버·args 상태 대조",
+   "pass": 0,
+   "fail": 0,
+   "not-checked": 69,
+   "excluded": 13,
+   "n/a": 144,
+   "why": "열린·호버·args 상태는 찍기만 하고 대조하지 않는다"
+  },
+  {
+   "id": "ours",
+   "label": "우리 사본(@ds/ui) 대조",
+   "pass": 0,
+   "fail": 0,
+   "not-checked": 141,
+   "excluded": 13,
+   "n/a": 72,
+   "why": "우리 사본(components/src/ui)을 Storybook 과 대조하는 검사가 없다 — 맥 프로토타입이 이것을 쓴다"
+  },
+  {
+   "id": "figma",
+   "label": "피그마 컴포넌트 대조",
+   "pass": 0,
+   "fail": 0,
+   "not-checked": 208,
+   "excluded": 13,
+   "n/a": 5,
+   "why": "피그마 컴포넌트 세트를 Storybook 과 대조하는 검사가 없다"
+  }
+ ],
+ "tokens": {
+  "total": 514,
+  "checked": 22,
+  "families": {
+   "font": {
+    "total": 7,
+    "checked": 0
+   },
+   "color": {
+    "total": 89,
+    "checked": 0
+   },
+   "spacing": {
+    "total": 1,
+    "checked": 0
+   },
+   "container": {
+    "total": 8,
+    "checked": 0
+   },
+   "tracking": {
+    "total": 5,
+    "checked": 0
+   },
+   "leading": {
+    "total": 4,
+    "checked": 0
+   },
+   "radius": {
+    "total": 3,
+    "checked": 0
+   },
+   "ease": {
+    "total": 2,
+    "checked": 0
+   },
+   "animate": {
+    "total": 2,
+    "checked": 0
+   },
+   "blur": {
+    "total": 2,
+    "checked": 0
+   },
+   "aspect": {
+    "total": 1,
+    "checked": 0
+   },
+   "default": {
+    "total": 4,
+    "checked": 0
+   },
+   "cell": {
+    "total": 1,
+    "checked": 0
+   },
+   "gray": {
+    "total": 13,
+    "checked": 0
+   },
+   "red": {
+    "total": 10,
+    "checked": 0
+   },
+   "orange": {
+    "total": 10,
+    "checked": 0
+   },
+   "yellow": {
+    "total": 10,
+    "checked": 0
+   },
+   "green": {
+    "total": 10,
+    "checked": 0
+   },
+   "blue": {
+    "total": 10,
+    "checked": 0
+   },
+   "magenta": {
+    "total": 10,
+    "checked": 0
+   },
+   "olive": {
+    "total": 10,
+    "checked": 0
+   },
+   "black": {
+    "total": 10,
+    "checked": 0
+   },
+   "white": {
+    "total": 10,
+    "checked": 0
+   },
+   "product": {
+    "total": 3,
+    "checked": 0
+   },
+   "day": {
+    "total": 75,
+    "checked": 0
+   },
+   "dusk": {
+    "total": 75,
+    "checked": 0
+   },
+   "night": {
+    "total": 74,
+    "checked": 0
+   },
+   "text": {
+    "total": 20,
+    "checked": 0
+   },
+   "general": {
+    "total": 22,
+    "checked": 22
+   },
+   "chart": {
+    "total": 5,
+    "checked": 0
+   },
+   "sidebar": {
+    "total": 8,
+    "checked": 0
+   }
+  }
+ },
+ "gate": {
+  "ok": true,
+  "retry": []
+ },
+ "extra": [],
+ "exclusions": [
+  {
+   "id": "features-addproduct-productconfigstep",
+   "build": "BIbnlWFW",
+   "title": "Features/AddProduct/ProductConfigStep",
+   "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외",
+   "approvedBy": "사영인(디자이너)",
+   "date": "2026-10-16"
+  },
+  {
+   "id": "features-installation-activationrefreshbutton",
+   "build": "BIbnlWFW",
+   "title": "Features/Installation/ActivationRefreshButton",
+   "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외",
+   "approvedBy": "사영인(디자이너)",
+   "date": "2026-10-16"
+  },
+  {
+   "id": "features-installation-activationstatusbadge",
+   "build": "BIbnlWFW",
+   "title": "Features/Installation/ActivationStatusBadge",
+   "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외",
+   "approvedBy": "사영인(디자이너)",
+   "date": "2026-10-16"
+  },
+  {
+   "id": "features-shipinfodetail-productinfosection",
+   "build": "BIbnlWFW",
+   "title": "Features/ShipInfoDetail/ProductInfoSection",
+   "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외",
+   "approvedBy": "사영인(디자이너)",
+   "date": "2026-10-16"
+  }
+ ],
+ "components": [
+  {
+   "pre": "components-appbreadcrumb",
+   "title": "Components/AppBreadcrumb",
+   "key": "breadcrumb",
+   "ours": true,
+   "stories": [
+    {
+     "id": "components-appbreadcrumb--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-appbreadcrumb--multi-level",
+     "name": "Multi Level",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-appbreadcrumb--single",
+     "name": "Single",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-badge",
+   "title": "components/Badge",
+   "key": "badge-ext",
+   "ours": false,
+   "stories": [
+    {
+     "id": "components-badge--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 7,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-badge--all-variants",
+     "name": "All Variants",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-badge--with-right-icon",
+     "name": "With Right Icon",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-badge--mono",
+     "name": "Mono",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-boardbox",
+   "title": "Components/BoardBox",
+   "key": "page-header",
+   "ours": true,
+   "stories": [
+    {
+     "id": "components-boardbox--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-boardbox--with-action",
+     "name": "With Action",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-boardbox--with-multiple-actions",
+     "name": "With Multiple Actions",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-boardbox--vertical-align",
+     "name": "Vertical Align",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-boardbox--no-title",
+     "name": "No Title",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-copyiconbutton",
+   "title": "Components/CopyIconButton",
+   "key": "copy-icon-button",
+   "ours": false,
+   "stories": [
+    {
+     "id": "components-copyiconbutton--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-copyiconbutton--in-context",
+     "name": "In Context",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-datatable",
+   "title": "Components/DataTable",
+   "key": "table",
+   "ours": true,
+   "stories": [
+    {
+     "id": "components-datatable--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-datatable--empty",
+     "name": "Empty",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-datatable--filtered-empty",
+     "name": "Filtered Empty",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-datatable--with-row-click",
+     "name": "With Row Click",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-datatable--with-pagination",
+     "name": "With Pagination",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-datatable--with-footer-left",
+     "name": "With Footer Left",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-datatable--with-get-row-class-name",
+     "name": "With Get Row Class Name",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-emptystate",
+   "title": "Components/EmptyState",
+   "key": "empty",
+   "ours": true,
+   "stories": [
+    {
+     "id": "components-emptystate--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 2,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-emptystate--without-action",
+     "name": "Without Action",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-emptystate--title-only",
+     "name": "Title Only",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-emptystate--all-variants",
+     "name": "All Variants",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-filter-addfilterbutton",
+   "title": "components/filter/AddFilterButton",
+   "key": "add-filter-button",
+   "ours": false,
+   "stories": [
+    {
+     "id": "components-filter-addfilterbutton--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-filter-filterbar",
+   "title": "components/filter/FilterBar",
+   "key": "filter-bar",
+   "ours": true,
+   "stories": [
+    {
+     "id": "components-filter-filterbar--empty",
+     "name": "Empty",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-filter-filterbar--with-active-filters",
+     "name": "With Active Filters",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 4,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-filter-filterbar--with-pinned-field",
+     "name": "With Pinned Field",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 2,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-filter-filterbar--all-filters-active",
+     "name": "All Filters Active",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 5,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-filter-filteroptions",
+   "title": "components/filter/FilterOptions",
+   "key": "filter-options",
+   "ours": false,
+   "stories": [
+    {
+     "id": "components-filter-filteroptions--single",
+     "name": "Single",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-filter-filteroptions--multiple",
+     "name": "Multiple",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-filter-filterselect",
+   "title": "components/filter/FilterSelect",
+   "key": "filter-select",
+   "ours": false,
+   "stories": [
+    {
+     "id": "components-filter-filterselect--single",
+     "name": "Single",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-filter-filterselect--multiple",
+     "name": "Multiple",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-filter-filterselect--operator",
+     "name": "Operator",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-filter-filterselect--operator-with-options",
+     "name": "Operator With Options",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-filter-filterselect--date-operator",
+     "name": "Date Operator",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-filter-filterselect--date-preset",
+     "name": "Date Preset",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-form-selectfield",
+   "title": "components/form/SelectField",
+   "key": "select-field",
+   "ours": false,
+   "stories": [
+    {
+     "id": "components-form-selectfield--single",
+     "name": "Single",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 5,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-form-selectfield--single-disabled",
+     "name": "Single (disabled)",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-form-selectfield--single-invalid",
+     "name": "Single (invalid)",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-form-selectfield--single-clearable",
+     "name": "Single (clearable)",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-form-selectfield--multiple",
+     "name": "Multiple",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-form-selectfield--multiple-disabled",
+     "name": "Multiple (disabled)",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-form-selectfield--multiple-invalid",
+     "name": "Multiple (invalid)",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-form-selectfield--with-disabled-options",
+     "name": "With disabled options",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-infotooltip",
+   "title": "Components/InfoTooltip",
+   "key": "info-tooltip",
+   "ours": false,
+   "stories": [
+    {
+     "id": "components-infotooltip--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 8,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-infotooltip--with-title",
+     "name": "With Title",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-infotooltip--long-content",
+     "name": "Long Content",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-infotooltip--sides",
+     "name": "Sides",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 3,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-loadingspinner",
+   "title": "Components/LoadingSpinner",
+   "key": "spinner",
+   "ours": true,
+   "stories": [
+    {
+     "id": "components-loadingspinner--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 2,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-loadingspinner--sizes",
+     "name": "Sizes",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-pagesizeselect",
+   "title": "Components/PageSizeSelect",
+   "key": "rows-per-page",
+   "ours": true,
+   "stories": [
+    {
+     "id": "components-pagesizeselect--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-pagesizeselect--interactive",
+     "name": "Interactive",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-personcell",
+   "title": "components/PersonCell",
+   "key": "person-cell",
+   "ours": false,
+   "stories": [
+    {
+     "id": "components-personcell--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-personcell--short-name",
+     "name": "Short Name",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-productbadge",
+   "title": "components/ProductBadge",
+   "key": "product-badge",
+   "ours": false,
+   "stories": [
+    {
+     "id": "components-productbadge--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 5,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-productbadge--navigation",
+     "name": "Navigation",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-productbadge--control",
+     "name": "Control",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-productbadge--svm",
+     "name": "Svm",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-productbadge--without-tooltip",
+     "name": "Without Tooltip",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-productbadge--all-products",
+     "name": "All Products",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 3,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-productbadge--with-long-versions",
+     "name": "With Long Versions",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 3,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-productfilterheader",
+   "title": "Components/ProductFilterHeader",
+   "key": "product-filter-header",
+   "ours": false,
+   "stories": [
+    {
+     "id": "components-productfilterheader--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-productfilterheader--with-filter",
+     "name": "With Filter",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-productfilterheader--interactive",
+     "name": "Interactive",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-scrolltable",
+   "title": "Components/ScrollTable",
+   "key": "scroll-table",
+   "ours": false,
+   "stories": [
+    {
+     "id": "components-scrolltable--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-scrolltable--empty",
+     "name": "Empty",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-searchinput",
+   "title": "Components/SearchInput",
+   "key": "search-box",
+   "ours": true,
+   "stories": [
+    {
+     "id": "components-searchinput--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 2,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-searchinput--with-suggestions",
+     "name": "With Suggestions",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-searchinput--with-history",
+     "name": "With History",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-searchinput--with-suggestion-hint",
+     "name": "With Suggestion Hint",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-searchinput--with-default-value",
+     "name": "With Default Value",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-searchinput--search-on-enter-only",
+     "name": "Search On Enter Only",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-statusbadge",
+   "title": "components/StatusBadge",
+   "key": "status-badge",
+   "ours": true,
+   "stories": [
+    {
+     "id": "components-statusbadge--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 7,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-statusbadge--all-tones",
+     "name": "All Tones",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-statusbadge--with-dot",
+     "name": "With Dot",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-statusbadge--without-background",
+     "name": "Without Background",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-statusbadge--mono",
+     "name": "Mono",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-stepper",
+   "title": "Components/Stepper",
+   "key": "stepper",
+   "ours": true,
+   "stories": [
+    {
+     "id": "components-stepper--first-step",
+     "name": "First Step",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-stepper--middle-step",
+     "name": "Middle Step",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-stepper--last-step",
+     "name": "Last Step",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-stepper--no-active-step",
+     "name": "No Active Step",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-stepper--all-states",
+     "name": "All States",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-stepper--clickable",
+     "name": "Clickable",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-tablefetchingoverlay",
+   "title": "Components/TableFetchingOverlay",
+   "key": "table-fetching-overlay",
+   "ours": false,
+   "stories": [
+    {
+     "id": "components-tablefetchingoverlay--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-tablefetchingoverlay--hidden",
+     "name": "Hidden",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "components-underlinetabs",
+   "title": "Components/UnderlineTabs",
+   "key": "underline-tabs",
+   "ours": false,
+   "stories": [
+    {
+     "id": "components-underlinetabs--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-underlinetabs--without-border",
+     "name": "Without Border",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-underlinetabs--fixed-width",
+     "name": "Fixed Width",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "components-underlinetabs--locked",
+     "name": "Locked",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "design-tokens-color",
+   "title": "Design Tokens/Color",
+   "key": "foundation-color",
+   "ours": false,
+   "stories": [
+    {
+     "id": "design-tokens-color--primitives",
+     "name": "Primitives",
+     "snapshot": "pass",
+     "renderLight": "n/a",
+     "renderDark": "n/a",
+     "renderControl": "n/a",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "n/a"
+    },
+    {
+     "id": "design-tokens-color--semantic-tokens",
+     "name": "Semantic Tokens",
+     "snapshot": "pass",
+     "renderLight": "n/a",
+     "renderDark": "n/a",
+     "renderControl": "n/a",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "n/a"
+    }
+   ]
+  },
+  {
+   "pre": "design-tokens-icons",
+   "title": "Design Tokens/Icons",
+   "key": "icons",
+   "ours": false,
+   "stories": [
+    {
+     "id": "design-tokens-icons--all",
+     "name": "All",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "design-tokens-typography",
+   "title": "Design Tokens/Typography",
+   "key": "foundation-typography",
+   "ours": false,
+   "stories": [
+    {
+     "id": "design-tokens-typography--scale",
+     "name": "Scale",
+     "snapshot": "pass",
+     "renderLight": "n/a",
+     "renderDark": "n/a",
+     "renderControl": "n/a",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "n/a"
+    },
+    {
+     "id": "design-tokens-typography--weights",
+     "name": "Weights",
+     "snapshot": "pass",
+     "renderLight": "n/a",
+     "renderDark": "n/a",
+     "renderControl": "n/a",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "n/a"
+    },
+    {
+     "id": "design-tokens-typography--all-combinations",
+     "name": "All Combinations",
+     "snapshot": "pass",
+     "renderLight": "n/a",
+     "renderDark": "n/a",
+     "renderControl": "n/a",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "n/a"
+    }
+   ]
+  },
+  {
+   "pre": "diagnostic-diagnostictoolspanel",
+   "title": "Diagnostic/DiagnosticToolsPanel",
+   "key": "diagnostic-tools-panel",
+   "ours": false,
+   "stories": [
+    {
+     "id": "diagnostic-diagnostictoolspanel--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "diagnostic-podresourcegrouprow",
+   "title": "Diagnostic/PodResourceGroupRow",
+   "key": "pod-resource-group-row",
+   "ours": false,
+   "stories": [
+    {
+     "id": "diagnostic-podresourcegrouprow--single-pod",
+     "name": "Single Pod",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 2,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "diagnostic-podresourcegrouprow--replica-group",
+     "name": "Replica Group",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "diagnostic-podresourcegrouprow--loading",
+     "name": "Loading",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "features-addproduct-productconfigstep",
+   "title": "Features/AddProduct/ProductConfigStep",
+   "key": null,
+   "ours": false,
+   "stories": [
+    {
+     "id": "features-addproduct-productconfigstep--single-product",
+     "name": "Single Product",
+     "snapshot": "excluded",
+     "renderLight": "excluded",
+     "renderDark": "excluded",
+     "renderControl": "excluded",
+     "states": "excluded",
+     "ours": "excluded",
+     "figma": "excluded",
+     "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외"
+    },
+    {
+     "id": "features-addproduct-productconfigstep--multiple-products",
+     "name": "Multiple Products",
+     "snapshot": "excluded",
+     "renderLight": "excluded",
+     "renderDark": "excluded",
+     "renderControl": "excluded",
+     "states": "excluded",
+     "ours": "excluded",
+     "figma": "excluded",
+     "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외"
+    },
+    {
+     "id": "features-addproduct-productconfigstep--per-product-quantity",
+     "name": "Per Product Quantity",
+     "snapshot": "excluded",
+     "renderLight": "excluded",
+     "renderDark": "excluded",
+     "renderControl": "excluded",
+     "states": "excluded",
+     "ours": "excluded",
+     "figma": "excluded",
+     "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외"
+    }
+   ]
+  },
+  {
+   "pre": "features-installation-activationrefreshbutton",
+   "title": "Features/Installation/ActivationRefreshButton",
+   "key": null,
+   "ours": false,
+   "stories": [
+    {
+     "id": "features-installation-activationrefreshbutton--default",
+     "name": "Default",
+     "snapshot": "excluded",
+     "renderLight": "excluded",
+     "renderDark": "excluded",
+     "renderControl": "excluded",
+     "states": "excluded",
+     "ours": "excluded",
+     "figma": "excluded",
+     "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외"
+    }
+   ]
+  },
+  {
+   "pre": "features-installation-activationstatusbadge",
+   "title": "Features/Installation/ActivationStatusBadge",
+   "key": null,
+   "ours": false,
+   "stories": [
+    {
+     "id": "features-installation-activationstatusbadge--valid",
+     "name": "Valid",
+     "snapshot": "excluded",
+     "renderLight": "excluded",
+     "renderDark": "excluded",
+     "renderControl": "excluded",
+     "states": "excluded",
+     "ours": "excluded",
+     "figma": "excluded",
+     "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외"
+    },
+    {
+     "id": "features-installation-activationstatusbadge--expiring-soon",
+     "name": "Expiring Soon",
+     "snapshot": "excluded",
+     "renderLight": "excluded",
+     "renderDark": "excluded",
+     "renderControl": "excluded",
+     "states": "excluded",
+     "ours": "excluded",
+     "figma": "excluded",
+     "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외"
+    },
+    {
+     "id": "features-installation-activationstatusbadge--expired",
+     "name": "Expired",
+     "snapshot": "excluded",
+     "renderLight": "excluded",
+     "renderDark": "excluded",
+     "renderControl": "excluded",
+     "states": "excluded",
+     "ours": "excluded",
+     "figma": "excluded",
+     "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외"
+    },
+    {
+     "id": "features-installation-activationstatusbadge--none",
+     "name": "None",
+     "snapshot": "excluded",
+     "renderLight": "excluded",
+     "renderDark": "excluded",
+     "renderControl": "excluded",
+     "states": "excluded",
+     "ours": "excluded",
+     "figma": "excluded",
+     "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외"
+    },
+    {
+     "id": "features-installation-activationstatusbadge--all-states",
+     "name": "All States",
+     "snapshot": "excluded",
+     "renderLight": "excluded",
+     "renderDark": "excluded",
+     "renderControl": "excluded",
+     "states": "excluded",
+     "ours": "excluded",
+     "figma": "excluded",
+     "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외"
+    }
+   ]
+  },
+  {
+   "pre": "features-shipinfodetail-productinfosection",
+   "title": "Features/ShipInfoDetail/ProductInfoSection",
+   "key": null,
+   "ours": false,
+   "stories": [
+    {
+     "id": "features-shipinfodetail-productinfosection--default",
+     "name": "Default",
+     "snapshot": "excluded",
+     "renderLight": "excluded",
+     "renderDark": "excluded",
+     "renderControl": "excluded",
+     "states": "excluded",
+     "ours": "excluded",
+     "figma": "excluded",
+     "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외"
+    },
+    {
+     "id": "features-shipinfodetail-productinfosection--no-client-server",
+     "name": "No Client Server",
+     "snapshot": "excluded",
+     "renderLight": "excluded",
+     "renderDark": "excluded",
+     "renderControl": "excluded",
+     "states": "excluded",
+     "ours": "excluded",
+     "figma": "excluded",
+     "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외"
+    },
+    {
+     "id": "features-shipinfodetail-productinfosection--quantity-unset",
+     "name": "Quantity Unset",
+     "snapshot": "excluded",
+     "renderLight": "excluded",
+     "renderDark": "excluded",
+     "renderControl": "excluded",
+     "states": "excluded",
+     "ours": "excluded",
+     "figma": "excluded",
+     "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외"
+    },
+    {
+     "id": "features-shipinfodetail-productinfosection--empty",
+     "name": "Empty",
+     "snapshot": "excluded",
+     "renderLight": "excluded",
+     "renderDark": "excluded",
+     "renderControl": "excluded",
+     "states": "excluded",
+     "ours": "excluded",
+     "figma": "excluded",
+     "reason": "FE 확인 — 이번 빌드(Build 8)에서 Features 섹션 제외"
+    }
+   ]
+  },
+  {
+   "pre": "layout-appshell",
+   "title": "Layout/AppShell",
+   "key": "sidebar",
+   "ours": true,
+   "stories": [
+    {
+     "id": "layout-appshell--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 8,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "layout-appshell--collapsed-sidebar",
+     "name": "Collapsed Sidebar",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 10,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "layout-appshell--custom-brand",
+     "name": "Custom Brand",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 8,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-accordion",
+   "title": "Primitives/Accordion",
+   "key": "accordion",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-accordion--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 3,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-accordion--multiple",
+     "name": "Multiple",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 2,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-accordion--icon-left",
+     "name": "Icon Left",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-alert",
+   "title": "Primitives/Alert",
+   "key": "alert",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-alert--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 2,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-alert--destructive",
+     "name": "Destructive",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-alert--title-only",
+     "name": "Title Only",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-alert--description-only",
+     "name": "Description Only",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-alert--without-icon",
+     "name": "Without Icon",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-alert--all-variants",
+     "name": "All Variants",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-alertdialog",
+   "title": "Primitives/AlertDialog",
+   "key": "alert-dialog",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-alertdialog--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-alertdialog--destructive",
+     "name": "Destructive",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-avatar",
+   "title": "Primitives/Avatar",
+   "key": "avatar",
+   "ours": false,
+   "stories": [
+    {
+     "id": "primitives-avatar--with-fallback",
+     "name": "With Fallback",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-avatar--with-image",
+     "name": "With Image",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-avatar--sizes",
+     "name": "Sizes",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-badge",
+   "title": "Primitives/Badge",
+   "key": "badge",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-badge--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 4,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-badge--all-variants",
+     "name": "All Variants",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-button",
+   "title": "Primitives/Button",
+   "key": "button",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-button--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 18,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-button--all-variants",
+     "name": "All Variants",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-button--all-sizes",
+     "name": "All Sizes",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-button--disabled",
+     "name": "Disabled",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-buttongroup",
+   "title": "primitives/ButtonGroup",
+   "key": "button-group",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-buttongroup--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-buttongroup--with-input",
+     "name": "With Input",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-buttongroup--with-text",
+     "name": "With Text",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-buttongroup--vertical",
+     "name": "Vertical",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-calendar",
+   "title": "Primitives/Calendar",
+   "key": "calendar",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-calendar--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-calendar--range",
+     "name": "Range",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-calendar--multiple",
+     "name": "Multiple",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-card",
+   "title": "Primitives/Card",
+   "key": "card",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-card--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-card--with-action",
+     "name": "With Action",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-card--with-footer",
+     "name": "With Footer",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-chart",
+   "title": "Primitives/Chart",
+   "key": "chart",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-chart--area",
+     "name": "Area",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-chart--pie",
+     "name": "Pie",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-checkbox",
+   "title": "Primitives/Checkbox",
+   "key": "checkbox",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-checkbox--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-checkbox--checked",
+     "name": "Checked",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-checkbox--disabled",
+     "name": "Disabled",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-checkbox--disabled-checked",
+     "name": "Disabled Checked",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-checkbox--with-label",
+     "name": "With Label",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-checkbox--all-states",
+     "name": "All States",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-collapsible",
+   "title": "Primitives/Collapsible",
+   "key": "collapsible",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-collapsible--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-command",
+   "title": "Primitives/Command",
+   "key": "command",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-command--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-dialog",
+   "title": "Primitives/Dialog",
+   "key": "dialog",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-dialog--small",
+     "name": "Small",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 5,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-dialog--medium",
+     "name": "Medium",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-dialog--large",
+     "name": "Large",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-dialog--extra-large",
+     "name": "Extra Large",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-dropdownmenu",
+   "title": "Primitives/DropdownMenu",
+   "key": "dropdown-menu",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-dropdownmenu--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-dropdownmenu--simple",
+     "name": "Simple",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-field",
+   "title": "Primitives/Field",
+   "key": "field",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-field--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-field--horizontal",
+     "name": "Horizontal",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-input",
+   "title": "Primitives/Input",
+   "key": "input",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-input--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-input--with-value",
+     "name": "With Value",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-input--disabled",
+     "name": "Disabled",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-input--all-states",
+     "name": "All States",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-inputgroup",
+   "title": "primitives/InputGroup",
+   "key": "input-group",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-inputgroup--with-leading-icon",
+     "name": "With Leading Icon",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-inputgroup--with-leading-text",
+     "name": "With Leading Text",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-inputgroup--with-trailing-button",
+     "name": "With Trailing Button",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-inputgroup--with-textarea",
+     "name": "With Textarea",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-item",
+   "title": "primitives/Item",
+   "key": "item",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-item--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-item--variants",
+     "name": "Variants",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-item--sizes",
+     "name": "Sizes",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-label",
+   "title": "Primitives/Label",
+   "key": "label",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-label--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-label--with-checkbox",
+     "name": "With Checkbox",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-label--disabled",
+     "name": "Disabled",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-pagination",
+   "title": "Primitives/Pagination",
+   "key": "pagination",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-pagination--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-pagination--with-ellipsis",
+     "name": "With Ellipsis",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-popover",
+   "title": "Primitives/Popover",
+   "key": "popover",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-popover--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-popover--with-form",
+     "name": "With Form",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-progress",
+   "title": "Primitives/Progress",
+   "key": "progress",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-progress--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-progress--all-values",
+     "name": "All Values",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-radiogroup",
+   "title": "Primitives/RadioGroup",
+   "key": "radio-group",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-radiogroup--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-radiogroup--disabled",
+     "name": "Disabled",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-radiogroup--horizontal",
+     "name": "Horizontal",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-select",
+   "title": "Primitives/Select",
+   "key": "select",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-select--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-select--with-groups",
+     "name": "With Groups",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-select--small-size",
+     "name": "Small Size",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-select--disabled",
+     "name": "Disabled",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-separator",
+   "title": "Primitives/Separator",
+   "key": "separator",
+   "ours": false,
+   "stories": [
+    {
+     "id": "primitives-separator--horizontal",
+     "name": "Horizontal",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-separator--vertical",
+     "name": "Vertical",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-sheet",
+   "title": "Primitives/Sheet",
+   "key": "sheet",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-sheet--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-sheet--left-side",
+     "name": "Left Side",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-skeleton",
+   "title": "Primitives/Skeleton",
+   "key": "skeleton",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-skeleton--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-skeleton--shapes",
+     "name": "Shapes",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-skeleton--card-skeleton",
+     "name": "Card Skeleton",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-switch",
+   "title": "Primitives/Switch",
+   "key": "switch",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-switch--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-switch--checked",
+     "name": "Checked",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-switch--disabled",
+     "name": "Disabled",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-switch--with-label",
+     "name": "With Label",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-switch--all-states",
+     "name": "All States",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-tabs",
+   "title": "Primitives/Tabs",
+   "key": "tabs",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-tabs--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-tabs--disabled-tab",
+     "name": "Disabled Tab",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-textarea",
+   "title": "Primitives/Textarea",
+   "key": "textarea",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-textarea--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-textarea--with-value",
+     "name": "With Value",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-textarea--disabled",
+     "name": "Disabled",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-textarea--all-states",
+     "name": "All States",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-toast",
+   "title": "Primitives/Toast",
+   "key": "sonner",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-toast--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-toast--success",
+     "name": "Success",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-toast--error",
+     "name": "Error",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-toast--with-description",
+     "name": "With Description",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "primitives-tooltip",
+   "title": "Primitives/Tooltip",
+   "key": "tooltip",
+   "ours": true,
+   "stories": [
+    {
+     "id": "primitives-tooltip--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    },
+    {
+     "id": "primitives-tooltip--positions",
+     "name": "Positions",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 3,
+     "ours": "not-checked",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "shared-errorindicator",
+   "title": "Shared/ErrorIndicator",
+   "key": "error-indicator",
+   "ours": false,
+   "stories": [
+    {
+     "id": "shared-errorindicator--default",
+     "name": "Default",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "shared-errorindicator--with-retry",
+     "name": "With Retry",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "shared-optionschemarenderer",
+   "title": "Shared/OptionSchemaRenderer",
+   "key": "option-schema-renderer",
+   "ours": false,
+   "stories": [
+    {
+     "id": "shared-optionschemarenderer--ip-camera-disabled",
+     "name": "Ip Camera Disabled",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 6,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "shared-optionschemarenderer--ip-camera-enabled",
+     "name": "Ip Camera Enabled",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 4,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "widgets-shipactionbuttons-shipspechistorymodal",
+   "title": "Widgets/ShipActionButtons/ShipSpecHistoryModal",
+   "key": "ship-spec-history-modal",
+   "ours": false,
+   "stories": [
+    {
+     "id": "widgets-shipactionbuttons-shipspechistorymodal--with-history",
+     "name": "With History",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "not-checked",
+     "stateCount": 1,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "widgets-shipactionbuttons-shipspechistorymodal--sparse-spec",
+     "name": "Sparse Spec",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "widgets-shipactionbuttons-shipspechistorymodal--empty",
+     "name": "Empty",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  },
+  {
+   "pre": "widgets-shipinformationoverview-shipoptionsection",
+   "title": "Widgets/ShipInformationOverview/ShipOptionSection",
+   "key": "ship-option-section",
+   "ours": false,
+   "stories": [
+    {
+     "id": "widgets-shipinformationoverview-shipoptionsection--all-enabled",
+     "name": "All Enabled",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "widgets-shipinformationoverview-shipoptionsection--all-disabled",
+     "name": "All Disabled",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    },
+    {
+     "id": "widgets-shipinformationoverview-shipoptionsection--empty",
+     "name": "Empty",
+     "snapshot": "pass",
+     "renderLight": "pass",
+     "renderDark": "not-checked",
+     "renderControl": "not-checked",
+     "states": "n/a",
+     "stateCount": 0,
+     "ours": "n/a",
+     "figma": "not-checked"
+    }
+   ]
+  }
+ ]
+}
