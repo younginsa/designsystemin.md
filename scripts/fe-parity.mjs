@@ -62,6 +62,9 @@ if (DEBUG) for (const p of [ours, fe]) {
   p.on("console", (m) => { if (m.type() === "error") console.log("   [console]", m.text().slice(0, 160)); });
   p.on("requestfailed", (r) => console.log("   [request failed]", r.url().slice(0, 120), r.failure()?.errorText));
 }
+// 우리 쪽 페이지를 DS 주소에서 연다(2026-10-16) — setContent 만 쓰면 페이지 주소가 about:blank(origin null)라 ds.css 의 Inter 글꼴이
+// CORS 로 막혀 대체 글꼴로 쟀다. FE 가 Build 8 부터 Inter 를 실제로 불러오면서 높이 1px 차이 37건으로 드러났다(우리 쪽 측정 틀의 버그)
+await ours.goto(DS + "/ds.css", { waitUntil: "load" });
 let totalDiff = 0, totalEl = 0, stories = 0, failures = 0, totalAllowed = 0;
 // 스토리마다 결과를 남긴다(안전장치 — fe:coverage 가 "렌더 대조" 칸을 채운다): pass · fail · error. 라이트 모드·폭 1280·기본 상태만 잰다
 const results = {};
