@@ -69,7 +69,8 @@
         "note": "Typography 스토리가 Build 7 에서 바뀌지 않아 댓글 칸이 없음 — 사용자 결정으로 DataTable Default 에 게시"
       },
       "deliveredToFe": "2026-10-13 (디자이너가 직접 — 스토리북 보강 요청 목록 5번)",
-      "status": "pending",
+      "status": "shipped",
+      "shipped": { "date": "2026-10-16", "build": "Build 8 (BIbnlWFW)", "evidence": "FE CSS :root{font-feature-settings:\"ss02\"} · 라이브 html 계산값 \"ss02\"" },
       "check": {
         "kind": "fontFeature",
         "ours": "\"ss02\"",
