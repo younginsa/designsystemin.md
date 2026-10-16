@@ -37,7 +37,10 @@ try {
 let tocBuild = null;
 try { const h = await (await fetch(BASE + "/iframe.html", { signal: AbortSignal.timeout(10000) })).text(); tocBuild = ((h.match(/href="([^"]+\.css)"/) || [])[1] || "").replace(/.*iframe-/, "").replace(/\.css$/, "") || null; } catch {}
 
-const exclusions = (opt(join(ROOT, "fe-requests/coverage-exclusions.json"))?.items || []);
+// 제외는 승인한 그 빌드에만(2026-10-16) — 지금 목차 빌드와 다른 빌드의 제외는 만료로 세고 적용하지 않는다
+const allExclusions = (opt(join(ROOT, "fe-requests/coverage-exclusions.json"))?.items || []);
+const exclusions = allExclusions.filter((x) => x.build && x.build === tocBuild);
+const expired = allExclusions.filter((x) => !(x.build && x.build === tocBuild));
 const exclOf = (id, pre) => exclusions.find((x) => x.id === id || x.id === pre);
 const preToKey = new Map(Object.entries(registry.components).filter(([, v]) => v.fe).map(([k, v]) => [v.fe.id, k]));
 const parity = opt(join(FE_DIR, "parity-results.json"))?.stories || {};
@@ -82,7 +85,8 @@ for (const c of [...comps.values()].sort((a, b) => a.title.localeCompare(b.title
     const row = { id: s.id, name: s.name };
     if (ex) { for (const k of CHECKS) row[k.id] = "excluded"; row.reason = ex.reason; rows.push(row); continue; }
     const snap = meta?.stories?.find((x) => x.id === s.id);
-    const fileOk = snap && !snap.error && existsSync(join(FE_DIR, snap.file)) && readFileSync(join(FE_DIR, snap.file), "utf8").trim().length > 0;
+    // 빈 렌더(스토리가 아무것도 안 그림 — 예: 상태 없음 배지)는 정상 결과다(2026-10-16): fe:sync 가 empty=true 로 적는다
+    const fileOk = snap && !snap.error && existsSync(join(FE_DIR, snap.file)) && (snap.empty || readFileSync(join(FE_DIR, snap.file), "utf8").trim().length > 0);
     row.snapshot = DROP === s.id ? "fail" : !c.key ? "fail" : !snap ? "fail" : fileOk ? "pass" : "fail";
     if (row.snapshot === "fail") { retry.add(c.key ?? c.pre); row.snapshotWhy = !c.key ? "레지스트리에 없음" : !snap ? "스냅샷에 이 스토리 없음" : "렌더 오류·빈 파일"; }
     row.renderLight = foundation ? "n/a" : parity[s.id] === "pass" ? "pass" : parity[s.id] ? "fail" : "not-checked";
@@ -121,7 +125,7 @@ const tally = Object.fromEntries(CHECKS.map((k) => {
 const tokTotal = vars.length, tokChecked = vars.filter((v) => checkedVars.has(v)).length;
 const full = (t) => t.fail === 0 && t["not-checked"] === 0;
 const cell = (k) => { const t = tally[k.id]; const app = t.pass + t.fail + t["not-checked"]; return `${k.label} ${t.pass}/${app}${t.fail ? ` (다름 ${t.fail})` : ""}${full(t) ? " ✓" : ""}`; };
-const line = `목차 컴포넌트 ${comps.size} · 스토리 ${toc.length} | ${CHECKS.map(cell).join(" | ")} | 토큰 값 ${tokChecked}/${tokTotal}${sr?.todo ? ` (할 일 ${sr.todo})` : ""} | 제외 ${exclusions.length}`;
+const line = `목차 컴포넌트 ${comps.size} · 스토리 ${toc.length} | ${CHECKS.map(cell).join(" | ")} | 토큰 값 ${tokChecked}/${tokTotal}${sr?.todo ? ` (할 일 ${sr.todo})` : ""} | 제외 ${exclusions.length}${expired.length ? ` (지난 빌드 제외 ${expired.length}개 만료)` : ""}`;
 // 빌드 섞임 — 스냅샷 도중 FE 가 새 빌드를 내면 앞 컴포넌트는 옛 빌드, 뒤는 새 빌드가 된다(2026-10-16 실제 발생: 동기화 중 05:26 UTC 새 빌드).
 // 스냅샷 빌드 ≠ 지금 목차 빌드면 관문을 막고 전부 다시 가져온다(retry 비움 = 전체)
 const buildMixed = !!(tocBuild && snapIndex?.feBuild && tocBuild !== snapIndex.feBuild);

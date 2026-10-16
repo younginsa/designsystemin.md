@@ -67,8 +67,11 @@ if (!Object.keys(entries).length) fail("목차가 비어 있다(로그인 벽?)"
 // Storybook 자체 목차(index.json)의 모든 컴포넌트를 가져온다. 레지스트리에 사람(이나 AI)이 고른 것만 가져오던 방식이 컴포넌트 9개·스토리 25개를
 // 말없이 빠뜨렸다(Features·Shared·Diagnostic·Widgets). 이제 목차에 있는데 레지스트리에 없는 컴포넌트는 여기서 자동 등록한다.
 // 빼려면 fe-requests/coverage-exclusions.json 에 이유와 함께 적는다(사용자 승인) — 그 밖에는 빠질 수 없다.
+// 제외는 승인한 그 빌드에만 적용된다(2026-10-16 사용자 지시 — 새 빌드가 새 원천. 지난 빌드 제외는 자동 만료)
 const EXCL_PATH = join(ROOT, "fe-requests/coverage-exclusions.json");
-const excluded = new Set(existsSync(EXCL_PATH) ? (JSON.parse(readFileSync(EXCL_PATH, "utf8")).items || []).map((x) => x.id) : []);
+const excludedFor = (build) => new Set(existsSync(EXCL_PATH) ? (JSON.parse(readFileSync(EXCL_PATH, "utf8")).items || []).filter((x) => x.build === build).map((x) => x.id) : []);
+const liveBuild = ((((await (await fetch(FE + "/iframe.html")).text()).match(/href="([^"]+\.css)"/) || [])[1] || "").replace(/.*iframe-/, "").replace(/\.css$/, "")) || "unknown";
+const excluded = excludedFor(liveBuild);
 const tocComps = new Map(); // 스토리 id 앞부분(= 컴포넌트) → { title, n }
 for (const e of Object.values(entries)) {
   if (e.type !== "story") continue;
@@ -171,15 +174,24 @@ async function render(id, args) {
   await page.mouse.move(0, 0).catch(() => {}); // 직전 hover 캡처의 마우스 위치가 다음 렌더에 툴팁을 띄우지 않게
   await page.goto(url, { waitUntil: "load" });
   // 렌더 완료 판정 — 스토리 루트에 내용이 생겼거나, 포털로 body 에 나간 오버레이가 생겼거나(Dialog 처럼 루트가 비는 경우), 에러 표시.
-  await page.waitForFunction(() => {
-    const b = document.body.classList;
-    if (b.contains("sb-show-errordisplay")) return true;
-    if (!b.contains("sb-show-main")) return false;
-    const r = document.getElementById("storybook-root");
-    // 글자만 렌더하는 스토리도 있다(ProductFilterHeader Default = "Product" 텍스트 노드 하나, 2026-10-14 — 요소만 보면 20초 초과)
-    if (r && (r.childElementCount > 0 || (r.textContent || "").trim())) return true;
-    return [...document.body.children].some((el) => !/^storybook-/.test(el.id) && !/(^|\s)sb-/.test(el.className || "") && !/^(SCRIPT|STYLE|LINK|NOSCRIPT|SPAN)$/.test(el.tagName));
-  }, null, { timeout: 20000 });
+  try {
+    await page.waitForFunction(() => {
+      const b = document.body.classList;
+      if (b.contains("sb-show-errordisplay")) return true;
+      if (!b.contains("sb-show-main")) return false;
+      const r = document.getElementById("storybook-root");
+      // 글자만 렌더하는 스토리도 있다(ProductFilterHeader Default = "Product" 텍스트 노드 하나, 2026-10-14 — 요소만 보면 20초 초과)
+      if (r && (r.childElementCount > 0 || (r.textContent || "").trim())) return true;
+      return [...document.body.children].some((el) => !/^storybook-/.test(el.id) && !/(^|\s)sb-/.test(el.className || "") && !/^(SCRIPT|STYLE|LINK|NOSCRIPT|SPAN)$/.test(el.tagName));
+    }, null, { timeout: 20000 });
+  } catch (e) {
+    // 빈 렌더(2026-10-16) — 스토리북이 스토리를 다 그렸는데(sb-show-main) 루트가 비어 있으면 오류가 아니라 "아무것도 안 그리는 스토리"다
+    // (예: ActivationStatusBadge None 이 20초 대기 끝에 오류로 잡혀 게시 관문을 막았다). 그 밖의 시간 초과는 그대로 오류
+    const empty = await page.evaluate(() => document.body.classList.contains("sb-show-main") && !document.body.classList.contains("sb-show-errordisplay")).catch(() => false);
+    if (!empty) throw e;
+    const r = await extract();
+    return { ...r, empty: true };
+  }
   await page.waitForTimeout(250); // play 함수·포털 마운트 여유
   return extract();
 }
@@ -323,7 +335,7 @@ for (const key of keys) {
     let r;
     try { r = await render(e.id); } catch (err) { r = { html: "", portal: false, initialArgs: {}, argTypes: {}, error: String(err?.message ?? err).slice(0, 200) }; }
     const name = pascal(e.name);
-    raw.push({ kind: "story", name, id: e.id, file: `${key}/${kebab(name)}.html`, html: r.html, portal: r.portal, initialArgs: r.initialArgs, error: r.error });
+    raw.push({ kind: "story", name, id: e.id, file: `${key}/${kebab(name)}.html`, html: r.html, portal: r.portal, initialArgs: r.initialArgs, error: r.error, empty: !!r.empty });
     if (r.error) errors++;
     else if (!r.portal) {
       let n = 0; try { n = Math.min(await countTriggers(), OPEN_MAX); } catch {}
@@ -382,7 +394,7 @@ for (const key of keys) {
     removed.forEach((c) => stripped.add(c));
     writeFileSync(join(OUT, r.file), html + "\n");
     collect(html, classes);
-    if (r.kind === "story") stories.push({ name: r.name, id: r.id, file: r.file, portal: r.portal, initialArgs: r.initialArgs, ...(r.error ? { error: r.error } : {}) });
+    if (r.kind === "story") stories.push({ name: r.name, id: r.id, file: r.file, portal: r.portal, initialArgs: r.initialArgs, ...(r.error ? { error: r.error } : {}), ...(r.empty ? { empty: true } : {}) });
     else if (r.kind === "open") opened.push({ story: r.story, index: r.index, trigger: r.trigger, file: r.file, ...(r.mode ? { mode: r.mode } : {}) });
     else states.push({ story: r.story, args: r.args, file: r.file, portal: r.portal });
   }
