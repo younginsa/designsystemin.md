@@ -36,6 +36,12 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${robotoMono.variable} h-full antialiased`}
     >
+      {/* 로컬 디자인 수정(2026-10-19) — 맥 localhost 에서만(배포 사이트엔 없음). 세션이 끝나면 Jira 로 발행되고 비워진다(scripts/local-design-flush.mjs) */}
+      {process.env.NODE_ENV === "development" && (
+        <head>
+          <link rel="stylesheet" href="/local-design.css" />
+        </head>
+      )}
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

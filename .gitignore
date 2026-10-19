@@ -26,3 +26,6 @@ mcp/.gen/
 playground/public/props/
 # FE 스니펫 자산 사본(pnpm mcp:artifacts 가 fe-stories/assets 에서 복사) — 커밋하지 않는다(2026-09-29)
 playground/public/fe-assets/
+
+# 로컬 디자인 수정 — 세션 동안만, 커밋 안 함(scripts/local-design-flush.mjs 가 Jira 로 보내고 비운다)
+playground/public/local-design.css

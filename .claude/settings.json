@@ -25,6 +25,16 @@
             "timeout": 45
           }
         ]
+      },
+      {
+        "matcher": "startup|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/local-design-flush.mjs 2>/dev/null || true",
+            "timeout": 40
+          }
+        ]
       }
     ]
   }
