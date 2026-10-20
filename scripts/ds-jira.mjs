@@ -30,9 +30,15 @@ while ((ai = args.indexOf('--attach')) >= 0) attachments.push(args.splice(ai, 2)
 const links = [];
 let li;
 while ((li = args.indexOf('--link')) >= 0) links.push(args.splice(li, 2)[1]);
+// --assignee <accountId> — 담당자 지정(대기 장부 발행 → 윤지윤, 2026-10-20). 없으면 미지정
+const asIdx = args.indexOf('--assignee');
+const assignee = asIdx >= 0 ? args.splice(asIdx, 2)[1] : '';
+// --no-prefix — 제목 앞 '[DS] ' 를 붙이지 않는다(제목에 이미 '[365 DS]' 가 있을 때)
+const npIdx = args.indexOf('--no-prefix');
+const noPrefix = npIdx >= 0 && !!args.splice(npIdx, 1);
 const [title, body] = args;
 if (!title) {
-  console.log('사용법: node --use-system-ca scripts/ds-jira.mjs "<제목>" "<본문>" [--type 추가|수정|버그] [--attach <AS-IS/TO-BE png>] [--link <리뷰 URL>]');
+  console.log('사용법: node --use-system-ca scripts/ds-jira.mjs "<제목>" "<본문>" [--type 추가|수정|버그] [--attach <AS-IS/TO-BE png>] [--link <리뷰 URL>] [--assignee <accountId>] [--no-prefix]');
   process.exit(1);
 }
 
@@ -65,9 +71,10 @@ const payload = {
   fields: {
     project: { key: PROJECT },
     issuetype: { name: issueType },
-    summary: '[DS] ' + title,
+    summary: (noPrefix ? '' : '[DS] ') + title,
     description,
     labels: ['ds-request', typeLabel],
+    ...(assignee ? { assignee: { accountId: assignee } } : {}),
   },
 };
 
