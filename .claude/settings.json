@@ -33,6 +33,11 @@
             "type": "command",
             "command": "node scripts/local-design-flush.mjs 2>/dev/null || true",
             "timeout": 40
+          },
+          {
+            "type": "command",
+            "command": "node scripts/ledger-flush.mjs 2>/dev/null || true",
+            "timeout": 60
           }
         ]
       }
