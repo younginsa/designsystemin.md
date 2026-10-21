@@ -34,6 +34,13 @@ if (!rules) process.exit(0); // 수정 없음 — 조용히 끝
 
 const heads = [...body.matchAll(/\/\*\s*디자인 수정:\s*([\s\S]*?)\*\//g)].map((m) => m[1].trim());
 const n = Math.max(heads.length, (rules.match(/\{/g) || []).length);
+
+// 이 맥의 관리자 저장소가 모으는 클론이면(2026-10-21) — Jira 로 보내지도 비우지도 않는다. 관리자 새 세션이 대기 장부로 가져간다.
+const COLLECTED = join(ROOT, ".ds-collected-by");
+if (existsSync(COLLECTED)) {
+  const admin = readFileSync(COLLECTED, "utf8").trim();
+  if (admin && existsSync(join(admin, ".ds-admin"))) { say(`${n}건 — 관리자 저장소(${admin})가 대기 장부로 가져갑니다. 파일은 그대로 둔다(미리보기 유지).`); process.exit(0); }
+}
 const date = new Date().toISOString().slice(0, 10);
 const title = `[디자인 수정] ${date} 세션 — ${n}건`;
 const text = [

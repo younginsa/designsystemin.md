@@ -29,3 +29,7 @@ playground/public/fe-assets/
 
 # 로컬 디자인 수정 — 세션 동안만, 커밋 안 함(scripts/local-design-flush.mjs 가 Jira 로 보내고 비운다)
 playground/public/local-design.css
+# 관리자 ↔ 클론 연결(2026-10-21) — 맥마다 다른 경로라 커밋하지 않는다
+# .ds-clones(관리자: 모을 클론 경로 한 줄씩) · .ds-collected-by(클론: 모으는 관리자 경로 — 있으면 클론은 Jira 로 안 보냄)
+.ds-clones
+.ds-collected-by

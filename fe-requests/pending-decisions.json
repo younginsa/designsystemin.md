@@ -148,5 +148,9 @@
   ],
   "notTracked": {
     "$note": "FE 가 '공통 컴포넌트 아님'으로 판정한 우리 조합 8개(detail-panel · error-console · heatmap-grid · icon-select · list-footer · notification-panel · timeline · version-filter-chip)는 FE 대기 결정이 아니다 — 프로토타입 전용으로 'FE 에 없음' 라벨을 단다. heatmap-grid 의 caution 톤은 caution-color 항목이 반영되면 자연히 맞는다."
+  },
+  "clonesImported": {
+    "ac468cb1": "radio-ring",
+    "54ffb0b2": "ship-spec-modal-header"
   }
 }
