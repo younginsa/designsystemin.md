@@ -139,10 +139,10 @@
     "$type": "color",
     "$value": {
       "light": "{palette.yellow.600@day}",
-      "dark": "{palette.yellow.600@dusk}",
-      "control": "{palette.yellow.600@dusk}"
+      "dark": "{palette.yellow.600@day}",
+      "control": "{palette.yellow.600@day}"
     },
-    "$note": "주의(CAUTION) 상태 — 진단 3단 레벨 WARNING(destructive)·CAUTION·NORMAL(success) 부활(2026-10-08 확정). Light = yellow-600 Day #E8A600, Dark·Control = yellow-600 Dusk #F0C000. 2026-10-08 사용자 결정: 노랑 식별성 우선 — 처음 정한 orange-700(#C34600)은 '너무 시커멓고 빨강과 구분이 안 된다'로 폐기. 쓰임: 기본은 점(도트)·틴트 배경만, 상태 이름 글자는 foreground(FE StatusBadge 와 같음). 글자에 쓰는 것은 선택 — Light 글자 대비 2.12:1 은 contrast-pairs 에 waived 로 수용(경고만). FE --general-caution(#F59E0B, 팔레트 밖 원색)은 이 값으로 바꿔 달라고 요청한다."
+    "$note": "주의(CAUTION) 상태 — 진단 3단 레벨 WARNING(destructive)·CAUTION·NORMAL(success) 부활(2026-10-08 확정). 전 모드 yellow-600 Day #E8A600 — 2026-10-27 디자이너 결정: FE Storybook(Build BIbnlWFW)이 세 모드 모두 #E8A600 으로 반영한 값을 수용(종전 Dark·Control = yellow-600 Dusk #F0C000, 장부 caution-color 닫음). 2026-10-08 사용자 결정: 노랑 식별성 우선 — 처음 정한 orange-700(#C34600)은 '너무 시커멓고 빨강과 구분이 안 된다'로 폐기. 쓰임: 기본은 점(도트)·틴트 배경만, 상태 이름 글자는 foreground(FE StatusBadge 와 같음). 글자에 쓰는 것은 선택 — Light 글자 대비 2.12:1 은 contrast-pairs 에 waived 로 수용(경고만)."
   },
   "chart-1": {
     "$type": "color",

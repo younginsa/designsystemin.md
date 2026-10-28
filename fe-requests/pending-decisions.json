@@ -6,9 +6,9 @@
       "what": "caution 색 — 진단 3단 레벨 CAUTION(점·틴트에만, 상태 글자는 기본색)",
       "value": {
         "light": "#E8A600",
-        "dark": "#F0C000",
-        "control": "#F0C000",
-        "palette": "yellow-600 (Day / Dusk)"
+        "dark": "#E8A600",
+        "control": "#E8A600",
+        "palette": "yellow-600 (Day) — 전 모드"
       },
       "feValueAtDecision": {
         "all": "#F59E0B",
@@ -30,16 +30,22 @@
         "build": 7
       },
       "deliveredToFe": "2026-10-13 (디자이너가 직접 — 스토리북 보강 요청 목록 5번)",
-      "status": "pending",
+      "status": "shipped",
       "check": {
         "kind": "color",
         "name": "caution",
         "ours": {
           "light": "#E8A600",
-          "dark": "#F0C000",
-          "control": "#F0C000"
+          "dark": "#E8A600",
+          "control": "#E8A600"
         },
         "feBefore": "#F59E0B"
+      },
+      "closed": {
+        "date": "2026-10-27",
+        "build": "BIbnlWFW",
+        "by": "디자이너(사영인)",
+        "note": "FE 가 세 모드 모두 #E8A600 으로 반영 — Light 는 장부 값과 같고, Dark·Control 은 장부 값(#F0C000) 대신 FE 값을 수용(2026-10-27 디자이너 결정). dstk/semantic.json caution 전 모드 yellow-600 Day 로 변경, 피그마 Theme General/caution 도 같은 값으로."
       }
     },
     {
@@ -107,11 +113,12 @@
     },
     {
       "id": "radio-ring",
-      "what": "라디오 버튼 — 미선택 테두리 진하게(foreground 100%) · 선택 = 굵은 primary 링(점 없음) + 3px 헤일로",
+      "what": "라디오 버튼 — 미선택 테두리 진하게(foreground 100%) · 선택 = 굵은 primary 링(점 없음)",
       "value": {
         "unchecked": "16×16 원 · 배경 투명 · 테두리 1px General/foreground(#3C3E47, 100%) · shadow-xs",
-        "checked": "16×16 원 · 배경 투명 · 테두리 5px General/primary(#4477F9, inside — 가운데 6px 흰 구멍) · shadow-xs + 3px 헤일로(spread 3)",
-        "reference": "피그마 세일즈포스 365 전환 UI spec_review — Dialog 1164:53295 (제품 및 서버 선택)"
+        "checked": "16×16 원 · 배경 투명 · 테두리 5px General/primary(#4477F9, inside — 가운데 6px 구멍) · shadow-xs",
+        "reference": "피그마 HiNAS 365(9bDM5hVObGhrFM6vLyeL3K) spec_review — Dialog 1393:72580 (제품 및 서버 선택). 종전 표기 Dialog 1164:53295",
+        "correction": "2026-10-27: 종전 checked 값의 \"+ 3px 헤일로(spread 3)\" 는 참조 Dialog 에 없다(효과 = shadow-xs 하나, 그림자 뒤로 안 비침) — 삭제. 3px 링은 focus·invalid 상태에만."
       },
       "feValueAtDecision": {
         "unchecked": "테두리 1px foreground 50% 투명도",
@@ -121,7 +128,8 @@
       "decided": "2026-10-20",
       "decidedBy": "디자이너(사영인)",
       "appliedIn": [
-        "세일즈포스 365 전환 UI spec_review — 라디오 116개(미선택 95 · 선택 21, 2026-10-20). 체크박스는 Storybook 과 같은 값(미선택 1px foreground)이라 장부 대상 아님"
+        "세일즈포스 365 전환 UI spec_review — 라디오 116개(미선택 95 · 선택 21, 2026-10-20). 체크박스는 Storybook 과 같은 값(미선택 1px foreground)이라 장부 대상 아님",
+        "피그마 라이브러리 Avikus Design library(i5IhnacRAjg6NJdmtctfn2) ↳ Checkboxes — Radio Group Item 세트 3201:88(8 변형) · Radio Group 3201:111 (2026-10-27)"
       ],
       "storybookTarget": "Primitives/RadioGroup",
       "status": "pending"
