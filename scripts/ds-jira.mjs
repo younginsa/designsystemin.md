@@ -6,13 +6,24 @@
 // 대상 프로젝트는 아래에 고정한다 — 개인 환경변수의 기본 프로젝트와 무관하게
 // 모든 DS 요청은 디자인 보드로 모인다.
 
-import { execSync } from 'node:child_process';
+import { execSync, spawnSync } from 'node:child_process';
 
 const BASE = 'https://avikus.atlassian.net';
 const PROJECT = 'DES';
 
-const email = process.env.JIRA_EMAIL;
-const token = process.env.JIRA_API_TOKEN;
+// 세션 시작 훅은 ~/.zshrc 를 읽지 않는 셸에서 돈다 — 환경변수가 비면 zsh 프로필에서 직접 읽는다(값은 출력하지 않는다, 2026-10-28)
+const fromProfile = () => {
+  const r = spawnSync('/bin/zsh', ['-ic', 'printf "\\n__DSJ__%s\\t%s__END__" "$JIRA_EMAIL" "$JIRA_API_TOKEN"'], { encoding: 'utf8', timeout: 8000, stdio: ['ignore', 'pipe', 'ignore'] });
+  const m = /__DSJ__([^\t]*)\t(.*?)__END__/s.exec(r.stdout || '');
+  return m ? { email: m[1].trim(), token: m[2].trim() } : {};
+};
+let email = process.env.JIRA_EMAIL;
+let token = process.env.JIRA_API_TOKEN;
+if (!email || !token) {
+  const p = fromProfile();
+  email = email || p.email;
+  token = token || p.token;
+}
 if (!email || !token) {
   console.log('[DS 요청] 환경변수 미설정 — 최초 1회 설정이 필요합니다:');
   console.log('  1. https://id.atlassian.com/manage-profile/security/api-tokens 에서 API 토큰 발급');
